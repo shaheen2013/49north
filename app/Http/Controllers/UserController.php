@@ -26,19 +26,8 @@ class UserController extends Controller
     public function index()
     {
         //Get all users and pass it to the view
-      $users = User::all();
-/*\DB::connection()->enableQueryLog();
-$users = Employee_detail::Join('Users', 'users.id', '=', 'employee_details.emp_id') 
-    ->get();
- $queries = \DB::getQueryLog();
-         dd($queries);*/
-/*$data['users'] = DB::table('users as u')
-    ->select('ed.*','u.created_at as createdat')
-    ->join('employee_details as ed', 'u.id', '=', 'ed.emp_id')
-    ->get();*/
-    
-       return view('users.index',)->with('users', $users);
-    //return view('users.index',$data);
+        $users = User::with('employee_details')->get();
+        return view('users.index')->with('users', $users);
     }
 
     /**
@@ -64,7 +53,6 @@ $users = Employee_detail::Join('Users', 'users.id', '=', 'employee_details.emp_i
     {
         $id = $request->input('id');
 
-
         //Validate name, email and password fields
         $rules = [
             'name' => 'required|max:120'
@@ -82,33 +70,32 @@ $users = Employee_detail::Join('Users', 'users.id', '=', 'employee_details.emp_i
         $this->validate($request, $rules);
 
         $input['is_admin'] = $request->input('is_admin', 0);
-         
 
         //profile pic  code
-         $profilepicname = '';
+        $profilepicname = '';
         if ($request->hasFile('profile_pic')) {
 
             $file = $request->file('profile_pic');
             $profilepicname = rand(11111, 99999) . '.' . $file->getClientOriginalExtension();
-            $request->file('profile_pic')->move("public/profile", $name);
-        } 
+            $request->file('profile_pic')->move("public/profile");
+        }
         /// end profile pic
 
-          // employee details array start  
-        $user_array = $request->except(['password','is_admin']);
-            $user_array['profile_pic'] = $profilepicname;
+        // employee details array start
+        $user_array = $request->except(['password', 'is_admin']);
+        $user_array['profile_pic'] = $profilepicname;
 
         if ($id) {
             $user = User::find($id);
             $user->update($input);
-            
+
             $user_detailsupdate = Employee_detail::find($id);
             $user_detailsupdate->update($user_array);
             $msg = 'User successfully updated';
         } else {
             $user = User::create($input);
             $lastid = $user->id;
-            
+
             $user_array['emp_id'] = $lastid;
             $user_details = Employee_detail::create($user_array);
             $msg = 'User successfully Added';
