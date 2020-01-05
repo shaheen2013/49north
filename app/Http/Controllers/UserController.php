@@ -26,7 +26,7 @@ class UserController extends Controller
     public function index()
     {
         //Get all users and pass it to the view
-        $users = User::with('employee_details')->get();
+        $users = User::with('employee_details')->orderBy('name')->get();
         return view('users.index')->with('users', $users);
     }
 
@@ -43,6 +43,18 @@ class UserController extends Controller
     }
 
     /**
+     * Get custom attributes for validator errors.
+     *
+     * @return array
+     */
+    public function attributes()
+    {
+        return [
+            'password' => 'Password must contain a lower case, uppercase, number and special character',
+        ];
+    }
+
+    /**
      * Store a newly created resource in storage.
      *
      * @param Request $request
@@ -55,10 +67,14 @@ class UserController extends Controller
 
         //Validate name, email and password fields
         $rules = [
-            'name' => 'required|max:120'
+            'firstname' => 'required|max:120',
+            'lastname' => 'required|max:120',
+            'email' => Rule::unique('users')->ignore($id) // require unique email address
         ];
-        $rules['email'][] = Rule::unique('users')->ignore($id);
-        $input = $request->only(['email', 'name']);
+
+        // morph input fields to match user table
+        $input['name'] = $request->input('firstname') . ' ' . $request->input('lastname');
+        $input['email'] = $request->input('workemail');
 
         // if password is entered or it's a new user
         if ($request->input('password') || !$id) {
@@ -69,6 +85,7 @@ class UserController extends Controller
 
         $this->validate($request, $rules);
 
+        // check for admin details
         $input['is_admin'] = $request->input('is_admin', 0);
 
         //profile pic  code
@@ -82,23 +99,30 @@ class UserController extends Controller
         /// end profile pic
 
         // employee details array start
-        $user_array = $request->except(['password', 'is_admin']);
+        $user_array = $request->only(['firstname','lastname','dob','personalemail','phone_no','address','workemail','profile_pic','marital_status','no_ofchildren','family_inarea','spcifamilycircumstace','prsnl_belief','known_medical_conditions','allergies','dietary_restrictions','known_health_concerns','aversion_phyactivity','emergency_contact_name','reltn_emergency_contact','emergency_contact_phone','emergency_contact_email']);
         $user_array['profile_pic'] = $profilepicname;
 
         if ($id) {
             $user = User::find($id);
             $user->update($input);
 
-            $user_detailsupdate = Employee_detail::find($id);
-            $user_detailsupdate->update($user_array);
+/*            $user_detailsupdate = Employee_detail::find($id);
+            $user_detailsupdate->update($user_array);*/
             $msg = 'User successfully updated';
         } else {
             $user = User::create($input);
-            $lastid = $user->id;
+            /*$lastid = $user->id;
 
             $user_array['emp_id'] = $lastid;
-            $user_details = Employee_detail::create($user_array);
+            $user_details = Employee_detail::create($user_array);*/
             $msg = 'User successfully Added';
+        }
+
+        if ($user->emp_id) {
+            $user->employee_details()->update($user_array);
+        }
+        else {
+            $user->employee_details()->create($user_array);
         }
 
         //Redirect to the users.index view and display message
@@ -125,39 +149,21 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        $user = User::findOrFail($id); //Get user with specified id
-        $roles = Role::get(); //Get all roles
+        $u = User::findOrFail($id); //Get user with specified id
+        $user = Employee_detail::find($u->emp_id);
+        if (!$user) {
+            $user = new Employee_detail();
+            // separate first / last name from user table
+            list($user->firstname,$user->lastname) = explode(' ',$u->name);
+            $user->workemail = $u->email;
+        }
 
-        return view('users.edit', compact('user', 'roles')); //pass user and roles data to view
+        if (!$user->workemail) $user->workemail = $u->email;
+        $user->is_admin = $u->is_admin; // lazy load details from admin
+        $user->id = $u->id; // override ID to match User table instead of Employee Details
 
-    }
+        return view('users.edit', compact('user'));
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param Request $request
-     * @param int $id
-     * @return RedirectResponse
-     * @throws ValidationException
-     */
-    public function update(Request $request, $id)
-    {
-        $user = User::findOrFail($id); //Get role specified by id
-
-        //Validate name, email and password fields
-        $this->validate($request, [
-            'name' => 'required|max:120',
-            'email' => 'required|email|unique:users,email,' . $id,
-            'password' => 'required|min:6|confirmed'
-        ]);
-        $input = $request->only(['name', 'email', 'password']); //Retreive the name, email and password fields
-        $roles = $request['roles']; //Retreive all roles
-        $user->fill($input)->save();
-
-
-        return redirect()->route('users.index')
-            ->with('flash_message',
-                'User successfully edited.');
     }
 
     /**

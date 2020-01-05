@@ -170,7 +170,7 @@
 
                                         <div class="col-md-6">
                                             <div class="text_outer">
-                                                <label for="name" class="">Known medical condions</label>
+                                                <label for="name" class="">Known medical conditions</label>
                                                 <input type="text" id="name" name="name" class="form-control"
                                                        placeholder="Insert text here">
                                             </div>
@@ -207,7 +207,7 @@
 
                                         <div class="col-md-6">
                                             <div class="text_outer">
-                                                <label for="name" class="">Aversion to physical acvity</label>
+                                                <label for="name" class="">Aversion to physical activity</label>
                                                 <input type="text" id="email" name="email" class="form-control"
                                                        placeholder="Insert text here">
                                             </div>
@@ -230,7 +230,7 @@
 
                                         <div class="col-md-3">
                                             <div class="text_outer">
-                                                <label for="name" class="">Relaonship to emergency contact</label>
+                                                <label for="name" class="">Relationship to emergency contact</label>
                                                 <input type="text" id="email" name="email" class="form-control"
                                                        placeholder="Insert text here">
                                             </div>

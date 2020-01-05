@@ -16,7 +16,7 @@ use App\Maintenance_ticket;
 
 class AdminController extends Controller
 {
-    
+
     public function index()
     {
     	return view('admin/registration');
@@ -33,15 +33,15 @@ class AdminController extends Controller
 
     public function milegebook(){
     	$data['mileage_list'] = DB::table('mileages')->get();
-    	$data['companies'] =   Company::all(); 
-    	return view('admin/mileagebook', $data);  
+    	$data['companies'] =   Company::all();
+    	return view('admin/mileagebook', $data);
     }
 
     public function tech_maintanance(){
     	$data['maintanance']= Maintenance_ticket::where(['delete_status'=> NULL , 'status' => NULL])->get();
     	$data['maintanance1']= Maintenance_ticket::where(['delete_status'=> NULL , 'status' => 1])->orWhere(['status' => 2])->get();
     	$data['category']  =   Categorys::all();
-    	return view('admin/tech_maintanance', $data); 
+    	return view('admin/tech_maintanance', $data);
     }
 
     public function timeoff(){
@@ -53,9 +53,9 @@ class AdminController extends Controller
     }
 
      protected function add_registration(Request $request)
-    {   
+    {
         $name = '';
-        if($request->hasFile('profilepic')) { 
+        if($request->hasFile('profilepic')) {
         $file = $request->file('profilepic');
         $name = rand(11111, 99999) . '.' . $file->getClientOriginalExtension();
         $request->file('profilepic')->move("public/profile", $name);
@@ -67,19 +67,19 @@ class AdminController extends Controller
             'dob' => $request->dob,
             'phone_no'=> $request->phone,
             'address' => $request->address,
-            'profile_pic' => $name, 
+            'profile_pic' => $name,
             'no_ofchildren'=> $request->noofchildren,
             'family_inarea' => $request->familyinarea,
-            'spclfamilycircumstace' => $request->familycircum,
+            'familycircumstance' => $request->familycircumstance,
             'prsnl_belief' => $request->personal_belief,
             'known_medical_conditions'=> $request->medical_conditions,
             'allergies' => $request->allergies,
-            'dietiary_restricons' => $request->dietary,
+            'dietary_restrictions' => $request->dietary_restrictions,
             'known_health_concerns' => $request->mental_concerns,
             'aversion_phyactivity'=> $request->aversion_phyactivity,
             'emergency_contact_name' => $request->emergency_contact_name,
             'reltn_emergency_contact' => $request->rel_emer_contact,
-            'emergency_contact_email' => $request->emergency_email, 
+            'emergency_contact_email' => $request->emergency_email,
             'emergency_contact_phone' => $request->emer_contact_phone,
         );
 
@@ -87,7 +87,7 @@ class AdminController extends Controller
             if($check_email == 1){
               return back()->with('error', 'This Email Already Available Please Try Another EMail !!');
             }
-        $Employee_detail = Employee_detail::create($employee_detailsarray); 
+        $Employee_detail = Employee_detail::create($employee_detailsarray);
         $last_id=$Employee_detail->id;
         $user_detail = User::create([
             'emp_id' =>$last_id,
@@ -108,7 +108,7 @@ class AdminController extends Controller
         }
 
          return back()->with('message', 'Your information is submitted Successfully');
-      
+
     }
 
 }

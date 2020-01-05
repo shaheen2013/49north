@@ -12,7 +12,7 @@
             <form id="contacts_form" method="POST" name="contact-form"
                   action="{{url('registration')}}" enctype="multipart/form-data">
                 @csrf
-               
+
                 <div class="personal">
                     <h2 class="form_title">Personal Information</h2>
                     <div class="row">
@@ -160,7 +160,7 @@
                                 <label for="name" class="">Special family circumstances</label>
                                 <input type="text" id="familycircum" name="familycircum"
                                        class="form-control" placeholder="Insert text here"
-                                       value={{isset($employee_details->spclfamilycircumstace) ?  $employee_details->spclfamilycircumstace : ''}}>
+                                       value={{isset($employee_details->familycircumstance) ?  $employee_details->familycircumstance : ''}}>
                             </div>
                         </div>
 
@@ -183,7 +183,7 @@
 
                         <div class="col-md-6">
                             <div class="text_outer">
-                                <label for="name" class="">Known medical condions</label>
+                                <label for="name" class="">Known medical conditions</label>
                                 <input type="text" id="medical_conditions" name="medical_conditions"
                                        class="form-control" placeholder="Insert text here">
                             </div>
@@ -220,7 +220,7 @@
 
                         <div class="col-md-6">
                             <div class="text_outer">
-                                <label for="name" class="">Aversion to physical acvity</label>
+                                <label for="name" class="">Aversion to physical activity</label>
                                 <input type="text" id="aversion_phyactivity"
                                        name="aversion_phyactivity" class="form-control"
                                        placeholder="Insert text here">
@@ -245,7 +245,7 @@
 
                         <div class="col-md-3">
                             <div class="text_outer">
-                                <label for="name" class="">Relaonship to emergency contact</label>
+                                <label for="name" class="">Relationship to emergency contact</label>
                                 <input type="text" id="rel_emer_contact" name="rel_emer_contact"
                                        class="form-control" placeholder="Insert text here">
                             </div>

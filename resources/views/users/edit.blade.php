@@ -8,7 +8,7 @@
 
     <div class="tab-pane fade show active" id="nav-employee" role="tabpanel" aria-labelledby="nav-employee-tab">
 
-        {{ Form::model($user, array('route' => array('users.store'))) }}
+        {{ Form::model($user, ['url' => route('users.store')]) }}
         {!! Form::hidden('id') !!}
 
         <div class="personal">
@@ -18,8 +18,8 @@
                 <div class="col-md-3">
                     <div class="text_outer">
 
-                        {{ Form::label('First Name', 'First Name') }}
-                        {{ Form::text('name', null, array('class' => 'form-control','placeholder'=>'First Name','required'=>'required')) }}
+                        {{ Form::label('firstname', 'First Name') }}
+                        {{ Form::text('firstname', null, array('class' => 'form-control','placeholder'=>'First Name','required'=>'required')) }}
 
                     </div>
                 </div>
@@ -27,7 +27,7 @@
                 <div class="col-md-3">
                     <div class="text_outer">
 
-                        {{ Form::label('Last Name', 'Last Name') }}
+                        {{ Form::label('lastname', 'Last Name') }}
                         {{ Form::text('lastname', null, array('class' => 'form-control','placeholder'=>'Last Name','required'=>'required')) }}
 
                     </div>
@@ -42,7 +42,7 @@
 
                 <div class="col-md-3">
                     <div class="text_outer">
-                        {{ Form::label('phone', 'Phone') }}
+                        {{ Form::label('phone_no', 'Phone') }}
                         {{ Form::number('phone_no', null, array('class' => 'form-control','Placeholder'=>"000 000 0000")) }}
                     </div>
                 </div>
@@ -54,7 +54,7 @@
                 <div class="col-md-6">
                     <div class="text_outer">
 
-                        {{ Form::label('Aaddress', 'Address') }}
+                        {{ Form::label('address', 'Address') }}
                         {{ Form::text('address', null, array('class' => 'form-control','Placeholder'=>"Address")) }}
 
 
@@ -64,7 +64,7 @@
                 <div class="col-md-3">
                     <div class="text_outer">
 
-                        {{ Form::label('Personal email', 'Personal email') }}
+                        {{ Form::label('personalemail', 'Personal email') }}
                         {{ Form::email('personalemail', null, array('class' => 'form-control','Placeholder'=>"Personal email")) }}
                     </div>
                 </div>
@@ -72,8 +72,8 @@
                 <div class="col-md-3">
                     <div class="text_outer">
 
-                        {{ Form::label('Work email', 'Work email') }}
-                        {{ Form::email('email', null, array('class' => 'form-control','Placeholder'=>"Work email",'required'=>'required')) }}
+                        {{ Form::label('workemail', 'Work email') }}
+                        {{ Form::email('workemail', null, array('class' => 'form-control','Placeholder'=>"Work email",'required'=>'required')) }}
 
                     </div>
                 </div>
@@ -94,8 +94,7 @@
                     <div class="text_outer">
                         <label for="name" class="">Password*</label>
                         <input type="password" id="password" name="password" class="form-control" placeholder="xxxxxxx"
-                               required>
-
+                               {{ $user->id ? '' : 'required' }} {{-- password is only required if it's a new user --}}>
                     </div>
                 </div>
 
@@ -128,8 +127,8 @@
                 <div class="col-md-3">
                     <div class="text_outer">
 
-                        {{ Form::label('familyinfo', 'Number of children') }}
-                        {{ Form::text('no_ofchildren', null, array('class' => 'form-control')) }}
+                        {{ Form::label('no_ofchildren', 'Number of children') }}
+                        {{ Form::number('no_ofchildren', null, array('class' => 'form-control','min' => 0)) }}
 
                     </div>
                 </div>
@@ -137,7 +136,7 @@
                 <div class="col-md-6">
                     <div class="text_outer">
 
-                        {{ Form::label('familyinfo', 'Family in the area') }}
+                        {{ Form::label('family_inarea', 'Family in the area') }}
                         {{ Form::text('family_inarea', null, array('class' => 'form-control','placeholder'=>'Insert text here')) }}
                     </div>
                 </div>
@@ -150,15 +149,15 @@
                 <div class="col-md-6">
                     <div class="text_outer">
 
-                        {{ Form::label('familyinfo', 'Special family circumstances') }}
-                        {{ Form::text('spclfamilycircumstace', null, array('class' => 'form-control','placeholder'=>'Insert text here')) }}
+                        {{ Form::label('familycircumstance', 'Special family circumstances') }}
+                        {{ Form::text('familycircumstance', null, array('class' => 'form-control','placeholder'=>'Insert text here')) }}
                     </div>
                 </div>
 
                 <div class="col-md-3">
                     <div class="text_outer">
 
-                        {{ Form::label('familyinfo', 'Personal belief/religious requirements') }}
+                        {{ Form::label('prsnl_belief', 'Personal belief/religious requirements') }}
                         {{ Form::text('prsnl_belief', null, array('class' => 'form-control','placeholder'=>'Insert text here')) }}
                     </div>
                 </div>
@@ -173,7 +172,7 @@
                 <div class="col-md-6">
                     <div class="text_outer">
 
-                        {{ Form::label('familyinfo', 'Known medical condions') }}
+                        {{ Form::label('known_medical_conditions', 'Known medical conditions') }}
                         {{ Form::text('known_medical_conditions', null, array('class' => 'form-control','placeholder'=>'Insert text here')) }}
                     </div>
                 </div>
@@ -181,7 +180,7 @@
                 <div class="col-md-6">
                     <div class="text_outer">
 
-                        {{ Form::label('familyinfo', 'Allergies') }}
+                        {{ Form::label('allergies', 'Allergies') }}
                         {{ Form::text('allergies', null, array('class' => 'form-control','placeholder'=>'Insert text here')) }}
                     </div>
                 </div>
@@ -194,7 +193,7 @@
                 <div class="col-md-3">
                     <div class="text_outer">
 
-                        {{ Form::label('familyinfo', 'Dietary restricons') }}
+                        {{ Form::label('dietiary_restrictions', 'Dietary Restrictions') }}
                         {{ Form::text('dietiary_restrictions', null, array('class' => 'form-control','placeholder'=>'Insert text here')) }}
                     </div>
                 </div>
@@ -202,14 +201,14 @@
                 <div class="col-md-3">
                     <div class="text_outer">
 
-                        {{ Form::label('familyinfo', 'Known mental health concerns') }}
+                        {{ Form::label('known_health_concerns', 'Known mental health concerns') }}
                         {{ Form::text('known_health_concerns', null, array('class' => 'form-control','placeholder'=>'Insert text here')) }}
                     </div>
                 </div>
 
                 <div class="col-md-6">
                     <div class="text_outer">
-                        {{ Form::label('familyinfo', 'Aversion to physical acvity') }}
+                        {{ Form::label('aversion_phyactivity', 'Aversion to physical activity') }}
                         {{ Form::text('aversion_phyactivity', null, array('class' => 'form-control','placeholder'=>'Insert text here')) }}
                     </div>
                 </div>
@@ -223,14 +222,14 @@
 
                 <div class="col-md-3">
                     <div class="text_outer">
-                        {{ Form::label('familyinfo', 'Emergency contact name') }}
+                        {{ Form::label('emergency_contact_name', 'Emergency contact name') }}
                         {{ Form::text('emergency_contact_name', null, array('class' => 'form-control','placeholder'=>'Insert text here')) }}
                     </div>
                 </div>
 
                 <div class="col-md-3">
                     <div class="text_outer">
-                        {{ Form::label('familyinfo', 'Relaonship to emergency contact') }}
+                        {{ Form::label('reltn_emergency_contact', 'Relationship to emergency contact') }}
                         {{ Form::text('reltn_emergency_contact', null, array('class' => 'form-control','placeholder'=>'Insert text here')) }}
                     </div>
                 </div>
@@ -238,7 +237,7 @@
                 <div class="col-md-3">
                     <div class="text_outer">
 
-                        {{ Form::label('familyinfo', 'Emergency contact phone') }}
+                        {{ Form::label('emergency_contact_phone', 'Emergency contact phone') }}
                         {{ Form::text('emergency_contact_phone', null, array('class' => 'form-control','placeholder'=>'Insert text here')) }}
                     </div>
                 </div>
@@ -246,7 +245,7 @@
                 <div class="col-md-3">
                     <div class="text_outer">
 
-                        {{ Form::label('familyinfo', 'Emergency contact email') }}
+                        {{ Form::label('emergency_contact_email', 'Emergency contact email') }}
                         {{ Form::email('emergency_contact_email', null, array('class' => 'form-control','placeholder'=>'Insert text here')) }}
                     </div>
                 </div>
