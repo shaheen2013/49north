@@ -25,12 +25,13 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::get('/index', 'HomeController@index')->name('index');
     Route::get('/home', 'HomeController@home')->name('home');
-
+    Route::post('/edit_employee','HomeController@edit_employee');
     // agreements
-    Route::get('/agreementlist', 'HomeController@agreement_list')->name('agreementlist');
-    Route::post('/addagreement', 'HomeController@add_empagreement')->name('addagreement');
+  
+   // Route::post('/addagreement', 'HomeController@add_empagreement')->name('addagreement');
 
-    Route::post('/employee_agreementlist', 'HomeController@employee_agreementlist')->name('employee_agreementlist');
+   // Route::post('/employee_agreementlist', 'HomeController@employee_agreementlist')->name('employee_agreementlist');
+    Route::get('/agreementlist', 'HomeController@agreementlist')->name('agreementlist');
 
     //Route::get('/', 'PostController@index')->name('home');
     Route::delete('delete_agreement/{id}/{type}', 'HomeController@destroy')->name('delete_agreement');
@@ -83,6 +84,7 @@ Route::group(['middleware' => ['auth', 'isAdmin']], function () {
     Route::resource('users', 'UserController');
     Route::resource('roles', 'RoleController');
     Route::resource('permissions', 'PermissionController');
+    //Route::resource('agreements','AgreementController');
 });
 
 
