@@ -1,10 +1,13 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\User;
 
+use App\Employee_detail;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use App\{Company, Project, Purchases, Categorys, Expenses};
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
@@ -25,8 +28,8 @@ class HomeController extends Controller
     {
        
        $emp_id =  auth()->user()->id;
-        $data['employee_details'] = DB::table('users as u')
-            ->join('employee_details as ed', 'u.id', '=', 'ed.emp_id')
+        $data['user'] = DB::table('users as u')
+            ->join('employee_details as ed', 'u.id', '=', 'ed.id')
             ->select('ed.*')->where('u.id', '=', $emp_id)
             ->first();
           
@@ -459,11 +462,101 @@ class HomeController extends Controller
             ->select('ed.id', 'ed.firstname', 'ed.created_at', 'ed.lastname', 'ed.personalemail', 'a.agreement', 'coc.coc_agreement')
             ->where(array('ed.id' => auth()->user()->emp_id))
             ->get();
-        return view('admin.agreement_list')->with('employee', $employee);
+        return view('agreement_listnew')->with('employee', $employee);
     }
 
 
     public function benefits () {
         return view('benefits');
     }
+
+    public function edit_employee(Request $request)
+    {
+        $id = $request->input('id');
+
+        //Validate name, email and password fields
+        $rules = [
+            'firstname' => 'required|max:120',
+            'lastname' => 'required|max:120',
+            'email' => Rule::unique('users')->ignore($id) // require unique email address
+        ];
+
+        // morph input fields to match user table
+        $input['name'] = $request->input('firstname') . ' ' . $request->input('lastname');
+        $input['email'] = $request->input('workemail');
+
+        // if password is entered or it's a new user
+        if ($request->input('password') || !$id) {
+            //$rules['password'] = 'required|min:6|confirmed';
+            $rules['password'] = ['required', 'string', 'min:8', 'regex:/^.*(?=.{3,})(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[\d\X])(?=.*[!$#%]).*$/'];
+            $input['password'] = Hash::make($request->input('password'));
+        }
+
+        $this->validate($request, $rules);
+
+        // check for admin details
+        $input['is_admin'] = $request->input('is_admin', 0);
+
+        //profile pic  code
+        $profilepicname = '';
+        if ($request->hasFile('profile_pic')) {
+
+            $file = $request->file('profile_pic');
+            $profilepicname = rand(11111, 99999) . '.' . $file->getClientOriginalExtension();
+            $request->file('profile_pic')->move("public/profile");
+        }
+        /// end profile pic
+
+        // employee details array start
+        $user_array = $request->only(['firstname','lastname','dob','personalemail','phone_no','address','workemail','profile_pic','marital_status','no_ofchildren','family_inarea','spcifamilycircumstace','prsnl_belief','known_medical_conditions','allergies','dietary_restrictions','known_health_concerns','aversion_phyactivity','emergency_contact_name','reltn_emergency_contact','emergency_contact_phone','emergency_contact_email']);
+        $user_array['profile_pic'] = $profilepicname;
+
+        if ($id) {
+            $user = User::find($id);
+            $user->update($input);
+            $emp_id = $id;
+/*            $user_detailsupdate = Employee_detail::find($id);
+            $user_detailsupdate->update($user_array);*/
+            $msg = 'User successfully updated';
+        } else {
+            $user = User::create($input);
+           
+            $msg = 'User successfully Added';
+        }
+
+        if (isset($emp_id)) {
+            //$user->employee_details()->update($user_array);
+            Employee_detail::where('id','=',$emp_id)->update($user_array);
+        }
+        else {
+            $user->employee_details()->create($user_array);
+          
+        }
+
+        //Redirect to the users.index view and display message
+        return redirect()->route('home')
+            ->with('flash_message', $msg);
+    }
+
+
+
+///////////  Agreement List 
+
+     function agreementlist()
+    {
+        $employee = DB::table('employee_details as ed')
+            ->leftjoin('agreements as a', 'ed.id', '=', 'a.emp_id')
+            ->leftjoin('codeofconduct as coc', 'ed.id', '=', 'coc.emp_id')
+            ->select('ed.id', 'ed.firstname', 'ed.created_at', 'ed.lastname', 'ed.personalemail', 'a.agreement', 'coc.coc_agreement')
+            ->where(array('ed.id' => auth()->user()->emp_id))
+            ->get();
+        return view('agreement_listnew')->with('agreement', $employee);
+    }
+
+
+
+
+
+
+
 }
