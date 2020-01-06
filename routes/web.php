@@ -74,7 +74,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/deletemileage/{id}', 'MileageController@deletemileage');
 
     // pay statement
-    Route::get('admin/addpaystatement', 'Admin\PaystatementController@paystatement');
+    Route::get('admin/addpaystatement', 'Admin\AdminPaystatementController@paystatement');
 });
 
 
@@ -99,7 +99,7 @@ Route::group(['middleware' => ['auth', 'isAdmin']], function () {
 //Route::middleware(['admin'])->group(function () {
 Route::get('admin/addpaystatement','Admin\PaystatementController@paystatement');
 Route::get('admin/registration','Admin\AdminController@index');
-Route::get('admin/agreement','Admin\AgreementController@agreementlist');
+Route::get('admin/agreement','Admin\AdminAgreementController@agreementlist');
 Route::get('admin/expences_report','Admin\AdminController@expences_report');
 Route::get('admin/milegebook','Admin\AdminController@milegebook');
 Route::get('admin/tech_maintanance','Admin\AdminController@tech_maintanance');
