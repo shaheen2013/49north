@@ -7,8 +7,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
 
-class Company extends Authenticatable
-{
+class Company extends Authenticatable {
     use Notifiable;
     use HasRoles;
 
@@ -19,9 +18,8 @@ class Company extends Authenticatable
      */
     protected $guard = [];
 
-    
-   /* public function setPasswordAttribute($password)
-    {   
-        $this->attributes['password'] = bcrypt($password);
-    }*/
+    /* public function setPasswordAttribute($password)
+     {
+         $this->attributes['password'] = bcrypt($password);
+     }*/
 }

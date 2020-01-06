@@ -27,10 +27,10 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/home', 'HomeController@home')->name('home');
     Route::post('/edit_employee','HomeController@edit_employee');
     // agreements
-  
-   // Route::post('/addagreement', 'HomeController@add_empagreement')->name('addagreement');
 
-   // Route::post('/employee_agreementlist', 'HomeController@employee_agreementlist')->name('employee_agreementlist');
+   // Route::post('/addagreement', 'AgreementController@add_empagreement')->name('addagreement');
+
+   // Route::post('/employee_agreementlist', 'AgreementController@employee_agreementlist')->name('employee_agreementlist');
     Route::get('/agreementlist', 'HomeController@agreementlist')->name('agreementlist');
 
     //Route::get('/', 'PostController@index')->name('home');
@@ -92,8 +92,8 @@ Route::group(['middleware' => ['auth', 'isAdmin']], function () {
 //Route::post('/employeeagreement', 'EmployeeAgreementController@agreementlist')->name('employeeagreement');
 
 //Route::middleware(['admin'])->group(function () {
-	
-	
+
+
 	/// ADMin
 
 //Route::middleware(['admin'])->group(function () {

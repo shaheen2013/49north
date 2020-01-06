@@ -4,7 +4,6 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Agreement extends Model
-{
-		protected $guarded = [];
+class Agreement extends Model {
+    protected $guarded = [];
 }

@@ -2,23 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-
-use Auth;
-//Importing laravel-permission models
-use Spatie\Permission\Models\Role;
-use Spatie\Permission\Models\Permission;
-
-use Session;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Http\{RedirectResponse,Request};
+use Illuminate\Routing\Redirector;
+use Illuminate\Validation\ValidationException;
+use Illuminate\View\View;
+use Spatie\Permission\Models\{Role,Permission};
 
 class RoleController extends Controller {
 
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Factory|View
      */
-    public function index() {
+    public function index () {
         $roles = Role::all();//Get all roles
 
         return view('roles.index')->with('roles', $roles);
@@ -27,27 +25,28 @@ class RoleController extends Controller {
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Factory|View
      */
-    public function create() {
+    public function create () {
         $permissions = Permission::all();//Get all permissions
 
-        return view('roles.create', ['permissions'=>$permissions]);
+        return view('roles.create', ['permissions' => $permissions]);
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     *
+     * @return RedirectResponse
+     * @throws ValidationException
      */
-    public function store(Request $request) {
-    //Validate name and permissions field
+    public function store (Request $request) {
+        //Validate name and permissions field
         $this->validate($request, [
-            'name'=>'required|unique:roles|max:10',
-            'permissions' =>'required',
-            ]
-        );
+                'name'        => 'required|unique:roles|max:10',
+                'permissions' => 'required',
+            ]);
 
         $name = $request['name'];
         $role = new Role();
@@ -56,36 +55,36 @@ class RoleController extends Controller {
         $permissions = $request['permissions'];
 
         $role->save();
-    //Looping thru selected permissions
+        //Looping thru selected permissions
         foreach ($permissions as $permission) {
             $p = Permission::where('id', '=', $permission)->firstOrFail();
-         //Fetch the newly created role and assign permission
+            //Fetch the newly created role and assign permission
             $role = Role::where('name', '=', $name)->first();
             $role->givePermissionTo($p);
         }
 
-        return redirect()->route('roles.index')
-            ->with('flash_message',
-             'Role'. $role->name.' added!');
+        return redirect()->route('roles.index')->with('flash_message', 'Role' . $role->name . ' added!');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param int $id
+     *
+     * @return RedirectResponse|Redirector
      */
-    public function show($id) {
+    public function show ($id) {
         return redirect('roles');
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param int $id
+     *
+     * @return Factory|View
      */
-    public function edit($id) {
+    public function edit ($id) {
         $role = Role::findOrFail($id);
         $permissions = Permission::all();
 
@@ -95,17 +94,19 @@ class RoleController extends Controller {
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param int     $id
+     *
+     * @return RedirectResponse
+     * @throws ValidationException
      */
-    public function update(Request $request, $id) {
+    public function update (Request $request, $id) {
 
         $role = Role::findOrFail($id);//Get role with the given id
-    //Validate name and permission fields
+        //Validate name and permission fields
         $this->validate($request, [
-            'name'=>'required|max:10|unique:roles,name,'.$id,
-            'permissions' =>'required',
+            'name'        => 'required|max:10|unique:roles,name,' . $id,
+            'permissions' => 'required',
         ]);
 
         $input = $request->except(['permissions']);
@@ -123,25 +124,21 @@ class RoleController extends Controller {
             $role->givePermissionTo($p);  //Assign permission to role
         }
 
-        return redirect()->route('roles.index')
-            ->with('flash_message',
-             'Role'. $role->name.' updated!');
+        return redirect()->route('roles.index')->with('flash_message', 'Role' . $role->name . ' updated!');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param int $id
+     *
+     * @return RedirectResponse
      */
-    public function destroy($id)
-    {
+    public function destroy ($id) {
         $role = Role::findOrFail($id);
         $role->delete();
 
-        return redirect()->route('roles.index')
-            ->with('flash_message',
-             'Role deleted!');
+        return redirect()->route('roles.index')->with('flash_message', 'Role deleted!');
 
     }
 }
