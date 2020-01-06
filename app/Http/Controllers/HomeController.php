@@ -26,13 +26,13 @@ class HomeController extends Controller
      */
     public function home()
     {
-       
+
        $emp_id =  auth()->user()->id;
         $data['user'] = DB::table('users as u')
             ->join('employee_details as ed', 'u.id', '=', 'ed.id')
             ->select('ed.*')->where('u.id', '=', $emp_id)
             ->first();
-          
+
        return view('home', $data);
     }
 
@@ -520,7 +520,7 @@ class HomeController extends Controller
             $msg = 'User successfully updated';
         } else {
             $user = User::create($input);
-           
+
             $msg = 'User successfully Added';
         }
 
@@ -530,7 +530,7 @@ class HomeController extends Controller
         }
         else {
             $user->employee_details()->create($user_array);
-          
+
         }
 
         //Redirect to the users.index view and display message
@@ -540,7 +540,7 @@ class HomeController extends Controller
 
 
 
-///////////  Agreement List 
+///////////  Agreement List
 
      function agreementlist()
     {
@@ -548,7 +548,7 @@ class HomeController extends Controller
             ->leftjoin('agreements as a', 'ed.id', '=', 'a.emp_id')
             ->leftjoin('codeofconduct as coc', 'ed.id', '=', 'coc.emp_id')
             ->select('ed.id', 'ed.firstname', 'ed.created_at', 'ed.lastname', 'ed.personalemail', 'a.agreement', 'coc.coc_agreement')
-            ->where(array('ed.id' => auth()->user()->emp_id))
+            ->where(array('ed.id' => auth()->user()->id))
             ->get();
         return view('agreement_listnew')->with('agreement', $employee);
     }

@@ -16,7 +16,7 @@ class Employee_detail extends Model
      * @return HasOne
      */
     public function user () {
-        return $this->hasOne(User::class,'emp_id','id');
+        return $this->hasOne(User::class,'id','id');
     }
 
     /**

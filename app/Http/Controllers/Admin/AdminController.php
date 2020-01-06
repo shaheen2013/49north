@@ -90,7 +90,7 @@ class AdminController extends Controller
         $Employee_detail = Employee_detail::create($employee_detailsarray);
         $last_id=$Employee_detail->id;
         $user_detail = User::create([
-            'emp_id' =>$last_id,
+            'id' =>$last_id,
             'name' =>$request->firstname.' '.$request->lastname,
             'password' =>Hash::make($request->password),
             'email' =>$request->personalemail,

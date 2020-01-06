@@ -31,9 +31,9 @@ class MileageController extends Controller
      */
     public function mileagelist(Request $request)
     {   ob_start();
-        $emp_id  =  auth()->user()->emp_id;
+        $emp_id  =  auth()->user()->id;
         $type  =  auth()->user()->user_type;
-       if($type == 'is_admin')$mileage_list = DB::table('mileages')->get();       
+       if($type == 'is_admin')$mileage_list = DB::table('mileages')->get();
        else  $mileage_list = DB::table('mileages')->where(array('emp_id'=>$emp_id,'status'=>'A'))->get();
         foreach($mileage_list as $mlist)
         {
@@ -47,37 +47,37 @@ class MileageController extends Controller
             </tr>
             <tr class="spacer"></tr>
 
-        <?php 
+        <?php
         }
 
         $data=ob_get_clean();
         echo json_encode(array(
-            "data" => $data, 
+            "data" => $data,
         ));
     }
 
     public function addmileage(Request $request)
-    {  
+    {
             $mileagearray = array(
-                            'emp_id' =>auth()->user()->emp_id,
-                            'company' => $request->companyname, 
-                            'date' => $request->date, 
+                            'emp_id' =>auth()->user()->id,
+                            'company' => $request->companyname,
+                            'date' => $request->date,
                             'vehicle' => $request->vehicle,
                             'kilometers' =>$request->kilometers,
                             'reasonmileage' =>$request->reasonformileage,
                             );
 
                 DB::table('mileages')->insert($mileagearray);
-        
+
 
     }
 
     function updatemileage(Request $request)
-    {   $emp_id  =  auth()->user()->emp_id;
+    {   $emp_id  =  auth()->user()->id;
         $conditions = array('id'=>$request->editmileage_id,'emp_id'=>$emp_id);
         DB::table('mileages')->where($conditions)->update(
                     [   'date' => $request->date,
-                        'company' => $request->companyname,                    
+                        'company' => $request->companyname,
                         'vehicle' => $request->vehicle,
                         'kilometers' => $request->kilometers,
                         'reasonmileage' => $request->reasonformileage,
@@ -90,9 +90,9 @@ class MileageController extends Controller
     function get_mileage($id)
     {
         $data['companies'] = Company::all();
-        $emp_id  =  auth()->user()->emp_id;
+        $emp_id  =  auth()->user()->id;
         $type  =  auth()->user()->user_type;
-       if($type== 'is_admin')$mileage_list = DB::table('mileages')->first();       
+       if($type== 'is_admin')$mileage_list = DB::table('mileages')->first();
        else {
         $data['mileagedetails'] = DB::table('mileages')
             ->where(array('id'=>$id,'emp_id'=>$emp_id))->first();
@@ -102,12 +102,12 @@ class MileageController extends Controller
 
     function deletemileage($id)
     {
-        $emp_id  =  auth()->user()->emp_id;
+        $emp_id  =  auth()->user()->id;
         $conditions = array('id'=>$id,'emp_id'=>$emp_id);
         DB::table('mileages')->where($conditions)->update(['status' => 'D']);
-       
+
     }
 
-    
+
 
 }

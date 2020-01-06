@@ -91,7 +91,6 @@ class RegisterController extends Controller
             $Employee_detail = Employee_detail::create($employee_detailsarray);
             $last_id = $Employee_detail->id;
             $user_detail = User::create([
-                'emp_id' => $last_id,
                 'name' => $request->firstname . ' ' . $request->lastname,
                 'password' => Hash::make($request->password),
                 'email' => $request->personalemail,
@@ -110,7 +109,7 @@ class RegisterController extends Controller
 
             return back()->with('message', 'Your information is submitted Successfully');
         } else {
-            $Employee_detail = Employee_detail::where('id', '=', auth()->user()->emp_id)->update($employee_detailsarray);
+            $Employee_detail = Employee_detail::where('id', '=', auth()->user()->id)->update($employee_detailsarray);
             return back()->with('message', 'Your information is submitted Successfully');
         }
     }

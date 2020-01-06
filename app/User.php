@@ -19,7 +19,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'emp_id', 'email', 'password', 'user_type', 'is_admin'
+        'name', 'email', 'password', 'user_type', 'is_admin'
     ];
 
     /**
@@ -46,7 +46,7 @@ class User extends Authenticatable
      * @return HasOne
      */
     public function employee_details () {
-        return $this->hasOne(Employee_detail::class,'id','emp_id');
+        return $this->hasOne(Employee_detail::class,'id','id');
     }
 
     /* public function setPasswordAttribute($password)
