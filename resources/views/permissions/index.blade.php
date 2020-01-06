@@ -1,9 +1,9 @@
 {{-- \resources\views\permissions\index.blade.php --}}
-@extends('layouts.app')
+@extends('layouts.main')
 
 @section('title', '| Permissions')
 
-@section('content')
+@section('content1')
 
 <div class="col-lg-10 col-lg-offset-1">
     <h1><i class="fa fa-key"></i>Available Permissions

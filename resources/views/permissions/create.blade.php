@@ -1,9 +1,9 @@
 {{-- \resources\views\permissions\create.blade.php --}}
-@extends('layouts.app')
+@extends('layouts.main')
 
 @section('title', '| Create Permission')
 
-@section('content')
+@section('content1')
 
 <div class='col-lg-4 col-lg-offset-4'>
 

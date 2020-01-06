@@ -7,271 +7,267 @@
 @section('content1')
 
  <!--------------employee-------------->
-                     <div class="tab-pane fade show active" id="nav-employee" role="tabpanel"
-             aria-labelledby="nav-employee-tab">
-            <form id="contacts_form" method="POST" name="contact-form"
-                  action="{{url('registration')}}" enctype="multipart/form-data">
-                @csrf
+                    <div class="tab-pane fade show active" id="nav-employee" role="tabpanel" aria-labelledby="nav-employee-tab">
 
-                <div class="personal">
-                    <h2 class="form_title">Personal Information</h2>
-                    <div class="row">
+        {{ Form::model($user, ['url' => url('edit_employee')]) }}
+        {!! Form::hidden('id') !!}
 
-                        <div class="col-md-3">
-                            <div class="text_outer">
-                                <label for="name" class="">First name</label>
-                                <input type="text" id="firstname" name="firstname"
-                                       class="form-control" placeholder="First Name"
-                                       value={{isset($employee_details->name) ?  $employee_details->name : ''}}>
-                            </div>
-                        </div>
+        <div class="personal">
+            <h2 class="form_title">Personal Information</h2>
+            <div class="row">
 
-                        <div class="col-md-3">
-                            <div class="text_outer">
-                                <label for="name" class="">Last name</label>
-                                <input type="text" id="lastname" name="lastname"
-                                       class="form-control" placeholder="Last Name"
-                                       value={{isset($employee_details->lastname) ?  $employee_details->lastname : ''}}>
-                            </div>
-                        </div>
+                <div class="col-md-3">
+                    <div class="text_outer">
 
-                        <div class="col-md-3">
-                            <div class="text_outer">
-                                <label for="name" class="">Date of birth</label>
-                                <input type="date" id="dob" name="dob" class="form-control"
-                                       value={{isset($employee_details->dob) ?  $employee_details->dob : ''}}>
-                            </div>
-                        </div>
-
-                        <div class="col-md-3">
-                            <div class="text_outer">
-                                <label for="name" class="">Phone</label>
-                                <input type="number" id="phone" name="phone" class="form-control"
-                                       placeholder="000 000 0000"
-                                       value={{isset($employee_details->phone_no) ?  $employee_details->phone_no : ''}}>
-                            </div>
-                        </div>
+                        {{ Form::label('firstname', 'First Name') }}
+                        {{ Form::text('firstname', null, array('class' => 'form-control','placeholder'=>'First Name','required'=>'required')) }}
 
                     </div>
+                </div>
 
-                    <div class="row">
+                <div class="col-md-3">
+                    <div class="text_outer">
 
-                        <div class="col-md-6">
-                            <div class="text_outer">
-                                <label for="name" class="">Address</label>
-                                <input type="text" id="address" name="address" class="form-control"
-                                       placeholder="Address"
-                                       value={{isset($employee_details->address) ?  $employee_details->address : ''}}>
-                            </div>
-                        </div>
-
-                        <div class="col-md-3">
-                            <div class="text_outer">
-                                <label for="name" class="">Personal email</label>
-                                <input type="email" id="personalemail" name="personalemail"
-                                       class="form-control" placeholder="Personal Email"
-                                       value={{isset($employee_details->personalemail) ?  $employee_details->personalemail : ''}} {{(auth()->user()->user_type == 'employee') ? 'readonly': ''}}>
-                            </div>
-                        </div>
-
-                        <div class="col-md-3">
-                            <div class="text_outer">
-                                <label for="name" class="">Work email</label>
-                                <input type="email" id="workemail" name="workemail"
-                                       class="form-control" placeholder="Work email"
-                                       value={{isset($employee_details->email) ?  $employee_details->email : ''}}>
-                            </div>
-                        </div>
+                        {{ Form::label('lastname', 'Last Name') }}
+                        {{ Form::text('lastname', null, array('class' => 'form-control','placeholder'=>'Last Name','required'=>'required')) }}
 
                     </div>
+                </div>
 
-                    <div class="row">
-
-                        <div class="col-md-6">
-                            <div class="text_outer file_upload">
-                                <label for="name" class="">Profile photo</label>
-                                <input type="file" id="profilepic" name="profilepic"
-                                       class="form-control">
-                            </div>
-                        </div>
-
-
-                        <div class="col-md-3">
-                            <div class="text_outer">
-                                <label for="name" class="">Password*</label>
-                                <input type="password" id="password" name="password"
-                                       class="form-control" placeholder="xxxxxxx">
-                            </div>
-                        </div>
-
-                        <div class="col-md-3">
-                            <p>**Only required if you are changing your password. Your password must
-                                be more than 6 characters long, should contain at least 1 uppercase,
-                                1
-                                lowercase, 1 numeric and 1 special character.
-                                <a href="javascript:void(0)" data-toggle="modal"
-                                   data-target="#upload-modal1">Click Reset</a>
-                            </p>
-                        </div>
-
+                <div class="col-md-3">
+                    <div class="text_outer">
+                        {{ Form::label('dob', 'Date of birth') }}
+                        {{ Form::date('dob', null, array('class' => 'form-control')) }}
                     </div>
-                </div><!--------Personal Information----------->
+                </div>
 
-                <div class="circumstances">
-                    <h2 class="form_title">Personal Circumstances</h2>
-                    <div class="row">
+                <div class="col-md-3">
+                    <div class="text_outer">
+                        {{ Form::label('phone_no', 'Phone') }}
+                        {{ Form::number('phone_no', null, array('class' => 'form-control','Placeholder'=>"000 000 0000")) }}
+                    </div>
+                </div>
 
-                        <div class="col-md-3">
-                            <div class="text_outer">
-                                <label for="name" class="">Marital status</label>
-                                <select class="select_status form-control" name="marital_status">
-                                    <option value="">Select</option>
-                                    <option value="1">1</option>
-                                    <option value="2">2</option>
-                                </select>
-                            </div>
-                        </div>
+            </div>
 
-                        <div class="col-md-3">
-                            <div class="text_outer">
-                                <label for="name" class="">Number of children</label>
-                                <input type="number" id="noofchildren" name="noofchildren"
-                                       class="form-control" placeholder="0"
-                                       value={{isset($employee_details->no_ofchildren) ?  $employee_details->no_ofchildren : ''}}>
-                            </div>
-                        </div>
+            <div class="row">
 
-                        <div class="col-md-6">
-                            <div class="text_outer">
-                                <label for="name" class="">Family in the area</label>
-                                <input type="text" id="familyinarea" name="familyinarea"
-                                       class="form-control" placeholder="Insert text here"
-                                       value={{isset($employee_details->family_inarea) ?  $employee_details->family_inarea : ''}}>
-                            </div>
-                        </div>
+                <div class="col-md-6">
+                    <div class="text_outer">
+
+                        {{ Form::label('address', 'Address') }}
+                        {{ Form::text('address', null, array('class' => 'form-control','Placeholder'=>"Address")) }}
 
 
                     </div>
+                </div>
 
-                    <div class="row">
+                <div class="col-md-3">
+                    <div class="text_outer">
 
-                        <div class="col-md-6">
-                            <div class="text_outer">
-                                <label for="name" class="">Special family circumstances</label>
-                                <input type="text" id="familycircum" name="familycircum"
-                                       class="form-control" placeholder="Insert text here"
-                                       value={{isset($employee_details->familycircumstance) ?  $employee_details->familycircumstance : ''}}>
-                            </div>
-                        </div>
+                        {{ Form::label('personalemail', 'Personal email') }}
+                        {{ Form::email('personalemail', null, array('class' => 'form-control','Placeholder'=>"Personal email")) }}
+                    </div>
+                </div>
 
-                        <div class="col-md-3">
-                            <div class="text_outer">
-                                <label for="name" class="">Personal belief/religious
-                                    requirements</label>
-                                <input type="text" id="personal_belief" name="personal_belief"
-                                       class="form-control" placeholder="Insert text here"
-                                       value={{isset($employee_details->prsnl_belief) ?  $employee_details->prsnl_belief : ''}}>
-                            </div>
-                        </div>
+                <div class="col-md-3">
+                    <div class="text_outer">
+
+                        {{ Form::label('workemail', 'Work email') }}
+                        {{ Form::email('workemail', null, array('class' => 'form-control','Placeholder'=>"Work email",'required'=>'required')) }}
 
                     </div>
-                </div><!--------Personal Circumstances----------->
+                </div>
 
-                <div class="health">
-                    <h2 class="form_title">Health Concerns</h2>
-                    <div class="row">
+            </div>
 
-                        <div class="col-md-6">
-                            <div class="text_outer">
-                                <label for="name" class="">Known medical conditions</label>
-                                <input type="text" id="medical_conditions" name="medical_conditions"
-                                       class="form-control" placeholder="Insert text here">
-                            </div>
-                        </div>
+            <div class="row">
 
-                        <div class="col-md-6">
-                            <div class="text_outer">
-                                <label for="name" class="">Allergies</label>
-                                <input type="text" id="allergies" name="allergies"
-                                       class="form-control" placeholder="Insert text here">
-                            </div>
-                        </div>
+                <div class="col-md-6">
+                    <div class="text_outer file_upload">
+                        <label for="name" class="">Profile photo</label>
+                        <input type="file" id="profile_pic" name="profile_pic" class="form-control">
+                    </div>
+                </div>
 
+
+                <div class="col-md-3">
+                    <div class="text_outer">
+                        <label for="name" class="">Password*</label>
+                        <input type="password" id="password" name="password" class="form-control" placeholder="xxxxxxx"
+                               {{ $user->id ? '' : 'required' }} {{-- password is only required if it's a new user --}}>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <p>**Only required if you are changing your password. Your password must
+                        be more than 6 characters long, should contain at least 1 uppercase, 1
+                        lowercase, 1 numeric and 1 special character.
+                        <a href="javascript:void(0)" data-toggle="modal" data-target="#upload-modal1">Click Reset</a>
+                    </p>
+                </div>
+
+            </div>
+        </div><!--------Personal Information----------->
+
+        <div class="circumstances">
+            <h2 class="form_title">Personal Circumstances</h2>
+            <div class="row">
+
+                <div class="col-md-3">
+                    <div class="text_outer">
+                        <label for="name" class="">Marital status</label>
+                        <select class="select_status form-control" name="marital_status">
+                            <option value="">Select</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="text_outer">
+
+                        {{ Form::label('no_ofchildren', 'Number of children') }}
+                        {{ Form::number('no_ofchildren', null, array('class' => 'form-control','min' => 0)) }}
 
                     </div>
+                </div>
 
-                    <div class="row">
+                <div class="col-md-6">
+                    <div class="text_outer">
 
-                        <div class="col-md-3">
-                            <div class="text_outer">
-                                <label for="name" class="">Dietary Restrictions</label>
-                                <input type="text" id="dietary" name="dietary" class="form-control"
-                                       placeholder="Insert text here">
-                            </div>
-                        </div>
-
-                        <div class="col-md-3">
-                            <div class="text_outer">
-                                <label for="name" class="">Known mental health concerns</label>
-                                <input type="text" id="mental_concerns" name="mental_concerns"
-                                       class="form-control" placeholder="Insert text here">
-                            </div>
-                        </div>
-
-                        <div class="col-md-6">
-                            <div class="text_outer">
-                                <label for="name" class="">Aversion to physical activity</label>
-                                <input type="text" id="aversion_phyactivity"
-                                       name="aversion_phyactivity" class="form-control"
-                                       placeholder="Insert text here">
-                            </div>
-                        </div>
-
+                        {{ Form::label('family_inarea', 'Family in the area') }}
+                        {{ Form::text('family_inarea', null, array('class' => 'form-control','placeholder'=>'Insert text here')) }}
                     </div>
-                </div><!--------Health Concerns----------->
+                </div>
 
-                <div class="emergency">
-                    <h2 class="form_title">Emergency Contact Information</h2>
-                    <div class="row">
 
-                        <div class="col-md-3">
-                            <div class="text_outer">
-                                <label for="name" class="">Emergency contact name</label>
-                                <input type="text" id="emergency_contact_name"
-                                       name="emergency_contact_name" class="form-control"
-                                       placeholder="Insert text here">
-                            </div>
-                        </div>
+            </div>
 
-                        <div class="col-md-3">
-                            <div class="text_outer">
-                                <label for="name" class="">Relationship to emergency contact</label>
-                                <input type="text" id="rel_emer_contact" name="rel_emer_contact"
-                                       class="form-control" placeholder="Insert text here">
-                            </div>
-                        </div>
+            <div class="row">
 
-                        <div class="col-md-3">
-                            <div class="text_outer">
-                                <label for="name" class="">Emergency contact phone</label>
-                                <input type="text" id="emer_contact_phone" name="emer_contact_phone"
-                                       class="form-control" placeholder="Insert text here">
-                            </div>
-                        </div>
+                <div class="col-md-6">
+                    <div class="text_outer">
 
-                        <div class="col-md-3">
-                            <div class="text_outer">
-                                <label for="name" class="">Emergency contact email</label>
-                                <input type="text" id="emergency_email" name="emergency_email"
-                                       class="form-control" placeholder="Insert text here">
-                            </div>
-                        </div>
-
+                        {{ Form::label('familycircumstance', 'Special family circumstances') }}
+                        {{ Form::text('familycircumstance', null, array('class' => 'form-control','placeholder'=>'Insert text here')) }}
                     </div>
-                </div><!--------Emergency Contact Information----------->
+                </div>
 
-                <button type="submit" class="btn-dark contact_btn">Save</button>
+                <div class="col-md-3">
+                    <div class="text_outer">
 
-            </form>
-        </div><!-------------end--------->
+                        {{ Form::label('prsnl_belief', 'Personal belief/religious requirements') }}
+                        {{ Form::text('prsnl_belief', null, array('class' => 'form-control','placeholder'=>'Insert text here')) }}
+                    </div>
+                </div>
+
+            </div>
+        </div><!--------Personal Circumstances----------->
+
+        <div class="health">
+            <h2 class="form_title">Health Concerns</h2>
+            <div class="row">
+
+                <div class="col-md-6">
+                    <div class="text_outer">
+
+                        {{ Form::label('known_medical_conditions', 'Known medical conditions') }}
+                        {{ Form::text('known_medical_conditions', null, array('class' => 'form-control','placeholder'=>'Insert text here')) }}
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="text_outer">
+
+                        {{ Form::label('allergies', 'Allergies') }}
+                        {{ Form::text('allergies', null, array('class' => 'form-control','placeholder'=>'Insert text here')) }}
+                    </div>
+                </div>
+
+
+            </div>
+
+            <div class="row">
+
+                <div class="col-md-3">
+                    <div class="text_outer">
+
+                        {{ Form::label('dietiary_restrictions', 'Dietary Restrictions') }}
+                        {{ Form::text('dietiary_restrictions', null, array('class' => 'form-control','placeholder'=>'Insert text here')) }}
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="text_outer">
+
+                        {{ Form::label('known_health_concerns', 'Known mental health concerns') }}
+                        {{ Form::text('known_health_concerns', null, array('class' => 'form-control','placeholder'=>'Insert text here')) }}
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="text_outer">
+                        {{ Form::label('aversion_phyactivity', 'Aversion to physical activity') }}
+                        {{ Form::text('aversion_phyactivity', null, array('class' => 'form-control','placeholder'=>'Insert text here')) }}
+                    </div>
+                </div>
+
+            </div>
+        </div><!--------Health Concerns----------->
+
+        <div class="emergency">
+            <h2 class="form_title">Emergency Contact Information</h2>
+            <div class="row">
+
+                <div class="col-md-3">
+                    <div class="text_outer">
+                        {{ Form::label('emergency_contact_name', 'Emergency contact name') }}
+                        {{ Form::text('emergency_contact_name', null, array('class' => 'form-control','placeholder'=>'Insert text here')) }}
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="text_outer">
+                        {{ Form::label('reltn_emergency_contact', 'Relationship to emergency contact') }}
+                        {{ Form::text('reltn_emergency_contact', null, array('class' => 'form-control','placeholder'=>'Insert text here')) }}
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="text_outer">
+
+                        {{ Form::label('emergency_contact_phone', 'Emergency contact phone') }}
+                        {{ Form::text('emergency_contact_phone', null, array('class' => 'form-control','placeholder'=>'Insert text here')) }}
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="text_outer">
+
+                        {{ Form::label('emergency_contact_email', 'Emergency contact email') }}
+                        {{ Form::email('emergency_contact_email', null, array('class' => 'form-control','placeholder'=>'Insert text here')) }}
+                    </div>
+                </div>
+
+            </div>
+        </div><!--------Emergency Contact Information----------->
+        @if(auth()->user()->is_admin == 1)
+        <div class="emergency">
+            <h2 class="form_title">Admin</h2>
+            <div class="row">
+                <div class='col-md-3'>
+                    <div class="text_outer">
+                        {!! Form::checkbox('is_admin',1,null,['class' => 'form-check-input','id' => 'is-admin']) !!}
+                        {!! Form::label('is-admin','Is Admin') !!}
+                    </div>
+                </div>
+            </div>
+        </div>
+        @endif
+        {{ Form::button(auth()->user()->id ? 'Edit' : 'Add', array('class' => 'btn-dark contact_btn','type'=>'submit')) }}
+
+        {{ Form::close() }}
+    </div><!-------------end--------->
 @endsection

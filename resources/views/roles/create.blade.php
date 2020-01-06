@@ -1,8 +1,8 @@
-@extends('layouts.app')
+@extends('layouts.main')
 
 @section('title', '| Add Role')
 
-@section('content')
+@section('content1')
 
 <div class='col-lg-4 col-lg-offset-4'>
 

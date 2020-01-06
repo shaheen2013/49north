@@ -57,9 +57,19 @@
     </nav>
 </div>
 
+{{--
 @if (isset($subnav))
     @include($subnav)
-@endif
+@endif  --}}
+        <nav class="top_tab_details">
+              <div class="container-fluid">
+                  <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                    <a class="nav-item nav-link active" id="nav-employee-tab" data-toggle="tab" href="#nav-employee" role="tab" aria-controls="nav-employee" aria-selected="true">Employee Information</a>
+                    <a class="nav-item nav-link" id="agreement_list" href="{{ route('agreementlist') }}">Agreements</a>
+                    <a class="nav-item nav-link" id="nav-statements-tab" data-toggle="tab" href="#nav-statements" role="tab" aria-controls="nav-statements" aria-selected="false">Pay Statements</a>
+                  </div>
+              </div><!--------------container--------------->
+        </nav>
 
 <div class="container-fluid">
 
@@ -94,6 +104,3 @@
 
 @stack('scripts')
 
-</body>
-
-</html>
