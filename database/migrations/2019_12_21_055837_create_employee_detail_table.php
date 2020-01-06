@@ -15,14 +15,14 @@ class CreateEmployeeDetailTable extends Migration
     {
         Schema::create('Employee_details', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('emp_id');
-			$table->string('name')->nullable();
+            //$table->string('emp_id');
+			$table->string('firstname')->nullable();
 			$table->string('lastname')->nullable();
 			$table->string('dob')->nullable();
 			$table->string('personalemail')->nullable();
 			$table->string('phone_no')->nullable();
 			$table->string('address')->nullable();
-			$table->string('email')->nullable();
+			$table->string('workemail')->nullable();
 			$table->string('profile_pic')->nullable();
 			$table->string('marital_status')->nullable();
 			$table->string('no_ofchildren')->nullable();
