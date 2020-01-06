@@ -105,24 +105,23 @@ class UserController extends Controller
         if ($id) {
             $user = User::find($id);
             $user->update($input);
-
+            $emp_id = $id;
 /*            $user_detailsupdate = Employee_detail::find($id);
             $user_detailsupdate->update($user_array);*/
             $msg = 'User successfully updated';
         } else {
             $user = User::create($input);
-            /*$lastid = $user->id;
-
-            $user_array['emp_id'] = $lastid;
-            $user_details = Employee_detail::create($user_array);*/
+           
             $msg = 'User successfully Added';
         }
 
-        if ($user->emp_id) {
-            $user->employee_details()->update($user_array);
+        if (isset($emp_id)) {
+            //$user->employee_details()->update($user_array);
+            Employee_detail::where('id','=',$emp_id)->update($user_array);
         }
         else {
             $user->employee_details()->create($user_array);
+          
         }
 
         //Redirect to the users.index view and display message
@@ -150,7 +149,11 @@ class UserController extends Controller
     public function edit($id)
     {
         $u = User::findOrFail($id); //Get user with specified id
-        $user = Employee_detail::find($u->emp_id);
+        //DB::enableQueryLog();
+        $user = Employee_detail::find($u->id);
+       /* $query = DB::getQueryLog();
+        print_r($query);
+        die;*/
         if (!$user) {
             $user = new Employee_detail();
             // separate first / last name from user table
