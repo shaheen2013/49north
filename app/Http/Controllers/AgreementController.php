@@ -1,26 +1,28 @@
 <?php
 
 namespace App\Http\Controllers;
-use Response;
-use App\Agreement;
-use App\Codeofconduct;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-class AgreementController extends Controller
-{
-    function agreementlist()
-    {
-    	$employee = DB::table('employee_details as ed')->leftjoin('agreements as a', 'ed.id', '=', 'a.emp_id')->leftjoin('codeofconducts as coc', 'ed.id', '=', 'coc.emp_id')
-            ->select('ed.id', 'ed.firstname', 'ed.created_at', 'ed.lastname', 'ed.personalemail', 'a.agreement', 'coc.coc_agreement');
-            
-            /// if employee is not admin
-            if(auth()->user()->is_admin == 0)
-            {
-             $employee->where(array('ed.id'=>auth()->user()->id,'a.deleted_at'=>NULL));
-            }
-            $result = $employee->get();
 
-       return view('agreement_listnew')->with('agreement', $result);
+use App\{Agreement, Codeofconduct, Employee_detail};
+use Exception;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Http\{JsonResponse, RedirectResponse, Request};
+use Illuminate\View\View;
+
+class AgreementController extends Controller {
+
+    /**
+     * @return Factory|View
+     */
+    function agreementlist () {
+        $q = Employee_detail::orderBy('firstname')->with('activeAgreement', 'activeCodeofconduct', 'activeAgreement.amendments');
+
+        /// if employee is not admin
+        if (auth()->user()->is_admin == 0) {
+            $q->where('id', auth()->user()->id);
+        }
+        $users = $q->get();
+
+        return view('agreement_listnew', compact('users'));
     }
 
     function addagreement(Request $request)
