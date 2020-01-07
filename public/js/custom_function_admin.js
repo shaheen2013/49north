@@ -3,7 +3,7 @@ function get_agreementlist()
 	var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
 
 	$.ajax({
-		type:'POST',
+		type:'GET',
 		url:"./agreementlist",
 		dataType:'html',
 		data: {_token: CSRF_TOKEN},
@@ -18,7 +18,7 @@ function get_agreementlist()
 
 
 function show_modal_agreement(id,type)
-{
+{  //alert('edfds');
 	$('#show_modal_agreement').modal('show');
 	$('#employee_id_modal').val(id);  
 	$('#agreement_type').val(type);
@@ -40,9 +40,11 @@ $('#upload_agreement').submit(function(e)
   		contentType: false,
 		success:function(response)
 		{
+			console.log(response);
 			$('#show_modal_agreement').modal('hide');
-			get_agreementlist();
-		  swal("Agreement Uploaded successfully","", "success");
+			
+		  swal(response.desc,"", response.status);
+		  get_agreementlist();
 
 		}
 	});
