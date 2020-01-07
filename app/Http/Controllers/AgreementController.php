@@ -76,20 +76,22 @@ class AgreementController extends Controller {
         }
     }
 
-
+    /**
+     * @param $id
+     * @param $type
+     *
+     * @return JsonResponse
+     */
     function destroy ($id, $type) {
+
         if ($type == 'EA') {
-          // DB::table('agreements')->where(['emp_id', $id])->update(['status' => 'D']);
-         $agreement =   Agreement::where('emp_id',$id)->first();
-         //$success = $agreement->exists ? true : false;
-         $agreement->delete();
+            $agreement = Agreement::where('id', $id)->first();
         }
-        if ($type == 'COC') {
-            //DB::table('codeofconduct')->where('emp_id', $id)->update(['status' => 'D']);
-        	$coc =   Codeofconduct::where('emp_id',$id)->first();
-	        // $success = $coc->exists ? true : false;
-	         $coc->delete();
+        else {
+            $agreement = Codeofconduct::where('id', $id)->first();
         }
+
+        $agreement->delete();
 
         return response()->json([
             'success' => 'Agreement deleted successfully!'
