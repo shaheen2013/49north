@@ -19,6 +19,14 @@ class AddSoftDeletes extends Migration
         Schema::table('employee_details', function (Blueprint $table) {
             $table->softDeletes();
         });
+
+        Schema::table('agreements', function (Blueprint $table) {
+            $table->softDeletes();
+        });
+
+        Schema::table('codeofconducts', function (Blueprint $table) {
+            $table->softDeletes();
+        });
     }
 
     /**
@@ -33,6 +41,14 @@ class AddSoftDeletes extends Migration
         });
 
         Schema::table('employee_details', function (Blueprint $table) {
+            $table->dropColumn('deleted_at');
+        });
+
+        Schema::table('agreements', function (Blueprint $table) {
+            $table->dropColumn('deleted_at');
+        });
+
+        Schema::table('codeofconducts', function (Blueprint $table) {
             $table->dropColumn('deleted_at');
         });
     }
