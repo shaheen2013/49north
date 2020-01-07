@@ -29,7 +29,7 @@ Route::group(['middleware' => ['auth']], function () {
 
     // agreements
     Route::get('agreementlist','AgreementController@agreementlist');
-    Route::post('addagreement','AgreementController@addagreement');
+    Route::post('addagreement','AgreementController@addagreement')->name('add-agreement');
     Route::delete('delete_agreement/{id}/{type}', 'AgreementController@destroy')->name('delete_agreement');
 
     // Expenses

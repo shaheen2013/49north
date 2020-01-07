@@ -25,55 +25,59 @@ class AgreementController extends Controller {
         return view('agreement_listnew', compact('users'));
     }
 
-    function addagreement(Request $request)
-    {
-        if ($request->hasFile('agreement_file')) {
-            $file = $request->file('agreement_file');
-            $name = rand(11111, 99999) . '.' . $file->getClientOriginalExtension();
-        }
-        $conditions = ['emp_id' => $request->employee_id];
-        if ($request->agreement_type == 'EA') {
-            $request->file('agreement_file')->move("public/agreement", $name);
-            $agreement_details = DB::table('agreements')->where($conditions)->first();
-            if ($agreement_details) {
-                $update_result =	DB::table('agreements')->where($conditions)->update([
-                    //'emp_id'        => $request->employee_id,
-                    'agreement'     => $name,
-                    'old_agreement' => $agreement_details->agreement,
-                ]);
-               // if($update_result) echo json_encode(array(''));
-              if($update_result)  return Response::json(['status' =>'success', 'desc' => 'Updated successfully']);
+    /**
+     * @param Request $request
+     *
+     * @return RedirectResponse
+     */
+    function addagreement (Request $request) {
 
+        $file = $request->file('agreement_file');
+        $name = str_pad($request->input('employee_id'), '3', '0', STR_PAD_LEFT) . '-' . rand(11111, 99999) . '.' . $file->getClientOriginalExtension();
+
+        $conditions = ['emp_id' => $request->input('employee_id'), 'status' => 'A'];
+
+        // get file upload type
+        $type = $request->input('agreement_type') == 'EA' ? : 'COC';
+        // set file directory for upload
+        $path = $type == 'EA' ? 'agreement' : 'codeofconduct';
+
+        try {
+            $request->file('agreement_file')->move("public/" . $path, $name);
+        } catch (Exception $e) {
+            return redirect()->back()->with('message','File not saved');
+        }
+
+        if ($type == 'EA') {
+            // if it is an amendment, then attach it to an agreement
+            if ($request->input('is_amendment', false)) {
+                $currentAgreement = Agreement::where($conditions)->first();
+                Agreement::create([
+                    'emp_id'    => $request->employee_id,
+                    'agreement' => $name,
+                    'parent_id' => $currentAgreement->id
+                ]);
             }
             else {
-                $insert_result = DB::table('agreements')->insert([
-                        'emp_id'        => $request->employee_id,
-                        'agreement'     => $name,
-                        'old_agreement' => $name,
-                    ]);
-                if($insert_result)  return Response::json(['status' =>'success', 'desc' => 'Added successfully']);
-            }
-
-        }
-        else {
-            $request->file('agreement_file')->move("public/codeofconduct", $name);
-            $agreement_details = DB::table('codeofconducts')->where($conditions)->first();
-            if ($agreement_details) {
-                $coc_result = DB::table('codeofconducts')->where($conditions)->update([
-                    'coc_agreement' => $name,
-                    'old_coc'       => $agreement_details->coc_agreement,
+                // set old agreement, if it exists, to "D"
+                Agreement::where($conditions)->update(['status' => 'D']);
+                Agreement::create([
+                    'emp_id'    => $request->employee_id,
+                    'agreement' => $name
                 ]);
-                if($coc_result)return Response::json(['status' =>'success', 'desc' => 'Updated successfully']);
-            }
-            else {
-                $coc_insertres = DB::table('codeofconducts')->insert([
-                        'emp_id'        => $request->employee_id,
-                        'coc_agreement' => $name,
-                        'old_coc'       => '',
-                    ]);
-                if($coc_insertres)  return Response::json(['status' =>'success', 'desc' => 'Added successfully']);
             }
         }
+        elseif ($type == 'COC') {
+            // set old agreement, if it exists, to "D"
+            Codeofconduct::where($conditions)->update(['status' => 'D']);
+
+            Codeofconduct::create([
+                'emp_id'        => $request->employee_id,
+                'coc_agreement' => $name,
+            ]);
+        }
+
+        return redirect()->back();
     }
 
     /**
