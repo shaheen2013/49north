@@ -39,7 +39,7 @@
             <div class="modal-body">
                 <div class="col-md-12" style="margin-top:40px;margin-bottom:20px;">
                     <form id="upload_agreement" enctype="multipart/form-data">
-                        {{ method_field('PUT') }}
+                     
                         @csrf
                         <input type="hidden"  name="employee_id" id="employee_id_modal">
                         <input type="hidden"  name="agreement_type" id="agreement_type">
