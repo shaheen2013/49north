@@ -13,12 +13,12 @@ class CreateCodeofconductTable extends Migration
      */
     public function up()
     {
-        Schema::create('codeofconduct', function (Blueprint $table) {
+        Schema::create('codeofconducts', function (Blueprint $table) {
             $table->bigIncrements('id');
 			$table->string('emp_id');
 			$table->string('coc_agreement');
 			$table->string('old_coc');
-			$table->enum('status', ['A', 'D']);
+			//$table->enum('status', ['A', 'D']);
             $table->timestamps();
         });
     }
