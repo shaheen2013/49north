@@ -47,4 +47,20 @@ class Employee_detail extends Model {
     public function getNameAttribute () {
         return $this->firstname . ' ' . $this->lastname;
     }
+
+    /**
+     * @return HasOne
+     */
+    public function activeAgreement () {
+        return $this->hasOne(Agreement::class,'emp_id')->where('status','A')->whereNull('parent_id');
+    }
+
+    /**
+     * @return HasOne
+     */
+    public function activeCodeofconduct () {
+        return $this->hasOne(Codeofconduct::class,'emp_id')->where('status','A');
+    }
+
+
 }
