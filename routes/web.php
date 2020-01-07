@@ -26,15 +26,11 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/index', 'HomeController@index')->name('index');
     Route::get('/home', 'HomeController@home')->name('home');
     Route::post('/edit_employee','HomeController@edit_employee');
+
     // agreements
-
-   // Route::post('/addagreement', 'AgreementController@add_empagreement')->name('addagreement');
-
-   // Route::post('/employee_agreementlist', 'AgreementController@employee_agreementlist')->name('employee_agreementlist');
-    Route::get('/agreementlist', 'HomeController@agreementlist')->name('agreementlist');
-
-    //Route::get('/', 'PostController@index')->name('home');
-    Route::delete('delete_agreement/{id}/{type}', 'HomeController@destroy')->name('delete_agreement');
+    Route::get('agreementlist','AgreementController@agreementlist');
+    Route::post('addagreement','AgreementController@addagreement');
+    Route::delete('delete_agreement/{id}/{type}', 'AgreementController@destroy')->name('delete_agreement');
 
     // Expenses
     Route::group(['prefix' => 'expenses', 'as' => 'expenses.'], function () {
