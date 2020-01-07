@@ -21,7 +21,7 @@
                 <ul id="myTab" role="tablist" class="navbar-nav text-uppercase nav nav-tabs">
 
                     <li class="nav-item">
-                        <a class="nav-link active" id="profile-tab" data-toggle="tab" href="#profile" role="tab"
+                        <a class="nav-link active" id="profile-tab" data-toggle="tab" href="{{ route('home') }}" role="tab"
                            aria-controls="profile" aria-selected="true">My Profile </a>
                     </li>
                     <li class="nav-item">
@@ -64,7 +64,7 @@
         <nav class="top_tab_details">
               <div class="container-fluid">
                   <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                    <a class="nav-item nav-link  {{ (request()->is('home')) ? 'active' : '' }}" id="nav-employee-tab"  href="{{ url('home') }}" aria-controls="nav-employee" aria-selected="true">Employee Information</a>
+                    {{--<a class="nav-item nav-link  {{ (request()->is('home')) ? 'active' : '' }}" id="nav-employee-tab"  href="{{ url('home') }}" aria-controls="nav-employee" aria-selected="true">Employee Information</a>--}}
                     <a class="nav-item nav-link nav_agreement {{ (request()->is('agreementlist')) ? 'active' : '' }}" id="agreement_list" href="{{ url('agreementlist') }}">Agreements</a>
                     <a class="nav-item nav-link nav_agreement {{ (request()->is('mileagelist')) ? 'active' : '' }}" id="agreement_list" href="{{ url('mileagelist') }}">Mileage</a>
                     <a class="nav-item nav-link" id="nav-statements-tab" data-toggle="tab" href="#nav-statements" role="tab" aria-controls="nav-statements" aria-selected="false">Pay Statements</a>
