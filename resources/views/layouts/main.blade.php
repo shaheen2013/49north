@@ -64,8 +64,9 @@
         <nav class="top_tab_details">
               <div class="container-fluid">
                   <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                    <a class="nav-item nav-link active" id="nav-employee-tab" data-toggle="tab" href="#nav-employee" role="tab" aria-controls="nav-employee" aria-selected="true">Employee Information</a>
-                    <a class="nav-item nav-link" id="agreement_list" href="{{ route('agreementlist') }}">Agreements</a>
+                    <a class="nav-item nav-link  {{ (request()->is('home')) ? 'active' : '' }}" id="nav-employee-tab"  href="{{ url('home') }}" aria-controls="nav-employee" aria-selected="true">Employee Information</a>
+                    <a class="nav-item nav-link nav_agreement {{ (request()->is('agreementlist')) ? 'active' : '' }}" id="agreement_list" href="{{ url('agreementlist') }}">Agreements</a>
+                    <a class="nav-item nav-link nav_agreement {{ (request()->is('agreementlist')) ? 'active' : '' }}" id="agreement_list" href="{{ url('agreementlist') }}">Agreements</a>
                     <a class="nav-item nav-link" id="nav-statements-tab" data-toggle="tab" href="#nav-statements" role="tab" aria-controls="nav-statements" aria-selected="false">Pay Statements</a>
                   </div>
               </div><!--------------container--------------->
@@ -101,6 +102,7 @@
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/js/bootstrap-datepicker.min.js"></script>
 <script type="text/javascript" src="{{ asset('js/admin.js') }}"></script>
-
+<script src="{{asset('js/custom_function.js')}}"></script>
+<script src="{{asset('js/custom_function_admin.js')}}"></script>
 @stack('scripts')
 
