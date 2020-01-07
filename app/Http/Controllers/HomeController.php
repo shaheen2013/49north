@@ -480,15 +480,6 @@ class HomeController extends Controller {
         return redirect()->route('home')->with('flash_message', $msg);
     }
 
-    /**
-     * @return Factory|View
-     */
-    function agreementlist () {
-        $employee = DB::table('employee_details as ed')->leftjoin('agreements as a', 'ed.id', '=', 'a.emp_id')->leftjoin('codeofconduct as coc', 'ed.id', '=', 'coc.emp_id')
-            ->select('ed.id', 'ed.firstname', 'ed.created_at', 'ed.lastname', 'ed.personalemail', 'a.agreement', 'coc.coc_agreement')->where(['ed.id' => auth()->user()->id])
-            ->get();
-
-        return view('agreement_listnew')->with('agreement', $employee);
-    }
+   
 
 }
