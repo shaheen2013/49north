@@ -23,7 +23,7 @@
     {{--<script src="{{asset('js/agency.min.js')}}"></script>--}}
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
-
+   
     @stack('after-styles')
 
     <script>
