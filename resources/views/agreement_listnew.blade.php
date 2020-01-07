@@ -1,6 +1,6 @@
 
 @extends('layouts.main')   
-
+@include('modal')
 @section('content1') 
   <div class="container-fluid">
 
@@ -41,7 +41,13 @@
                                                     <a href="javascript:void(0);" onclick="show_modal_agreement('{{$user->id}}','COC')">Edit</a>
                                                     <a href="{{asset('codeofconduct/'.$user->coc_agreement)}}"  target="_blank">View</a>
 
-                                                    <a href="javascript:void(0);" onclick="delete_agreement('{{$user->id}}','COC')" class="down">DELETE</a>
+                                         <a href="javascript:void(0);" onclick="delete_agreement('{{$user->id}}','COC')" class="down">DELETE</a>
+
+                                            <!--<a class="btn btn-danger deletejson" data-token="{{ csrf_token() }}"
+                                           data-url="{{ url('delete_agreement',$user->id,'COC') }}" data-id="{{ $user->id }}"
+                                           >Delete</a>-->
+
+
                                                     @else
                                                     <a href="javascript:void(0);" onclick="show_modal_agreement('{{$user->id}}','COC')">Uplaod</a>
                                                     @endif
