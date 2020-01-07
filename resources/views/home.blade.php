@@ -94,8 +94,8 @@
                 <div class="col-md-3">
                     <div class="text_outer">
                         <label for="name" class="">Password*</label>
-                        <input type="password" id="password" name="password" class="form-control" placeholder="xxxxxxx"
-                               {{ $user->id ? '' : 'required' }} {{-- password is only required if it's a new user --}}>
+                        <input type="password" id="password" name="password" class="form-control" placeholder="xxxxxxx" 
+                        {{ auth()->user()->id ? '' : 'required' }} {{-- password is only required if it's a new user --}}>
                     </div>
                 </div>
 
