@@ -24,34 +24,17 @@ class MileageController extends Controller {
      * @return void
      */
     public function mileagelist (Request $request) {
-        ob_start();
+       
         $emp_id = auth()->user()->id;
-        $type = auth()->user()->user_type;
-        if ($type == 'is_admin') {
+        $type = auth()->user()->is_admin;
+        if ($type == '1') {
             $mileage_list = DB::table('mileages')->get();
         }
         else {
             $mileage_list = DB::table('mileages')->where(['emp_id' => $emp_id, 'status' => 'A'])->get();
         }
-        foreach ($mileage_list as $mlist) {
-            ?>
-            <tr style="margin-bottom:10px;">
-                <td><?= $mlist->date ?></td>
-                <td><?= $mlist->reasonmileage ?></td>
-                <td><?= $mlist->kilometers ?></td>
-                <td class="action-box">
-                    <a href="javascript:void();" data-toggle="modal" data-target="#mileage-modaledit" data="<?= $mlist->id ?>" class="edit_mileage" onclick="edit_mileage(<?= $mlist->id ?>)">EDIT</a>
-                    <a href="#" class="down" onclick="delete_mileage(<?= $mlist->id ?>);">DELETE</a></td>
-            </tr>
-            <tr class="spacer"></tr>
-
-            <?php
-        }
-
-        $data = ob_get_clean();
-        echo json_encode([
-            "data" => $data,
-        ]);
+        
+        return view('mileagelist')->with('mileage_list',$mileage_list);
     }
 
     /**
