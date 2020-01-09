@@ -55,7 +55,7 @@ class AgreementController extends Controller {
                 Agreement::create([
                     'emp_id'    => $request->employee_id,
                     'agreement' => $name,
-                    'parent_id' => $currentAgreement->id
+                    'parent_id' => $currentAgreement['id']
                 ]);
             }
             else {
