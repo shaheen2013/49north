@@ -1,6 +1,9 @@
 @extends('layouts.main')
 @include('modal')
 @section('content1')
+    @if(Session::has('update_msg'))
+<p class="alert {{ Session::get('alert-class', 'alert-info') }}">{{ Session::get('update_msg') }}</p>
+@endif
     <div class="container-fluid">
 
         <div class="tab-pane employeeagreements" id="nav-agreements" role="tabpanel" aria-labelledby="nav-agreements-tab">
