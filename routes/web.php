@@ -33,33 +33,34 @@ Route::group(['middleware' => ['auth']], function () {
     Route::delete('delete_agreement/{id}/{type}', 'AgreementController@destroy')->name('delete_agreement');
 
     // Expenses
-    Route::group(['prefix' => 'expenses', 'as' => 'expenses.'], function () {
-        Route::post('/', 'HomeController@expenses')->name('index');
-        Route::post('/list', 'HomeController@expenses_list')->name('list');
-        Route::post('/edit_view', 'HomeController@edit_view_expenses')->name('edit_view');
-        Route::post('/edit', 'HomeController@expenses_edit')->name('edit');
-        Route::post('/delete', 'HomeController@delete_expense')->name('delete');
-        Route::post('/approve', 'HomeController@expense_approve')->name('approve');
-        Route::post('/reject', 'HomeController@expense_reject')->name('reject');
-        Route::post('/histocial', 'HomeController@expenses_historical')->name('historical');
+    Route::group(['prefix' => 'expense', 'as' => 'expense.'], function () {
+        Route::get('/list', 'ExpenseController@expenselist');
+        Route::post('/addexpense','ExpenseController@addexpense');
+        Route::post('/expense_edit_view', 'ExpenseController@expense_edit_view');
+        Route::post('/edit', 'ExpenseController@expenses_edit')->name('edit');
+        Route::post('/delete', 'ExpenseController@delete_expense')->name('delete');
+        Route::post('/approve', 'ExpenseController@expense_approve')->name('approve');
+        Route::post('/reject', 'ExpenseController@expense_reject')->name('reject');
+        Route::post('/history', 'ExpenseController@expenses_historical')->name('history');
     });
-
-    /*Route::post('/expenses','HomeController@expenses')->name('expenses');
-    Route::post('/expenses_list','HomeController@expenses_list')->name('expenses_list');
-    */
+    
 
     Route::post('/reset_apssword', 'RegisterController@reset_password')->name('reset_apssword');
     Route::post('/registration', 'RegisterController@store')->name('registration');
 
     ///// Maintenance
-    Route::post('/maintenance', 'Maintenance_ticket_controller@index')->name('maintenance');
-    Route::post('/maintanance_list', 'Maintenance_ticket_controller@maintanance_list')->name('maintanance_list');
+    Route::group(['prefix' => 'maintenance', 'as' => 'maintenance.'], function () {
+
+    Route::get('/list', 'MaintenanceController@Maintenance_list')->name('list');
+    /*Route::post('/maintanance_list', 'Maintenance_ticket_controller@maintanance_list')->name('maintanance_list');
     Route::post('/mainance_edit_view_ajax', 'Maintenance_ticket_controller@mainance_edit_view_ajax')->name('mainance_edit_view_ajax');
     Route::post('/maintenance1_edit', 'Maintenance_ticket_controller@maintenance1_edit')->name('maintenance1_edit');
     Route::post('/delete_maintance', 'Maintenance_ticket_controller@delete_maintance')->name('delete_maintance');
     Route::post('/ticket_inprogress', 'Maintenance_ticket_controller@ticket_inprogress')->name('ticket_inprogress');
     Route::post('/ticket_cancel', 'Maintenance_ticket_controller@ticket_cancel')->name('ticket_cancel');
-    Route::post('/complited_ticket', 'Maintenance_ticket_controller@complited_ticket')->name('complited_ticket');
+    Route::post('/complited_ticket', 'Maintenance_ticket_controller@complited_ticket')->name('complited_ticket');*/
+
+    });
 
     // mileage
     Route::get('/mileagelist', 'MileageController@mileagelist')->name('mileagelist');
@@ -84,15 +85,7 @@ Route::group(['middleware' => ['auth', 'isAdmin']], function () {
 });
 
 
-///// Employee Agreement
-//Route::post('/employeeagreement', 'EmployeeAgreementController@agreementlist')->name('employeeagreement');
 
-//Route::middleware(['admin'])->group(function () {
-
-
-	/// ADMin
-
-//Route::middleware(['admin'])->group(function () {
 Route::get('admin/addpaystatement','Admin\PaystatementController@paystatement');
 Route::get('admin/registration','Admin\AdminController@index');
 Route::get('admin/agreement','Admin\AdminAgreementController@agreementlist');
