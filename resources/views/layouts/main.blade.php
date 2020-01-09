@@ -8,8 +8,7 @@
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark" id="mainNav">
         <div class="container-fluid">
-            <a class="navbar-brand js-scroll-trigger logo_se" href="{{ route('home') }}"><img width="150"
-                                                                                    src="{{asset('img/logo.jpg')}}"
+            <a class="navbar-brand js-scroll-trigger logo_se" href="{{ route('home') }}"><img width="150" src="{{asset('img/logo.jpg')}}"
                                                                                     alt=""></a>
             <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
                     data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false"
@@ -65,9 +64,17 @@
               <div class="container-fluid">
                   <div class="nav nav-tabs" id="nav-tab" role="tablist">
                     {{--<a class="nav-item nav-link  {{ (request()->is('home')) ? 'active' : '' }}" id="nav-employee-tab"  href="{{ url('home') }}" aria-controls="nav-employee" aria-selected="true">Employee Information</a>--}}
+
                     <a class="nav-item nav-link nav_agreement {{ (request()->is('agreementlist')) ? 'active' : '' }}" id="agreement_list" href="{{ url('agreementlist') }}">Agreements</a>
+
                     <a class="nav-item nav-link nav_agreement {{ (request()->is('mileagelist')) ? 'active' : '' }}" id="agreement_list" href="{{ url('mileagelist') }}">Mileage</a>
+
+                    <a class="nav-item nav-link nav_agreement {{ (request()->is('expense/list')) ? 'active' : '' }}" id="agreement_list" href="{{ url('expense/list') }}">Expense</a>
+
+                    <a class="nav-item nav-link nav_agreement {{ (request()->is('maintenance/list')) ? 'active' : '' }}" id="maintenance_list" href="{{ url('maintenance/list') }}">maintenance</a>
+
                     <a class="nav-item nav-link" id="nav-statements-tab" data-toggle="tab" href="#nav-statements" role="tab" aria-controls="nav-statements" aria-selected="false">Pay Statements</a>
+
                   </div>
               </div><!--------------container--------------->
         </nav>
@@ -99,8 +106,16 @@
             'X-CSRF-TOKEN': $('meta[name=csrf-token]').attr('content')
         }
     });
+
+   $("document").ready(function(){
+    setTimeout(function(){
+        $("p.alert").remove();
+    }, 5000 ); // 5 secs
+
+}); 
 </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/js/bootstrap-datepicker.min.js"></script>
+
+<script type="text/javascript" src="{{ asset('js/bootstrap-datepicker.min.js') }}"></script>
 <script type="text/javascript" src="{{ asset('js/admin.js') }}"></script>
 <script src="{{asset('js/custom_function.js')}}"></script>
 <script src="{{asset('js/custom_function_admin.js')}}"></script>
