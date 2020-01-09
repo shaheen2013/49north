@@ -4,8 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Company;
-
+use App\{Company, Project, Purchases, Categorys, Expenses};
 class MileageController extends Controller {
     /**
      * Create a new controller instance.
@@ -24,17 +23,21 @@ class MileageController extends Controller {
      * @return void
      */
     public function mileagelist (Request $request) {
-       
         $emp_id = auth()->user()->id;
         $type = auth()->user()->is_admin;
         if ($type == '1') {
-            $mileage_list = DB::table('mileages')->get();
+            $data['mileage_list'] = DB::table('mileages')->get();
         }
         else {
-            $mileage_list = DB::table('mileages')->where(['emp_id' => $emp_id, 'status' => 'A'])->get();
+            $data['mileage_list'] = DB::table('mileages')->where(['emp_id' => $emp_id, 'status' => 'A'])->get();
         }
+
+        $data['companies'] = Company::all();
+        $data['project'] = Project::all();
+        $data['purchases'] = Purchases::all();
+        $data['category'] = Categorys::all();
         
-        return view('mileagelist')->with('mileage_list',$mileage_list);
+        return view('mileagelist',$data);
     }
 
     /**
@@ -67,7 +70,8 @@ class MileageController extends Controller {
             'kilometers'    => $request->kilometers,
             'reasonmileage' => $request->reasonformileage,
         ]);
-
+        $msg = 'Mileage updated successfully';
+        return redirect()->back()->with('msgmileage', $msg);
     }
 
     /**
@@ -78,15 +82,15 @@ class MileageController extends Controller {
     function get_mileage ($id) {
         $data['companies'] = Company::all();
         $emp_id = auth()->user()->id;
-        $type = auth()->user()->user_type;
-        if ($type == 'is_admin') {
-            $mileage_list = DB::table('mileages')->first();
+        $type = auth()->user()->id_admin;
+        if ($type == 1) {
+            $data['mileage_list'] = DB::table('mileages')->first();
         }
         else {
             $data['mileagedetails'] = DB::table('mileages')->where(['id' => $id, 'emp_id' => $emp_id])->first();
         }
 
-        return view('mileage', $data);
+        return view('ajaxview.editmileage', $data);
     }
 
     /**
