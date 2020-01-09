@@ -33,13 +33,14 @@
                                 @endif
 
                                 {{-- display amendments --}}
-
-                                @foreach ($user->activeAgreement->amendments AS $amendment)
+                                @if($user->activeAgreement['amendments'])
+                                @foreach ($user->activeAgreement['amendments'] AS $amendment)
                                     <div class="clearfix"></div>
                                     <br>{{ $loop->iteration }})
                                     <a href="{{asset('agreement/'.$amendment->agreement)}}" target="_blank">View</a><br>
                                     <a href="javascript:void(0);" onclick="delete_agreement('{{$user->activeAgreement->id}}','EA')" class="down">DELETE</a>
                                 @endforeach
+                                @endif
                             </td>
 
                             <td>
