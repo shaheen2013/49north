@@ -18,7 +18,7 @@ class CreateCodeofconductTable extends Migration
 			$table->string('emp_id');
 			$table->string('coc_agreement');
 			$table->string('old_coc');
-			//$table->enum('status', ['A', 'D']);
+			$table->enum('status', ['A', 'D']);
             $table->timestamps();
         });
     }
@@ -30,6 +30,6 @@ class CreateCodeofconductTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('codeofconduct');
+        Schema::dropIfExists('codeofconducts');
     }
 }
