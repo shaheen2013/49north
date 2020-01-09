@@ -9,7 +9,6 @@ function get_agreementlist()
 		data: {_token: CSRF_TOKEN},
 		success:function(response)
 		{
-			console.log(response);
 		   $(".total_agreement_list").html(response);
 		}
 	});
@@ -40,7 +39,7 @@ $('#upload_agreement').submit(function(e)
   		contentType: false,
 		success:function(response)
 		{
-			console.log(response);
+			
 			$('#show_modal_agreement').modal('hide');
 			
 		  swal(response.desc,"", response.status);
@@ -60,8 +59,11 @@ function delete_agreement(id,type)
 		data: {_token: CSRF_TOKEN,type:type},
 		success:function(response)
 		{
-		   get_agreementlist();
+		   //get_agreementlist();
 		  swal("Delete successfully","", "success");
+		setTimeout(function(){
+		       location.reload();
+		   },3000);
 		}
 	});
 }
@@ -99,7 +101,7 @@ function get_mileagelist()
 function addmileage_details()
 {	
      form_data =  $('#employee_mileage').serialize();
-    console.log(form_data);
+    
 	$.ajax({
 		type:'post',
 		url: './addmileage',		
@@ -107,8 +109,9 @@ function addmileage_details()
 		success:function(response)
 		{  
 			$('#mileage-modal').modal('hide');
-			get_mileagelist();
+			//get_mileagelist();
 		  swal("Your information is submitted Successfully","", "success");
+		  location.reload();
 
 		}
 	});
@@ -116,6 +119,7 @@ function addmileage_details()
 
 function edit_mileage(id)
 {
+	$('#mileage-modaledit').modal('show');
 	var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
 	$.ajax({
 		type:'post',
@@ -124,28 +128,14 @@ function edit_mileage(id)
 		data: {_token: CSRF_TOKEN},
 		success:function(response)
 		{ 
+			//$("#employee_mileageedit").html(response);
 			$("#employee_mileageedit").html(response);
+
 		}
 	});
 }
 
-function editmileage_details()
-{
-    //var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-    var form_data = $('#employee_mileageedit').serialize();    
-    $.ajax({
-		type:'post',
-		url: './updatemileage',
-		dataType:'html',		
-		data: form_data,
-		success:function(response)
-		{ 
-			$('#mileage-modaledit').modal('hide');
-			get_mileagelist();
-		  swal("Information edited Successfully","", "success");
-		}
-	});
-}
+
 
 function delete_mileage(id)
 {	var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
@@ -156,8 +146,9 @@ function delete_mileage(id)
 		data: {_token: CSRF_TOKEN},
 		success:function(response)
 		{ 
-			get_mileagelist();
+			//get_mileagelist();
 		  swal("Deleted Successfully","", "success");
+		  location.reload();
 		}
 	});
 }
@@ -206,7 +197,7 @@ function expences_listed(){
 	});
 }
 
-$(".nav_expense").click(function(){
+/*$(".nav_expense").click(function(){
 	expences_listed();
 });	
 
@@ -227,21 +218,20 @@ $('.expences').submit(function(e)
 		  swal("Expence Report Add Successfully","", "success");
 		}
 	});
-});
+});*/
 
 function edit_view_ajax(id){
 	var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
 	$.ajax({
 		type:'POST',
-		url:"./expences_edit_view",
+		url:"./expense_edit_view",
 		dataType:'html',
 		data: {_token: CSRF_TOKEN ,
 			   id: id},
 		success:function(response)
 		{
-	   	  resp = JSON.parse(response);
-	      $(".expense-modal-edit").html(resp.data);
-	      $(".expense-modal-edit").modal("show");
+	   	  $("#expense-modal-edit2").modal("show");
+	      $("#expenses_edit2").html(response);
 		}
 	});
 }
@@ -272,14 +262,14 @@ function delete_expence(id){
 	var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
 	$.ajax({
 		type:'POST',
-		url:"./delete_expence",
+		url:"./delete",
 		dataType:'html',
 		data: {_token: CSRF_TOKEN ,
 			   id: id},
 		success:function(response)
 		{
-	   	  expences_listed();
-		  swal("Expence Report Deleted Successfully","", "success");
+		  //$('p.alert').text('Deleted successfully');
+		  location.reload();
 		}
 	});
 
@@ -289,7 +279,7 @@ function expence_approve(id){
  var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
 	$.ajax({
 		type:'POST',
-		url:"./expence_approve",
+		url:"./approve",
 		dataType:'html',
 		data: {_token: CSRF_TOKEN ,
 			   id: id},
@@ -300,11 +290,12 @@ function expence_approve(id){
 		}
 	});
 }
+
 function expence_reject(id){
  var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
 	$.ajax({
 		type:'POST',
-		url:"./expence_reject",
+		url:"./reject",
 		dataType:'html',
 		data: {_token: CSRF_TOKEN ,
 			   id: id},
@@ -320,11 +311,11 @@ function expences_pending(id){
  expences_listed();
 }
 
-function expences_histocial(id){
+function expense_history(id){
  var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
 	$.ajax({
 		type:'POST',
-		url:"./expences_histocial",
+		url:"./history",
 		dataType:'html',
 		data: {_token: CSRF_TOKEN},
 		success:function(response)
