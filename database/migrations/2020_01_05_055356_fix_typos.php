@@ -14,8 +14,8 @@ class FixTypos extends Migration
     public function up()
     {
         Schema::table('employee_details', function (Blueprint $table) {
-            $table->renameColumn('dietiary_restricons','dietary_restrictions');
-            $table->renameColumn('spclfamilycircumstace','familycircumstance');
+            //$table->renameColumn('dietiary_restricons','dietary_restrictions');
+           // $table->renameColumn('spclfamilycircumstace','familycircumstance');
         });
     }
 
