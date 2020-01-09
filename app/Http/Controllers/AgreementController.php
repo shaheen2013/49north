@@ -57,6 +57,8 @@ class AgreementController extends Controller {
                     'agreement' => $name,
                     'parent_id' => $currentAgreement['id']
                 ]);
+
+                $msg = 'Agreement added successfully';
             }
             else {
                 // set old agreement, if it exists, to "D"
@@ -65,6 +67,8 @@ class AgreementController extends Controller {
                     'emp_id'    => $request->employee_id,
                     'agreement' => $name
                 ]);
+
+                $msg = 'Agreement updated successfully';
             }
         }
         elseif ($type == 'COC') {
@@ -75,9 +79,12 @@ class AgreementController extends Controller {
                 'emp_id'        => $request->employee_id,
                 'coc_agreement' => $name,
             ]);
+
+            $msg = 'Code of conduct updated successfully';
         }
 
-        return redirect()->back();
+        //return redirect()->back();
+        return redirect()->back()->with('update_msg', $msg);
     }
 
     /**
