@@ -18,7 +18,7 @@ class CreateAgreementTable extends Migration
 			$table->string('emp_id');
 			$table->string('agreement');
 			$table->string('old_agreement');
-			//$table->enum('status', ['A', 'D'])->default('A');
+			$table->enum('status', ['A', 'D'])->default('A');
             $table->timestamps();
         });
     }
