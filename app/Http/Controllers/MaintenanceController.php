@@ -37,6 +37,7 @@ class MaintenanceController extends Controller
      	return view('ajaxview.editmaintenance',$data);
     }
 
+    /// update maintenance 
     function edit(Request $request)
     {
     	$id = $request->id;
@@ -44,5 +45,27 @@ class MaintenanceController extends Controller
         $try = Maintenance_ticket::where(['id' => $id])->update($data);
         $msg = 'Updated a ticket';
         return redirect()->back()->with('tickets', $msg);
+    }
+
+    /// delete tickets
+    function delete(Request $request)
+    {
+        $id = $request->id;
+        Maintenance_ticket::where(['id' => $id])->update(['delete_status' => 1]);
+        $msg = 'Ticket deleted';
+        return redirect()->back()->with('tickets',$msg);
+    }
+
+
+    function ticket_inprogress(Request $request)
+    {
+         $id = $request->id;
+        Maintenance_ticket::where(['id' => $id])->update(['status' => 1]);
+    }
+
+
+    public function ticket_cancel (Request $request) {
+        $id = $request->id;
+        Maintenance_ticket::where(['id' => $id])->update(['status' => 2]);
     }
 }
