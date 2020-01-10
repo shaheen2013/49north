@@ -55,10 +55,10 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/add', 'MaintenanceController@addmaintenance')->name('add');
     Route::post('/editview', 'MaintenanceController@edit_maintenanceview')->name('editview');
     Route::post('/edit', 'MaintenanceController@edit')->name('edit');
-    /*Route::post('/delete_maintance', 'Maintenance_ticket_controller@delete_maintance')->name('delete_maintance');
-    Route::post('/ticket_inprogress', 'Maintenance_ticket_controller@ticket_inprogress')->name('ticket_inprogress');
-    Route::post('/ticket_cancel', 'Maintenance_ticket_controller@ticket_cancel')->name('ticket_cancel');
-    Route::post('/complited_ticket', 'Maintenance_ticket_controller@complited_ticket')->name('complited_ticket');*/
+    Route::post('/delete', 'MaintenanceController@delete')->name('delete');
+    Route::post('/ticket_inprogress', 'MaintenanceController@ticket_inprogress')->name('ticket_inprogress');
+    Route::post('/ticket_cancel', 'MaintenanceController@ticket_cancel')->name('ticket_cancel');
+   /* Route::post('/complited_ticket', 'Maintenance_ticket_controller@complited_ticket')->name('complited_ticket');*/
 
     });
 
