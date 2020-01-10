@@ -193,4 +193,26 @@
     </div>
 </div>
 
+
+<script type="text/javascript">
+    
+    $(document).ready(function() { 
+
+        $("#active_ticket_span").click(function() {
+            $("#active_ticket_span").addClass("active-span");
+            $("#complited_ticket_span").removeClass("active-span");
+            $("#active_ticket_div").show();
+            $("#complited_ticket_div").hide();
+        
+    });
+    $("#complited_ticket_span").click(function() {
+            $("#complited_ticket_span").addClass("active-span");
+            $("#active_ticket_span").removeClass("active-span");
+            $("#active_ticket_div").hide();
+            $("#complited_ticket_div").show();
+    });
+
+         });   
+</script>
+
 @endsection
