@@ -406,14 +406,15 @@ function delete_maintance(id){
 	var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
 	$.ajax({
 		type:'POST',
-		url:"./delete_maintance",
+		url:"./delete",
 		dataType:'html',
 		data: {_token: CSRF_TOKEN ,
 			   id: id},
 		success:function(response)
 		{
-	   	  maintanance_list();
-		  swal("Tech Maintenance Deleted Successfully","", "success");
+	   	 //maintanance_list();
+		  //swal("Tech Maintenance Deleted Successfully","", "success");
+		  location.reload();
 		}
 	});
 }
@@ -428,8 +429,9 @@ function ticket_inprogress(id){
 			   id: id},
 		success:function(response)
 		{
-	   	  maintanance_list();
-		  swal("Tech Maintenance Inprogress Successfully","", "success");
+	   	  //maintanance_list();
+		  //swal("Tech Maintenance Inprogress Successfully","", "success");
+		  location.reload();
 		}
   });
 }
@@ -444,8 +446,9 @@ function ticket_cancel(id){
 			   id: id},
 		success:function(response)
 		{
-	   	  maintanance_list();
-		  swal("Tech Maintenance Cancel Successfully","", "success");
+	   	  //maintanance_list();
+		  //swal("Tech Maintenance Cancel Successfully","", "success");
+		  location.reload();
 		}
 	});
 
