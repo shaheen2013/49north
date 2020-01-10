@@ -274,7 +274,7 @@ function maintanance_list(){
 	});
 }
 
-$('.maintenance1').submit(function(e){
+/*$('.maintenance1').submit(function(e){
     e.preventDefault();
     var form_data =  new FormData($(".maintenance1")[0]);
 	$.ajax({
@@ -290,24 +290,23 @@ $('.maintenance1').submit(function(e){
 		  swal("Tech Maintenance Add Successfully","", "success");
 		}
 	});
-});
+});*/
 
-function mainance_edit_view_ajax(id){
+/*function mainance_edit_view_ajax(id){
 	var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
 	$.ajax({
 		type:'POST',
-		url:"./mainance_edit_view_ajax",
+		url:"./editview",
 		dataType:'html',
 		data: {_token: CSRF_TOKEN ,
 			   id: id},
 		success:function(response)
 		{
-	   	  resp = JSON.parse(response);
-	      $(".edit-maintenance-modal").html(resp.data);
+	      $(".maintenance1_edit").html(response);
 	      $(".edit-maintenance-modal").modal("show");
 		}
 	});
-}
+}*/
 
 // $('.maintenance1_edit').submit(function(e){
 //     e.preventDefault();
