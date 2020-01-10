@@ -29,7 +29,7 @@ class ExpenseController extends Controller
         if ($request->hasFile('receipt')) {
             $file = $request->file('receipt');
             $receiptname = rand(11111, 99999) . '.' . $file->getClientOriginalExtension();
-            $request->file('receipt')->move("public/receipt");
+            $request->file('receipt')->move("public/receipt",$receiptname);
         }
         
         $data['receipt'] = $receiptname;
@@ -60,6 +60,16 @@ class ExpenseController extends Controller
     public function expenses_edit (Request $request) {
         $data = $request->all();
         $id = $data['id'];
+
+        $receiptname = '';
+        if ($request->hasFile('receipt')) {
+            $file = $request->file('receipt');
+            $receiptname = rand(11111, 99999) . '.' . $file->getClientOriginalExtension();
+            $request->file('receipt')->move("public/receipt",$receiptname);
+        }
+        
+        $data['receipt'] = $receiptname;
+        
         Expenses::where('id', $id)->update($data);
         $msg = 'Expense Updated successfully';
         return redirect()->back()->with('expense',$msg);
