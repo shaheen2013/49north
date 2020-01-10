@@ -31,7 +31,7 @@ class CreateEmployeeDetailTable extends Migration
 			$table->string('prsnl_belief')->nullable();
 			$table->string('known_medical_conditions')->nullable();
 			$table->string('allergies')->nullable();
-			$table->string('dietiary_restrictions')->nullable();
+			$table->string('dietiary_restricons')->nullable();
 			$table->string('known_health_concerns')->nullable();
 			$table->string('aversion_phyactivity')->nullable();
 			$table->string('emergency_contact_name')->nullable();
