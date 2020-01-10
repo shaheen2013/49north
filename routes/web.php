@@ -52,10 +52,10 @@ Route::group(['middleware' => ['auth']], function () {
     Route::group(['prefix' => 'maintenance', 'as' => 'maintenance.'], function () {
 
     Route::get('/list', 'MaintenanceController@Maintenance_list')->name('list');
-    /*Route::post('/maintanance_list', 'Maintenance_ticket_controller@maintanance_list')->name('maintanance_list');
-    Route::post('/mainance_edit_view_ajax', 'Maintenance_ticket_controller@mainance_edit_view_ajax')->name('mainance_edit_view_ajax');
-    Route::post('/maintenance1_edit', 'Maintenance_ticket_controller@maintenance1_edit')->name('maintenance1_edit');
-    Route::post('/delete_maintance', 'Maintenance_ticket_controller@delete_maintance')->name('delete_maintance');
+    Route::post('/add', 'MaintenanceController@addmaintenance')->name('add');
+    Route::post('/editview', 'MaintenanceController@edit_maintenanceview')->name('editview');
+    Route::post('/edit', 'MaintenanceController@edit')->name('edit');
+    /*Route::post('/delete_maintance', 'Maintenance_ticket_controller@delete_maintance')->name('delete_maintance');
     Route::post('/ticket_inprogress', 'Maintenance_ticket_controller@ticket_inprogress')->name('ticket_inprogress');
     Route::post('/ticket_cancel', 'Maintenance_ticket_controller@ticket_cancel')->name('ticket_cancel');
     Route::post('/complited_ticket', 'Maintenance_ticket_controller@complited_ticket')->name('complited_ticket');*/
