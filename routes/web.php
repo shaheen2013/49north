@@ -72,6 +72,20 @@ Route::group(['middleware' => ['auth']], function () {
 
     // pay statement
     Route::get('admin/addpaystatement', 'Admin\AdminPaystatementController@paystatement');
+
+
+    ///// timeoff route
+    Route::group(['prefix' => 'timeoff', 'as'=>'timeoff.'], function() {
+        Route::get('/list','TimeoffController@timeofflist')->name('list');
+    });
+
+    //// Paystatement route
+    Route::group(['prefix'=>'paystatement', 'as'=>'paystatement.'], function(){
+        Route::get('/list','PaystatementController@paylist');
+        Route::post('/add','PaystatementController@addpaystatement')->name('add');
+
+    });
+
 });
 
 
