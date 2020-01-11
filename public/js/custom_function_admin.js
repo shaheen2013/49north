@@ -468,3 +468,9 @@ function complited_ticket(){
 		}
 	});
 }
+
+function paystatement_modal(id)
+{
+	$('#empidstatement').val(id);
+	$('#show_modal_paystatement').modal('show');
+} 
