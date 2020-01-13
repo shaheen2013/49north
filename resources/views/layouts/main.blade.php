@@ -19,10 +19,12 @@
             <div class="collapse navbar-collapse" id="navbarResponsive">
                 <ul id="myTab" role="tablist" class="navbar-nav text-uppercase nav nav-tabs">
 
+                    @admin
                     <li class="nav-item">
                         <a class="nav-link active" id="profile-tab" data-toggle="tab" href="{{ route('home') }}" role="tab"
                            aria-controls="profile" aria-selected="true">My Profile </a>
                     </li>
+                    @endadmin
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('users.index') }}" role="tab">Staff</a>
                     </li>
@@ -114,7 +116,7 @@
         $("p.alert").remove();
     }, 5000 ); // 5 secs
 
-}); 
+});
 </script>
 
 <script type="text/javascript" src="{{ asset('js/bootstrap-datepicker.min.js') }}"></script>

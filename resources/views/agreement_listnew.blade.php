@@ -2,8 +2,8 @@
 @include('modal')
 @section('content1')
     @if(Session::has('update_msg'))
-<p class="alert {{ Session::get('alert-class', 'alert-info') }}">{{ Session::get('update_msg') }}</p>
-@endif
+        <p class="alert {{ Session::get('alert-class', 'alert-info') }}">{{ Session::get('update_msg') }}</p>
+    @endif
     <div class="container-fluid">
 
         <div class="tab-pane employeeagreements" id="nav-agreements" role="tabpanel" aria-labelledby="nav-agreements-tab">
@@ -28,30 +28,45 @@
                             <td>{{$user->name}}</td>
                             <td>
                                 @if($user->activeAgreement)
+                                    @admin
                                     <a href="javascript:void(0);" onclick="show_modal_agreement('{{$user->id}}','EA')">Edit</a>
+                                    @endadmin
                                     <a href="{{asset('agreement/'.$user->activeAgreement->agreement)}}" target="_blank">View</a>
+                                    @admin
                                     <a href="javascript:void(0);" onclick="delete_agreement('{{$user->activeAgreement->id}}','EA')" class="down">DELETE</a>
+                                    @endadmin
                                 @else
+                                    @admin
                                     <a href="javascript:void(0);" onclick="show_modal_agreement('{{$user->id}}','EA')">Upload</a>
+                                    @endadmin
                                 @endif
 
                                 {{-- display amendments --}}
                                 @if($user->activeAgreement['amendments'])
-                                @foreach ($user->activeAgreement['amendments'] AS $amendment)
-                                    <div class="clearfix"></div>
-                                    <br>{{ $loop->iteration }})
-                                    <a href="{{asset('agreement/'.$amendment->agreement)}}" target="_blank">View</a><br>
-                                    <a href="javascript:void(0);" onclick="delete_agreement('{{$user->activeAgreement->id}}','EA')" class="down">DELETE</a>
-                                @endforeach
+                                    @foreach ($user->activeAgreement['amendments'] AS $amendment)
+
+                                        <br>{{ $loop->iteration }})
+                                        <a href="{{asset('agreement/'.$amendment->agreement)}}" target="_blank">View</a>
+
+                                        @admin
+                                        <br>
+                                        <a href="javascript:void(0);" onclick="delete_agreement('{{$user->activeAgreement->id}}','EA')" class="down">DELETE</a>
+                                        @endadmin
+                                    @endforeach
                                 @endif
                             </td>
 
                             <td>
                                 @if($user->activeCodeofconduct)
+                                    @admin
                                     <a href="javascript:void(0);" onclick="show_modal_agreement('{{$user->id}}','COC')">Edit</a>
+                                    @endadmin
+
                                     <a href="{{asset('codeofconduct/'.$user->activeCodeofconduct->coc_agreement)}}" target="_blank">View</a>
 
+                                    @admin
                                     <a href="javascript:void(0);" onclick="delete_agreement('{{$user->activeCodeofconduct->id}}','COC')" class="down">DELETE</a>
+                                    @endadmin
 
                                 <!--<a class="btn btn-danger deletejson" data-token="{{ csrf_token() }}"
                                            data-url="{{ url('delete_agreement',$user->id,'COC') }}" data-id="{{ $user->id }}"
@@ -59,7 +74,9 @@
 
 
                                 @else
+                                    @admin
                                     <a href="javascript:void(0);" onclick="show_modal_agreement('{{$user->id}}','COC')">Upload</a>
+                                    @endadmin
                                 @endif
 
                             </td>
