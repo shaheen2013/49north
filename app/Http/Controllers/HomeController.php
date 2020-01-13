@@ -4,10 +4,10 @@ namespace App\Http\Controllers;
 
 use App\User;
 
-use App\{Company, Project, Purchases, Categorys, Expenses,Employee_detail};
+use App\{Expenses,Employee_detail};
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Contracts\View\Factory;
-use Illuminate\Http\{JsonResponse,RedirectResponse,Request};
+use Illuminate\Http\{RedirectResponse,Request};
 use Illuminate\Validation\{Rule,ValidationException};
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
@@ -102,7 +102,7 @@ class HomeController extends Controller {
         ]);
     }
 
-    
+
     /**
      * @param Request $request
      */
@@ -112,7 +112,7 @@ class HomeController extends Controller {
         Expenses::where('id', $id)->update($data);
     }
 
-   
+
 
     /**
      *
@@ -266,9 +266,9 @@ class HomeController extends Controller {
         }
 
         //Redirect to the users.index view and display message
-        return redirect()->route('home')->with('flash_message', $msg);
+        return redirect()->route('home')->with('alert-info', $msg);
     }
 
-   
+
 
 }

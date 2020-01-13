@@ -4,12 +4,13 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Paystatement extends Model
-{
-	public $timestamps = false;
+class Paystatement extends Model {
+    use HasEmployee;
 
-	protected  $primaryKey = 'emp_id';
+    public $timestamps = false;
 
-    protected $fillable = ['emp_id','pdfname','description','date','created_at'];
+    protected $primaryKey = 'emp_id';
+
+    protected $fillable = ['emp_id', 'pdfname', 'description', 'date', 'created_at'];
 
 }

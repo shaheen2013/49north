@@ -56,7 +56,7 @@ class PostController extends Controller {
         $post = Post::create($request->only('title', 'body'));
 
         //Display a successful message upon save
-        return redirect()->route('posts.index')->with('flash_message', 'Article,
+        return redirect()->route('posts.index')->with('alert-info', 'Article,
              ' . $post->title . ' created');
     }
 
@@ -106,7 +106,7 @@ class PostController extends Controller {
         $post->body = $request->input('body');
         $post->save();
 
-        return redirect()->route('posts.show', $post->id)->with('flash_message', 'Article, ' . $post->title . ' updated');
+        return redirect()->route('posts.show', $post->id)->with('alert-info', 'Article, ' . $post->title . ' updated');
 
     }
 
@@ -121,7 +121,7 @@ class PostController extends Controller {
         $post = Post::findOrFail($id);
         $post->delete();
 
-        return redirect()->route('posts.index')->with('flash_message', 'Article successfully deleted');
+        return redirect()->route('posts.index')->with('alert-info', 'Article successfully deleted');
 
     }
 }

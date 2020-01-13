@@ -1,13 +1,11 @@
 @extends('layouts.main')
 @section('content1')
-@if(Session::has('paystatement'))
-<p class="alert {{ Session::get('alert-class', 'alert-info') }}">{{ Session::get('paystatement') }}</p>
-@endif
+
  <div class="container-fluid">
    <div class="tab-pane " id="nav-statements" aria-labelledby="nav-statements-tab">
                         <div class="agreements">
                             <h3><span  class="active-span" id="active_contracts_span">Paystatement  </span></h3>
-                            
+
                             <div id="active_contracts_div">
                                 <div class="top_part_">
                                     <ul>
@@ -31,13 +29,13 @@
                                         @else
                                         <a href="#" onclick="paystatement_modal('{{$plist->empid}}')" >UPLOAD</a>
 
-                                        @endif                                        
+                                        @endif
                                     </div>
                                 </div><!------------------>
                               @endforeach
                             @endif
                             </div>
-                            
+
                         </div>
                       </div>
 
@@ -64,14 +62,14 @@
                                     <input type="date" id="date" name="date" class="form-control" placeholder="Insert text here">
                                 </div>
                             </div>
-                            <div class="col-md-4">  
+                            <div class="col-md-4">
                                 <div class="text_outer file_upload" style="height: 60px;">
                                     <label for="name" class="">Upload PDF</label>
                                     <input type="file"  name="pdfname" class="form-control" id="pdfname" style="height: 30px;" required>
                                 </div>
                             </div>
                         </div>
-                        </hr>               
+                        </hr>
                         <div class="row margin-top-30">
                             <div class="form-group" style="width:100%;">
                                 <div class="col-md-12 col-sm-12">
@@ -82,7 +80,7 @@
                         </div>
                     </form>
                 </div>
-                
+
             </div>
 
         </div>

@@ -1,9 +1,7 @@
 @extends('layouts.main')
 
 @section('content1')
-@if(Session::has('tickets'))
-<p class="alert {{ Session::get('alert-class', 'alert-info') }}">{{ Session::get('tickets') }}</p>
-@endif
+
 <div class="container-fluid">
 
     <div class="tab-pane" id="nav-maintenance" role="tabpanel" aria-labelledby="nav-maintenance-tab">

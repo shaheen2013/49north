@@ -10,7 +10,7 @@ class MaintenanceController extends Controller
 
 	/// Maintennace List
     function Maintenance_list()
-    {	
+    {
     	$data['maintanance'] = Maintenance_ticket::where(['delete_status' => NULL, 'status' => NULL])->get();
         $data['maintanance1'] = Maintenance_ticket::where(['delete_status' => NULL, 'status' => 1])->orWhere(['status' => 2])->get();
         $data['category'] = Categorys::all();
@@ -18,16 +18,16 @@ class MaintenanceController extends Controller
     }
 
 
-    /// Add maintenance 
+    /// Add maintenance
     function addmaintenance(Request $request)
     {
     	$data = $request->all();
         Maintenance_ticket::insert($data);
         $msg = 'Ticket Added successfully';
-        return redirect()->back()->with('tickets', $msg);
+        return redirect()->back()->with('alert-info', $msg);
     }
-   
-   ///// edit view 
+
+   ///// edit view
     function edit_maintenanceview(Request $request)
     {
     	$data['maintanance'] = DB::table('maintenance_tickets')->where('id', $request->id)->first();
@@ -37,14 +37,14 @@ class MaintenanceController extends Controller
      	return view('ajaxview.editmaintenance',$data);
     }
 
-    /// update maintenance 
+    /// update maintenance
     function edit(Request $request)
     {
     	$id = $request->id;
         $data = $request->all();
         $try = Maintenance_ticket::where(['id' => $id])->update($data);
         $msg = 'Updated a ticket';
-        return redirect()->back()->with('tickets', $msg);
+        return redirect()->back()->with('alert-info', $msg);
     }
 
     /// delete tickets
@@ -53,7 +53,7 @@ class MaintenanceController extends Controller
         $id = $request->id;
         Maintenance_ticket::where(['id' => $id])->update(['delete_status' => 1]);
         $msg = 'Ticket deleted';
-        return redirect()->back()->with('tickets',$msg);
+        return redirect()->back()->with('alert-info',$msg);
     }
 
 

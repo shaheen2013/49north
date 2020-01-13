@@ -65,7 +65,7 @@ class PermissionController extends Controller {
             }
         }
 
-        return redirect()->route('permissions.index')->with('flash_message', 'Permission' . $permission->name . ' added!');
+        return redirect()->route('permissions.index')->with('alert-info', 'Permission' . $permission->name . ' added!');
 
     }
 
@@ -110,7 +110,7 @@ class PermissionController extends Controller {
         $input = $request->all();
         $permission->fill($input)->save();
 
-        return redirect()->route('permissions.index')->with('flash_message', 'Permission' . $permission->name . ' updated!');
+        return redirect()->route('permissions.index')->with('alert-info', 'Permission' . $permission->name . ' updated!');
 
     }
 
@@ -126,12 +126,12 @@ class PermissionController extends Controller {
 
         //Make it impossible to delete this specific permission
         if ($permission->name == "Admin Panel") {
-            return redirect()->route('permissions.index')->with('flash_message', 'Cannot delete this Permission!');
+            return redirect()->route('permissions.index')->with('alert-info', 'Cannot delete this Permission!');
         }
 
         $permission->delete();
 
-        return redirect()->route('permissions.index')->with('flash_message', 'Permission deleted!');
+        return redirect()->route('permissions.index')->with('alert-info', 'Permission deleted!');
 
     }
 }

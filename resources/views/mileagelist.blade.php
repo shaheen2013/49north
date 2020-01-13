@@ -1,9 +1,7 @@
 @extends('layouts.main')
 @include('modal')
 @section('content1')
-    @if(Session::has('msgmileage'))
-        <p class="alert {{ Session::get('alert-class', 'alert-info') }}">{{ Session::get('msgmileage') }}</p>
-    @endif
+
     <div class="tab-pane  " id="nav-mileage" role="tabpanel" aria-labelledby="nav-mileage-tab">
 
         <!--- mileage List  -->

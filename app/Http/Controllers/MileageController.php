@@ -77,7 +77,7 @@ class MileageController extends Controller {
         ]);
         $msg = 'Mileage updated successfully';
 
-        return redirect()->back()->with('msgmileage', $msg);
+        return redirect()->back()->with('alert-info', $msg);
     }
 
     /**

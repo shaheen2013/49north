@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\{User,Paystatement};
-use DB;
+use App\{Paystatement};
+use Illuminate\Support\Facades\DB;
 class PaystatementController extends Controller
 {
 	/// Payment list
@@ -20,7 +20,7 @@ class PaystatementController extends Controller
     }
 
     /// get paystatement addview
-    //function  
+    //function
 
 
     /// Add Paystatement
@@ -35,7 +35,7 @@ class PaystatementController extends Controller
             $request->file('pdfname')->move("public/paystatement",$statementname);
       	}
       	 $data['pdfname'] = $statementname;
-         
+
   		$empid_exists = Paystatement::find($data['emp_id']);
   		if($empid_exists)
   		{
@@ -47,6 +47,6 @@ class PaystatementController extends Controller
   			Paystatement::insert($data);
         	$msg = 'Paystatement added successfully';
     	}
-        return redirect()->back()->with('paystatement', $msg);
+        return redirect()->back()->with('alert-info', $msg);
     }
 }

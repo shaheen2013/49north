@@ -84,7 +84,7 @@ class AgreementController extends Controller {
         }
 
         //return redirect()->back();
-        return redirect()->back()->with('update_msg', $msg);
+        return redirect()->back()->with('alert-info', $msg);
     }
 
     /**

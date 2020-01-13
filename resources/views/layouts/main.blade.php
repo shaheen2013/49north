@@ -9,7 +9,7 @@
     <nav class="navbar navbar-expand-lg navbar-dark" id="mainNav">
         <div class="container-fluid">
             <a class="navbar-brand js-scroll-trigger logo_se" href="{{ route('home') }}"><img width="150" src="{{asset('img/logo.jpg')}}"
-                                                                                    alt=""></a>
+                                                                                              alt=""></a>
             <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
                     data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false"
                     aria-label="Toggle navigation">
@@ -19,15 +19,14 @@
             <div class="collapse navbar-collapse" id="navbarResponsive">
                 <ul id="myTab" role="tablist" class="navbar-nav text-uppercase nav nav-tabs">
 
-                    @admin
                     <li class="nav-item">
-                        <a class="nav-link active" id="profile-tab" data-toggle="tab" href="{{ route('home') }}" role="tab"
-                           aria-controls="profile" aria-selected="true">My Profile </a>
+                        <a class="nav-link active" href="{{ route('home') }}">My Profile </a>
                     </li>
-                    @endadmin
+                    @admin
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('users.index') }}" role="tab">Staff</a>
                     </li>
+                    @endadmin
                     <li class="nav-item">
                         <a class="nav-link" id="benefits-tab" data-toggle="tab" href="#benefits" role="tab"
                            aria-controls="benefits" aria-selected="true">Benefits</a>
@@ -62,26 +61,26 @@
 @if (isset($subnav))
     @include($subnav)
 @endif  --}}
-        <nav class="top_tab_details">
-              <div class="container-fluid">
-                  <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                    {{--<a class="nav-item nav-link  {{ (request()->is('home')) ? 'active' : '' }}" id="nav-employee-tab"  href="{{ url('home') }}" aria-controls="nav-employee" aria-selected="true">Employee Information</a>--}}
+<nav class="top_tab_details">
+    <div class="container-fluid">
+        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+            {{--<a class="nav-item nav-link  {{ (request()->is('home')) ? 'active' : '' }}" id="nav-employee-tab"  href="{{ url('home') }}" aria-controls="nav-employee" aria-selected="true">Employee Information</a>--}}
 
-                    <a class="nav-item nav-link  {{ (request()->is('agreementlist')) ? 'active' : '' }}" id="agreement_list" href="{{ url('agreementlist') }}">Agreements</a>
+            <a class="nav-item nav-link  {{ (request()->is('agreementlist')) ? 'active' : '' }}" id="agreement_list" href="{{ url('agreementlist') }}">Agreements</a>
 
-                    <a class="nav-item nav-link  {{ (request()->is('mileagelist')) ? 'active' : '' }}" id="agreement_list" href="{{ url('mileagelist') }}">Mileage</a>
+            <a class="nav-item nav-link  {{ (request()->is('mileagelist')) ? 'active' : '' }}" id="agreement_list" href="{{ url('mileagelist') }}">Mileage</a>
 
-                    <a class="nav-item nav-link  {{ (request()->is('expense/list')) ? 'active' : '' }}" id="agreement_list" href="{{ url('expense/list') }}">Expense</a>
+            <a class="nav-item nav-link  {{ (request()->is('expense/list')) ? 'active' : '' }}" id="agreement_list" href="{{ url('expense/list') }}">Expense</a>
 
-                    <a class="nav-item nav-link  {{ (request()->is('maintenance/list')) ? 'active' : '' }}" id="maintenance_list" href="{{ url('maintenance/list') }}">Maintenance</a>
+            <a class="nav-item nav-link  {{ (request()->is('maintenance/list')) ? 'active' : '' }}" id="maintenance_list" href="{{ url('maintenance/list') }}">Maintenance</a>
 
-                    <a class="nav-item nav-link  {{ (request()->is('timeoff/list')) ? 'active' : '' }}" id="timeoff_list" href="{{ url('timeoff/list') }}">Time Off</a>
+            <a class="nav-item nav-link  {{ (request()->is('timeoff/list')) ? 'active' : '' }}" id="timeoff_list" href="{{ url('timeoff/list') }}">Time Off</a>
 
-                    <a class="nav-item nav-link {{request()->is('paystatement/list') ? 'active' : '' }}" id="nav-statements-tab" href="{{url('paystatement/list')}}" >Pay Statements</a>
+            <a class="nav-item nav-link {{request()->is('paystatement/list') ? 'active' : '' }}" id="nav-statements-tab" href="{{url('paystatement/list')}}">Pay Statements</a>
 
-                  </div>
-              </div><!--------------container--------------->
-        </nav>
+        </div>
+    </div><!--------------container--------------->
+</nav>
 
 <div class="container-fluid">
 
@@ -98,6 +97,15 @@
             You have successfully deleted an item.
         </div>
     </div>
+    <div class="flash-message">
+        @foreach (['danger', 'warning', 'success', 'info'] as $msg)
+            @if(session()->has('alert-' . $msg))
+                <p class="alert alert-{{ $msg }}">
+                    {!! nl2br(session()->get('alert-' . $msg)) !!} <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                </p>
+            @endif
+        @endforeach
+    </div>
 
     @yield('content1')
 </div>
@@ -111,12 +119,12 @@
         }
     });
 
-   $("document").ready(function(){
-    setTimeout(function(){
-        $("p.alert").remove();
-    }, 5000 ); // 5 secs
+    $("document").ready(function () {
+        setTimeout(function () {
+            $("p.alert").remove();
+        }, 5000); // 5 secs
 
-});
+    });
 </script>
 
 <script type="text/javascript" src="{{ asset('js/bootstrap-datepicker.min.js') }}"></script>

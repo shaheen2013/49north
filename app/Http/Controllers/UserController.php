@@ -143,7 +143,7 @@ class UserController extends Controller {
         }
 
         //Redirect to the users.index view and display message
-        return redirect()->route('users.index')->with('flash_message', $msg);
+        return redirect()->route('users.index')->with('alert-info', $msg);
     }
 
     /**
