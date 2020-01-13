@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\{Model, SoftDeletes};
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Agreement extends Model {
-    use  SoftDeletes;
+    use  SoftDeletes, HasEmployee;
 
     public $table = "agreements";
 

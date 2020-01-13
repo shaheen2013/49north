@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Codeofconduct extends Model {
-    use  SoftDeletes;
+    use  SoftDeletes, HasEmployee;
 
     protected $guarded = [];
 
