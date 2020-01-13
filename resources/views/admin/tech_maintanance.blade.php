@@ -21,28 +21,29 @@
                     $emprec = DB::table('employee_details')->where(['id' => $maintanance_list->emp_id])->first();
             ?>
                 <tr style="margin-bottom:10px;">
-                    <td><?php echo "#00".$maintanance_list->id ?></td>                    
-                    <td><?php echo $maintanance_list->subject ?></td>
+                    <td>{{ "#00".$maintanance_list->id }}</td>
+                    <td>{{ $maintanance_list->subject }}</td>
                     <td><?php
-                     if($maintanance_list->status == NULL){ 
+                     if($maintanance_list->status == NULL){
                         echo "Pending";
                      }elseif ($maintanance_list->status == 1) {
                         echo "in progress";
                      }else if ($maintanance_list->status == 2) {
                         echo "Close";
                      }
-                     ?></td> 
-                    <td><?php echo $maintanance_list->updated_at ?></td>
-                    <td><?php echo isset($emprec->firstname) .' '. isset($emprec->lastname); ?></td>
+                     ?></td>
+                    <td>{{ $maintanance_list->updated_at }}</td>
+                    <td>{{ isset($emprec->firstname) .' '. isset($emprec->lastname) }}</td>
                      <td>
-                        <a href="javascript:void(0)" onclick="ticket_inprogress(<?= $maintanance_list->id ?>)"><i class="fa fa-check-circle" title="In Progress"></i></a>
-                        <a href="javascript:void(0)" title="Cancel!" onclick="ticket_cancel(<?= $maintanance_list->id ?>)"><i class="fa fa-ban"></i></a>                        
-                    </td> 
+                        <a href="javascript:void(0)" onclick="ticket_inprogress({{ $maintanance_list->id  }})"><i class="fa fa-check-circle" title="In Progress"></i></a>
+                        <a href="javascript:void(0)" title="Cancel!" onclick="ticket_cancel({{ $maintanance_list->id  }})"><i class="fa fa-ban"></i></a>
+                    </td>
 
-                    <td class="action-box"><a href="javascript:void(0);" onclick="mainance_edit_view_ajax(<?= $maintanance_list->id ?>)" >EDIT</a><a href="javascript:void(0);" class="down" onclick="delete_maintance(<?= $maintanance_list->id ?>)">DELETE</a></td>
+                    <td class="action-box"><a href="javascript:void(0);" onclick="mainance_edit_view_ajax({{ $maintanance_list->id  }})" >EDIT</a>
+                        <a href="javascript:void(0);" class="down" onclick="delete_maintance({{ $maintanance_list->id  }})">DELETE</a></td>
                 </tr>
                 <tr class="spacer"></tr>
-              <?php  } ?>  
+              <?php  } ?>
                                 <tbody>
                             </table>
                           </div>
@@ -64,26 +65,26 @@
                   $emprec = DB::table('employee_details')->where(['id' => $maintanance_list->emp_id])->first();
             ?>
                 <tr style="margin-bottom:10px;">
-                    <td><?php echo "#00".$maintanance_list->id ?></td>                    
-                    <td><?php echo $maintanance_list->subject ?></td>
+                    <td>{{ "#00".$maintanance_list->id }}</td>
+                    <td>{{ $maintanance_list->subject }}</td>
                     <td><?php
-                     if($maintanance_list->status == NULL){ 
+                     if($maintanance_list->status == NULL){
                         echo "Pending";
                      }elseif ($maintanance_list->status == 1) {
                         echo "in progress";
                      }else if ($maintanance_list->status == 2) {
                         echo "Close";
                      }
-                     ?></td> 
-                    <td><?php echo $maintanance_list->updated_at ?></td>
-                    <td><?php echo isset($emprec->firstname) .' '. isset($emprec->lastname); ?></td>
+                     ?></td>
+                    <td>{{ $maintanance_list->updated_at }}</td>
+                    <td>{{ isset($emprec->firstname) .' '. isset($emprec->lastname) }}</td>
                      <td>
-                        <a href="javascript:void(0)">View</a>                  
-                    </td> 
+                        <a href="javascript:void(0)">View</a>
+                    </td>
 
                 </tr>
-                <tr class="spacer"></tr>  
-            <?php } ?>    
+                <tr class="spacer"></tr>
+            <?php } ?>
                                 <tbody>
                             </table>
                           </div>
@@ -94,7 +95,7 @@
 
 <div id="edit-maintenance-modal" class="modal fade bs-example-modal-lg edit-maintenance-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <!-- modal come on ajax-->
-</div>  
+</div>
 
 <div id="maintenance-modal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
@@ -128,7 +129,7 @@
                                     <label for="name" class="">Description</label>
                                     <input type="text" id="name" name="description" class="form-control" placeholder="Insert text here">
                                 </div>
-                            </div>                            
+                            </div>
                         </div>
                         <div class="row">
                             <div class="col-md-6 col-sm-6">
@@ -139,7 +140,7 @@
                                         <option>1</option>
                                         <option>2</option>
                                     </select>
-                                </div>                             
+                                </div>
                             </div>
                             <div class="col-md-6 col-sm-6">
                                 <div class="text_outer">
@@ -147,19 +148,19 @@
                                     <select class="select_status form-control" name="category">
                                         <option>Select</option>
                                         @foreach($category as $category_ex_report)
-                                        <option value="{{ $category_ex_report->id }}">{{ $category_ex_report->categoryname }}</option> 
-                                      @endforeach  
+                                        <option value="{{ $category_ex_report->id }}">{{ $category_ex_report->categoryname }}</option>
+                                      @endforeach
                                     </select>
                                 </div>
                             </div>
                         </div>
-                        </hr>               
+                        <hr>
                         <div class="row margin-top-30">
                             <div class="form-group" style="width:100%;">
                                 <div class="col-md-12 col-sm-12">
                                     {{ csrf_field() }}
-                                    <input type="hidden" name="emp_id" value="<?= auth()->user()->id; ?>">
-                                    <input type="hidden" name="updated_at" value="<?= now(); ?>">
+                                    <input type="hidden" name="emp_id" value="{{ auth()->user()->id }}">
+                                    <input type="hidden" name="updated_at" value="{{ now() }}">
                                     <button type="submit" class="btn-dark contact_btn">Save</button>
                                     <span class="close close-span" data-dismiss="modal" aria-label="Close"><i class="fa fa-arrow-left"></i> Return to Maintenance</span>
                                 </div>
@@ -167,7 +168,7 @@
                         </div>
                     </form>
                 </div>
-                
+
             </div>
 
         </div>

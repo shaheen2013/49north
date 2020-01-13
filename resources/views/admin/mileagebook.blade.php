@@ -13,7 +13,7 @@
 
                             <div id="active_mileage_div">
                             <table style="width:100%;">
-                                <thead> 
+                                <thead>
                                     <tr>
                                         <th>Date</th>
                                         <th>Reason for mileage</th>
@@ -24,11 +24,11 @@
                                 <tbody class="return_mileagelist">
                                   @foreach($mileage_list as $mlist)
                                      <tr style="margin-bottom:10px;">
-                                        <td><?= $mlist->date?></td>
-                                        <td><?= $mlist->reasonmileage?></td>
-                                        <td><?= $mlist->kilometers?></td>
-                                        <td class="action-box"><a href="javascript:void();" data-toggle="modal" data-target="#mileage-modaledit" data="<?= $mlist->id?>" class="edit_mileage" onclick="edit_mileage(<?= $mlist->id?>)">EDIT</a>
-                                        <a href="#" class="down" onclick="delete_mileage(<?= $mlist->id?>);">DELETE</a></td>
+                                        <td>{{ $mlist->date }}</td>
+                                        <td>{{ $mlist->reasonmileage }}</td>
+                                        <td>{{ $mlist->kilometers }}</td>
+                                        <td class="action-box"><a href="javascript:void();" data-toggle="modal" data-target="#mileage-modaledit" data="{{ $mlist->id }}" class="edit_mileage" onclick="edit_mileage({{ $mlist->id }})">EDIT</a>
+                                        <a href="#" class="down" onclick="delete_mileage({{ $mlist->id }});">DELETE</a></td>
                                     </tr>
                                     <tr class="spacer"></tr>
                                   @endforeach
@@ -37,12 +37,12 @@
                                 </div>
 
 
-                                
+
                         </div>
 
 
 
-                        
+
                       </div><!-------------end--------->
 
 </div>
@@ -66,39 +66,39 @@
                                        @endforeach
                                     </select>
                                 </div>
-                                
+
                             </div>
-                            
+
                             <div class="col-md-6 col-sm-6">
                                 <div class="text_outer">
                                     <label for="name" class="">Date</label>
                                     <input type="date"  placeholder = "" name="date" class = "form-control"  >
                                 </div>
-                                
-                                
+
+
                             </div>
                         </div>
                         <div class="clearfix"></div>
-                        
+
                         <div class="row">
                             <div class="col-md-6 col-sm-6">
                                 <div class="text_outer">
                                     <label for="name" class="">Vehicle</label>
                                     <input type="text" id="vehicle" name="vehicle" class="form-control" placeholder="Insert text here">
                                 </div>
-                                
-                                
+
+
                             </div>
                             <div class="col-md-6 col-sm-6">
                                 <div class="text_outer">
                                     <label for="name" class="">No of kilometers</label>
                                     <input type="text" id="kilometers" name="kilometers" class="form-control" placeholder="Insert figure here">
                                 </div>
-                                
-                                
+
+
                             </div>
                         </div>
-                        
+
                         <div class="row">
                             <div class="col-md-12 col-sm-12">
                                 <div class="text_outer">
@@ -106,22 +106,22 @@
                                     <input type="text" id="reasonformileage" name="reasonformileage" class="form-control" placeholder="Insert text here">
                                 </div>
                             </div>
-                            
+
                         </div>
-                        </hr>               
+                        </hr>
                         <div class="row margin-top-30">
                             <div class="form-group" style="width:100%;">
                                 <div class="col-md-12 col-sm-12">
                                     <button type="button" onclick="addmileage_details();" class="btn-dark contact_btn">Save</button>
                                     <span class="close close-span" data-dismiss="modal" aria-label="Close"><i class="fa fa-arrow-left"></i> Return to Mileage</span>
-                                    
+
                                 </div>
                             </div>
                         </div>
 
                     </form>
                 </div>
-                
+
             </div>
 
         </div>
