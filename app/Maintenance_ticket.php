@@ -8,8 +8,7 @@ use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
 
 class Maintenance_ticket extends Authenticatable {
-    use Notifiable;
-    use HasRoles;
+    use Notifiable, HasRoles, HasEmployee;
 
     /**
      * The attributes that are mass assignable.

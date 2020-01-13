@@ -15,9 +15,14 @@
                         <thead>
                         <tr>
                             <th>Date</th>
+                            @admin
+                            <th>Employee</th>
+                            @endadmin
                             <th>Description</th>
                             <th>Total</th>
+                            @admin
                             <th>Action</th>
+                            @endadmin
                             <th></th>
                         </tr>
                         </thead>
@@ -25,12 +30,19 @@
                         @foreach ($expense as $expence_list)
                             <tr style="margin-bottom:10px;">
                                 <td>{{ $expence_list->date }}</td>
+                                @admin
+                                <td>
+                                    {{ $expence_list->employee->name }}
+                                </td>
+                                @endadmin
                                 <td>{{ $expence_list->description }}</td>
                                 <td>{{ $expence_list->total }}</td>
+                                @admin
                                 <td>
                                     <a href="javascript:void(0)" onclick="expence_approve({{ $expence_list->id  }})"><i class="fa fa-check-circle" title="Approved"></i></a>
                                     <a href="javascript:void(0)" title="Reject!" onclick="expence_reject({{ $expence_list->id }})"><i class="fa fa-ban"></i></a>
                                 </td>
+                                @endadmin
                                 <td class="action-box"><a href="javascript:void(0);" onclick="edit_view_ajax({{ $expence_list->id }})">EDIT</a>
                                     <a href="javascript:void(0);" class="down" onclick="delete_expence({{ $expence_list->id }})">DELETE</a></td>
                             </tr>
