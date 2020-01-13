@@ -2,9 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use App\{Company, Project, Purchases, Categorys, Expenses};
+use App\{Company, Mileage, Project, Purchases, Categorys};
+use Illuminate\View\View;
+
 class MileageController extends Controller {
     /**
      * Create a new controller instance.
@@ -20,24 +25,22 @@ class MileageController extends Controller {
      *
      * @param Request $request
      *
-     * @return void
+     * @return Factory|View
      */
     public function mileagelist (Request $request) {
-        $emp_id = auth()->user()->id;
+
         $type = auth()->user()->is_admin;
         if ($type == '1') {
-            $data['mileage_list'] = DB::table('mileages')->get();
+            $data['mileage_list'] = Mileage::where('status','<>','D')->orderByDesc('created_at')->with('employee:id,firstname,lastname')->get();
         }
         else {
-            $data['mileage_list'] = DB::table('mileages')->where(['emp_id' => $emp_id, 'status' => 'A'])->get();
+            $data['mileage_list'] = Auth::user()->mileage()->where('status','A')->orderByDesc('created_at')->get();
+
         }
 
         $data['companies'] = Company::all();
-        $data['project'] = Project::all();
-        $data['purchases'] = Purchases::all();
-        $data['category'] = Categorys::all();
-        
-        return view('mileagelist',$data);
+
+        return view('mileagelist', $data);
     }
 
     /**
@@ -59,6 +62,8 @@ class MileageController extends Controller {
 
     /**
      * @param Request $request
+     *
+     * @return RedirectResponse
      */
     function updatemileage (Request $request) {
         $emp_id = auth()->user()->id;
@@ -71,13 +76,14 @@ class MileageController extends Controller {
             'reasonmileage' => $request->reasonformileage,
         ]);
         $msg = 'Mileage updated successfully';
+
         return redirect()->back()->with('msgmileage', $msg);
     }
 
     /**
      * @param $id
      *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Factory|View
      */
     function get_mileage ($id) {
         $data['companies'] = Company::all();
