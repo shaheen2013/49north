@@ -1,6 +1,10 @@
+.idea
+*.idea
 /node_modules
 /public/hot
 /public/storage
+/storage
+/public/public
 /storage/*.key
 /vendor
 .env
