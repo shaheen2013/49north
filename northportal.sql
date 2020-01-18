@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 17, 2020 at 05:45 AM
+-- Generation Time: Jan 18, 2020 at 05:25 AM
 -- Server version: 10.1.38-MariaDB
 -- PHP Version: 7.2.15
 
@@ -107,17 +107,31 @@ INSERT INTO `codeofconducts` (`id`, `emp_id`, `coc_agreement`, `status`, `create
 CREATE TABLE `companies` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `companyname` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+<<<<<<< HEAD
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
+=======
+  `email` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `logo` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `deleted_at` timestamp NULL DEFAULT NULL
+>>>>>>> b862558d8917e3c3fc3e5b035e33ec7ee27f0fbe
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `companies`
 --
 
+<<<<<<< HEAD
 INSERT INTO `companies` (`id`, `companyname`, `created_at`, `updated_at`) VALUES
 (1, 'company1', NULL, NULL),
 (2, 'company2', NULL, NULL);
+=======
+INSERT INTO `companies` (`id`, `companyname`, `email`, `logo`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 'company1', NULL, NULL, NULL, NULL, NULL),
+(2, 'company2', NULL, NULL, NULL, NULL, NULL);
+>>>>>>> b862558d8917e3c3fc3e5b035e33ec7ee27f0fbe
 
 -- --------------------------------------------------------
 
@@ -160,8 +174,14 @@ CREATE TABLE `employee_details` (
 
 INSERT INTO `employee_details` (`id`, `firstname`, `lastname`, `dob`, `personalemail`, `phone_no`, `address`, `workemail`, `profile_pic`, `marital_status`, `no_ofchildren`, `family_inarea`, `familycircumstance`, `prsnl_belief`, `known_medical_conditions`, `allergies`, `dietary_restrictions`, `known_health_concerns`, `aversion_phyactivity`, `emergency_contact_name`, `reltn_emergency_contact`, `emergency_contact_phone`, `emergency_contact_email`, `created_at`, `updated_at`, `deleted_at`) VALUES
 (1, 'the', 'admin', '2020-01-17', 'sean@fitnessmanagement.ca', '8369152973', 'B/102', NULL, '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2020-01-01 01:11:10', '2020-01-01 01:11:10', NULL),
+<<<<<<< HEAD
 (3, 'Ridwanul', 'Hafiz', '2020-01-17', 'junaid@gmail.com', '8369152973', 'B/102', NULL, '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2020-01-01 01:11:10', '2020-01-01 01:11:10', NULL),
 (4, 'sean', 'glendinning', '2020-01-17', 'allcdnboy@gmail.com', '8369152973', 'B/102', NULL, '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2020-01-01 01:11:10', '2020-01-01 01:11:10', NULL);
+=======
+(3, 'Ridwan', 's', NULL, NULL, NULL, NULL, 'owner@gmail.com', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2020-01-01 01:11:10', '2020-01-16 23:24:48', NULL),
+(4, 'sean', 'glendinning', '2020-01-17', 'allcdnboy@gmail.com', '8369152973', 'B/102', NULL, '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2020-01-01 01:11:10', '2020-01-01 01:11:10', NULL),
+(5, 'Shahinur', 'Rahman', NULL, NULL, NULL, NULL, 'shahinplan@mailinator.com', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2020-01-16 23:34:02', '2020-01-16 23:34:02', NULL);
+>>>>>>> b862558d8917e3c3fc3e5b035e33ec7ee27f0fbe
 
 -- --------------------------------------------------------
 
@@ -280,7 +300,12 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (47, '2020_01_04_001602_add_is_admin_to_users', 2),
 (48, '2020_01_04_002131_add_soft_deletes', 3),
 (49, '2020_01_05_055356_fix_typos', 3),
+<<<<<<< HEAD
 (50, '2020_01_07_203646_remove_old_from_agreements', 4);
+=======
+(50, '2020_01_07_203646_remove_old_from_agreements', 4),
+(51, '2020_01_17_065504_add_logo_and_email_to_companies_table', 5);
+>>>>>>> b862558d8917e3c3fc3e5b035e33ec7ee27f0fbe
 
 -- --------------------------------------------------------
 
@@ -534,8 +559,14 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `user_type`, `is_admin`, `emp_id`, `remember_token`, `created_at`, `updated_at`, `deleted_at`) VALUES
 (1, 'admin', 'admin@gmail.com', NULL, '$2y$12$RCnO2MnCF8X1F2LZz20r2.glusbX0xUemxgmTNKyWmmILM9hFF2IW', 'is_admin', 1, NULL, NULL, NULL, NULL, NULL),
+<<<<<<< HEAD
 (3, 'Ridwanul hafiz', 'ridwan@gmail.com', NULL, '$2y$12$RCnO2MnCF8X1F2LZz20r2.glusbX0xUemxgmTNKyWmmILM9hFF2IW', 'employee', 0, '1', NULL, '2020-01-01 01:11:11', '2020-01-14 03:18:14', NULL),
 (4, 'sean glendinning', 'allcdnboy@gmail.com', NULL, '$2y$10$AutQJPoqKYZZDwmcMo9WBO64a5Bx2fZqUBYQMjubom0ca3R8FGQI6', 'employee', 0, '1', NULL, '2020-01-01 01:11:11', '2020-01-14 03:18:14', NULL);
+=======
+(3, 'Ridwan s', 'owner@gmail.com', NULL, '$2y$12$RCnO2MnCF8X1F2LZz20r2.glusbX0xUemxgmTNKyWmmILM9hFF2IW', 'employee', 0, '1', NULL, '2020-01-01 01:11:11', '2020-01-16 23:24:48', NULL),
+(4, 'sean glendinning', 'allcdnboy@gmail.com', NULL, '$2y$10$AutQJPoqKYZZDwmcMo9WBO64a5Bx2fZqUBYQMjubom0ca3R8FGQI6', 'employee', 0, '1', NULL, '2020-01-01 01:11:11', '2020-01-14 03:18:14', NULL),
+(5, 'Shahinur Rahman', 'shahinplan@mailinator.com', NULL, '$2y$10$L74Xz3ddkz9lJh/d7KsMIOZLaUqq8bel55Y0jBIoW0JBT/LwZryyG', NULL, 0, NULL, NULL, '2020-01-16 23:34:02', '2020-01-16 23:34:02', NULL);
+>>>>>>> b862558d8917e3c3fc3e5b035e33ec7ee27f0fbe
 
 --
 -- Indexes for dumped tables
@@ -716,7 +747,11 @@ ALTER TABLE `companies`
 -- AUTO_INCREMENT for table `employee_details`
 --
 ALTER TABLE `employee_details`
+<<<<<<< HEAD
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+=======
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+>>>>>>> b862558d8917e3c3fc3e5b035e33ec7ee27f0fbe
 
 --
 -- AUTO_INCREMENT for table `expenses`
@@ -740,7 +775,11 @@ ALTER TABLE `maintenance_tickets`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
+<<<<<<< HEAD
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
+=======
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=52;
+>>>>>>> b862558d8917e3c3fc3e5b035e33ec7ee27f0fbe
 
 --
 -- AUTO_INCREMENT for table `mileages`
@@ -800,7 +839,11 @@ ALTER TABLE `roles_old`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
+<<<<<<< HEAD
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+=======
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+>>>>>>> b862558d8917e3c3fc3e5b035e33ec7ee27f0fbe
 
 --
 -- Constraints for dumped tables

@@ -43,6 +43,17 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/reject', 'ExpenseController@expense_reject')->name('reject');
         Route::post('/history', 'ExpenseController@expenses_historical')->name('history');
     });
+
+    Route::group(['prefix' => 'company'], function () {
+        Route::get('/', 'CompanyController@index')->name('company.index');
+        Route::POST('/search', 'CompanyController@searchCompanyPage');
+        Route::get('/create', 'CompanyController@create');
+        Route::post('/store', 'CompanyController@store');
+        Route::get('/edit/{id}', 'CompanyController@edit');
+        Route::POST('/update/{id}', 'CompanyController@update');
+        Route::POST('/destroy/{id}', 'CompanyController@destroy');
+
+    });
     
 
     Route::post('/reset_apssword', 'RegisterController@reset_password')->name('reset_apssword');
@@ -100,7 +111,7 @@ Route::group(['middleware' => ['auth', 'isAdmin']], function () {
 
 
 
-Route::get('admin/addpaystatement','Admin\PaystatementController@paystatement');
+// Route::get('admin/addpaystatement','Admin\PaystatementController@paystatement');
 Route::get('admin/registration','Admin\AdminController@index');
 Route::get('admin/agreement','Admin\AdminAgreementController@agreementlist');
 Route::get('admin/expences_report','Admin\AdminController@expences_report');
