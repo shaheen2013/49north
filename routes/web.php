@@ -44,8 +44,16 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/history', 'ExpenseController@expenses_historical')->name('history');
     });
 
-    Route::resource('company', 'CompanyController');
-    Route::POST('/company/search', 'CompanyController@searchCompanyPage');
+    Route::group(['prefix' => 'company'], function () {
+        Route::get('/', 'CompanyController@index');
+        Route::POST('/search', 'CompanyController@searchCompanyPage');
+        Route::get('/create', 'CompanyController@create');
+        Route::post('/store', 'CompanyController@store');
+        Route::get('/edit/{id}', 'CompanyController@edit');
+        Route::POST('/update/{id}', 'CompanyController@update');
+        Route::GET('/destroy/{id}', 'CompanyController@destroy');
+
+    });
     
 
     Route::post('/reset_apssword', 'RegisterController@reset_password')->name('reset_apssword');
