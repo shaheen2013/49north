@@ -16,16 +16,19 @@
                         </div>
                         <div class="col-sm-9">
                             <a href="javascript:void(0)" class="_new_icon_button_1" data-toggle="modal"
-                               data-target="#expense-modal">
+                               data-target="#company-modal">
                                 <i class="fa fa-plus"></i>
                             </a>
+                        </div>
+                        <div class="col-sm-12 text-center">
+                            <img id="wait" src='{{ asset('img/demo_wait.gif') }}' width="50" height="50" />
                         </div>
                         <div class="col-sm-12">
                             <table class="table _table _table-bordered">
                                 <thead>
                                 <tr>
+                                    <th>Company Logo</th>
                                     <th>Company Name</th>
-                                    <th>Logo</th>
                                     <th>Email</th>
                                     <th width="200px" class="text-right">Action</th>
                                 </tr>
@@ -44,9 +47,7 @@
 
     </div>
 
-
-
-    <div id="expense-modal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog"
+    <div id="company-modal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog"
          aria-labelledby="myLargeModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -90,7 +91,7 @@
         </div>
     </div>
 
-    <div id="expense-modal-edit2" class="modal fade bs-example-modal-lg expense-modal-edit" tabindex="-1" role="dialog"
+    <div id="company-modal-edit2" class="modal fade bs-example-modal-lg company-modal-edit" tabindex="-1" role="dialog"
          aria-labelledby="myLargeModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -150,29 +151,28 @@
                 $("#pending_div").hide();
                 $("#historical_div").show();
             });
-
             $("#pending_span").click(function () {
                 $("#pending_span").addClass("active-span");
                 $("#historical_span").removeClass("active-span");
                 $("#pending_div").show();
                 $("#historical_div").hide();
-
             });
         });
         window.onload = function () {
             searchCompanyPage()
-        }
+        };
         function create_company(event){
             event.preventDefault();
             $('#create').attr('disabled','disabled');
             var companyname = $('#companyname').val();
             var email = $('#email').val();
-            var logo = $('#logo').val();
             //    alert();
             var data = new FormData(document.getElementById('createCompanyForm'));
-            if(companyname == '' || email == ''|| logo == ''){
+            if(companyname === '' || email === ''){
                 $.toaster({ message : 'Field is required!', title : 'Required', priority : 'danger' });
+
                 $('#create').removeAttr('disabled');
+
                 return false;
             }
             $.ajax({
@@ -185,9 +185,9 @@
                 cache: false,
                 success: function( response ) {
                     $.toaster({ message : 'Created successfully', title : 'Success', priority : 'success' });
-                    setTimeout(function () {
-                        window.location.reload();
-                    }, 1000);
+                    searchCompanyPage();
+                    $('#company-modal').modal('hide');
+                    $('#create').removeAttr('disabled');
                 }
 
             });
@@ -195,7 +195,7 @@
 
         function OpenEditCompanyModel(id) {
             console.log(id)
-            $('#expense-modal-edit2').modal();
+            $('#company-modal-edit2').modal();
             $.ajax({
                 type: 'GET',
                 url: "company/edit/"+id,
@@ -204,10 +204,8 @@
                     if (results.status === 'success') {
                         $('#edit_companyname').val(results.data.companyname);
                         $('#edit_email').val(results.data.email);
-                        $('#edit_logo_show').attr('src','/logo/'+results.data.logo);
+                        $('#edit_logo_show').attr('src','public/logo/'+results.data.logo);
                         $('#update').attr('onclick', 'update_company(' + id + ')');
-                        // console.log(results.data.cost.cost_date.split(' ')[0])
-                        // $('#send_form').attr('onclick','update_cost('+id+')');
                     } else {
                         swal("Error!", results.message, "error");
                     }
@@ -216,21 +214,18 @@
         }
 
         function update_company(id) {
-            // $('#send_form').attr('disabled','disabled');
+            $('#update').attr('disabled','disabled');
             var companyname = $('#edit_companyname').val();
             var email = $('#edit_email').val();
-            var logo = $('#edit_logo').val();
-
             var data = new FormData(document.getElementById('editCompanyForm'));
+            if(companyname === '' || email === ''){
 
-            // if(companyname == '' || email == ''|| logo == ''){
+                $.toaster({ message : 'Field is required!', title : 'Required', priority : 'danger' }, 1000);
+                $('#update').removeAttr('disabled')
 
-            //     // $.toaster({ message : 'Field is required!', title : 'Required', priority : 'danger' }, 1000);
-            //     // $('#send_form').removeAttr('disabled')
-            //         alert();
 
-            //     // return false;
-            // }
+                return false;
+            }
             $.ajax({
                 method: "POST",
                 url: "company/update/"+id, //resource route
@@ -241,9 +236,9 @@
                 cache: false,
                 success: function( response ) {
                     $.toaster({ message : 'Updated successfully', title : 'Success', priority : 'success' });
-                    setTimeout(function () {
-                        window.location.reload();
-                    }, 1000);
+                    searchCompanyPage();
+                    $('#company-modal-edit2').modal('hide');
+                    $('#update').removeAttr('disabled');
                 }
 
             });
@@ -251,16 +246,12 @@
 
         function searchCompanyPage() {
             let search = $('#search').val();
-
             let data = {
                 _token: '{{  @csrf_token() }}',
                 search: search,
 
             };
-
-            // $('#wait').css('display', 'block'); // wait for loader
-
-            console.log(data);
+            $('#wait').css('display', 'inline-block'); // wait for loader
             $.ajax({
                 type: 'post',
                 url: "/company/search",
@@ -270,24 +261,19 @@
                     let html = '';
 
                     if (results.status === 'success') {
-                        // $('#wait').css('display', 'none');
+                        $('#wait').css('display', 'none');
                         for (let index = 0; index < results.data.length; index++) {
-
-
                             html += `<tr>
+                                        <td> ${results.data[index].logo !== null ? '<img src="/public/companyLogo/'+results.data[index].logo+'" height="50px" alt="">' : 'N/A'} </td>
                                         <td> ${results.data[index].companyname} </td>
-                                        <td> ${results.data[index].logo !== null ? results.data[index].logo : 'N/A'} </td>
                                         <td> ${results.data[index].email !== null ? results.data[index].email : 'N/A'} </td>
-
                                         <td class="text-right">
                                             <a href="javascript:void(0);" onclick="OpenEditCompanyModel('${results.data[index].id}')">EDIT</a>
                                             <a href="javascript:void(0);" class="down" onclick="deleteconfirm('${results.data[index].id}')">DELETE</a></td>
                                         </td>
-
-                                    </tr><tr class="spacer"></tr>`
+                                    </tr><tr class="spacer"></tr>`;
                         }
                         $('#company_search').html(html);
-
                     } else {
                         swal("Error!", results.message, "error");
                     }
@@ -307,8 +293,8 @@
             }).then(function (e) {
                 if (e.value === true) {
                     $.ajax({
-                        type: 'DELETE',
-                        url: "/company" + id,
+                        type: 'post',
+                        url: "/company/destroy/" + id,
                         data: {_token: '{{  @csrf_token() }}'},
                         dataType: 'JSON',
                         success: function (results) {

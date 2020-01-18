@@ -14,8 +14,7 @@ class CompanyController extends Controller
      */
     public function index()
     {
-        $data = Company::all();
-        return view('company.companyreport', compact('data'));
+        return view('company.companyreport');
     }
 
     /**
@@ -41,11 +40,11 @@ class CompanyController extends Controller
     public function store(Request $request)
     {
         $data = $request->all();
-        $logo = '';
+        $logo = null;
         if ($request->hasFile('logo')) {
             $file = $request->file('logo');
             $logo = rand(11111, 99999) . '.' . $file->getClientOriginalExtension();
-            $request->file('logo')->move("public/logo", $logo);
+            $request->file('logo')->move("public/companyLogo", $logo);
         }
 
         $data['logo'] = $logo;
@@ -94,17 +93,15 @@ class CompanyController extends Controller
     {
         // return $request->all();
         $data = Company::findOrFail($id);
-        $logo = '';
+        $logo = null;
         if ($request->hasFile('logo')) {
             $file = $request->file('logo');
             $logo = rand(11111, 99999) . '.' . $file->getClientOriginalExtension();
-            $request->file('logo')->move("public/logo", $logo);
-           
+            $request->file('logo')->move("public/companyLogo", $logo);
+            $data->logo = $logo;
         }
         $data->companyname = $request->companyname;
         $data->email =  $request->email;
-        $data->logo = $logo;
-        // $data->save();
 
         if($data->update()){
             return response()->json(['status'=>'success']);
@@ -119,7 +116,7 @@ class CompanyController extends Controller
                     $q->where('companyname', 'LIKE', '%'.$request->search.'%');
                 }
             });
-            $data= $data->get();
+            $data= $data->orderBy('companyname', 'asc')->get();
         return response()->json(['status'=>'success', 'data' => $data]);
     }
 

@@ -51,7 +51,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/store', 'CompanyController@store');
         Route::get('/edit/{id}', 'CompanyController@edit');
         Route::POST('/update/{id}', 'CompanyController@update');
-        Route::GET('/destroy/{id}', 'CompanyController@destroy');
+        Route::POST('/destroy/{id}', 'CompanyController@destroy');
 
     });
     
