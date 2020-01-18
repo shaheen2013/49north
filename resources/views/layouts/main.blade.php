@@ -22,6 +22,13 @@
                     <li class="nav-item">
                         <a class="nav-link active" href="{{ route('home') }}">My Profile </a>
                     </li>
+
+                    @admin
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('company.index') }}" role="tab">Company</a>
+                    </li>
+                    @endadmin
+
                     @admin
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('users.index') }}" role="tab">Staff</a>

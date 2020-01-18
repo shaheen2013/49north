@@ -43,6 +43,9 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/reject', 'ExpenseController@expense_reject')->name('reject');
         Route::post('/history', 'ExpenseController@expenses_historical')->name('history');
     });
+
+    Route::resource('company', 'CompanyController');
+    Route::POST('/company/search', 'CompanyController@searchCompanyPage');
     
 
     Route::post('/reset_apssword', 'RegisterController@reset_password')->name('reset_apssword');
