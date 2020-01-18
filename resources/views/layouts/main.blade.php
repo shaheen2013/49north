@@ -136,5 +136,6 @@
 <script type="text/javascript" src="{{ asset('js/admin.js') }}"></script>
 <script src="{{asset('js/custom_function.js')}}"></script>
 <script src="{{asset('js/custom_function_admin.js')}}"></script>
+<script src="{{ URL::asset('toaster/jquery.toaster.js') }}"></script>
 @stack('scripts')
 

@@ -82,12 +82,8 @@
                                 <div class="form-group" style="width:100%;">
                                     <div class="col-md-12 col-sm-12">
                                         <input type="hidden" name="emp_id" value="{{ auth()->user()->id }}">
-                                        <button type="button" id="create" onclick="create_company()"
-                                                class="btn-dark contact_btn" data-form="expences">Save
-                                        </button>
-                                        <span class="close close-span" data-dismiss="modal" aria-label="Close"><i
-                                                class="fa fa-arrow-left"></i> Return to Company Reports</span>
-
+                                        <button type="button" id="create" onclick="create_company(event)" class="btn-dark contact_btn" data-form="expences">Save</button>
+                                        <span class="close close-span" data-dismiss="modal" aria-label="Close"><i class="fa fa-arrow-left"></i> Return to Company Reports</span>
                                     </div>
                                 </div>
                             </div>
@@ -122,12 +118,12 @@
                                                id="edit_email">
                                     </div>
                                 </div>
-                                <div class="clearfix"></div>
-                                <div class="col-md-6 col-sm-6">
-                                    <div class="text_outer">
-                                        <label for="name" class="">Logo</label>
-                                        <input type="file" name="logo" id="edit_logo" class="form-control">
-                                    </div>
+                            <div class="clearfix"></div>
+                            <div class="col-md-6 col-sm-6">
+                                <div class="text_outer">
+                                    <label for="name" class="">Logo</label>
+                                    <img src="" id="edit_logo_show" alt="">
+                                    <input type="file" name="logo" id="edit_logo" class="form-control">
                                 </div>
                             </div>
 
@@ -147,8 +143,8 @@
                                 </div>
                             </div>
                         </div>
+                        </div>
                     </form>
-
                 </div>
 
             </div>
@@ -177,20 +173,17 @@
         window.onload = function () {
             searchCompanyPage()
         }
-
-        function create_company() {
-            // event.preventDefault();
-            // $('#create').attr('disabled','disabled');
+        function create_company(event){
+            event.preventDefault();
+            $('#create').attr('disabled','disabled');
             var companyname = $('#companyname').val();
             var email = $('#email').val();
             var logo = $('#logo').val();
             //    alert();
             var data = new FormData(document.getElementById('createCompanyForm'));
-            // console.log(data)
-            if (companyname == '' || email == '' || logo == '') {
-                alert('field is required');
-                // $.toaster({ message : 'Field is required!', title : 'Required', priority : 'danger' });
-                // $('#create').removeAttr('disabled');
+            if(companyname == '' || email == ''|| logo == ''){
+                $.toaster({ message : 'Field is required!', title : 'Required', priority : 'danger' });
+                $('#create').removeAttr('disabled');
                 return false;
             }
             $.ajax({
@@ -201,11 +194,11 @@
                 processData: false,  // Important!
                 contentType: false,
                 cache: false,
-                success: function (response) {
-                    // $.toaster({ message : 'Created successfully', title : 'Success', priority : 'success' });
-                    // setTimeout(function () {
-                    window.location.reload();
-                    // }, 1000);
+                success: function( response ) {
+                    $.toaster({ message : 'Created successfully', title : 'Success', priority : 'success' });
+                    setTimeout(function () {
+                        window.location.reload();
+                    }, 1000);
                 }
 
             });
@@ -216,13 +209,13 @@
             $('#expense-modal-edit2').modal();
             $.ajax({
                 type: 'GET',
-                url: "company/" + id + "/edit",
+                url: "company/edit/"+id,
                 dataType: 'JSON',
                 success: function (results) {
                     if (results.status === 'success') {
                         $('#edit_companyname').val(results.data.companyname);
                         $('#edit_email').val(results.data.email);
-                        $('#edit_logo').val(results.data.logo);
+                        $('#edit_logo_show').attr('src','/logo/'+results.data.logo);
                         $('#update').attr('onclick', 'update_company(' + id + ')');
                         // console.log(results.data.cost.cost_date.split(' ')[0])
                         // $('#send_form').attr('onclick','update_cost('+id+')');
@@ -250,18 +243,18 @@
             //     // return false;
             // }
             $.ajax({
-                method: "PUT",
-                url: "/company/" + id, //resource route
+                method: "POST",
+                url: "company/update/"+id, //resource route
                 data: data,
                 enctype: 'multipart/form-data',
                 processData: false,  // Important!
                 contentType: false,
                 cache: false,
-                success: function (response) {
-                    // $.toaster({ message : 'Updated successfully', title : 'Success', priority : 'success' });
-                    // setTimeout(function () {
-                    // window.location.reload();
-                    // }, 1000);
+                success: function( response ) {
+                    $.toaster({ message : 'Updated successfully', title : 'Success', priority : 'success' });
+                    setTimeout(function () {
+                        window.location.reload();
+                    }, 1000);
                 }
 
             });

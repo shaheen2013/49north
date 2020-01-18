@@ -95,13 +95,14 @@ class CompanyController extends Controller
         // return $request->all();
         $data = Company::findOrFail($id);
         $logo = '';
-        dd($request->hasFile('logo'), $request->allFiles(), $request->all());
         if ($request->hasFile('logo')) {
             $file = $request->file('logo');
             $logo = rand(11111, 99999) . '.' . $file->getClientOriginalExtension();
             $request->file('logo')->move("public/logo", $logo);
-            dd('hh');
+           
         }
+        $data->companyname = $request->companyname;
+        $data->email =  $request->email;
         $data->logo = $logo;
         // $data->save();
 

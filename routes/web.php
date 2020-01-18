@@ -111,7 +111,7 @@ Route::group(['middleware' => ['auth', 'isAdmin']], function () {
 
 
 
-Route::get('admin/addpaystatement','Admin\PaystatementController@paystatement');
+// Route::get('admin/addpaystatement','Admin\PaystatementController@paystatement');
 Route::get('admin/registration','Admin\AdminController@index');
 Route::get('admin/agreement','Admin\AdminAgreementController@agreementlist');
 Route::get('admin/expences_report','Admin\AdminController@expences_report');
