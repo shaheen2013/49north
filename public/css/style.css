@@ -1230,6 +1230,7 @@ a.navbar-brand.js-scroll-trigger.logo_se {
     overflow: hidden;
     margin: 0 0 25px;
     padding: 5px 20px 5px;
+    position: relative;
 }
 .text_outer label {
     margin: 0 0 0;
@@ -1259,11 +1260,11 @@ button.btn-dark.contact_btn {
     background: #760800;
     border: none;
     margin: 0 0 60px;
-    padding: 2px 45px 3px;
+    padding: 7px 45px 7px;
     border-radius: 25px;
     text-transform: uppercase;
     font-size: 13px;
-    color: #dfc8c6;
+    color: #fae3e1;
 }
 .agreements h3 {
     color: #760800;
@@ -1436,6 +1437,7 @@ span.close.close-span {
     font-weight: 400;
     color: #000;
 	float: left;
+    cursor: pointer;
 }
 form{
 	margin-bottom:0px;
@@ -1740,6 +1742,13 @@ span.fc-title {
 /*===========================*/
 /*New Style Sheet*/
 /*===========================*/
+.margin-10{width: 100%;display: inline-block;margin-bottom: 10px}
+.well-default-trans{
+    width: 100%;
+    display: inline-block;
+    padding: 50px;
+    background: transparent;
+}
 .navbar-expand-lg .navbar-collapse{
     display: table!important;
 }
@@ -1761,4 +1770,11 @@ span.fc-title {
 ._new_icon_button_1:hover,._new_icon_button_1:active{
     background-color: #7e7e7e!important;
     color: #fff!important;
+}
+._input_choose_file{
+    opacity: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 35px!important;
 }
