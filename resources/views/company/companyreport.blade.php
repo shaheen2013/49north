@@ -89,7 +89,7 @@
                                 <div class="form-group" style="width:100%;">
                                     <div class="col-md-12 col-sm-12">
                                         <input type="hidden" name="emp_id" value="{{ auth()->user()->id }}">
-                                        <button type="button" id="create" onclick="create_company()" class="btn-dark contact_btn" data-form="expences">Save</button>
+                                        <button type="button" id="create" onclick="create_company(event)" class="btn-dark contact_btn" data-form="expences">Save</button>
                                         <span class="close close-span" data-dismiss="modal" aria-label="Close"><i class="fa fa-arrow-left"></i> Return to Company Reports</span>
 
                                     </div>
@@ -127,6 +127,7 @@
                             <div class="col-md-6 col-sm-6">
                                 <div class="text_outer">
                                     <label for="name" class="">Logo</label>
+                                    <img src="" id="edit_logo_show" alt="">
                                     <input type="file" name="logo" id="edit_logo" class="form-control">
                                 </div>
                             </div>  
@@ -172,9 +173,9 @@
             });
         });
 
-        function create_company(){
-            // event.preventDefault();
-            // $('#create').attr('disabled','disabled');
+        function create_company(event){
+            event.preventDefault();
+            $('#create').attr('disabled','disabled');
             var companyname = $('#companyname').val();
             var email = $('#email').val();
             var logo = $('#logo').val();
@@ -182,9 +183,8 @@
             var data = new FormData(document.getElementById('createCompanyForm'));
             // console.log(data)
             if(companyname == '' || email == ''|| logo == ''){
-                alert('field is required');
-                // $.toaster({ message : 'Field is required!', title : 'Required', priority : 'danger' });
-                // $('#create').removeAttr('disabled');
+                $.toaster({ message : 'Field is required!', title : 'Required', priority : 'danger' });
+                $('#create').removeAttr('disabled');
                 return false;
             }
 
@@ -202,10 +202,10 @@
                 contentType: false,
                 cache: false,
                 success: function( response ) {
-                    // $.toaster({ message : 'Created successfully', title : 'Success', priority : 'success' });
-                    // setTimeout(function () {
+                    $.toaster({ message : 'Created successfully', title : 'Success', priority : 'success' });
+                    setTimeout(function () {
                         window.location.reload();
-                    // }, 1000);
+                    }, 1000);
                 }
 
             });
@@ -223,14 +223,15 @@
             });
             $.ajax({
                 type: 'GET',
-                url: "company/"+id+"/edit",
+                url: "company/edit/"+id,
+                // url: "company/edit"+id,
                 dataType: 'JSON',
                 success: function (results) {
 
                     if (results.status === 'success') {
                         $('#edit_companyname').val(results.data.companyname);
                         $('#edit_email').val(results.data.email);
-                        $('#edit_logo').val(results.data.logo);
+                        $('#edit_logo_show').attr('src','/logo/'+results.data.logo);
                         $('#update').attr('onclick', 'update_company(' + id + ')');
                       
 
@@ -265,18 +266,18 @@
                 }
             });
             $.ajax({
-                method: "PUT",
-                url: "/company/"+id, //resource route
+                method: "POST",
+                url: "company/update/"+id, //resource route
                 data: data,
                 enctype: 'multipart/form-data',
                 processData: false,  // Important!
                 contentType: false,
                 cache: false,
                 success: function( response ) {
-                    // $.toaster({ message : 'Updated successfully', title : 'Success', priority : 'success' });
-                    // setTimeout(function () {
-                        // window.location.reload();
-                    // }, 1000);
+                    $.toaster({ message : 'Updated successfully', title : 'Success', priority : 'success' });
+                    setTimeout(function () {
+                        window.location.reload();
+                    }, 1000);
                 }
 
             });
