@@ -73,8 +73,7 @@
                                 <div class="col-md-12 col-sm-12">
                                     <div class="text_outer">
                                         <label for="name" class=""><i class="fa fa-fw fa-photo"></i> Click to Choose Logo</label>
-                                        <img src="" id="edit_logo_show" alt="">
-                                        <input type="file" name="logo" id="edit_logo" class="form-control _input_choose_file">
+                                        <input type="file" name="logo" id="logo" class="form-control _input_choose_file">
                                     </div>
                                 </div>
                                 <div class="col-md-12 col-sm-12">
@@ -117,7 +116,7 @@
                                 <div class="col-md-12 col-sm-12">
                                     <div class="text_outer">
                                         <label for="name" class=""><i class="fa fa-fw fa-photo"></i> Click to Choose Logo</label>
-                                        <img src="" id="edit_logo_show" alt="">
+                                        <img src="" id="edit_logo_show" alt="" width="50" height="50">
                                         <input type="file" name="logo" id="edit_logo" class="form-control _input_choose_file">
                                     </div>
                                 </div>
@@ -207,7 +206,7 @@
                     if (results.status === 'success') {
                         $('#edit_companyname').val(results.data.companyname);
                         $('#edit_email').val(results.data.email);
-                        $('#edit_logo_show').attr('src','public/logo/'+results.data.logo);
+                        $('#edit_logo_show').attr('src','logo/'+results.data.logo);
                         $('#update').attr('onclick', 'update_company(' + id + ')');
                     } else {
                         swal("Error!", results.message, "error");
@@ -223,15 +222,6 @@
             var logo = $('#edit_logo').val();
 
             var data = new FormData(document.getElementById('editCompanyForm'));
-
-            if(companyname == '' || email == ''|| logo == ''){
-
-                $.toaster({ message : 'Field is required!', title : 'Required', priority : 'danger' }, 1000);
-                $('#update').removeAttr('disabled')
-                    
-
-                return false;
-            }
             $.ajax({
                 method: "POST",
                 url: "company/update/"+id, //resource route

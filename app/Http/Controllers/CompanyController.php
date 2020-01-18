@@ -45,7 +45,7 @@ class CompanyController extends Controller
         if ($request->hasFile('logo')) {
             $file = $request->file('logo');
             $logo = rand(11111, 99999) . '.' . $file->getClientOriginalExtension();
-            $request->file('logo')->move("public/logo", $logo);
+            $request->file('logo')->move("logo", $logo);
         }
 
         $data['logo'] = $logo;
@@ -98,7 +98,7 @@ class CompanyController extends Controller
         if ($request->hasFile('logo')) {
             $file = $request->file('logo');
             $logo = rand(11111, 99999) . '.' . $file->getClientOriginalExtension();
-            $request->file('logo')->move("public/logo", $logo);
+            $request->file('logo')->move("logo", $logo);
            
         }
         $data->companyname = $request->companyname;
