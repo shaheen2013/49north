@@ -231,11 +231,8 @@
                     if (results.status === 'success') {
                         $('#edit_companyname').val(results.data.companyname);
                         $('#edit_email').val(results.data.email);
-                        $('#edit_logo_show').attr('src','/logo/'+results.data.logo);
+                        $('#edit_logo_show').attr('src','public/logo/'+results.data.logo);
                         $('#update').attr('onclick', 'update_company(' + id + ')');
-                      
-
-                     // console.log(results.data.cost.cost_date.split(' ')[0])
                         // $('#send_form').attr('onclick','update_cost('+id+')');
                     } else {
                         swal("Error!", results.message, "error");
