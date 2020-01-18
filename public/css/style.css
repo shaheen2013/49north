@@ -1,5 +1,3 @@
-
-
 #mainNav{
 	background-color:#212529
 }
@@ -22,7 +20,7 @@
 	font-size:90%;
 	font-weight:400;
 	padding:.75em 0;
-	letter-spacing:1px;
+	letter-spacing: -1px;
 	color:#002240;
 }
 #mainNav .navbar-nav .nav-item .nav-link.active,#mainNav .navbar-nav .nav-item .nav-link:hover{
@@ -1156,7 +1154,8 @@ section#section7 {
 nav#mainNav {
     box-shadow: none;
     border-bottom: 1px solid #ccc;
-    padding: 15px 0 22px;
+    padding: 25px 10px;
+    height: 80px;
 }
 #mainNav .navbar-nav .nav-item .nav-link.active, #mainNav .navbar-nav .nav-item .nav-link:hover {
     color: #760800 ;
@@ -1173,13 +1172,16 @@ ul#myTab {
     border: none;
     display: table;
     margin: 0 auto;
+    width: 700px;
+    position: absolute;
+    left: calc(50% - 350px);
+    top: 0;
+    height: 80px;
+    padding: 25px 0;
 }
 #myTab li.nav-item {
-    padding: 0 0 0 80px;
+    padding: 0 25px;
     float: left;
-}
-#myTab li.nav-item:first-child {
-    padding: 0;
 }
 section#user_part {
     padding: 15px 0 0;
@@ -1198,8 +1200,7 @@ nav.top_tab_details {
     border: 0px solid transparent;
     color: #a5a5a5;
     float: left;
-    padding: 0 0 15px;
-    margin: 0 0 0 100px;
+    padding: 10px 25px;
 }
 .nav-tabs {
     border-bottom: 1px solid #dee2e6;
@@ -1739,6 +1740,9 @@ span.fc-title {
 /*===========================*/
 /*New Style Sheet*/
 /*===========================*/
+.navbar-expand-lg .navbar-collapse{
+    display: table!important;
+}
 .form-control-new{
     border: 1px solid #d4d3d3;
     border-radius: 30px;

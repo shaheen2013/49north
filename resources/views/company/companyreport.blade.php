@@ -27,7 +27,7 @@
                                     <th>Company Name</th>
                                     <th>Logo</th>
                                     <th>Email</th>
-                                    <th class="text-right">Action</th>
+                                    <th width="200px" class="text-right">Action</th>
                                 </tr>
                                 </thead>
                                 <tbody class="return_expence_ajax" id="company_search">
@@ -195,7 +195,7 @@
             }
             $.ajax({
                 method: "POST",
-                url: "/company", //resource route
+                url: "/company/store", //resource route
                 data: data,
                 enctype: 'multipart/form-data',
                 processData: false,  // Important!
@@ -219,13 +219,11 @@
                 url: "company/" + id + "/edit",
                 dataType: 'JSON',
                 success: function (results) {
-
                     if (results.status === 'success') {
                         $('#edit_companyname').val(results.data.companyname);
                         $('#edit_email').val(results.data.email);
                         $('#edit_logo').val(results.data.logo);
-
-
+                        $('#update').attr('onclick', 'update_company(' + id + ')');
                         // console.log(results.data.cost.cost_date.split(' ')[0])
                         // $('#send_form').attr('onclick','update_cost('+id+')');
                     } else {
@@ -294,7 +292,7 @@
                         for (let index = 0; index < results.data.length; index++) {
 
 
-                            html += `<tr style="margin-bottom:10px;">
+                            html += `<tr>
                                         <td> ${results.data[index].companyname} </td>
                                         <td> ${results.data[index].logo !== null ? results.data[index].logo : 'N/A'} </td>
                                         <td> ${results.data[index].email !== null ? results.data[index].email : 'N/A'} </td>

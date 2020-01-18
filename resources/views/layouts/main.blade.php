@@ -43,24 +43,22 @@
                            aria-controls="classroom" aria-selected="true">Classroom</a>
                     </li>
                 </ul>
-                <ul class="navbar-nav text-uppercase ">
-                    <li class="nav-item">
-                    <!--<a class="nav-link js-scroll-trigger" href="#"><img src="{{asset('img/sign.jpg')}}" alt="" width="24p" ></a>-->
+                <div class="pull-right">
+                    <ul class="navbar-nav text-uppercase">
+                        <li class="nav-item">
+                            <a class="nav-link js-scroll-trigger" href="javascript:void(0)"
+                               onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                <img src="{{asset('img/sign.jpg')}}" alt="" width="24p" >
+                            </a>
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                @csrf
+                            </form>
+                        </li>
 
-                        <a class="nav-link js-scroll-trigger" href="{{ route('logout') }}"
-                           onclick="event.preventDefault();
-                             document.getElementById('logout-form').submit();">
-                            {{ __('Logout') }}
-                        </a>
-                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                            @csrf
-                        </form>
-                    </li>
-
-                </ul>
+                    </ul>
+                </div>
             </div>
         </div>
-
     </nav>
 </div>
 
