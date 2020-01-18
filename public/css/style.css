@@ -1,5 +1,6 @@
-
-
+*{
+    outline: 0!important;
+}
 #mainNav{
 	background-color:#212529
 }
@@ -22,7 +23,7 @@
 	font-size:90%;
 	font-weight:400;
 	padding:.75em 0;
-	letter-spacing:1px;
+	letter-spacing: -1px;
 	color:#002240;
 }
 #mainNav .navbar-nav .nav-item .nav-link.active,#mainNav .navbar-nav .nav-item .nav-link:hover{
@@ -138,7 +139,7 @@ section#section1 {
 }
 .start h2:before {
     content: "";
-	background:none; 
+	background:none;
     border: 2px solid #002240;
 }
 .unavailable h2:before {
@@ -478,7 +479,7 @@ header.masthead .header_text {
     border-color: #7d7d7d;
 }
 #contactForm ::placeholder{
-	
+
 	text-transform:uppercase;
 }
 .form-group {
@@ -899,7 +900,7 @@ h2.why_title {
 	color: #fff;
 }
 .footer a {
-	display:block; 
+	display:block;
     color: #fff;
 	text-decoration:none;
 	line-height:52px;
@@ -984,7 +985,7 @@ button.cun.pre {
 }
 .login a {
     font-size: 14px;
-}	
+}
 .courses_test {
     display: inline-block;
     width: 100%;
@@ -1012,18 +1013,18 @@ button.cun.pre {
 }
 .test_act img {
     margin: 0 15px 0 0px;
-}	
-	
-	
-	
-	
+}
+
+
+
+
 .left_head_text {
     padding: 0 0 0;
 }
 .scroll_btn {
     margin: 20px 0 0;
 }
-.modal-dialog { 
+.modal-dialog {
     margin: 80px 10px;
 }
 button.btn.btn-primary.popup {
@@ -1156,7 +1157,8 @@ section#section7 {
 nav#mainNav {
     box-shadow: none;
     border-bottom: 1px solid #ccc;
-    padding: 15px 0 22px;
+    padding: 25px 10px;
+    height: 80px;
 }
 #mainNav .navbar-nav .nav-item .nav-link.active, #mainNav .navbar-nav .nav-item .nav-link:hover {
     color: #760800 ;
@@ -1173,13 +1175,16 @@ ul#myTab {
     border: none;
     display: table;
     margin: 0 auto;
+    width: 700px;
+    position: absolute;
+    left: calc(50% - 350px);
+    top: 0;
+    height: 80px;
+    padding: 25px 0;
 }
 #myTab li.nav-item {
-    padding: 0 0 0 80px;
+    padding: 0 25px;
     float: left;
-}
-#myTab li.nav-item:first-child {
-    padding: 0;
 }
 section#user_part {
     padding: 15px 0 0;
@@ -1198,8 +1203,7 @@ nav.top_tab_details {
     border: 0px solid transparent;
     color: #a5a5a5;
     float: left;
-    padding: 0 0 15px;
-    margin: 0 0 0 100px;
+    padding: 10px 25px;
 }
 .nav-tabs {
     border-bottom: 1px solid #dee2e6;
@@ -1229,6 +1233,7 @@ a.navbar-brand.js-scroll-trigger.logo_se {
     overflow: hidden;
     margin: 0 0 25px;
     padding: 5px 20px 5px;
+    position: relative;
 }
 .text_outer label {
     margin: 0 0 0;
@@ -1258,11 +1263,11 @@ button.btn-dark.contact_btn {
     background: #760800;
     border: none;
     margin: 0 0 60px;
-    padding: 2px 45px 3px;
+    padding: 7px 45px 7px;
     border-radius: 25px;
     text-transform: uppercase;
     font-size: 13px;
-    color: #dfc8c6;
+    color: #fae3e1;
 }
 .agreements h3 {
     color: #760800;
@@ -1397,18 +1402,18 @@ tbody tr {
 	margin-bottom:10px;
 }
 td {
-    
+
 	padding:10px;
 }
 th {
-    
 	padding:10px;
-	font-weight:400 !important;
+	font-weight: 700 !important;
+    color: #777;
 }
 td a {
     border: 1px solid #ccc;
     display: inline-block;
-    float: left;
+    /*float: left;*/
     text-align: center;
     padding: 0 35px;
     margin: 0 0 0 14px;
@@ -1420,9 +1425,6 @@ td a.down {
     color: #760800 !important;
     border-color: #760800 !important;
 }
-.spacer{
-		height:15px;
-	}
 .action-box
 {
 	float:right !important;
@@ -1435,12 +1437,13 @@ span.close.close-span {
     font-weight: 400;
     color: #000;
 	float: left;
+    cursor: pointer;
 }
 form{
 	margin-bottom:0px;
 }
 .modal-content button.btn-dark.contact_btn {
-    
+
     margin: 0 0 0px !important;
 }
 
@@ -1520,21 +1523,21 @@ td {
 #regForm {
   background-color: #ffffff;
   margin: 100px auto;
-  font-family: Raleway;
+  /*font-family: Raleway;*/
   padding: 40px;
   width: 70%;
   min-width: 300px;
 }
 
 h1 {
-  text-align: center;  
+  text-align: center;
 }
 
 input {
   padding: 10px;
   width: 100%;
   font-size: 17px;
-  font-family: Raleway;
+  /*font-family: Raleway;*/
   border: 1px solid #aaaaaa;
 }
 
@@ -1544,7 +1547,7 @@ input.invalid {
 }
 .tabs {
   display: none;
-} 
+}
 
 button {
   background-color: #4CAF50;
@@ -1552,7 +1555,7 @@ button {
   border: none;
   padding: 10px 20px;
   font-size: 17px;
-  font-family: Raleway;
+  /*font-family: Raleway;*/
   cursor: pointer;
 }
 
@@ -1570,7 +1573,7 @@ button:hover {
   width: 15px;
   margin: 0 2px;
   background-color: #bbbbbb;
-  border: none;  
+  border: none;
   border-radius: 50%;
   display: inline-block;
   opacity: 0.5;
@@ -1714,7 +1717,7 @@ a.fc-day-number {
     border: 0px solid !important;
 }
 .fc-content-skeleton tbody tr {
-    border: 0px solid #cecece !important; 
+    border: 0px solid #cecece !important;
     margin-bottom: 10px;
 }
 .fc-row.fc-week.fc-widget-content.fc-rigid {
@@ -1734,3 +1737,47 @@ div#calender-div {
 span.fc-title {
     color: #fff;
 }
+
+
+/*===========================*/
+/*New Style Sheet*/
+/*===========================*/
+.margin-10{width: 100%;display: inline-block;margin-bottom: 10px}
+.well-default-trans{
+    width: 100%;
+    display: inline-block;
+    padding: 30px;
+    background: transparent;
+}
+.navbar-expand-lg .navbar-collapse{
+    display: table!important;
+}
+.form-control-new{
+    border: 1px solid #d4d3d3;
+    border-radius: 30px;
+    height: 40px;
+    font-size: 14px;
+    padding: 10px 20px;
+}
+._new_icon_button_1{
+    background-color: #989898;
+    font-size: 15px;
+    padding: 10px 12px;
+    border-radius: 50%;
+    color: #fff;
+    float: right;
+}
+._new_icon_button_1:hover,._new_icon_button_1:active{
+    background-color: #7e7e7e!important;
+    color: #fff!important;
+}
+._input_choose_file{
+    opacity: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 35px!important;
+}
+
+._table th{border: none!important;border-bottom: none!important;}
+.spacer{ height:10px; }

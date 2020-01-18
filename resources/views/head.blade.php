@@ -22,7 +22,9 @@
     <!-- Custom scripts for this template -->
     {{--<script src="{{asset('js/agency.min.js')}}"></script>--}}
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.2.0/sweetalert2.min.css">
+    <link rel="stylesheet" href="{{ asset('assets/jquery-spinner/css/bootstrap-spinner.css') }}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.2.0/sweetalert2.all.min.js"></script>
    
     @stack('after-styles')
 
