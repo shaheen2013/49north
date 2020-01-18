@@ -45,7 +45,7 @@ Route::group(['middleware' => ['auth']], function () {
     });
 
     Route::group(['prefix' => 'company'], function () {
-        Route::get('/', 'CompanyController@index');
+        Route::get('/', 'CompanyController@index')->name('company.index');
         Route::POST('/search', 'CompanyController@searchCompanyPage');
         Route::get('/create', 'CompanyController@create');
         Route::post('/store', 'CompanyController@store');

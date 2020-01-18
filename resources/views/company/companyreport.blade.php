@@ -195,7 +195,7 @@
             });
             $.ajax({
                 method: "POST",
-                url: "/company", //resource route
+                url: "/company/store", //resource route
                 data: data,
                 enctype: 'multipart/form-data',
                 processData: false,  // Important!
@@ -231,7 +231,7 @@
                         $('#edit_companyname').val(results.data.companyname);
                         $('#edit_email').val(results.data.email);
                         $('#edit_logo').val(results.data.logo);
-                       
+                        $('#update').attr('onclick', 'update_company(' + id + ')');
                       
 
                      // console.log(results.data.cost.cost_date.split(' ')[0])
