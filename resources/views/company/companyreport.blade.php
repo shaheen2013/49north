@@ -70,22 +70,17 @@
                                         <input type="email" placeholder="" class="form-control" name="email" id="email">
                                     </div>
                                 </div>
-                                <div class="clearfix"></div>
-                                <div class="col-md-6 col-sm-6">
+                                <div class="col-md-12 col-sm-12">
                                     <div class="text_outer">
-                                        <label for="name" class="">Logo</label>
-                                        <input type="file" name="logo" id="logo" class="form-control">
+                                        <label for="name" class=""><i class="fa fa-fw fa-photo"></i> Click to Choose Logo</label>
+                                        <img src="" id="edit_logo_show" alt="">
+                                        <input type="file" name="logo" id="edit_logo" class="form-control _input_choose_file">
                                     </div>
                                 </div>
-                            </div>
-
-                            <div class="row margin-top-30">
-                                <div class="form-group" style="width:100%;">
-                                    <div class="col-md-12 col-sm-12">
-                                        <input type="hidden" name="emp_id" value="{{ auth()->user()->id }}">
-                                        <button type="button" id="create" onclick="create_company(event)" class="btn-dark contact_btn" data-form="expences">Save</button>
-                                        <span class="close close-span" data-dismiss="modal" aria-label="Close"><i class="fa fa-arrow-left"></i> Return to Company Reports</span>
-                                    </div>
+                                <div class="col-md-12 col-sm-12">
+                                    <input type="hidden" name="emp_id" value="{{ auth()->user()->id }}">
+                                    <button type="button" id="create" onclick="create_company(event)" class="btn-dark contact_btn" data-form="expences">Save</button>
+                                    <span class="close close-span" data-dismiss="modal" aria-label="Close"><i class="fa fa-arrow-left"></i> Return to Company Reports</span>
                                 </div>
                             </div>
                         </div>
@@ -119,31 +114,25 @@
                                                id="edit_email">
                                     </div>
                                 </div>
-                            <div class="clearfix"></div>
-                            <div class="col-md-6 col-sm-6">
-                                <div class="text_outer">
-                                    <label for="name" class="">Logo</label>
-                                    <img src="" id="edit_logo_show" alt="">
-                                    <input type="file" name="logo" id="edit_logo" class="form-control">
-                                </div>
-                            </div>
-
-                            <div class="row margin-top-30">
-                                <div class="form-group" style="width:100%;">
-                                    <div class="col-md-12 col-sm-12">
-
-                                        <input type="hidden" name="emp_id" value="{{ auth()->user()->id }}">
-                                        <button type="button" id="update"
-                                                onclick="update_company({{ auth()->user()->id }})"
-                                                class="btn-dark contact_btn" data-form="expences">Save
-                                        </button>
-                                        <span class="close close-span" data-dismiss="modal" aria-label="Close"><i
-                                                class="fa fa-arrow-left"></i> Return to Company Reports</span>
-
+                                <div class="col-md-12 col-sm-12">
+                                    <div class="text_outer">
+                                        <label for="name" class=""><i class="fa fa-fw fa-photo"></i> Click to Choose Logo</label>
+                                        <img src="" id="edit_logo_show" alt="">
+                                        <input type="file" name="logo" id="edit_logo" class="form-control _input_choose_file">
                                     </div>
                                 </div>
+                                <div class="col-md-12 col-sm-12">
+
+                                    <input type="hidden" name="emp_id" value="{{ auth()->user()->id }}">
+                                    <button type="button" id="update"
+                                            onclick="update_company({{ auth()->user()->id }})"
+                                            class="btn-dark contact_btn" data-form="expences">Save
+                                    </button>
+                                    <span class="close close-span" data-dismiss="modal" aria-label="Close"><i
+                                            class="fa fa-arrow-left"></i> Return to Company Reports</span>
+
+                                </div>
                             </div>
-                        </div>
                         </div>
                     </form>
                 </div>
