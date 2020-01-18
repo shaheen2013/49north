@@ -16,6 +16,7 @@ class AddLogoAndEmailToCompaniesTable extends Migration
         Schema::table('companies', function (Blueprint $table) {
             $table->string('logo')->after('companyname')->nullable();
             $table->string('email')->after('companyname')->nullable();
+            $table->softDeletes();
         });
     }
 
@@ -29,6 +30,7 @@ class AddLogoAndEmailToCompaniesTable extends Migration
         Schema::table('companies', function (Blueprint $table) {
             $table->dropColumn('logo');
             $table->dropColumn('email');
+            $table->dropSoftDeletes();
         });
     }
 }
