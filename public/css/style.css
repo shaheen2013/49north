@@ -1,3 +1,6 @@
+*{
+    outline: 0!important;
+}
 #mainNav{
 	background-color:#212529
 }
@@ -1403,9 +1406,9 @@ td {
 	padding:10px;
 }
 th {
-
 	padding:10px;
-	font-weight:400 !important;
+	font-weight: 700 !important;
+    color: #777;
 }
 td a {
     border: 1px solid #ccc;
@@ -1422,9 +1425,6 @@ td a.down {
     color: #760800 !important;
     border-color: #760800 !important;
 }
-.spacer{
-		height:15px;
-	}
 .action-box
 {
 	float:right !important;
@@ -1746,7 +1746,7 @@ span.fc-title {
 .well-default-trans{
     width: 100%;
     display: inline-block;
-    padding: 50px;
+    padding: 30px;
     background: transparent;
 }
 .navbar-expand-lg .navbar-collapse{
@@ -1778,3 +1778,6 @@ span.fc-title {
     left: 0;
     height: 35px!important;
 }
+
+._table th{border: none!important;border-bottom: none!important;}
+.spacer{ height:10px; }

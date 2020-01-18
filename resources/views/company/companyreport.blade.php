@@ -3,7 +3,7 @@
 @section('content1')
 
 
-    <div class="container-fluid">
+    <div class="well-default-trans">
         <div class="tab-pane" id="nav-expense" role="tabpanel" aria-labelledby="nav-employee-tab">
             <div class="expense inner-tab-box">
                 <div class="col-md-12">
@@ -21,7 +21,7 @@
                             </a>
                         </div>
                         <div class="col-sm-12">
-                            <table class="table table-bordered">
+                            <table class="table _table _table-bordered">
                                 <thead>
                                 <tr>
                                     <th>Company Name</th>
@@ -284,7 +284,7 @@
                                             <a href="javascript:void(0);" class="down" onclick="deleteconfirm('${results.data[index].id}')">DELETE</a></td>
                                         </td>
 
-                                    </tr>`
+                                    </tr><tr class="spacer"></tr>`
                         }
                         $('#company_search').html(html);
 
