@@ -23,9 +23,9 @@ Auth::routes();
 
 Route::group(['middleware' => ['auth']], function () {
 
-    Route::get('/index', 'HomeController@index')->name('index');
-    Route::get('/home', 'HomeController@home')->name('home');
-    Route::post('/edit_employee','HomeController@edit_employee');
+    Route::get('home', 'HomeController@home')->name('home');
+    Route::get('edit-profile', 'HomeController@editProfile')->name('edit-profile');
+    Route::post('edit_employee','HomeController@edit_employee');
 
     // agreements
     Route::get('agreementlist','AgreementController@agreementlist');
@@ -43,7 +43,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/reject', 'ExpenseController@expense_reject')->name('reject');
         Route::post('/history', 'ExpenseController@expenses_historical')->name('history');
     });
-    
+
 
     Route::post('/reset_apssword', 'RegisterController@reset_password')->name('reset_apssword');
     Route::post('/registration', 'RegisterController@store')->name('registration');

@@ -20,7 +20,7 @@
                 <ul id="myTab" role="tablist" class="navbar-nav text-uppercase nav nav-tabs">
 
                     <li class="nav-item">
-                        <a class="nav-link active" href="{{ route('home') }}">My Profile </a>
+                        <a class="nav-link active" href="{{ route('edit-profile') }}">My Profile </a>
                     </li>
                     @admin
                     <li class="nav-item">
