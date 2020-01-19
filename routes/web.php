@@ -25,17 +25,17 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::get('home', 'HomeController@home')->name('home');
     Route::get('edit-profile', 'HomeController@editProfile')->name('edit-profile');
-    Route::post('edit_employee','HomeController@edit_employee');
+    Route::post('edit_employee', 'HomeController@edit_employee');
 
     // agreements
-    Route::get('agreementlist','AgreementController@agreementlist');
-    Route::post('addagreement','AgreementController@addagreement')->name('add-agreement');
+    Route::get('agreementlist', 'AgreementController@agreementlist');
+    Route::post('addagreement', 'AgreementController@addagreement')->name('add-agreement');
     Route::delete('delete_agreement/{id}/{type}', 'AgreementController@destroy')->name('delete_agreement');
 
     // Expenses
     Route::group(['prefix' => 'expense', 'as' => 'expense.'], function () {
         Route::get('/list', 'ExpenseController@expenselist');
-        Route::post('/addexpense','ExpenseController@addexpense');
+        Route::post('/addexpense', 'ExpenseController@addexpense');
         Route::post('/expense_edit_view', 'ExpenseController@expense_edit_view');
         Route::post('/edit', 'ExpenseController@expenses_edit')->name('edit');
         Route::post('/delete', 'ExpenseController@delete_expense')->name('delete');
@@ -51,14 +51,14 @@ Route::group(['middleware' => ['auth']], function () {
     ///// Maintenance
     Route::group(['prefix' => 'maintenance', 'as' => 'maintenance.'], function () {
 
-    Route::get('/list', 'MaintenanceController@Maintenance_list')->name('list');
-    Route::post('/add', 'MaintenanceController@addmaintenance')->name('add');
-    Route::post('/editview', 'MaintenanceController@edit_maintenanceview')->name('editview');
-    Route::post('/edit', 'MaintenanceController@edit')->name('edit');
-    Route::post('/delete', 'MaintenanceController@delete')->name('delete');
-    Route::post('/ticket_inprogress', 'MaintenanceController@ticket_inprogress')->name('ticket_inprogress');
-    Route::post('/ticket_cancel', 'MaintenanceController@ticket_cancel')->name('ticket_cancel');
-   /* Route::post('/complited_ticket', 'Maintenance_ticket_controller@complited_ticket')->name('complited_ticket');*/
+        Route::get('/list', 'MaintenanceController@Maintenance_list')->name('list');
+        Route::post('/add', 'MaintenanceController@addmaintenance')->name('add');
+        Route::post('/editview', 'MaintenanceController@edit_maintenanceview')->name('editview');
+        Route::post('/edit', 'MaintenanceController@edit')->name('edit');
+        Route::post('/delete', 'MaintenanceController@delete')->name('delete');
+        Route::post('/ticket_inprogress', 'MaintenanceController@ticket_inprogress')->name('ticket_inprogress');
+        Route::post('/ticket_cancel', 'MaintenanceController@ticket_cancel')->name('ticket_cancel');
+        /* Route::post('/complited_ticket', 'Maintenance_ticket_controller@complited_ticket')->name('complited_ticket');*/
 
     });
 
@@ -70,19 +70,16 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/updatemileage', 'MileageController@updatemileage');
     Route::post('/deletemileage/{id}', 'MileageController@deletemileage');
 
-    // pay statement
-    Route::get('admin/addpaystatement', 'Admin\AdminPaystatementController@paystatement');
-
 
     ///// timeoff route
-    Route::group(['prefix' => 'timeoff', 'as'=>'timeoff.'], function() {
-        Route::get('/list','TimeoffController@timeofflist')->name('list');
+    Route::group(['prefix' => 'timeoff', 'as' => 'timeoff.'], function () {
+        Route::get('/list', 'TimeoffController@timeofflist')->name('list');
     });
 
     //// Paystatement route
-    Route::group(['prefix'=>'paystatement', 'as'=>'paystatement.'], function(){
-        Route::get('/list','PaystatementController@paylist');
-        Route::post('/add','PaystatementController@addpaystatement')->name('add');
+    Route::group(['prefix' => 'paystatement', 'as' => 'paystatement.'], function () {
+        Route::get('/list', 'PaystatementController@paylist');
+        Route::post('/add', 'PaystatementController@addpaystatement')->name('add');
 
     });
 
@@ -97,14 +94,20 @@ Route::group(['middleware' => ['auth', 'isAdmin']], function () {
 });
 
 
+Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'as' => 'admin.'], function () {
+    Route::get('pay-statements', 'AdminPaystatementController@paystatement')->name('pay-statements');
 
-Route::get('admin/addpaystatement','Admin\PaystatementController@paystatement');
-Route::get('admin/registration','Admin\AdminController@index');
-Route::get('admin/agreement','Admin\AdminAgreementController@agreementlist');
-Route::get('admin/expences_report','Admin\AdminController@expences_report');
-Route::get('admin/milegebook','Admin\AdminController@milegebook');
-Route::get('admin/tech_maintanance','Admin\AdminController@tech_maintanance');
-Route::get('admin/timeoff','Admin\AdminController@timeoff');
-Route::get('admin/reportconcern','Admin\AdminController@reportconcern');
-Route::post('admin/add_registration','Admin\AdminController@add_registration');
+    Route::get('agreement', 'AdminAgreementController@agreementlist')->name('agreement-list');
 
+    Route::get('registration', 'AdminController@index')->name('registration');
+    Route::get('expences_report', 'AdminController@expences_report')->name('expense-report');
+    Route::get('milegebook', 'AdminController@milegebook')->name('mileage-book');
+    Route::get('tech_maintanance', 'AdminController@tech_maintanance')->name('tech-maintenance');
+    Route::get('timeoff', 'AdminController@timeoff')->name('timeoff');
+    Route::get('reportconcern', 'AdminController@reportconcern')->name('report-concern');
+    Route::post('add_registration', 'AdminController@add_registration')->name('add-registration');
+
+    // permissions
+    Route::resource('permissions', 'AdminPermissionsController');
+    Route::resource('roles', 'AdminRolesController');
+});
