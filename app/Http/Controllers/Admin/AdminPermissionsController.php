@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers\Admin;
 
+use Exception;
 use Illuminate\Contracts\View\Factory;
-use Illuminate\Http\{Request,Response};
+use Illuminate\Http\{JsonResponse, RedirectResponse, Request, Response};
 use Illuminate\View\View;
 use Spatie\Permission\Models\{Permission,Role};
 use App\Http\Controllers\Controller;
@@ -12,7 +13,7 @@ class AdminPermissionsController extends Controller {
     /**
      * Display a listing of the resource.
      *
-     * @return Response
+     * @return Factory|View
      */
     public function index () {
         $roles = Role::with('permissions')->orderBy('orderval')->get();
@@ -35,7 +36,7 @@ class AdminPermissionsController extends Controller {
      *
      * @param Request $request
      *
-     * @return Response
+     * @return RedirectResponse
      */
     public function store (Request $request) {
         $input = $request->except(['_token','role']);
@@ -97,8 +98,8 @@ class AdminPermissionsController extends Controller {
      *
      * @param Permission $permission
      *
-     * @return Response
-     * @throws \Exception
+     * @return JsonResponse
+     * @throws Exception
      */
     public function destroy (Permission $permission) {
         $permission->delete();
