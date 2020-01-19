@@ -93,9 +93,7 @@ Route::resource('posts', 'PostController');
 
 Route::group(['middleware' => ['auth', 'isAdmin']], function () {
     Route::resource('users', 'UserController');
-    Route::resource('roles', 'RoleController');
-    Route::resource('permissions', 'PermissionController');
-    //Route::resource('agreements','AgreementController');
+    Route::get('force-login/{user}', 'UserController@forceLogin')->name('force-login');
 });
 
 

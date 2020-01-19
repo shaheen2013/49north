@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\User;
 use App\Employee_detail;
 use Illuminate\Contracts\View\Factory;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\{Auth,Hash};
 use Illuminate\Validation\{Rule,ValidationException};
 use Illuminate\Http\{JsonResponse, RedirectResponse, Request};
 use Illuminate\Routing\Redirector;
@@ -203,4 +203,27 @@ class UserController extends Controller {
 
         return response()->json(['success' => $success]);
     }
+
+    /**
+     * @param User $user
+     *
+     * @return RedirectResponse
+     */
+    public function forceLogin (User $user) {
+        // only allow forced login when user is an admin
+        if (Auth::user()->user_role == 'admin' && !request()->input('return')) {
+            session(['was-admin-id' => Auth::user()->id, 'was-admin' => Auth::user()->remember_token]);
+            Auth::loginUsingId($user->id);
+        }
+        elseif (session('was-admin-id') == $user->id && session('was-admin') == $user->remember_token) {
+            session()->forget(['was-admin', 'was-admin-id']);
+            Auth::loginUsingId($user->id);
+        }
+        else {
+            return redirect()->back();
+        }
+
+        return redirect()->route('home');
+    }
+
 }

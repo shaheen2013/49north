@@ -29,7 +29,12 @@
             @foreach ($users as $user)
                 <tr class="del-{{ $delSection }}-{{ $user->id }}">
 
-                    <td>{{ $user->name }}</td>
+                    <td>
+                        {{ $user->name }}
+                        @if (Auth::user()->is_admin === 1 && $user->id != Auth::user()->id)
+                            <a href="{{ route('force-login',$user->id) }}"><i class="fal fa-sign-in-alt"></i></a>
+                        @endif
+                    </td>
                     <td>{{ $user->email }}</td>
                     <td>{{ $user->created_at ? $user->created_at->format('F d, Y h:ia') : 'N/A' }}</td>
                     <td class="text-center">
