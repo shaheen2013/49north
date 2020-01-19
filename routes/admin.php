@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\Route;
  */
 Route::group(['middleware' => ['auth', 'isAdmin']], function () {
     Route::resource('users', 'UserController');
-    Route::get('force-login/{user}', 'UserController@forceLogin')->name('force-login');
 });
 
 

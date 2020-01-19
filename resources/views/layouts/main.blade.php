@@ -8,7 +8,8 @@
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark" id="mainNav">
         <div class="container-fluid">
-            <a class="navbar-brand js-scroll-trigger logo_se" href="{{ route('home') }}"><img width="150" src="{{asset('img/logo.jpg')}}"
+            <a class="navbar-brand js-scroll-trigger logo_se" href="{{ route('home') }}"><img width="150"
+                                                                                              src="{{asset('img/logo.jpg')}}"
                                                                                               alt=""></a>
             <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
                     data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false"
@@ -66,17 +67,23 @@
         <div class="nav nav-tabs" id="nav-tab" role="tablist">
             {{--<a class="nav-item nav-link  {{ (request()->is('home')) ? 'active' : '' }}" id="nav-employee-tab"  href="{{ url('home') }}" aria-controls="nav-employee" aria-selected="true">Employee Information</a>--}}
 
-            <a class="nav-item nav-link  {{ (request()->is('agreementlist')) ? 'active' : '' }}" id="agreement_list" href="{{ url('agreementlist') }}">Agreements</a>
+            <a class="nav-item nav-link  {{ (request()->is('agreementlist')) ? 'active' : '' }}" id="agreement_list"
+               href="{{ url('agreementlist') }}">Agreements</a>
 
-            <a class="nav-item nav-link  {{ (request()->is('mileagelist')) ? 'active' : '' }}" id="agreement_list" href="{{ url('mileagelist') }}">Mileage</a>
+            <a class="nav-item nav-link  {{ (request()->is('mileagelist')) ? 'active' : '' }}" id="agreement_list"
+               href="{{ url('mileagelist') }}">Mileage</a>
 
-            <a class="nav-item nav-link  {{ (request()->is('expense/list')) ? 'active' : '' }}" id="agreement_list" href="{{ url('expense/list') }}">Expense</a>
+            <a class="nav-item nav-link  {{ (request()->is('expense/list')) ? 'active' : '' }}" id="agreement_list"
+               href="{{ url('expense/list') }}">Expense</a>
 
-            <a class="nav-item nav-link  {{ (request()->is('maintenance/list')) ? 'active' : '' }}" id="maintenance_list" href="{{ url('maintenance/list') }}">Maintenance</a>
+            <a class="nav-item nav-link  {{ (request()->is('maintenance/list')) ? 'active' : '' }}"
+               id="maintenance_list" href="{{ url('maintenance/list') }}">Maintenance</a>
 
-            <a class="nav-item nav-link  {{ (request()->is('timeoff/list')) ? 'active' : '' }}" id="timeoff_list" href="{{ url('timeoff/list') }}">Time Off</a>
+            <a class="nav-item nav-link  {{ (request()->is('timeoff/list')) ? 'active' : '' }}" id="timeoff_list"
+               href="{{ url('timeoff/list') }}">Time Off</a>
 
-            <a class="nav-item nav-link {{request()->is('paystatement/list') ? 'active' : '' }}" id="nav-statements-tab" href="{{url('paystatement/list')}}">Pay Statements</a>
+            <a class="nav-item nav-link {{request()->is('paystatement/list') ? 'active' : '' }}" id="nav-statements-tab"
+               href="{{url('paystatement/list')}}">Pay Statements</a>
 
         </div>
     </div><!--------------container--------------->
@@ -101,13 +108,29 @@
         @foreach (['danger', 'warning', 'success', 'info'] as $msg)
             @if(session()->has('alert-' . $msg))
                 <p class="alert alert-{{ $msg }}">
-                    {!! nl2br(session()->get('alert-' . $msg)) !!} <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                    {!! nl2br(session()->get('alert-' . $msg)) !!} <a href="#" class="close" data-dismiss="alert"
+                                                                      aria-label="close">&times;</a>
                 </p>
             @endif
         @endforeach
     </div>
 
     @yield('content1')
+</div>
+
+<div class="logout-footer fixed-bottom float-right">
+    @if (Auth::check())
+        <div class="text-right">
+            @if (session()->exists('was-admin-id') && session()->exists('was-admin'))
+                <a class="btn btn-secondary" style="margin-bottom: 30px; margin-right: 20px;" href="{{ route('force-login',[session()->get('was-admin-id'),'return' => 1]) }}">
+                    <small>Return To Admin</small>
+                </a>
+            @endif
+      {{--      <a class="btn btn-primary btn-charcoal" href="{{ route('admin.logout') }}">
+                <small>Logout</small>
+            </a>--}}
+        </div>
+    @endif
 </div>
 
 {{--<script type="text/javascript" src="{{ asset('js/jquery.inputmask.min.js') }}"></script>--}}
@@ -133,3 +156,5 @@
 <script src="{{asset('js/custom_function_admin.js')}}"></script>
 @stack('scripts')
 
+</body>
+</html>

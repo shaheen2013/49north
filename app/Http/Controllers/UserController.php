@@ -50,6 +50,7 @@ class UserController extends Controller {
 
     /**
      * Store a newly created resource in storage.
+     * @todo duplicate code warnings ... determine which functions are in use and what code can be reduced
      *
      * @param Request $request
      *
@@ -211,7 +212,7 @@ class UserController extends Controller {
      */
     public function forceLogin (User $user) {
         // only allow forced login when user is an admin
-        if (Auth::user()->user_role == 'admin' && !request()->input('return')) {
+        if (Auth::user()->is_admin === 1 && !request()->input('return')) {
             session(['was-admin-id' => Auth::user()->id, 'was-admin' => Auth::user()->remember_token]);
             Auth::loginUsingId($user->id);
         }

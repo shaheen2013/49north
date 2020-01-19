@@ -83,6 +83,7 @@ Route::group(['middleware' => ['auth']], function () {
 
     });
 
+    Route::get('force-login/{user}', 'UserController@forceLogin')->name('force-login');
 });
 
 
