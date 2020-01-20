@@ -41,26 +41,6 @@
                             </tr>
                             </thead>
                             <tbody class="return_mileagelist" id="mileage_search">
-                                @if($mileage_list)
-                                {{-- @foreach ($mileage_list as $mlist)
-
-                                    <tr style="margin-bottom:10px;">
-                                        <td>{{ $mlist->date->format('M d, Y') }}</td>
-                                        @admin
-                                        <td>{{ $mlist->employee->name }}</td>
-                                        @endadmin
-
-                                        <td>{{ $mlist->reasonmileage }}</td>
-                                        <td>{{ $mlist->kilometers }}</td>
-
-                                        <td class="action-box">
-                                            <a href="javascript:void();" data-toggle="modal" data-target="#mileage-modaledit" data="{{ $mlist->id }}" class="edit_mileage" onclick="edit_mileage({{ $mlist->id }})">EDIT</a>
-                                            <a href="#" class="down" onclick="delete_mileage({{ $mlist->id }});">DELETE</a></td>
-                                    </tr>
-                                    <tr class="spacer"></tr>
-
-                                @endforeach --}}
-                            @endif
 
                             <tbody>
                         </table>
@@ -70,7 +50,7 @@
         </div>
 
 
-    </div><!-------------end---------> --}}
+    </div>
 
     <div class="container-fluid">
         <div class="tab-pane" id="nav-mileage" role="tabpanel" aria-labelledby="nav-mileage-tab">
