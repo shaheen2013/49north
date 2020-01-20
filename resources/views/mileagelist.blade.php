@@ -8,24 +8,18 @@
             <div class="col-md-12">
                 <div class="row">
                     <div class="col-sm-3">
-                        <div class="form-group">
-                          
-                                   <input type="date"  name="date" id="date"  placeholder="Select Date" class="form-control-new" onkeyup="searchMileagePage()">
+                        <div class="form-group"> 
+                            <input type="date" name="date" id="date"  placeholder="Select Date" class="form-control-new" onkeyup="searchMileagePage()">
                         </div>
                     </div>
                     <div class="col-sm-3">
                         <div class="form-group">
-                            <input type="text" placeholder="Search employee" onkeyup="searchMileagePage()"
-                                   class="form-control-new" name="search" id="search">
-                                   
+                            <input type="text" placeholder="Search employee" onkeyup="searchMileagePage()" class="form-control-new" name="search" id="search">          
                         </div>
                     </div>
 
                     <div class="col-sm-6">
-                        <a href="javascript:void(0)" class="_new_icon_button_1" data-toggle="modal"
-                           data-target="#mileage-modal">
-                            <i class="fa fa-plus"></i>
-                        </a>
+                        <a href="javascript:void(0)" class="_new_icon_button_1" data-toggle="modal" data-target="#mileage-modal"> <i class="fa fa-plus"></i> </a>
                     </div>
                     <div class="col-sm-12">
                         <div id="wait" style="display:none;position:absolute;top:100%;left:50%;padding:2px;"><img src='{{ asset('img/demo_wait.gif') }}' width="64" height="64" /><br>Loading..</div>
@@ -41,24 +35,7 @@
                             </thead>
                             <tbody class="return_mileagelist" id="mileage_search">
                                 @if($mileage_list)
-                                {{-- @foreach ($mileage_list as $mlist)
-        
-                                    <tr style="margin-bottom:10px;">
-                                        <td>{{ $mlist->date->format('M d, Y') }}</td>
-                                        @admin
-                                        <td>{{ $mlist->employee->name }}</td>
-                                        @endadmin
-        
-                                        <td>{{ $mlist->reasonmileage }}</td>
-                                        <td>{{ $mlist->kilometers }}</td>
-        
-                                        <td class="action-box">
-                                            <a href="javascript:void();" data-toggle="modal" data-target="#mileage-modaledit" data="{{ $mlist->id }}" class="edit_mileage" onclick="edit_mileage({{ $mlist->id }})">EDIT</a>
-                                            <a href="#" class="down" onclick="delete_mileage({{ $mlist->id }});">DELETE</a></td>
-                                    </tr>
-                                    <tr class="spacer"></tr>
-        
-                                @endforeach --}}
+                                
                             @endif
 
                             <tbody>
@@ -99,7 +76,7 @@
                                 <div class="col-md-6 col-sm-6">
                                     <div class="text_outer">
                                         <label for="name" class="">Date</label>
-                                        <input type="date" placeholder="" name="date" class="form-control">
+                                        <input type="date" placeholder="" name="date" class="form-control" id="date">
                                     </div>
 
 
@@ -158,6 +135,7 @@
     <!--- Mileage modal end -->
 
 
+    <!----- Mileage Modal edit ---->
     <div id="mileage-modaledit" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -165,6 +143,8 @@
                 <div class="modal-body">
                     <div class="col-md-12" style="margin-top:40px;margin-bottom:20px;">
                         <form id="employee_mileageedit" action="{{url('updatemileage') }}" method="POST">
+
+                            {{-- @include('ajaxview.editmileage') --}}
 
                         </form>
                     </div>
@@ -175,7 +155,37 @@
         </div>
     </div>
 
+      <!--- Mileage edit modal end -->
+
     <script type="text/javascript">
+
+        function OpenEditMileageModel(id) {
+            console.log(id)
+            $('#"mileage-modaledit').modal();
+            $.ajax({
+                type: 'GET',
+                url: "/get_mileagedetails/"+id,
+                dataType: 'JSON',
+                success: function (results) {
+                    if (results.status === 'success') {
+                        $('#edit_companyname').val(results.data.companyname);
+                        $('#edit_email').val(results.data.email);
+                        $('#edit_logo_show').attr('src','/company/'+results.data.logo);
+                        $('#update').attr('onclick', 'update_company(' + id + ')');
+                    } else {
+                        swal("Error!", results.message, "error");
+                    }
+                }
+            });
+        }
+
+
+
+    $(document).ready(function(){
+        $('#date').flatpickr({
+            mode: "range"
+        });
+    });
 
         function searchMileagePage() {
             let search = $('#search').val();
@@ -204,7 +214,7 @@
                             if(results.data[index].date != null && results.data[index].date != ''){
                                 time = results.data[index].date.split(' ')[0];
                                 date = new Date(time);
-                                date = date.toDateString().split(' ')[2]+" "+date.toDateString().split(' ')[1]+" "+date.toDateString().split(' ')[3]
+                                date = date.toDateString().split(' ')[2]+" "+date.toDateString().split(' ')[1]+", "+date.toDateString().split(' ')[3]
                             }
                             else{
                                 date = '-';
@@ -215,7 +225,7 @@
                                         <td> ${results.data[index].reasonmileage} </td>
                                         <td> ${results.data[index].kilometers} </td>
                                         <td class="text-right">
-                                            <a href="javascript:void(0);" onclick="OpenEditCompanyModel('${results.data[index].id}')">EDIT</a>
+                                            <a href="javascript:void(0);" onclick="OpenEditMileageModel('${results.data[index].id}')">EDIT</a>
                                             <a href="javascript:void(0);" class="down" onclick="deleteconfirm('${results.data[index].id}')">DELETE</a></td>
                                         </td>
                                     </tr><tr class="spacer"></tr>`;

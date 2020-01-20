@@ -49,12 +49,10 @@ class MileageController extends Controller {
         if ($type == '1') {
             $data = Mileage::where('status','<>','D')->orderByDesc('created_at')->with('employee:id,firstname,lastname')
             ->where(function ($q) use($request){
-                // if(isset($request->search)){
-                //     $q->where('reasonmileage', 'LIKE', '%'.$request->search.'%');
-                // }
                 if(isset($request->search)){
                     $q->whereHas('employee', function($sql) use($request){
                         $sql->where('firstname', 'LIKE', '%'.$request->search.'%');
+                        $sql->orWhere('lastname', 'LIKE', '%'.$request->search.'%');
         
                     });
                     
@@ -69,13 +67,14 @@ class MileageController extends Controller {
         }
 
         else {
-            $data = Auth::user()->mileage()->where('status','A')->orderByDesc('created_at')->where(function ($q) use($request){
-                if(isset($request->search)){
-                    $q->where('reasonmileage', 'LIKE', '%'.$request->search.'%');
+            $data = Auth::user()->mileage()->where('status','A')->orderByDesc('created_at')
+            ->where(function ($q) use($request){
+                if(isset($request->date)){
+                    $q->whereDate('date', '=',$request->date);
                 }
             });
 
-            $data= $data->orderBy('reasonmileage', 'asc')->get();
+            $data= $data->get();
             return response()->json(['status'=>'success', 'data' => $data]);
 
         }

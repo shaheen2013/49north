@@ -78,9 +78,11 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/addmileage', 'MileageController@addmileage')->name('addmileage');
     Route::post('/employeemileage', 'MileageController@employee_mileagelist');
     Route::post('/get_mileagedetails/{id}', 'MileageController@get_mileage');
-    Route::post('/updatemileage', 'MileageController@updatemileage');
-    Route::post('/deletemileage/{id}', 'MileageController@deletemileage');
 
+    // Route::get('/mileage/edit/{id}', 'CompanyController@edit');
+    Route::post('/updatemileage', 'MileageController@updatemileage');
+
+    Route::post('/deletemileage/{id}', 'MileageController@deletemileage');
     Route::POST('/mileage/search', 'MileageController@searchMileage');
 
     // pay statement
