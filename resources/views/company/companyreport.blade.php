@@ -143,6 +143,7 @@
     <script type="text/javascript">
         var id = null;
         $.ajaxSetup({ headers: { 'X-CSRF-Token': "{{csrf_token()}}" } });
+
         $(document).ready(function () {
             $("#historical_span").click(function () {
                 $("#historical_span").addClass("active-span");
@@ -157,9 +158,11 @@
                 $("#historical_div").hide();
             });
         });
+
         window.onload = function () {
             searchCompanyPage()
         };
+
         function create_company(event){
             event.preventDefault();
             $('#create').attr('disabled','disabled');
@@ -183,12 +186,15 @@
                 contentType: false,
                 cache: false,
                 success: function( response ) {
-                    $.toaster({ message : 'Created successfully', title : 'Success', priority : 'success' });
-                    searchCompanyPage();
-                    $('#company-modal').modal('hide');
-                    $('#create').removeAttr('disabled');
+                    if (response.status == 'success') {
+                        $.toaster({message: 'Created successfully', title: 'Success', priority: 'success'});
+                        searchCompanyPage();
+                        $('#company-modal').modal('hide');
+                        $('#create').removeAttr('disabled');
+                    } else {
+                        $.toaster({message: 'Created failed', title: 'Failed', priority: 'fail'});
+                    }
                 }
-
             });
         }
 
@@ -309,7 +315,6 @@
                 return false;
             })
         }
-
     </script>
 
 @endsection

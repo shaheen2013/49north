@@ -35,25 +35,39 @@ class CompanyController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function store(Request $request)
     {
-        $data = $request->all();
-        $logo = null;
-        if ($request->hasFile('logo')) {
-            $file = $request->file('logo');
-            $logo = rand(11111, 99999) . '.' . $file->getClientOriginalExtension();
-            $request->file('logo')->move("public/companyLogo", $logo);
-        }
+        // Validate form data
+        $request->validate([
+            'companyname' => 'required|image',
+            'email' => 'nullable|email',
+            'logo' => 'nullable|image',
+        ]);
 
-        $data['logo'] = $logo;
+        try {
+            $data = $request->all();
+            $logo = null;
 
-        $check = Company::create($data);
-        if ($check) {
-            return response()->json(['status' => 'success']);
+            if ($request->hasFile('logo')) {
+                /*$file = $request->file('logo');
+                $logo = rand(11111, 99999) . '.' . $file->getClientOriginalExtension();
+                $request->file('logo')->move("public/companyLogo", $logo);*/
+                $logo = fileUpload('logo');
+            }
+
+            $data['logo'] = $logo;
+            $check = Company::create($data);
+
+            if ($check) {
+                return response()->json(['status' => 'success']);
+            }
+
+            return response()->json(['status' => 'fail']);
+        } catch (\Exception $e) {
+            return response()->json(['status' => 'fail', 'msg' => $e->getMessage()]);
         }
-        return response()->json(['status' => 'fail']);
     }
 
     /**
