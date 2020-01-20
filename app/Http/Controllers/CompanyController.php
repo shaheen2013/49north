@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\{Company, Project, Purchases, Categorys, Expenses};
+use Illuminate\Support\Facades\Storage;
 
 class CompanyController extends Controller
 {
@@ -40,24 +41,27 @@ class CompanyController extends Controller
     public function store(Request $request)
     {
         // Validate form data
-        $request->validate([
-            'companyname' => 'required|image',
+        $rules = [
+            'companyname' => 'required|string|max:191',
             'email' => 'nullable|email',
             'logo' => 'nullable|image',
-        ]);
+        ];
+
+        $validator = validator($request->all(), $rules, []);
+
+        if ($validator->fails()) {
+            return response()->json(['status' => 'fail', 'errors' => $validator->getMessageBag()->toarray()]);
+        }
 
         try {
             $data = $request->all();
             $logo = null;
 
             if ($request->hasFile('logo')) {
-                /*$file = $request->file('logo');
-                $logo = rand(11111, 99999) . '.' . $file->getClientOriginalExtension();
-                $request->file('logo')->move("public/companyLogo", $logo);*/
                 $logo = fileUpload('logo');
+                $data['logo'] = $logo;
             }
 
-            $data['logo'] = $logo;
             $check = Company::create($data);
 
             if ($check) {
@@ -101,26 +105,43 @@ class CompanyController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function update(Request $request, $id)
     {
-        // return $request->all();
-        $data = Company::findOrFail($id);
-        $logo = null;
-        if ($request->hasFile('logo')) {
-            $file = $request->file('logo');
-            $logo = rand(11111, 99999) . '.' . $file->getClientOriginalExtension();
-            $request->file('logo')->move("companies", $logo);
-            $data->logo = $logo;
-        }
-        $data->companyname = $request->companyname;
-        $data->email =  $request->email;
+        // Validate form data
+        $rules = [
+            'companyname' => 'required|string|max:191',
+            'email' => 'nullable|email',
+            'logo' => 'nullable|image',
+        ];
 
-        if($data->update()){
-            return response()->json(['status'=>'success']);
+        $validator = validator($request->all(), $rules, []);
+
+        if ($validator->fails()) {
+            return response()->json(['status' => 'fail', 'errors' => $validator->getMessageBag()->toarray()]);
         }
-        return response()->json(['status'=>'fail']);
+
+        try {// return $request->all();
+            $data = Company::findOrFail($id);
+            $logo = null;
+
+            if ($request->hasFile('logo')) {
+                Storage::delete($data->logo);
+                $data->logo = fileUpload('logo');
+            }
+
+            $data->companyname = $request->companyname;
+            $data->email = $request->email;
+
+            if ($data->update()) {
+                return response()->json(['status' => 'success']);
+            }
+
+            return response()->json(['status' => 'fail']);
+        } catch (\Exception $e) {
+            return response()->json(['status' => 'fail', 'msg' => $e->getMessage()]);
+        }
     }
 
     public function searchCompanyPage(Request $request){
@@ -138,21 +159,28 @@ class CompanyController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy($id)
     {
-        $company = Company::findOrFail($id);
-        if ($company->delete() == 1) {
-            $success = true;
-            $message = "Company deleted successfully";
-        } else {
-            $success = false;
-            $message = "Company not found";
+        try {
+            $company = Company::findOrFail($id);
+            Storage::delete($company->logo);
+
+            if ($company->delete() == 1) {
+                $success = true;
+                $message = "Company deleted successfully";
+            } else {
+                $success = false;
+                $message = "Company not found";
+            }
+
+            return response()->json([
+                'success' => $success,
+                'message' => $message,
+            ]);
+        } catch (\Exception $e) {
+            return response()->json(['status' => 'fail', 'msg' => $e->getMessage()]);
         }
-        return response()->json([
-            'success' => $success,
-            'message' => $message,
-        ]);
     }
 }
