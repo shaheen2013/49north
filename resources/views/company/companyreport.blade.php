@@ -209,7 +209,7 @@
                     if (results.status === 'success') {
                         $('#edit_companyname').val(results.data.companyname);
                         $('#edit_email').val(results.data.email);
-                        $('#edit_logo_show').attr('src','logo/'+results.data.logo);
+                        $('#edit_logo_show').attr('src','{{ fileUrl() }}' + results.data.logo);
                         $('#update').attr('onclick', 'update_company(' + id + ')');
                     } else {
                         swal("Error!", results.message, "error");
@@ -261,7 +261,7 @@
                         $('#wait').css('display', 'none');
                         for (let index = 0; index < results.data.length; index++) {
                             html += `<tr>
-                                        <td> ${results.data[index].logo !== null ? '<img src='+results.data[index].logo+'"/public/company/" height="50px" alt="">' : 'N/A'} </td>
+                                        <td> ${results.data[index].logo !== null ? '<img src={{ fileUrl() }}'+results.data[index].logo+' height="50px" alt="">' : 'N/A'} </td>
                                         <td> ${results.data[index].companyname} </td>
                                         <td> ${results.data[index].email !== null ? results.data[index].email : 'N/A'} </td>
                                         <td class="text-right">
