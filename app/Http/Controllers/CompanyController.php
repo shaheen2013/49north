@@ -58,13 +58,10 @@ class CompanyController extends Controller
             $logo = null;
 
             if ($request->hasFile('logo')) {
-                /*$file = $request->file('logo');
-                $logo = rand(11111, 99999) . '.' . $file->getClientOriginalExtension();
-                $request->file('logo')->move("public/companyLogo", $logo);*/
                 $logo = fileUpload('logo');
+                $data['logo'] = $logo;
             }
 
-            $data['logo'] = $logo;
             $check = Company::create($data);
 
             if ($check) {
@@ -130,10 +127,6 @@ class CompanyController extends Controller
             $logo = null;
 
             if ($request->hasFile('logo')) {
-                /*$file = $request->file('logo');
-                $logo = rand(11111, 99999) . '.' . $file->getClientOriginalExtension();
-                $request->file('logo')->move("company", $logo);
-                $data->logo = $logo;*/
                 Storage::delete($data->logo);
                 $data->logo = fileUpload('logo');
             }
