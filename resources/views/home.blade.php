@@ -297,7 +297,7 @@
             success: function( results ) {
                 // $.toaster({ message : 'Password Updated successfully', title : 'Success', priority : 'success' });
                 // window.location.reload();
-                
+
                 if (results.success === true) {
                     swal("Done!", results.message, "success").then(function () {
 
@@ -307,9 +307,7 @@
                     swal("Error!", results.message, "error");
                 }
             }
-        });
-
-                    
+        });               
     } 
 
     </script>
