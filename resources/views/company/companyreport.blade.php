@@ -255,7 +255,7 @@
                         $('#wait').css('display', 'none');
                         for (let index = 0; index < results.data.length; index++) {
                             html += `<tr>
-                                        <td> ${results.data[index].logo !== null ? '<img src="/public/companyLogo/'+results.data[index].logo+'" height="50px" alt="">' : 'N/A'} </td>
+                                        <td> ${results.data[index].logo !== null ? '<img src='+results.data[index].logo+'"/public/company/" height="50px" alt="">' : 'N/A'} </td>
                                         <td> ${results.data[index].companyname} </td>
                                         <td> ${results.data[index].email !== null ? results.data[index].email : 'N/A'} </td>
                                         <td class="text-right">
