@@ -122,4 +122,5 @@ Route::get('admin/reportconcern','Admin\AdminController@reportconcern');
 Route::post('admin/add_registration','Admin\AdminController@add_registration');
 
 Route::post('/reset/password/{id}', 'UserController@changeUserPassword');
+Route::post('/reset/stuff/password/{id}', 'UserController@changeStuffPassword');
 
