@@ -9,9 +9,8 @@
                 <div class="row">
                     <div class="col-sm-3">
                         <div class="form-group">
-                            {{-- <input type="text" placeholder="Search Mileage" onkeyup="searchMileagePage()"
-                                   class="form-control-new" name="search" id="search"> --}}
-                                   <input type="date"  name="date" id="date"  placeholder="Select Date" class="form-control-new" onkeyup="searchMileagePage()" value="{{$date_key?$date_key:null}}">
+                          
+                                   <input type="date"  name="date" id="date"  placeholder="Select Date" class="form-control-new" onkeyup="searchMileagePage()">
                         </div>
                     </div>
                     <div class="col-sm-3">
@@ -22,7 +21,7 @@
                         </div>
                     </div>
 
-                    <div class="col-sm-9">
+                    <div class="col-sm-6">
                         <a href="javascript:void(0)" class="_new_icon_button_1" data-toggle="modal"
                            data-target="#mileage-modal">
                             <i class="fa fa-plus"></i>
@@ -197,12 +196,21 @@
                 dataType: 'JSON',
                 success: function (results) {
                     let html = '';
-
+                    let date = '';
                     if (results.status === 'success') {
                         $('#wait').css('display', 'none');
                         for (let index = 0; index < results.data.length; index++) {
+
+                            if(results.data[index].date != null && results.data[index].date != ''){
+                                time = results.data[index].date.split(' ')[0];
+                                date = new Date(time);
+                                date = date.toDateString().split(' ')[2]+" "+date.toDateString().split(' ')[1]+" "+date.toDateString().split(' ')[3]
+                            }
+                            else{
+                                date = '-';
+                            }
                             html += `<tr>
-                                        <td> ${results.data[index].date} </td>
+                                        <td> ${ date  } </td>
                                         <td> ${results.data[index].employee.firstname+' '+results.data[index].employee.lastname} </td>
                                         <td> ${results.data[index].reasonmileage} </td>
                                         <td> ${results.data[index].kilometers} </td>
