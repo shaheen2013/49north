@@ -40,11 +40,17 @@ class CompanyController extends Controller
     public function store(Request $request)
     {
         // Validate form data
-        $request->validate([
-            'companyname' => 'required|image',
+        $rules = [
+            'companyname' => 'required|string|max:191',
             'email' => 'nullable|email',
             'logo' => 'nullable|image',
-        ]);
+        ];
+
+        $validator = validator($request->all(), $rules, []);
+
+        if ($validator->fails()) {
+            return response()->json(['status' => 'fail', 'errors' => $validator->getMessageBag()->toarray()]);
+        }
 
         try {
             $data = $request->all();
