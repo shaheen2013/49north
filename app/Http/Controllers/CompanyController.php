@@ -117,7 +117,7 @@ class CompanyController extends Controller
         if ($request->hasFile('logo')) {
             $file = $request->file('logo');
             $logo = rand(11111, 99999) . '.' . $file->getClientOriginalExtension();
-            $request->file('logo')->move("public/companyLogo", $logo);
+            $request->file('logo')->move("company", $logo);
             $data->logo = $logo;
         }
         $data->companyname = $request->companyname;
