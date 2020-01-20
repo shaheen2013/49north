@@ -9,8 +9,9 @@
                 <div class="row">
                     <div class="col-sm-3">
                         <div class="form-group">
-                            <input type="text" placeholder="Search Mileage" onkeyup="searchMileagePage()"
-                                   class="form-control-new" name="search" id="search">
+                            {{-- <input type="text" placeholder="Search Mileage" onkeyup="searchMileagePage()"
+                                   class="form-control-new" name="search" id="search"> --}}
+                                   <input type="date"  name="date" id="date"  placeholder="Select Date" class="form-control-new" onkeyup="searchMileagePage()" value="{{$date_key?$date_key:null}}">
                         </div>
                     </div>
                     <div class="col-sm-9">
@@ -32,7 +33,7 @@
                             </tr>
                             </thead>
                             <tbody class="return_mileagelist" id="mileage_search">
-                                @if($mileage_list)
+                                {{-- @if($mileage_list) --}}
                                 {{-- @foreach ($mileage_list as $mlist)
         
                                     <tr style="margin-bottom:10px;">
@@ -51,7 +52,7 @@
                                     <tr class="spacer"></tr>
         
                                 @endforeach --}}
-                            @endif
+                            {{-- @endif --}}
 
                             <tbody>
                         </table>
@@ -170,10 +171,12 @@
     <script type="text/javascript">
 
         function searchMileagePage() {
-            let search = $('#search').val();
+            // let search = $('#search').val();
+            let date = $('#date').val();
             let data = {
                 _token: '{{  @csrf_token() }}',
-                search: search,
+                // search: search,
+                date: date,
 
             };
             console.log(data);
@@ -192,7 +195,7 @@
                         for (let index = 0; index < results.data.length; index++) {
                             html += `<tr>
                                         <td> ${results.data[index].date} </td>
-                                        <td> ${results.data[index].employee.firstname} </td>
+                                        <td> ${results.data[index].employee.firstname+' '+results.data[index].employee.lastname} </td>
                                         <td> ${results.data[index].reasonmileage} </td>
                                         <td> ${results.data[index].kilometers} </td>
                                         <td class="text-right">

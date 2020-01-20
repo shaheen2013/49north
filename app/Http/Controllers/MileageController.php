@@ -39,8 +39,9 @@ class MileageController extends Controller {
         }
 
         $data['companies'] = Company::all();
+        $date_key = $request->date;
 
-        return view('mileagelist', $data);
+        return view('mileagelist', $data)->with('date_key',$date_key);
     }
 
     public function searchMileage(Request $request){
@@ -48,8 +49,11 @@ class MileageController extends Controller {
         if ($type == '1') {
             $data = Mileage::where('status','<>','D')->orderByDesc('created_at')->with('employee:id,firstname,lastname')
             ->where(function ($q) use($request){
-                if(isset($request->search)){
-                    $q->where('reasonmileage', 'LIKE', '%'.$request->search.'%');
+                // if(isset($request->search)){
+                //     $q->where('reasonmileage', 'LIKE', '%'.$request->search.'%');
+                // }
+                if(isset($request->date)){
+                    $q->whereDate('date', '=',$request->date);
                 }
             });
 
