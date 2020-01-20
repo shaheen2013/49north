@@ -139,5 +139,6 @@
 <script src="{{asset('js/custom_function_admin.js')}}"></script>
 <script src="{{ URL::asset('toaster/jquery.toaster.js') }}"></script>
 <script src="{{ URL::asset('assets/jquery-spinner/js/jquery.spinner.js') }}"></script>
+<script src="{{asset('flatpicker/js/flatpicker.min.js')}}"></script>
 @stack('scripts')
 

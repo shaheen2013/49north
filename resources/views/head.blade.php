@@ -11,11 +11,13 @@
     <link href="{{asset('css/bootstrap.min.css')}}" rel="stylesheet">
     <!-- Custom styles-->
     <link href="{{asset('css/style.css')}}" rel="stylesheet">
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
     <!-- Bootstrap core JavaScript -->
     <script src="{{asset('js/jquery.min.js')}}"></script>
     <!-- Bootstrap core JavaScript -->
+   
     <script src="{{asset('js/bootstrap.min.js')}}"></script>
     <!-- Plugin JavaScript -->
     <script src="{{asset('js/jquery.easing.min.js')}}"></script>
@@ -23,7 +25,11 @@
     {{--<script src="{{asset('js/agency.min.js')}}"></script>--}}
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.2.0/sweetalert2.min.css">
+
+    <link rel="stylesheet" href="{{ asset('flatpicker/css/flatpickr.min.css') }}">
+
     <link rel="stylesheet" href="{{ asset('assets/jquery-spinner/css/bootstrap-spinner.css') }}">
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.2.0/sweetalert2.all.min.js"></script>
    
     @stack('after-styles')

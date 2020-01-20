@@ -6,6 +6,7 @@
 /storage
 /public/public
 /public/companies
+/public/logo
 /storage/*.key
 /vendor
 .env
