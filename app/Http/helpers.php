@@ -53,3 +53,10 @@ if (! function_exists('fileUpload')) {
     }
 }
 
+if (! function_exists('fileUrl')) {
+    function fileUrl($path = null)
+    {
+        return 'https://s3.'.env('AWS_DEFAULT_REGION').'.amazonaws.com/'.env('AWS_BUCKET').'/'.$path;
+    }
+}
+
