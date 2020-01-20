@@ -14,6 +14,14 @@
                                    <input type="date"  name="date" id="date"  placeholder="Select Date" class="form-control-new" onkeyup="searchMileagePage()" value="{{$date_key?$date_key:null}}">
                         </div>
                     </div>
+                    <div class="col-sm-3">
+                        <div class="form-group">
+                            <input type="text" placeholder="Search employee" onkeyup="searchMileagePage()"
+                                   class="form-control-new" name="search" id="search">
+                                   
+                        </div>
+                    </div>
+
                     <div class="col-sm-9">
                         <a href="javascript:void(0)" class="_new_icon_button_1" data-toggle="modal"
                            data-target="#mileage-modal">
@@ -33,7 +41,7 @@
                             </tr>
                             </thead>
                             <tbody class="return_mileagelist" id="mileage_search">
-                                {{-- @if($mileage_list) --}}
+                                @if($mileage_list)
                                 {{-- @foreach ($mileage_list as $mlist)
         
                                     <tr style="margin-bottom:10px;">
@@ -52,7 +60,7 @@
                                     <tr class="spacer"></tr>
         
                                 @endforeach --}}
-                            {{-- @endif --}}
+                            @endif
 
                             <tbody>
                         </table>
@@ -171,11 +179,11 @@
     <script type="text/javascript">
 
         function searchMileagePage() {
-            // let search = $('#search').val();
+            let search = $('#search').val();
             let date = $('#date').val();
             let data = {
                 _token: '{{  @csrf_token() }}',
-                // search: search,
+                search: search,
                 date: date,
 
             };

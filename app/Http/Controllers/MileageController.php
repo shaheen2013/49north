@@ -52,12 +52,19 @@ class MileageController extends Controller {
                 // if(isset($request->search)){
                 //     $q->where('reasonmileage', 'LIKE', '%'.$request->search.'%');
                 // }
+                if(isset($request->search)){
+                    $q->whereHas('employee', function($sql) use($request){
+                        $sql->where('firstname', 'LIKE', '%'.$request->search.'%');
+        
+                    });
+                    
+                }
                 if(isset($request->date)){
                     $q->whereDate('date', '=',$request->date);
                 }
             });
 
-            $data= $data->orderBy('reasonmileage', 'asc')->get();
+            $data= $data->get();
             return response()->json(['status'=>'success', 'data' => $data]);
         }
 
