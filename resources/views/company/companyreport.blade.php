@@ -143,6 +143,7 @@
     <script type="text/javascript">
         var id = null;
         $.ajaxSetup({ headers: { 'X-CSRF-Token': "{{csrf_token()}}" } });
+
         $(document).ready(function () {
             $("#historical_span").click(function () {
                 $("#historical_span").addClass("active-span");
@@ -157,9 +158,11 @@
                 $("#historical_div").hide();
             });
         });
+
         window.onload = function () {
             searchCompanyPage()
         };
+
         function create_company(event){
             event.preventDefault();
             $('#create').attr('disabled','disabled');
@@ -183,12 +186,15 @@
                 contentType: false,
                 cache: false,
                 success: function( response ) {
-                    $.toaster({ message : 'Created successfully', title : 'Success', priority : 'success' });
-                    searchCompanyPage();
-                    $('#company-modal').modal('hide');
-                    $('#create').removeAttr('disabled');
+                    if (response.status == 'success') {
+                        $.toaster({message: 'Created successfully', title: 'Success', priority: 'success'});
+                        searchCompanyPage();
+                        $('#company-modal').modal('hide');
+                        $('#create').removeAttr('disabled');
+                    } else {
+                        $.toaster({message: 'Created failed', title: 'Failed', priority: 'fail'});
+                    }
                 }
-
             });
         }
 
@@ -203,7 +209,7 @@
                     if (results.status === 'success') {
                         $('#edit_companyname').val(results.data.companyname);
                         $('#edit_email').val(results.data.email);
-                        $('#edit_logo_show').attr('src','/company/'+results.data.logo);
+                        $('#edit_logo_show').attr('src','{{ fileUrl() }}' + results.data.logo);
                         $('#update').attr('onclick', 'update_company(' + id + ')');
                     } else {
                         swal("Error!", results.message, "error");
@@ -255,7 +261,7 @@
                         $('#wait').css('display', 'none');
                         for (let index = 0; index < results.data.length; index++) {
                             html += `<tr>
-                                        <td> ${results.data[index].logo !== null ? '<img src='+results.data[index].logo+'"/company/" height="50px" alt="">' : 'N/A'} </td>
+                                        <td> ${results.data[index].logo !== null ? '<img src={{ fileUrl() }}'+results.data[index].logo+' height="50px" alt="">' : 'N/A'} </td>
                                         <td> ${results.data[index].companyname} </td>
                                         <td> ${results.data[index].email !== null ? results.data[index].email : 'N/A'} </td>
                                         <td class="text-right">
@@ -309,7 +315,6 @@
                 return false;
             })
         }
-
     </script>
 
 @endsection

@@ -2,14 +2,15 @@
 @include('modal')
 @section('content1')
 
-<div class="container-fluid">
+
+<div class="well-default-trans">
     <div class="tab-pane" id="nav-mileage" role="tabpanel" aria-labelledby="nav-mileage-tab">
         <div class="mileage inner-tab-box">
             <div class="col-md-12">
                 <div class="row">
                     <div class="col-sm-3">
                         <div class="form-group">
-                          
+
                                    <input type="date"  name="date" id="date"  placeholder="Select Date" class="form-control-new" onkeyup="searchMileagePage()">
                         </div>
                     </div>
@@ -17,7 +18,7 @@
                         <div class="form-group">
                             <input type="text" placeholder="Search employee" onkeyup="searchMileagePage()"
                                    class="form-control-new" name="search" id="search">
-                                   
+
                         </div>
                     </div>
 
@@ -40,36 +41,16 @@
                             </tr>
                             </thead>
                             <tbody class="return_mileagelist" id="mileage_search">
-                                @if($mileage_list)
-                                {{-- @foreach ($mileage_list as $mlist)
-        
-                                    <tr style="margin-bottom:10px;">
-                                        <td>{{ $mlist->date->format('M d, Y') }}</td>
-                                        @admin
-                                        <td>{{ $mlist->employee->name }}</td>
-                                        @endadmin
-        
-                                        <td>{{ $mlist->reasonmileage }}</td>
-                                        <td>{{ $mlist->kilometers }}</td>
-        
-                                        <td class="action-box">
-                                            <a href="javascript:void();" data-toggle="modal" data-target="#mileage-modaledit" data="{{ $mlist->id }}" class="edit_mileage" onclick="edit_mileage({{ $mlist->id }})">EDIT</a>
-                                            <a href="#" class="down" onclick="delete_mileage({{ $mlist->id }});">DELETE</a></td>
-                                    </tr>
-                                    <tr class="spacer"></tr>
-        
-                                @endforeach --}}
-                            @endif
 
                             <tbody>
                         </table>
                     </div>
                 </div>
             </div>
-
-
         </div>
-    </div><!-------------end--------->
+
+
+    </div>
 
 </div>
 
@@ -187,7 +168,7 @@
 
             };
             console.log(data);
-            
+
             $('#wait').css('display', 'inline-block'); // wait for loader
             $.ajax({
                 type: 'post',
