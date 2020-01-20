@@ -20,14 +20,14 @@
                     <tr class="del-role-{{ $role->id }}">
                         <td><a href="{{ route('admin.roles.edit',$role->id) }}">{{ $role->name }}</a></td>
                         <td class="text-center">
-                            <a class="text-danger deletejson" data-token="{{ csrf_token() }}" data-url="{{ route('admin.roles.destroy',$role->id) }}" data-id="{{ $role->id }}" data-section="role"><i class="fal fa-trash-alt"></i></a>
+                            <a class="text-danger deletejson" data-token="{{ csrf_token() }}" data-url="{{ route('admin.roles.destroy',$role->id) }}" data-id="{{ $role->id }}" data-section="role">Delete</a>
                         </td>
                     </tr>
                     @foreach ($role->permissions()->orderBy('orderval')->orderBy('name')->get() AS $permission)
                         <tr class="del-permission-{{ $permission->id }}">
                             <td class="text-right"><a href="{{ route('admin.permissions.edit',$permission->id) }}">{{ $permission->orderval }}) {{ $permission->name }}</a></td>
                             <td class="text-center">
-                                <a class="text-danger deletejson" data-token="{{ csrf_token() }}" data-url="{{ route('admin.permissions.destroy',$permission->id) }}" data-id="{{ $permission->id }}" data-section="permission"><i class="fal fa-trash-alt"></i></a>
+                                <a class="text-danger deletejson" data-token="{{ csrf_token() }}" data-url="{{ route('admin.permissions.destroy',$permission->id) }}" data-id="{{ $permission->id }}" data-section="permission">Delete</a>
                             </td>
                         </tr>
                     @endforeach

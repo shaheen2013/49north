@@ -138,7 +138,7 @@ section#section1 {
 }
 .start h2:before {
     content: "";
-	background:none; 
+	background:none;
     border: 2px solid #002240;
 }
 .unavailable h2:before {
@@ -478,7 +478,7 @@ header.masthead .header_text {
     border-color: #7d7d7d;
 }
 #contactForm ::placeholder{
-	
+
 	text-transform:uppercase;
 }
 .form-group {
@@ -899,7 +899,7 @@ h2.why_title {
 	color: #fff;
 }
 .footer a {
-	display:block; 
+	display:block;
     color: #fff;
 	text-decoration:none;
 	line-height:52px;
@@ -984,7 +984,7 @@ button.cun.pre {
 }
 .login a {
     font-size: 14px;
-}	
+}
 .courses_test {
     display: inline-block;
     width: 100%;
@@ -1012,18 +1012,18 @@ button.cun.pre {
 }
 .test_act img {
     margin: 0 15px 0 0px;
-}	
-	
-	
-	
-	
+}
+
+
+
+
 .left_head_text {
     padding: 0 0 0;
 }
 .scroll_btn {
     margin: 20px 0 0;
 }
-.modal-dialog { 
+.modal-dialog {
     margin: 80px 10px;
 }
 button.btn.btn-primary.popup {
@@ -1397,11 +1397,11 @@ tbody tr {
 	margin-bottom:10px;
 }
 td {
-    
+
 	padding:10px;
 }
 th {
-    
+
 	padding:10px;
 	font-weight:400 !important;
 }
@@ -1440,7 +1440,7 @@ form{
 	margin-bottom:0px;
 }
 .modal-content button.btn-dark.contact_btn {
-    
+
     margin: 0 0 0px !important;
 }
 
@@ -1527,7 +1527,7 @@ td {
 }
 
 h1 {
-  text-align: center;  
+  text-align: center;
 }
 
 input {
@@ -1544,7 +1544,7 @@ input.invalid {
 }
 .tabs {
   display: none;
-} 
+}
 
 button {
   background-color: #4CAF50;
@@ -1570,7 +1570,7 @@ button:hover {
   width: 15px;
   margin: 0 2px;
   background-color: #bbbbbb;
-  border: none;  
+  border: none;
   border-radius: 50%;
   display: inline-block;
   opacity: 0.5;
@@ -1714,7 +1714,7 @@ a.fc-day-number {
     border: 0px solid !important;
 }
 .fc-content-skeleton tbody tr {
-    border: 0px solid #cecece !important; 
+    border: 0px solid #cecece !important;
     margin-bottom: 10px;
 }
 .fc-row.fc-week.fc-widget-content.fc-rigid {
@@ -1733,4 +1733,12 @@ div#calender-div {
 }
 span.fc-title {
     color: #fff;
+}
+
+.remove-default-style {
+    border: none;
+    float: none;
+    display: inline;
+    padding: initial;
+    margin: initial;
 }

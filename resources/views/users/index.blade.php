@@ -29,7 +29,7 @@
                     <td>
                         {{ $user->name }}
                         @if (Auth::user()->is_admin === 1 && $user->id != Auth::user()->id)
-                            <a href="{{ route('force-login',$user->id) }}"><i class="fal fa-sign-in-alt"></i></a>
+                            <a class="remove-default-style" href="{{ route('force-login',$user->id) }}"><i class="fa fa-sign-in"></i></a>
                         @endif
                     </td>
                     <td>{{ $user->email }}</td>
