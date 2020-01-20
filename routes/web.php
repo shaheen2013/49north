@@ -81,6 +81,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/updatemileage', 'MileageController@updatemileage');
     Route::post('/deletemileage/{id}', 'MileageController@deletemileage');
 
+    Route::POST('/mileage/search', 'MileageController@searchMileage');
+
     // pay statement
     Route::get('admin/addpaystatement', 'Admin\AdminPaystatementController@paystatement');
 
