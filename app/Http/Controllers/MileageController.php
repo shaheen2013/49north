@@ -49,12 +49,10 @@ class MileageController extends Controller {
         if ($type == '1') {
             $data = Mileage::where('status','<>','D')->orderByDesc('created_at')->with('employee:id,firstname,lastname')
             ->where(function ($q) use($request){
-                // if(isset($request->search)){
-                //     $q->where('reasonmileage', 'LIKE', '%'.$request->search.'%');
-                // }
                 if(isset($request->search)){
                     $q->whereHas('employee', function($sql) use($request){
                         $sql->where('firstname', 'LIKE', '%'.$request->search.'%');
+                        $sql->orWhere('lastname', 'LIKE', '%'.$request->search.'%');
         
                     });
                     
@@ -69,13 +67,14 @@ class MileageController extends Controller {
         }
 
         else {
-            $data = Auth::user()->mileage()->where('status','A')->orderByDesc('created_at')->where(function ($q) use($request){
-                if(isset($request->search)){
-                    $q->where('reasonmileage', 'LIKE', '%'.$request->search.'%');
+            $data = Auth::user()->mileage()->where('status','A')->orderByDesc('created_at')
+            ->where(function ($q) use($request){
+                if(isset($request->date)){
+                    $q->whereDate('date', '=',$request->date);
                 }
             });
 
-            $data= $data->orderBy('reasonmileage', 'asc')->get();
+            $data= $data->get();
             return response()->json(['status'=>'success', 'data' => $data]);
 
         }
@@ -137,6 +136,34 @@ class MileageController extends Controller {
         }
 
         return view('ajaxview.editmileage', $data);
+    }
+
+    public function edit($id)
+    {
+        $emp_id = auth()->user()->id;
+        $data['mileage'] = Mileage::findOrFail($id)->where(['emp_id' => $emp_id])->first();
+        $data['companies'] = Company::all();
+        if($data){
+            return response()->json(['status'=>'success', 'data'=>$data]);
+        }
+        return response()->json(['status'=>'fail']);
+    }
+
+    public function update(Request $request, $id)
+    {
+        
+       $data= Mileage::find($id);
+        $data->company = $request->company;
+        $data->date = $request->date;
+        $data->vehicle = $request->vehicle;
+        $data->kilometers = $request->kilometers;
+        $data->reasonmileage = $request->reasonmileage;
+
+        $data->save();
+        if($data->update()){
+            return response()->json(['status'=>'success']);
+        }
+        return response()->json(['status'=>'fail']);
     }
 
     /**
