@@ -235,12 +235,17 @@ class UserController extends Controller {
 
             if ($user->update() == 1) {
                 $success = true;
-                $message = "Your Password sent to your email";
+                $message = "Password send your email";
             } else {
                 $success = false;
-                $message = "User not found";
+                $message = "There is a problem";
             }
-            return response()->json(['status' => 'success']);
+            return response()->json([
+                'success' => $success,
+                'message' => $message,
+            ]);
+
+            // return response()->json(['status' => 'success']);
 
         } catch(\Exception $e){
             return response()->json(['status' => 'fail', 'error' => $e->getMessages()]);

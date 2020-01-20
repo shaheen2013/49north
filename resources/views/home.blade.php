@@ -283,48 +283,34 @@
 
     var id = null
     function resetPassword(id){
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-Token': "{{csrf_token()}}"
+            }
+        });
         // console.log(id)
 
-        swal({
-                title: "Update?",
-                text: "Please ensure and then confirm!",
-                type: "warning",
-                showCancelButton: !0,
-                confirmButtonText: "Yes, Send password to email!",
-                cancelButtonText: "No, cancel!",
-                reverseButtons: !0
-            }).then(function (e) {
-                if (e.value === true) {
-                    
-            $.ajax({
-                method: "POST",
-                url: "/reset/password/"+id,
-                data: {_token: '{{  @csrf_token() }}'},
+        $.ajax({
+            method: "POST",
+            url: "/reset/password/"+id,
+            dataType: 'JSON',
+            success: function( results ) {
+                // $.toaster({ message : 'Password Updated successfully', title : 'Success', priority : 'success' });
+                // window.location.reload();
+                
+                if (results.success === true) {
+                    swal("Done!", results.message, "success").then(function () {
 
-                dataType: 'JSON',
-                 success: function (results) {
-
-                            if (results.success === true) {
-                                swal("Done!", results.message, "success").then(function () {
-
-                                    // window.location.reload()
-                                })
-                            } else {
-                                swal("Error!", results.message, "error");
-                            }
-                        }
-
-                    });
-
-                    } else {
-                        e.dismiss;
-                    }
-
-                    }, function (dismiss) {
-                    return false;
+                        // window.location.reload()
                     })
+                } else {
+                    swal("Error!", results.message, "error");
+                }
+            }
+        });
 
-    }
+                    
+    } 
 
     </script>
 
