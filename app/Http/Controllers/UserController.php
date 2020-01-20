@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\PasswordReset;
 use App\User;
 use App\Employee_detail;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\{Rule,ValidationException};
 use Illuminate\Http\{JsonResponse, RedirectResponse, Request};
 use Illuminate\Routing\Redirector;
@@ -22,7 +24,8 @@ class UserController extends Controller {
      */
      use SendsPasswordResetEmails;
 
-    public function index () {
+    public function index ()
+    {
         //Get all users and pass it to the view
         $users = User::with('employee_details')->orderBy('name')->get();
 
@@ -34,7 +37,8 @@ class UserController extends Controller {
      *
      * @return Factory|View
      */
-    public function create () {
+    public function create ()
+    {
         //Get all roles and pass it to the view
         $user = new User();
 
@@ -46,7 +50,8 @@ class UserController extends Controller {
      *
      * @return array
      */
-    public function attributes () {
+    public function attributes ()
+    {
         return [
             'password' => 'Password must contain a lower case, uppercase, number and special character',
         ];
@@ -60,7 +65,8 @@ class UserController extends Controller {
      * @return RedirectResponse
      * @throws ValidationException
      */
-    public function store (Request $request) {
+    public function store (Request $request)
+    {
         $id = $request->input('id');
 
         //Validate name, email and password fields
@@ -157,7 +163,8 @@ class UserController extends Controller {
      *
      * @return RedirectResponse|Redirector
      */
-    public function show ($id) {
+    public function show ($id)
+    {
         return redirect('users');
     }
 
@@ -168,7 +175,8 @@ class UserController extends Controller {
      *
      * @return Factory|View
      */
-    public function edit ($id) {
+    public function edit ($id)
+    {
         $u = User::findOrFail($id); //Get user with specified id
         //DB::enableQueryLog();
         $user = Employee_detail::find($u->id);
@@ -199,7 +207,8 @@ class UserController extends Controller {
      *
      * @return JsonResponse|RedirectResponse
      */
-    public function destroy ($id) {
+    public function destroy ($id)
+    {
         //Find a user with a given id and delete
         $user = User::find($id);
         $success = $user->exists ? true : false;
@@ -207,10 +216,10 @@ class UserController extends Controller {
 
         return response()->json(['success' => $success]);
     }
-    public function changeUserPassword(Request $request, $id){
-        
-        try{
 
+    public function changeUserPassword(Request $request, $id)
+    {
+        try{
             $user = User::find($id);
             $pass = '';
             $symbols = array();
@@ -222,14 +231,18 @@ class UserController extends Controller {
             $symbols["numbers"] = '1234567890';
             $symbols["special_symbols"] = '!?~@#-_+<>[]{}';
             $characters = explode(",",$characters);
+
             foreach ($characters as $key=>$value) {
                 $used_symbols .= $symbols[$value];
             }
+
             $symbols_length = strlen($used_symbols) - 1;
+
             for ($i = 0; $i < $length; $i++) {
                 $n = rand(0, $symbols_length);
                 $pass .= $used_symbols[$n];
             }
+
             $user->password = bcrypt($pass);
             $user->save();
 
@@ -240,22 +253,38 @@ class UserController extends Controller {
                 $success = false;
                 $message = "There is a problem";
             }
+
+            // Send email
+            if ($user->employee_details) {
+                $emails = [];
+
+                if ($user->employee_details->personalemail) {
+                    $emails[] = $user->employee_details->personalemail;
+                }
+
+                if ($user->employee_details->workemail) {
+                    $emails[] = $user->employee_details->workemail;
+                }
+
+                if (count($emails)) {
+                    Mail::to($emails)->send(new PasswordReset($pass));
+                } else {
+                    $message = "You have no email!";
+                }
+            }
+
             return response()->json([
                 'success' => $success,
                 'message' => $message,
             ]);
-
-            // return response()->json(['status' => 'success']);
-
         } catch(\Exception $e){
             return response()->json(['status' => 'fail', 'error' => $e->getMessages()]);
         }
     }
 
-    public function changeStuffPassword(Request $request, $id){
-        
+    public function changeStuffPassword(Request $request, $id)
+    {
         try{
-
             $user = User::findOrFail($id);
             $pass = '';
             $symbols = array();
@@ -267,14 +296,18 @@ class UserController extends Controller {
             $symbols["numbers"] = '1234567890';
             $symbols["special_symbols"] = '!?~@#-_+<>[]{}';
             $characters = explode(",",$characters);
+
             foreach ($characters as $key=>$value) {
                 $used_symbols .= $symbols[$value];
             }
+
             $symbols_length = strlen($used_symbols) - 1;
+
             for ($i = 0; $i < $length; $i++) {
                 $n = rand(0, $symbols_length);
                 $pass .= $used_symbols[$n];
             }
+
             $user->password = bcrypt($pass);
             $user->save();
 
@@ -285,16 +318,32 @@ class UserController extends Controller {
                 $success = false;
                 $message = "There is a problem";
             }
+
+            // Send email
+            if ($user->employee_details) {
+                $emails = [];
+
+                if ($user->employee_details->personalemail) {
+                    $emails[] = $user->employee_details->personalemail;
+                }
+
+                if ($user->employee_details->workemail) {
+                    $emails[] = $user->employee_details->workemail;
+                }
+
+                if (count($emails)) {
+                    Mail::to($emails)->send(new PasswordReset($pass));
+                } else {
+                    $message = "You have no email!";
+                }
+            }
+
             return response()->json([
                 'success' => $success,
                 'message' => $message,
             ]);
-
-            // return response()->json(['status' => 'success']);
-
         } catch(\Exception $e){
             return response()->json(['status' => 'fail', 'error' => $e->getMessages()]);
         }
     }
-
 }
