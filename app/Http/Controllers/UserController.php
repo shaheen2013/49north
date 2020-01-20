@@ -10,6 +10,8 @@ use Illuminate\Validation\{Rule,ValidationException};
 use Illuminate\Http\{JsonResponse, RedirectResponse, Request};
 use Illuminate\Routing\Redirector;
 use Illuminate\View\View;
+use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
+
 
 class UserController extends Controller {
 
@@ -18,6 +20,8 @@ class UserController extends Controller {
      *
      * @return Factory|View
      */
+     use SendsPasswordResetEmails;
+
     public function index () {
         //Get all users and pass it to the view
         $users = User::with('employee_details')->orderBy('name')->get();
@@ -203,4 +207,94 @@ class UserController extends Controller {
 
         return response()->json(['success' => $success]);
     }
+    public function changeUserPassword(Request $request, $id){
+        
+        try{
+
+            $user = User::find($id);
+            $pass = '';
+            $symbols = array();
+            $length = 8;
+            $used_symbols = '';
+            $characters = "lower_case,upper_case,numbers,special_symbols";
+            $symbols["lower_case"] = 'abcdefghijklmnopqrstuvwxyz';
+            $symbols["upper_case"] = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            $symbols["numbers"] = '1234567890';
+            $symbols["special_symbols"] = '!?~@#-_+<>[]{}';
+            $characters = explode(",",$characters);
+            foreach ($characters as $key=>$value) {
+                $used_symbols .= $symbols[$value];
+            }
+            $symbols_length = strlen($used_symbols) - 1;
+            for ($i = 0; $i < $length; $i++) {
+                $n = rand(0, $symbols_length);
+                $pass .= $used_symbols[$n];
+            }
+            $user->password = bcrypt($pass);
+            $user->save();
+
+            if ($user->update() == 1) {
+                $success = true;
+                $message = "Password send your email";
+            } else {
+                $success = false;
+                $message = "There is a problem";
+            }
+            return response()->json([
+                'success' => $success,
+                'message' => $message,
+            ]);
+
+            // return response()->json(['status' => 'success']);
+
+        } catch(\Exception $e){
+            return response()->json(['status' => 'fail', 'error' => $e->getMessages()]);
+        }
+    }
+
+    public function changeStuffPassword(Request $request, $id){
+        
+        try{
+
+            $user = User::findOrFail($id);
+            $pass = '';
+            $symbols = array();
+            $length = 8;
+            $used_symbols = '';
+            $characters = "lower_case,upper_case,numbers,special_symbols";
+            $symbols["lower_case"] = 'abcdefghijklmnopqrstuvwxyz';
+            $symbols["upper_case"] = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            $symbols["numbers"] = '1234567890';
+            $symbols["special_symbols"] = '!?~@#-_+<>[]{}';
+            $characters = explode(",",$characters);
+            foreach ($characters as $key=>$value) {
+                $used_symbols .= $symbols[$value];
+            }
+            $symbols_length = strlen($used_symbols) - 1;
+            for ($i = 0; $i < $length; $i++) {
+                $n = rand(0, $symbols_length);
+                $pass .= $used_symbols[$n];
+            }
+            $user->password = bcrypt($pass);
+            $user->save();
+
+            if ($user->update() == 1) {
+                $success = true;
+                $message = "Password send your email";
+            } else {
+                $success = false;
+                $message = "There is a problem";
+            }
+            return response()->json([
+                'success' => $success,
+                'message' => $message,
+            ]);
+
+            // return response()->json(['status' => 'success']);
+
+        } catch(\Exception $e){
+            return response()->json(['status' => 'fail', 'error' => $e->getMessages()]);
+        }
+    }
+
 }
