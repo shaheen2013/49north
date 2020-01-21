@@ -54,6 +54,23 @@
                                 <tbody>
                             </table>
                         </div>
+                        <div id="historical_div" style="display:none;">
+                            <table style="width:100%;">
+                                <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Description</th>
+                                    <th>Total</th>
+                                    <th></th>
+                                </tr>
+                                </thead>
+                                <tbody class="return_expence_ajax_history">
+            
+            
+                                </tbody>
+                            </table>
+            
+                        </div>
                     </div>
                 </div>
             </div>
