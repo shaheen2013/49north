@@ -17,7 +17,7 @@ class HomeController extends Controller {
     /**
      * @return Factory|View
      */
-    public function index () {
+    public function home () {
         return view('dashboard');
     }
 
@@ -26,7 +26,7 @@ class HomeController extends Controller {
      *
      * @return Renderable
      */
-    public function home () {
+    public function editProfile () {
 
         $emp_id = auth()->user()->id;
         $data['user'] = DB::table('users as u')->join('employee_details as ed', 'u.id', '=', 'ed.id')->select('ed.*')->where('u.id', '=', $emp_id)->first();

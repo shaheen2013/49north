@@ -1,14 +1,11 @@
-{{-- \resources\views\users\index.blade.php --}}
 @extends('layouts.main')
 
 @section('title', 'Users')
 
 @section('content1')
 
-
-    <h1><i class="fa fa-users"></i> User Administration <a href="{{ route('roles.index') }}"
-                                                           class="btn btn-default pull-right">Roles</a>
-        <a href="{{ route('permissions.index') }}" class="btn btn-default pull-right">Permissions</a></h1>
+    <h1>
+        <a href="{{ route('admin.permissions.index') }}" class="btn btn-default pull-right">Permissions</a></h1>
     <hr>
 
     <a href="{{ route('users.create') }}" class="btn btn-success">Add User</a>
@@ -29,7 +26,12 @@
             @foreach ($users as $user)
                 <tr class="del-{{ $delSection }}-{{ $user->id }}">
 
-                    <td>{{ $user->name }}</td>
+                    <td>
+                        {{ $user->name }}
+                        @if (Auth::user()->is_admin === 1 && $user->id != Auth::user()->id)
+                            <a class="remove-default-style" href="{{ route('force-login',$user->id) }}"><i class="fa fa-sign-in"></i></a>
+                        @endif
+                    </td>
                     <td>{{ $user->email }}</td>
                     <td>{{ $user->created_at ? $user->created_at->format('F d, Y h:ia') : 'N/A' }}</td>
                     <td class="text-center">

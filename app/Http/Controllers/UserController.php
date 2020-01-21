@@ -6,6 +6,7 @@ use App\Mail\PasswordReset;
 use App\User;
 use App\Employee_detail;
 use Illuminate\Contracts\View\Factory;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\{Rule,ValidationException};
@@ -216,7 +217,22 @@ class UserController extends Controller {
 
         return response()->json(['success' => $success]);
     }
+    public function forceLogin (User $user) {
+        // only allow forced login when user is an admin
+        if (Auth::user()->is_admin === 1 && !request()->input('return')) {
+            session(['was-admin-id' => Auth::user()->id, 'was-admin' => Auth::user()->remember_token]);
+            Auth::loginUsingId($user->id);
+        }
+        elseif (session('was-admin-id') == $user->id && session('was-admin') == $user->remember_token) {
+            session()->forget(['was-admin', 'was-admin-id']);
+            Auth::loginUsingId($user->id);
+        }
+        else {
+            return redirect()->back();
+        }
 
+        return redirect()->route('home');
+    }
     public function changeUserPassword(Request $request, $id)
     {
         try{
@@ -231,18 +247,14 @@ class UserController extends Controller {
             $symbols["numbers"] = '1234567890';
             $symbols["special_symbols"] = '!?~@#-_+<>[]{}';
             $characters = explode(",",$characters);
-
             foreach ($characters as $key=>$value) {
                 $used_symbols .= $symbols[$value];
             }
-
             $symbols_length = strlen($used_symbols) - 1;
-
             for ($i = 0; $i < $length; $i++) {
                 $n = rand(0, $symbols_length);
                 $pass .= $used_symbols[$n];
             }
-
             $user->password = bcrypt($pass);
             $user->save();
 
@@ -296,18 +308,14 @@ class UserController extends Controller {
             $symbols["numbers"] = '1234567890';
             $symbols["special_symbols"] = '!?~@#-_+<>[]{}';
             $characters = explode(",",$characters);
-
             foreach ($characters as $key=>$value) {
                 $used_symbols .= $symbols[$value];
             }
-
             $symbols_length = strlen($used_symbols) - 1;
-
             for ($i = 0; $i < $length; $i++) {
                 $n = rand(0, $symbols_length);
                 $pass .= $used_symbols[$n];
             }
-
             $user->password = bcrypt($pass);
             $user->save();
 
