@@ -47,7 +47,7 @@ class MileageController extends Controller {
     public function searchMileage(Request $request){
         $type = auth()->user()->is_admin;
         if ($type == '1') {
-            $data = Mileage::where('status','<>','D')->orderByDesc('created_at')->with('employee:id,firstname,lastname')
+            $data = Mileage::orderByDesc('created_at')->with('employee:id,firstname,lastname')
             ->where(function ($q) use($request){
                 if(isset($request->search)){
                     $q->whereHas('employee', function($sql) use($request){
@@ -57,9 +57,9 @@ class MileageController extends Controller {
                     });
                     
                 }
-                if(isset($request->date)){
-                    $q->whereDate('date', '=',$request->date);
-                    // $q ->whereBetween('date', array($request->from_date, $request->to_date))
+                if(isset($request->from) && isset($request->to)){
+                    $q->whereBetween('date', [$request->from, $request->to]);
+                    // $q->whereBetween('date', array($request->from, $request->to));
                 }
             });
 
