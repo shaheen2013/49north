@@ -93,16 +93,16 @@
                 <div class="col-md-3">
                     <div class="text_outer">
                         <label for="name" class="">Password*</label>
-                        <input type="password" id="password" name="password" class="form-control" placeholder="xxxxxxx"
+                        <input type="password" id="password" name="password" class="form-control" placeholder="xxxxxxxx"
                                {{ $user->id ? '' : 'required' }} {{-- password is only required if it's a new user --}}>
                     </div>
                 </div>
 
                 <div class="col-md-3">
                     <p>**Only required if you are changing your password. Your password must
-                        be more than 6 characters long, should contain at least 1 uppercase, 1
+                        be more than 8 characters long, should contain at least 1 uppercase, 1
                         lowercase, 1 numeric and 1 special character.
-                        <a href="javascript:void(0)" data-toggle="modal" data-target="#upload-modal1">Click Reset</a>
+                        <a href="javascript:void(0)" data-toggle="modal" data-target="#upload-modal1" onclick="resetStuffPassword({{ $user->id }})">Click Reset</a>
                     </p>
                 </div>
 
@@ -269,5 +269,39 @@
 
         {{ Form::close() }}
     </div>
+
+    <script type="text/javascript">
+
+    var user_id = null
+    function resetStuffPassword(id){
+        user_id = id;
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-Token': "{{csrf_token()}}"
+            }
+        });
+        console.log(user_id)
+
+        $.ajax({
+            method: "POST",
+            url: "/reset/stuff/password/"+id,
+            dataType: 'JSON',
+            success: function( results ) {
+                // $.toaster({ message : 'Password Updated successfully', title : 'Success', priority : 'success' });
+                // window.location.reload();
+
+                if (results.success === true) {
+                    swal("Done!", results.message, "success").then(function () {
+
+                        // window.location.reload()
+                    })
+                } else {
+                    swal("Error!", results.message, "error");
+                }
+            }
+        });               
+    } 
+
+    </script>
 
 @endsection

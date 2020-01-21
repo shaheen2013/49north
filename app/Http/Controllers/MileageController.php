@@ -39,9 +39,49 @@ class MileageController extends Controller {
         }
 
         $data['companies'] = Company::all();
+        $date_key = $request->date;
 
-        return view('mileagelist', $data);
+        return view('mileagelist', $data)->with('date_key',$date_key);
     }
+
+    public function searchMileage(Request $request){
+        $type = auth()->user()->is_admin;
+        if ($type == '1') {
+            $data = Mileage::where('status','<>','D')->orderByDesc('created_at')->with('employee:id,firstname,lastname')
+            ->where(function ($q) use($request){
+                // if(isset($request->search)){
+                //     $q->where('reasonmileage', 'LIKE', '%'.$request->search.'%');
+                // }
+                if(isset($request->search)){
+                    $q->whereHas('employee', function($sql) use($request){
+                        $sql->where('firstname', 'LIKE', '%'.$request->search.'%');
+        
+                    });
+                    
+                }
+                if(isset($request->date)){
+                    $q->whereDate('date', '=',$request->date);
+                }
+            });
+
+            $data= $data->get();
+            return response()->json(['status'=>'success', 'data' => $data]);
+        }
+
+        else {
+            $data = Auth::user()->mileage()->where('status','A')->orderByDesc('created_at')->where(function ($q) use($request){
+                if(isset($request->search)){
+                    $q->where('reasonmileage', 'LIKE', '%'.$request->search.'%');
+                }
+            });
+
+            $data= $data->orderBy('reasonmileage', 'asc')->get();
+            return response()->json(['status'=>'success', 'data' => $data]);
+
+        }
+        return response()->json(['status'=>'success', 'data' => $data]);
+    }
+
 
     /**
      * @param Request $request

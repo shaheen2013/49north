@@ -3,6 +3,7 @@
 
 @include('head')
 
+
 <body id="page-top">
 <div id="app">
     <!-- Navigation -->
@@ -23,9 +24,16 @@
                     <li class="nav-item">
                         <a class="nav-link active" href="{{ route('edit-profile') }}">My Profile </a>
                     </li>
+
                     @admin
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('users.index') }}" role="tab">Staff</a>
+                        <a class="nav-link" href="{{ route('company.index') }}" role="tab">Company</a>
+                    </li>
+                    @endadmin
+
+                    @admin
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('users.index') }}" role="tab">Admin</a>
                     </li>
                     @endadmin
                     <li class="nav-item">
@@ -37,24 +45,22 @@
                            aria-controls="classroom" aria-selected="true">Classroom</a>
                     </li>
                 </ul>
-                <ul class="navbar-nav text-uppercase ">
-                    <li class="nav-item">
-                    <!--<a class="nav-link js-scroll-trigger" href="#"><img src="{{asset('img/sign.jpg')}}" alt="" width="24p" ></a>-->
+                <div class="pull-right">
+                    <ul class="navbar-nav text-uppercase">
+                        <li class="nav-item">
+                            <a class="nav-link js-scroll-trigger" href="javascript:void(0)"
+                               onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                <img src="{{asset('img/sign.jpg')}}" alt="" width="24p" >
+                            </a>
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                @csrf
+                            </form>
+                        </li>
 
-                        <a class="nav-link js-scroll-trigger" href="{{ route('logout') }}"
-                           onclick="event.preventDefault();
-                             document.getElementById('logout-form').submit();">
-                            {{ __('Logout') }}
-                        </a>
-                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                            @csrf
-                        </form>
-                    </li>
-
-                </ul>
+                    </ul>
+                </div>
             </div>
         </div>
-
     </nav>
 </div>
 
@@ -154,6 +160,8 @@
 <script type="text/javascript" src="{{ asset('js/admin.js') }}"></script>
 <script src="{{asset('js/custom_function.js')}}"></script>
 <script src="{{asset('js/custom_function_admin.js')}}"></script>
+<script src="{{ URL::asset('toaster/jquery.toaster.js') }}"></script>
+<script src="{{ URL::asset('assets/jquery-spinner/js/jquery.spinner.js') }}"></script>
 @stack('scripts')
 
 </body>

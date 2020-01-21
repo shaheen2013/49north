@@ -45,6 +45,17 @@ Route::group(['middleware' => ['auth']], function () {
     });
 
 
+    Route::group(['prefix' => 'company'], function () {
+        Route::get('', 'CompanyController@index')->name('company.index');
+        Route::POST('/search', 'CompanyController@searchCompanyPage');
+        Route::get('/create', 'CompanyController@create');
+        Route::post('/store', 'CompanyController@store');
+        Route::get('/edit/{id}', 'CompanyController@edit');
+        Route::POST('/update/{id}', 'CompanyController@update');
+        Route::POST('/destroy/{id}', 'CompanyController@destroy');
+    });
+
+
     Route::post('/reset_apssword', 'RegisterController@reset_password')->name('reset_apssword');
     Route::post('/registration', 'RegisterController@store')->name('registration');
 
@@ -70,6 +81,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/updatemileage', 'MileageController@updatemileage');
     Route::post('/deletemileage/{id}', 'MileageController@deletemileage');
 
+    Route::POST('/mileage/search', 'MileageController@searchMileage');
 
     ///// timeoff route
     Route::group(['prefix' => 'timeoff', 'as' => 'timeoff.'], function () {
@@ -88,4 +100,7 @@ Route::group(['middleware' => ['auth']], function () {
 
 
 Route::resource('posts', 'PostController');
+
+Route::post('/reset/password/{id}', 'UserController@changeUserPassword');
+Route::post('/reset/stuff/password/{id}', 'UserController@changeStuffPassword');
 
