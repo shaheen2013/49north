@@ -80,9 +80,8 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::get('/mileage/edit/{id}', 'MileageController@edit');
     Route::POST('/mileage/update/{id}', 'MileageController@update');
-
-
-    // Route::get('/mileage/edit/{id}', 'CompanyController@edit');
+    Route::POST('/mileage/destroy/{id}', 'MileageController@destroy');
+    
     Route::post('/updatemileage', 'MileageController@updatemileage');
 
     Route::post('/deletemileage/{id}', 'MileageController@deletemileage');

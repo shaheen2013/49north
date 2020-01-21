@@ -348,5 +348,43 @@
             searchMileagePage()
         };
 
+        function deleteconfirm(id) {
+            swal({
+                title: "Delete?",
+                text: "Please ensure and then confirm!",
+                type: "warning",
+                showCancelButton: !0,
+                confirmButtonText: "Yes, delete it!",
+                cancelButtonText: "No, cancel!",
+                reverseButtons: !0
+            }).then(function (e) {
+                if (e.value === true) {
+                    $.ajax({
+                        type: 'post',
+                        url: "/mileage/destroy/" + id,
+                        data: {_token: '{{  @csrf_token() }}'},
+                        dataType: 'JSON',
+                        success: function (results) {
+
+                            if (results.success === true) {
+                                swal("Done!", results.message, "success").then(function () {
+
+                                    window.location.reload()
+                                })
+                            } else {
+                                swal("Error!", results.message, "error");
+                            }
+                        }
+                    });
+
+                } else {
+                    e.dismiss;
+                }
+
+            }, function (dismiss) {
+                return false;
+            })
+        }
+
     </script>
 @endsection
