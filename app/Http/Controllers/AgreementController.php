@@ -30,10 +30,10 @@ class AgreementController extends Controller {
      *
      * @return RedirectResponse
      */
-    function addagreement (Request $request) {
-
-        $file = $request->file('agreement_file');
-        $name = str_pad($request->input('employee_id'), '3', '0', STR_PAD_LEFT) . '-' . rand(11111, 99999) . '.' . $file->getClientOriginalExtension();
+    function addagreement (Request $request)
+    {
+        //$file = $request->file('agreement_file');
+        //$name = str_pad($request->input('employee_id'), '3', '0', STR_PAD_LEFT) . '-' . rand(11111, 99999) . '.' . $file->getClientOriginalExtension();
 
         $conditions = ['emp_id' => $request->input('employee_id'), 'status' => 'A'];
 
@@ -43,7 +43,8 @@ class AgreementController extends Controller {
         $path = $type == 'EA' ? 'agreement' : 'codeofconduct';
 
         try {
-            $request->file('agreement_file')->move("public/" . $path, $name);
+            $name = fileUpload('agreement_file', true);
+            //$request->file('agreement_file')->move("public/" . $path, $name);
         } catch (Exception $e) {
             return redirect()->back()->with('message','File not saved');
         }

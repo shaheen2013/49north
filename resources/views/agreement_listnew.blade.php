@@ -2,7 +2,7 @@
 @include('modal')
 @section('content1')
 
-    <div class="container-fluid">
+    <div class="well-default-trans">
 
         <div class="tab-pane employeeagreements" id="nav-agreements" role="tabpanel" aria-labelledby="nav-agreements-tab">
 
@@ -14,8 +14,8 @@
                     <tr>
                         <th>Date</th>
                         <th>Employee Name</th>
-                        <th>Employee Agreement</th>
-                        <th>Code of Conduct</th>
+                        <th class="text-right">Employee Agreement</th>
+                        <th class="text-right">Code of Conduct</th>
                     </tr>
                     </thead>
 
@@ -24,12 +24,12 @@
                         <tr style="margin-bottom:10px;">
                             <td>{{$user->created_at}}</td>
                             <td>{{$user->name}}</td>
-                            <td>
+                            <td class="text-right">
                                 @if($user->activeAgreement)
                                     @admin
                                     <a href="javascript:void(0);" onclick="show_modal_agreement('{{$user->id}}','EA')">Edit</a>
                                     @endadmin
-                                    <a href="{{asset('agreement/'.$user->activeAgreement->agreement)}}" target="_blank">View</a>
+                                    <a href="{{fileUrl($user->activeAgreement->agreement, true)}}" target="_blank">View</a>
                                     @admin
                                     <a href="javascript:void(0);" onclick="delete_agreement('{{$user->activeAgreement->id}}','EA')" class="down">DELETE</a>
                                     @endadmin
@@ -44,7 +44,7 @@
                                     @foreach ($user->activeAgreement['amendments'] AS $amendment)
 
                                         <br>{{ $loop->iteration }})
-                                        <a href="{{asset('agreement/'.$amendment->agreement)}}" target="_blank">View</a>
+                                        <a href="{{fileUrl($amendment->agreement, true)}}" target="_blank">View</a>
 
                                         @admin
                                         <br>
@@ -54,13 +54,13 @@
                                 @endif
                             </td>
 
-                            <td>
+                            <td class="text-right">
                                 @if($user->activeCodeofconduct)
                                     @admin
                                     <a href="javascript:void(0);" onclick="show_modal_agreement('{{$user->id}}','COC')">Edit</a>
                                     @endadmin
 
-                                    <a href="{{asset('codeofconduct/'.$user->activeCodeofconduct->coc_agreement)}}" target="_blank">View</a>
+                                    <a href="{{fileUrl($user->activeCodeofconduct->coc_agreement, true)}}" target="_blank">View</a>
 
                                     @admin
                                     <a href="javascript:void(0);" onclick="delete_agreement('{{$user->activeCodeofconduct->id}}','COC')" class="down">DELETE</a>
