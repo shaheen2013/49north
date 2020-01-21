@@ -10,7 +10,7 @@
                 <div class="row">
                     <div class="col-sm-3">
                         <div class="form-group">
-                            <input type="date" name="date" id="date"  placeholder="Select Date" class="form-control-new" onkeyup="searchMileagePage()">
+                            <input type="date" name="date" id="date"  placeholder="Select Date" class="form-control-new" onChange="searchMileagePage()">
                         </div>
                     </div>
                     <div class="col-sm-3">
@@ -216,6 +216,8 @@
     <script type="text/javascript">
 
         var id = null;
+        var from = null;
+        var to = null;
         function OpenEditMileageModel(id) {
             console.log(id)
             $('#mileage-modaledit').modal();
@@ -287,17 +289,23 @@
 
     $(document).ready(function(){
         $('#date').flatpickr({
-            mode: "range"
+            mode: "range",
+            onChange: function(selectedDates, dateStr, instance) {
+                from = formatDate(selectedDates[0]);
+                to = formatDate(selectedDates[1]);
+            },
         });
     });
 
         function searchMileagePage() {
             let search = $('#search').val();
-            let date = $('#date').val();
+            
+            // console.log(date);
             let data = {
                 _token: '{{  @csrf_token() }}',
                 search: search,
-                date: date,
+                from: from,
+                to: to,
 
             };
             console.log(data);
@@ -344,6 +352,59 @@
         window.onload = function () {
             searchMileagePage()
         };
+
+        function deleteconfirm(id) {
+            swal({
+                title: "Delete?",
+                text: "Please ensure and then confirm!",
+                type: "warning",
+                showCancelButton: !0,
+                confirmButtonText: "Yes, delete it!",
+                cancelButtonText: "No, cancel!",
+                reverseButtons: !0
+            }).then(function (e) {
+                if (e.value === true) {
+                    $.ajax({
+                        type: 'post',
+                        url: "/mileage/destroy/" + id,
+                        data: {_token: '{{  @csrf_token() }}'},
+                        dataType: 'JSON',
+                        success: function (results) {
+
+                            if (results.success === true) {
+                                swal("Done!", results.message, "success").then(function () {
+
+                                    window.location.reload()
+                                })
+                            } else {
+                                swal("Error!", results.message, "error");
+                            }
+                        }
+                    });
+
+                } else {
+                    e.dismiss;
+                }
+
+            }, function (dismiss) {
+                return false;
+            })
+        }
+
+        // Format date
+        function formatDate(date) {
+            var d = new Date(date),
+                month = '' + (d.getMonth() + 1),
+                day = '' + d.getDate(),
+                year = d.getFullYear();
+
+            if (month.length < 2)
+                month = '0' + month;
+            if (day.length < 2)
+                day = '0' + day;
+
+            return [year, month, day].join('-');
+        }
 
     </script>
 @endsection

@@ -47,7 +47,7 @@ class MileageController extends Controller {
     public function searchMileage(Request $request){
         $type = auth()->user()->is_admin;
         if ($type == '1') {
-            $data = Mileage::where('status','<>','D')->orderByDesc('created_at')->with('employee:id,firstname,lastname')
+            $data = Mileage::orderByDesc('created_at')->with('employee:id,firstname,lastname')
             ->where(function ($q) use($request){
                 if(isset($request->search)){
                     $q->whereHas('employee', function($sql) use($request){
@@ -57,8 +57,9 @@ class MileageController extends Controller {
                     });
                     
                 }
-                if(isset($request->date)){
-                    $q->whereDate('date', '=',$request->date);
+                if(isset($request->from) && isset($request->to)){
+                    $q->whereBetween('date', [$request->from, $request->to]);
+                    // $q->whereBetween('date', array($request->from, $request->to));
                 }
             });
 
@@ -169,11 +170,20 @@ class MileageController extends Controller {
     /**
      * @param $id
      */
-    function deletemileage ($id) {
-        $emp_id = auth()->user()->id;
-        $conditions = ['id' => $id, 'emp_id' => $emp_id];
-        DB::table('mileages')->where($conditions)->update(['status' => 'D']);
-
+    public function destroy($id)
+    {
+        $mileage = Mileage::findOrFail($id);
+        if ($mileage->delete() == 1) {
+            $success = true;
+            $message = "Mileage deleted successfully";
+        } else {
+            $success = false;
+            $message = "Mileage not found";
+        }
+        return response()->json([
+            'success' => $success,
+            'message' => $message,
+        ]);
     }
 
 }
