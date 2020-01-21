@@ -43,6 +43,10 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/reject', 'ExpenseController@expense_reject')->name('reject');
         Route::post('/history', 'ExpenseController@expenses_historical')->name('history');
         Route::POST('/search', 'ExpenseController@searchExpense');
+
+        Route::get('/edit/{id}', 'ExpenseController@edit');
+        Route::POST('/update/{id}', 'ExpenseController@update');
+
         Route::POST('/destroy/{id}', 'ExpenseController@destroy');
 
     });

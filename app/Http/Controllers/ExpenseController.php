@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\{Company, Project, Purchases, Categorys, Expenses};
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class ExpenseController extends Controller {
 
@@ -43,6 +44,67 @@ class ExpenseController extends Controller {
        
     }
 
+    //expense edit page with value
+    public function edit(Request $request)
+    {
+        // $emp_id = auth()->user()->id;
+        $data['expense'] = Expenses::where('id', $request->id)->first();
+        $data['companies'] = Company::all();
+        $data['project'] = Project::all();
+        $data['purchases'] = Purchases::all();
+        $data['category'] = Categorys::all();
+       
+        if($data){
+            return response()->json(['status'=>'success', 'data'=>$data]);
+        }
+        return response()->json(['status'=>'fail']);
+    }
+
+    public function update(Request $request, $id)
+    {
+        // Validate form data
+        $rules = [
+           
+            'receipt' => 'nullable|image',
+        ];
+
+        $validator = validator($request->all(), $rules, []);
+
+        if ($validator->fails()) {
+            return response()->json(['status' => 'fail', 'errors' => $validator->getMessageBag()->toarray()]);
+        }
+        try {// return $request->all();
+            $data = Expenses::findOrFail($id);
+            $receipt = null;
+
+            if ($request->hasFile('receipt')) {
+                Storage::delete($data->receipt);
+                $data->receipt = fileUpload('receipt');
+            }
+
+            $data->company = $request->company;
+            $data->category = $request->category;
+            $data->purchase = $request->purchase;
+            $data->project = $request->project;
+            $data->description = $request->description;
+            $data->date = $request->date;
+            $data->billable = $request->billable;
+            $data->received_auth = $request->received_auth;
+            $data->subtotal = $request->subtotal;
+            $data->gst = $request->gst;
+            $data->pst = $request->pst;
+            $data->total = $request->total;
+
+            if ($data->update()) {
+                return response()->json(['status' => 'success']);
+            }
+
+            return response()->json(['status' => 'fail']);
+        } catch (\Exception $e) {
+            return response()->json(['status' => 'fail', 'msg' => $e->getMessage()]);
+        }
+       
+    }
     public function destroy($id)
     {
         $expense = Expenses::findOrFail($id);
@@ -67,7 +129,7 @@ class ExpenseController extends Controller {
         if ($request->hasFile('receipt')) {
             $file = $request->file('receipt');
             $receiptname = rand(11111, 99999) . '.' . $file->getClientOriginalExtension();
-            $request->file('receipt')->move("public/receipt", $receiptname);
+            $request->file('receipt')->move("receipt", $receiptname);
         }
 
         $data['receipt'] = $receiptname;
@@ -76,21 +138,6 @@ class ExpenseController extends Controller {
         $msg = "Expense added successfully";
 
         return redirect()->back()->with('alert-info', $msg);
-    }
-
-    /////// Auto populate expense details
-    function expense_edit_view (Request $request) {
-        $data['expense'] = DB::table('expenses')->where('id', $request->id)->first();
-        $data['companies'] = Company::all();
-        $data['project'] = Project::all();
-        $data['purchases'] = Purchases::all();
-        $data['category'] = Categorys::all();
-        $data['company'] = DB::table('companies')->where('id', $data['expense']->company)->first();
-        $data['projects'] = DB::table('projects')->where('id', $data['expense']->project)->first();
-        $data['purchase'] = DB::table('purchases')->where('id', $data['expense']->purchase)->first();
-        $data['category1'] = DB::table('categorys')->where('id', $data['expense']->category)->first();
-
-        return view('ajaxview.editexpense', $data);
     }
 
     ///// To edit details of expense
@@ -102,7 +149,7 @@ class ExpenseController extends Controller {
         if ($request->hasFile('receipt')) {
             $file = $request->file('receipt');
             $receiptname = rand(11111, 99999) . '.' . $file->getClientOriginalExtension();
-            $request->file('receipt')->move("public/receipt", $receiptname);
+            $request->file('receipt')->move("receipt", $receiptname);
         }
 
         $data['receipt'] = $receiptname;
