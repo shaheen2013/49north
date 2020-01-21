@@ -42,6 +42,9 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/approve', 'ExpenseController@expense_approve')->name('approve');
         Route::post('/reject', 'ExpenseController@expense_reject')->name('reject');
         Route::post('/history', 'ExpenseController@expenses_historical')->name('history');
+        Route::POST('/search', 'ExpenseController@searchExpense');
+        Route::POST('/destroy/{id}', 'ExpenseController@destroy');
+
     });
 
 
@@ -81,10 +84,6 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/mileage/edit/{id}', 'MileageController@edit');
     Route::POST('/mileage/update/{id}', 'MileageController@update');
     Route::POST('/mileage/destroy/{id}', 'MileageController@destroy');
-    
-    Route::post('/updatemileage', 'MileageController@updatemileage');
-
-    Route::post('/deletemileage/{id}', 'MileageController@deletemileage');
     Route::POST('/mileage/search', 'MileageController@searchMileage');
 
     // pay statement
