@@ -24,7 +24,7 @@ class ExpenseController extends Controller {
 
     public function searchExpense(Request $request){
       
-        $data = Expenses::orderByDesc('created_at')->with('employee:id,firstname,lastname')
+        $data = Expenses::orderByDesc('created_at')->with('employee:id,firstname,lastname')->where('status', null)
             ->where(function ($q) use($request){
                 if(isset($request->search)){
                     $q->whereHas('employee', function($sql) use($request){
@@ -43,6 +43,49 @@ class ExpenseController extends Controller {
             return response()->json(['status'=>'success', 'data' => $data]);
        
     }
+
+    // public function searchExpensePending(Request $request){
+      
+    //     $data = Expenses::orderByDesc('created_at')->with('employee:id,firstname,lastname')->where('status', null)
+    //         ->where(function ($q) use($request){
+    //             if(isset($request->search)){
+    //                 $q->whereHas('employee', function($sql) use($request){
+    //                     $sql->where('firstname', 'LIKE', '%'.$request->search.'%');
+    //                     $sql->orWhere('lastname', 'LIKE', '%'.$request->search.'%');
+        
+    //                 });
+                    
+    //             }
+    //             if(isset($request->from) && isset($request->to)){
+    //                 $q->whereBetween('date', [$request->from, $request->to]);
+    //             }
+    //         });
+
+    //         $data= $data->get();
+    //         return response()->json(['status'=>'success', 'data' => $data]);
+       
+    // }
+    // public function searchExpenseHistory(Request $request){
+      
+    //     $data = Expenses::orderByDesc('created_at')->with('employee:id,firstname,lastname')->where('status', 1)
+    //         ->where(function ($q) use($request){
+    //             if(isset($request->search)){
+    //                 $q->whereHas('employee', function($sql) use($request){
+    //                     $sql->where('firstname', 'LIKE', '%'.$request->search.'%');
+    //                     $sql->orWhere('lastname', 'LIKE', '%'.$request->search.'%');
+        
+    //                 });
+                    
+    //             }
+    //             if(isset($request->from) && isset($request->to)){
+    //                 $q->whereBetween('date', [$request->from, $request->to]);
+    //             }
+    //         });
+
+    //         $data= $data->get();
+    //         return response()->json(['status'=>'success', 'data' => $data]);
+       
+    // }
 
     //expense edit page with value
     public function edit(Request $request)
@@ -160,11 +203,7 @@ class ExpenseController extends Controller {
         return redirect()->back()->with('alert-info', $msg);
     }
 
-    ///// delete expense
-    public function delete_expense (Request $request) {
-        $id = $request->id;
-        Expenses::where('id', $id)->update(['delete_status' => '1']);
-    }
+   
 
     /// approved expense
     public function expense_approve (Request $request) {

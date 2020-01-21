@@ -29,13 +29,14 @@
                             <a href="javascript:void(0)" class="_new_icon_button_1" data-toggle="modal"
                                data-target="#expense-modal"> <i class="fa fa-plus"></i> </a>
                         </div>
+                       
                         <div class="col-sm-12" id="pending_div">
                             <div id="wait" style="display:none;position:absolute;top:100%;left:50%;padding:2px;"><img
                                     src='{{ asset('img/demo_wait.gif') }}' width="64" height="64"/><br>Loading..
                             </div>
                             <table class="table table-bordered">
                                 <thead>
-                                <tr>
+                                   
                                 <tr>
                                     <th>Date</th>
                                     @admin
@@ -48,23 +49,31 @@
                                     @endadmin
                                     <th></th>
                                 </tr>
-                                </tr>
+                               
                                 </thead>
                                 <tbody class="return_expence_ajax" id="expense_search">
                                 <tbody>
                             </table>
                         </div>
-                        <div id="historical_div" style="display:none;">
-                            <table style="width:100%;">
+                       
+                        <div id="historical_div" style="display:none;" class="col-sm-12">
+                            <table class="table table-bordered">
                                 <thead>
-                                <tr>
-                                    <th>Date</th>
-                                    <th>Description</th>
-                                    <th>Total</th>
-                                    <th></th>
-                                </tr>
+                                    <tr>
+                                        <th>Date</th>
+                                        @admin
+                                        <th>Employee</th>
+                                        @endadmin
+                                        <th>Description</th>
+                                        <th>Total</th>
+                                        @admin
+                                        <th>Action</th>
+                                        @endadmin
+                                        <th></th>
+                                    </tr>
                                 </thead>
-                                <tbody class="return_expence_ajax_history">
+                                {{-- <tbody class="return_expence_ajax" id="expense_search1"> --}}
+                                <tbody class="return_expence_ajax_history" id="expense_search">
             
             
                                 </tbody>
@@ -477,6 +486,8 @@
             });
         });
 
+       
+
         function searchExpensePage() {
             let search = $('#search').val();
 
@@ -527,6 +538,7 @@
                                 <tr class="spacer"></tr>`;
                         }
                         $('#expense_search').html(html);
+                       
                     } else {
                         swal("Error!", results.message, "error");
                     }
@@ -537,6 +549,118 @@
         window.onload = function () {
             searchExpensePage()
         };
+        // function expences_pending(){
+        //     let search = $('#search').val();
+
+        //     // console.log(date);
+        //     let data = {
+        //         _token: '{{  @csrf_token() }}',
+        //         search: search,
+        //         from: from,
+        //         to: to,
+
+        //     };
+        //     console.log(data);
+
+        //     $('#wait').css('display', 'inline-block'); // wait for loader
+        //     $.ajax({
+        //         type: 'post',
+        //         url: "/expense/pending/search",
+        //         data: data,
+        //         dataType: 'JSON',
+        //         success: function (results) {
+        //             let html = '';
+        //             let date = '';
+        //             if (results.status === 'success') {
+        //                 $('#wait').css('display', 'none');
+        //                 for (let index = 0; index < results.data.length; index++) {
+
+        //                     if (results.data[index].date != null && results.data[index].date != '') {
+        //                         time = results.data[index].date.split(' ')[0];
+        //                         date = new Date(time);
+        //                         date = date.toDateString().split(' ')[2] + " " + date.toDateString().split(' ')[1] + ", " + date.toDateString().split(' ')[3]
+        //                     } else {
+        //                         date = '-';
+        //                     }
+        //                     html += `<tr>
+        //                             <td> ${date} </td>
+        //                             <td> ${results.data[index].employee.firstname + ' ' + results.data[index].employee.lastname} </td>
+        //                             <td> ${results.data[index].description} </td>
+        //                             <td> ${results.data[index].total} </td>
+        //                             <td>
+        //                                 <a href="javascript:void(0)" onclick="expence_approve('${results.data[index].id}')"><i class="fa fa-check-circle" title="Approved"></i></a>
+        //                                 <a href="javascript:void(0)" title="Reject!" onclick="expence_reject('${results.data[index].id}')"><i class="fa fa-ban"></i></a>
+        //                             </td>
+        //                             <td class="action-box">
+        //                                 <a href="javascript:void(0);" onclick="OpenEditExpenseModel('${results.data[index].id}') ">EDIT</a>
+        //                                 <a href="javascript:void(0);" class="down" onclick="deleteconfirm('${results.data[index].id}')">DELETE</a>
+        //                             </td>
+        //                         </tr>
+        //                         <tr class="spacer"></tr>`;
+        //                 }
+        //                 $('#expense_search2').html(html);
+        //             } else {
+        //                 swal("Error!", results.message, "error");
+        //             }
+        //         }
+        //     });
+        // }
+        // function expense_history(){
+        //     let search = $('#search').val();
+
+        //     // console.log(date);
+        //     let data = {
+        //         _token: '{{  @csrf_token() }}',
+        //         search: search,
+        //         from: from,
+        //         to: to,
+
+        //     };
+        //     console.log(data);
+
+        //     $('#wait').css('display', 'inline-block'); // wait for loader
+        //     $.ajax({
+        //         type: 'post',
+        //         url: "/expense/history/search",
+        //         data: data,
+        //         dataType: 'JSON',
+        //         success: function (results) {
+        //             let html = '';
+        //             let date = '';
+        //             if (results.status === 'success') {
+        //                 $('#wait').css('display', 'none');
+        //                 for (let index = 0; index < results.data.length; index++) {
+
+        //                     if (results.data[index].date != null && results.data[index].date != '') {
+        //                         time = results.data[index].date.split(' ')[0];
+        //                         date = new Date(time);
+        //                         date = date.toDateString().split(' ')[2] + " " + date.toDateString().split(' ')[1] + ", " + date.toDateString().split(' ')[3]
+        //                     } else {
+        //                         date = '-';
+        //                     }
+        //                     html += `<tr>
+        //                             <td> ${date} </td>
+        //                             <td> ${results.data[index].employee.firstname + ' ' + results.data[index].employee.lastname} </td>
+        //                             <td> ${results.data[index].description} </td>
+        //                             <td> ${results.data[index].total} </td>
+        //                             <td>
+        //                                 <a href="javascript:void(0)" onclick="expence_approve('${results.data[index].id}')"><i class="fa fa-check-circle" title="Approved"></i></a>
+        //                                 <a href="javascript:void(0)" title="Reject!" onclick="expence_reject('${results.data[index].id}')"><i class="fa fa-ban"></i></a>
+        //                             </td>
+        //                             <td class="action-box">
+        //                                 <a href="javascript:void(0);" onclick="OpenEditExpenseModel('${results.data[index].id}') ">EDIT</a>
+        //                                 <a href="javascript:void(0);" class="down" onclick="deleteconfirm('${results.data[index].id}')">DELETE</a>
+        //                             </td>
+        //                         </tr>
+        //                         <tr class="spacer"></tr>`;
+        //                 }
+        //                 $('#expense_search1').html(html);
+        //             } else {
+        //                 swal("Error!", results.message, "error");
+        //             }
+        //         }
+        //     });
+        // }
 
         function deleteconfirm(id) {
             swal({
