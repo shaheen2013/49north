@@ -23,7 +23,7 @@ if (! function_exists('get_times')) {
 }
 
 if (! function_exists('fileUpload')) {
-    function fileUpload( $fileName ) {
+    function fileUpload( $fileName, $isPrivate = null ) {
         try {
             // Handle File Upload
             if (request()->hasFile($fileName)) {
@@ -39,7 +39,11 @@ if (! function_exists('fileUpload')) {
                 $filePath = "uploads/" . $fileNameToStore;
                 $exists = Storage::exists($filePath);
                 if (!$exists) {
-                    Storage::put($filePath, file_get_contents(request()->file($fileName)), 'public');
+                    if ($isPrivate) {
+                        Storage::put($filePath, file_get_contents(request()->file($fileName)));
+                    } else {
+                        Storage::put($filePath, file_get_contents(request()->file($fileName)), 'public');
+                    }
                 }
                 $file_url = $filePath;
 
@@ -54,9 +58,31 @@ if (! function_exists('fileUpload')) {
 }
 
 if (! function_exists('fileUrl')) {
-    function fileUrl($path = null)
+    function fileUrl($path = null, $isPrivate = null)
     {
-        return 'https://s3.'.env('AWS_DEFAULT_REGION').'.amazonaws.com/'.env('AWS_BUCKET').'/'.$path;
+        if ($isPrivate) {
+            // This code for generate new signed url of your file
+            $value = $path;
+            $disk = Storage::disk('s3');
+
+            if ($disk->exists($value))
+            {
+                $s3 = Storage::disk('s3');
+                $client = $s3->getDriver()->getAdapter()->getClient();
+                $expiry = "+10 minutes";
+
+                $command = $client->getCommand('GetObject', [
+                    'Bucket' => \Config::get('filesystems.disks.s3.bucket'),
+                    'Key'    => $value
+                ]);
+
+                $request = $client->createPresignedRequest($command, $expiry);
+
+                return (string) $request->getUri();
+            }
+        } else {
+            return 'https://s3.' . env('AWS_DEFAULT_REGION') . '.amazonaws.com/' . env('AWS_BUCKET') . '/' . $path;
+        }
     }
 }
 

@@ -30,10 +30,10 @@ class AgreementController extends Controller {
      *
      * @return RedirectResponse
      */
-    function addagreement (Request $request) {
-
-        $file = $request->file('agreement_file');
-        $name = str_pad($request->input('employee_id'), '3', '0', STR_PAD_LEFT) . '-' . rand(11111, 99999) . '.' . $file->getClientOriginalExtension();
+    function addagreement (Request $request)
+    {
+        //$file = $request->file('agreement_file');
+        //$name = str_pad($request->input('employee_id'), '3', '0', STR_PAD_LEFT) . '-' . rand(11111, 99999) . '.' . $file->getClientOriginalExtension();
 
         $conditions = ['emp_id' => $request->input('employee_id'), 'status' => 'A'];
 
@@ -43,7 +43,8 @@ class AgreementController extends Controller {
         $path = $type == 'EA' ? 'agreement' : 'codeofconduct';
 
         try {
-            $request->file('agreement_file')->move("public/" . $path, $name);
+            $name = fileUpload('agreement_file', true);
+            //$request->file('agreement_file')->move("public/" . $path, $name);
         } catch (Exception $e) {
             return redirect()->back()->with('message','File not saved');
         }
@@ -109,4 +110,52 @@ class AgreementController extends Controller {
         ]);
     }
 
+    /**
+     * Filter agreement
+     * @param Request $request
+     *
+     * @return JsonResponse
+     */
+    public function search(Request $request){
+        try {
+            $type = auth()->user()->is_admin;
+
+            if ($type) {
+                $data = Employee_detail::latest()->with('activeAgreement', 'activeCodeofconduct', 'activeAgreement.amendments')
+                    ->where(function ($q) use ($request) {
+                        if (isset($request->search)) {
+                            $q->where(\DB::raw("CONCAT(firstname, ' ', lastname)"), 'like', '%' . $request->search . '%');
+                        }
+                        if (isset($request->from) && isset($request->to)) {
+                            $q->whereBetween('created_at', [$request->from, $request->to]);
+                        }
+                    })->get();
+            } else {
+                $data = Employee_detail::latest()->with('activeAgreement', 'activeCodeofconduct', 'activeAgreement.amendments')
+                    ->where('id', auth()->user()->id)
+                    ->where(function ($q) use ($request) {
+                        if (isset($request->search)) {
+                            $q->where(\DB::raw("CONCAT(firstname, ' ', lastname)"), 'like', '%' . $request->search . '%');
+                        }
+                        if (isset($request->from) && isset($request->to)) {
+                            $q->whereBetween('created_at', [$request->from, $request->to]);
+                        }
+                    })->get();
+            }
+
+            foreach ($data as $datum) {
+                if($datum->activeAgreement) {
+                    $datum->active_agreement_url = fileUrl($datum->activeAgreement->agreement, true);
+                }
+
+                if($datum->activeCodeofconduct) {
+                    $datum->active_code_of_conduct_url = fileUrl($datum->activeCodeofconduct->coc_agreement, true);
+                }
+            }
+
+            return response()->json(['status' => 200, 'data' => $data]);
+        } catch (Exception $e) {
+            return response()->json(['status' => 500, 'message' => $e->getMessage()]);
+        }
+    }
 }

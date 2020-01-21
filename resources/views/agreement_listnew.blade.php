@@ -2,34 +2,46 @@
 @include('modal')
 @section('content1')
 
-    <div class="container-fluid">
+    <div class="well-default-trans">
 
         <div class="tab-pane employeeagreements" id="nav-agreements" role="tabpanel" aria-labelledby="nav-agreements-tab">
 
             <!--- employee agreement   -->
-            <h3>Agreement</h3>
+            <div class="row">
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <input type="date" name="date" id="date" placeholder="Select Date" class="form-control-new">
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <input type="text" placeholder="Search agreement" onkeyup="searchAgreement()" class="form-control-new" name="search" id="search">
+                    </div>
+                </div>
+            </div>
             <div style="width:100%;">
+                <div id="wait" style="display:none;position:absolute;top:50%;left:50%;padding:2px;"><img src='{{ asset('img/demo_wait.gif') }}' width="64" height="64" /><br>Loading..</div>
                 <table style="width:100%;">
                     <thead>
                     <tr>
                         <th>Date</th>
                         <th>Employee Name</th>
-                        <th>Employee Agreement</th>
-                        <th>Code of Conduct</th>
+                        <th class="text-right">Employee Agreement</th>
+                        <th class="text-right">Code of Conduct</th>
                     </tr>
                     </thead>
 
+                    <tbody id="agreement">
                     @foreach ($users as $user)
-                        <tbody>
                         <tr style="margin-bottom:10px;">
-                            <td>{{$user->created_at}}</td>
+                            <td>{{date('d M, Y', strtotime($user->created_at))}}</td>
                             <td>{{$user->name}}</td>
-                            <td>
+                            <td class="text-right">
                                 @if($user->activeAgreement)
                                     @admin
                                     <a href="javascript:void(0);" onclick="show_modal_agreement('{{$user->id}}','EA')">Edit</a>
                                     @endadmin
-                                    <a href="{{asset('agreement/'.$user->activeAgreement->agreement)}}" target="_blank">View</a>
+                                    <a href="{{fileUrl($user->activeAgreement->agreement, true)}}" target="_blank">View</a>
                                     @admin
                                     <a href="javascript:void(0);" onclick="delete_agreement('{{$user->activeAgreement->id}}','EA')" class="down">DELETE</a>
                                     @endadmin
@@ -44,7 +56,7 @@
                                     @foreach ($user->activeAgreement['amendments'] AS $amendment)
 
                                         <br>{{ $loop->iteration }})
-                                        <a href="{{asset('agreement/'.$amendment->agreement)}}" target="_blank">View</a>
+                                        <a href="{{fileUrl($amendment->agreement, true)}}" target="_blank">View</a>
 
                                         @admin
                                         <br>
@@ -54,13 +66,13 @@
                                 @endif
                             </td>
 
-                            <td>
+                            <td class="text-right">
                                 @if($user->activeCodeofconduct)
                                     @admin
                                     <a href="javascript:void(0);" onclick="show_modal_agreement('{{$user->id}}','COC')">Edit</a>
                                     @endadmin
 
-                                    <a href="{{asset('codeofconduct/'.$user->activeCodeofconduct->coc_agreement)}}" target="_blank">View</a>
+                                    <a href="{{fileUrl($user->activeCodeofconduct->coc_agreement, true)}}" target="_blank">View</a>
 
                                     @admin
                                     <a href="javascript:void(0);" onclick="delete_agreement('{{$user->activeCodeofconduct->id}}','COC')" class="down">DELETE</a>
@@ -81,15 +93,121 @@
 
                         </tr>
                         <tr class="spacer"></tr>
-
-                        <tbody>
                     @endforeach
-
+                    <tbody>
                 </table>
             </div>
 
         </div><!-------------end--------->
 
     </div>
+
+    <script !src="">
+        let is_admin = parseInt({{ auth()->user()->is_admin }});
+        let from = null;
+        let to = null;
+
+        $(document).ready(function(){
+            $('#date').flatpickr({
+                mode: "range",
+                onChange: function(selectedDates, dateStr, instance) {
+                    from = formatDate(selectedDates[0]);
+                    to = formatDate(selectedDates[1]);
+
+                    if (selectedDates[1] !== undefined) {
+                        searchAgreement();
+                    }
+                },
+            });
+        });
+
+        function searchAgreement() {
+            $('#agreement').html('');
+            $('#wait').css('display', 'inline-block'); // wait for loader
+            let search = $('#search').val();
+            let data = {
+                search: search,
+                from: from,
+                to: to,
+            };
+
+            $.ajax({
+                type: 'get',
+                url: "{{ route('agreement.search') }}",
+                data: data,
+                dataType: 'JSON',
+                success: function (results) {
+                    $('#wait').css('display', 'none');
+                    let html, date, empAgreement, codeOfConduct = '';
+
+                    if (results.status == 200) {
+                        for (let index = 0; index < results.data.length; index++) {
+                            if (results.data[index].created_at != null && results.data[index].created_at != '') {
+                                time = results.data[index].created_at.split(' ')[0];
+                                date = new Date(time);
+                                date = date.toDateString().split(' ')[2]+" "+date.toDateString().split(' ')[1]+", "+date.toDateString().split(' ')[3]
+                            } else {
+                                date = '-';
+                            }
+
+                            if (results.data[index].active_agreement) {
+                                if (is_admin) {
+                                    empAgreement = `<a href="javascript:void(0);" onclick="show_modal_agreement('${results.data[index].id}','EA')">EDIT</a>
+                                                    <a href="${results.data[index].active_agreement_url}" target="_blank">View</a>
+                                                    <a href="javascript:void(0);" onclick="delete_agreement('${results.data[index].active_agreement.id}'),'EA'" class="down">DELETE</a>`;
+                                } else {
+                                    empAgreement = `<a href="${results.data[index].active_agreement_url}" target="_blank">View</a>`;
+                                }
+                            } else {
+                                empAgreement = `<a href="javascript:void(0);" onclick="show_modal_agreement('${results.data[index].id}','EA')">Upload</a>`;
+                            }
+
+                            if (results.data[index].active_codeofconduct) {
+                                if (is_admin) {
+                                    codeOfConduct = `<a href="javascript:void(0);" onclick="show_modal_agreement('${results.data[index].id}'),'COC'">EDIT</a>
+                                                    <a href="${results.data[index].active_code_of_conduct_url}" target="_blank">View</a>
+                                                    <a href="javascript:void(0);" onclick="delete_agreement('${results.data[index].active_codeofconduct.id}'),'COC'" class="down">DELETE</a>`;
+                                } else {
+                                    codeOfConduct = `<a href="${results.data[index].active_code_of_conduct_url}" target="_blank">View</a>`;
+                                }
+                            } else {
+                                codeOfConduct = `<a href="javascript:void(0);" onclick="show_modal_agreement('${results.data[index].id}'),'COC'">Upload</a>`;
+                            }
+
+                            html += `<tr>
+                                        <td> ${ date  } </td>
+                                        <td> ${results.data[index].firstname+' '+results.data[index].lastname} </td>
+                                        <td class="text-right">
+                                            ${ empAgreement }
+                                        </td>
+                                        <td class="text-right">
+                                            ${ codeOfConduct }
+                                        </td>
+                                    </tr><tr class="spacer"></tr>`;
+                        }
+
+                        $('#agreement').html(html);
+                    } else {
+                        swal("Error!", results.message, "error");
+                    }
+                }
+            });
+        }
+
+        // Format date
+        function formatDate(date) {
+            var d = new Date(date),
+                month = '' + (d.getMonth() + 1),
+                day = '' + d.getDate(),
+                year = d.getFullYear();
+
+            if (month.length < 2)
+                month = '0' + month;
+            if (day.length < 2)
+                day = '0' + day;
+
+            return [year, month, day].join('-');
+        }
+    </script>
 
 @endsection

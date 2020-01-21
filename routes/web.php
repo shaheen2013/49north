@@ -31,6 +31,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('agreementlist', 'AgreementController@agreementlist');
     Route::post('addagreement', 'AgreementController@addagreement')->name('add-agreement');
     Route::delete('delete_agreement/{id}/{type}', 'AgreementController@destroy')->name('delete_agreement');
+    Route::get('agreement/search', 'AgreementController@search')->name('agreement.search');
 
     // Expenses
     Route::group(['prefix' => 'expense', 'as' => 'expense.'], function () {
@@ -81,7 +82,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/mileage/edit/{id}', 'MileageController@edit');
     Route::POST('/mileage/update/{id}', 'MileageController@update');
     Route::POST('/mileage/destroy/{id}', 'MileageController@destroy');
-    
+
     Route::post('/updatemileage', 'MileageController@updatemileage');
 
     Route::post('/deletemileage/{id}', 'MileageController@deletemileage');
