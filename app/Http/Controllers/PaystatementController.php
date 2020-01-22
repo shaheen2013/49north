@@ -52,4 +52,25 @@ class PaystatementController extends Controller
         }
         return redirect()->back()->with('alert-info', $msg);
     }
+
+    public function searchPaymentPage(Request $request){
+
+        // $data = DB::table('users as  u')
+        //     ->leftJoin('paystatements as p', 'u.id', '=', 'p.emp_id')
+        //     ->select('p.*', 'u.id as empid')
+        //     ->where(function ($q) use($request){
+        //         if(isset($request->from) && isset($request->to)){
+        //             $q->whereBetween('date', [$request->from, $request->to]);
+        //         }
+        //         });
+        $data = Paystatement::with('users')->where(function ($q) use($request){
+            if(isset($request->from) && isset($request->to)){
+                $q->whereBetween('date', [$request->from, $request->to]);
+            }
+            });
+            $data= $data->get();
+        return response()->json(['status'=>'success', 'data' => $data]);
+    }
+
+
 }
