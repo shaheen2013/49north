@@ -154,13 +154,9 @@
                         <td> ${date} </td>
                         <td class="text-right">
                             <a href="{{ url('/') }}/users/${value.id}/edit">Edit</a>
-
                             <a class="down deletejson" data-token="{{ csrf_token() }}"
                                data-url="{{ url('/') }}/users/${value.id}" data-id="${value.id}"
                                data-section="{{ $delSection }}">Delete</a>
-                            <a class="down deletejson" data-token="{{ csrf_token() }}"
-                               data-url="{{ url('/') }}/users/${value.id}" data-id="${value.id}"
-                               data-section="{{ $delSection }}"><i class="fal fa-trash-alt"></i></a>
                         </td>
                     </tr><tr class="spacer"></tr>`;
                     });
