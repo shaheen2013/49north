@@ -137,8 +137,6 @@
                 dataSource: result,
                 pageSize: 10,
                 totalNumber: result.length,
-                showGoInput: true,
-                showGoButton: true,
                 callback: function(data, pagination) {
                     let html = '';
                     data.forEach(function myFunction(value, index, array) {

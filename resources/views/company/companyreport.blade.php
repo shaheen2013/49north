@@ -263,8 +263,6 @@
                             dataSource: results.data,
                             pageSize: 10,
                             totalNumber: results.data.length,
-                            showGoInput: true,
-                            showGoButton: true,
                             callback: function(data, pagination) {
                                 let html = '';
                                 for (let index = 0; index < data.length; index++) {
