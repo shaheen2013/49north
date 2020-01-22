@@ -7,92 +7,96 @@
         <div class="tab-pane" id="nav-expense" role="tabpanel" aria-labelledby="nav-employee-tab">
             <div class="expense inner-tab-box">
                 <div class="col-md-12">
-                <h3><span class="active-span" id="pending_span" onclick="expences_pending_new()">Pending </span> |
-                    <span id="historical_span" onclick="expences_history_new()"> Historical</span>
-                </h3>
-                <div class="col-sm-12" id="pending_div">
-                    <div class="row">
-                    <div class="col-sm-3">
-                        <div class="form-group">
-                            <input type="date" name="pending_date" id="date" placeholder="Select Date"
-                                   class="form-control-new" onChange="expences_pending_new()">
-                        </div>
-                    </div>
-                    <div class="col-sm-3">
-                        <div class="form-group">
-                            <input type="text" placeholder="Search employee"
-                                   class="form-control-new" name="pending_search" id="pending_search" onkeyup="expences_pending_new()">
-                        </div>
-                    </div>
-                    <div class="col-sm-6">
-                        <a href="javascript:void(0)" class="_new_icon_button_1" data-toggle="modal"
-                           data-target="#expense-modal"> <i class="fa fa-plus"></i> </a>
-                    </div>
-                    <div id="wait" style="display:none;position:absolute;top:100%;left:50%;padding:2px;"><img
-                        src='{{ asset('img/demo_wait.gif') }}' width="64" height="64"/><br>Loading..
-                </div>
-                <table class="table table-bordered">
-                        <thead>
-                        <tr>
-                            <th>Date</th>
-                            @admin
-                            <th>Employee</th>
-                            @endadmin
-                            <th>Description</th>
-                            <th>Total</th>
-                            @admin
-                            <th>Action</th>
-                            @endadmin
-                            <th></th>
-                        </tr>
-                        </thead>
-                        <tbody class="return_expence_ajax" id="expence_pending">
-                       
-                        <tbody>
-                    </table>
-                </div>
-            </div>
-                <div id="historical_div" class="col-sm-12" style="display:none;">
-                    <div class="row">
-                        <div class="col-sm-3">
-                            <div class="form-group">
-                                <input type="date" name="history_date" id="history_date" placeholder="Select Date"
-                                       class="form-control-new" onChange="expences_history_new()">
+                    <h3><span class="active-span" id="pending_span" onclick="expences_pending_new()">Pending </span> |
+                        <span id="historical_span" onclick="expences_history_new()"> Historical</span>
+                    </h3>
+                    <div class="col-sm-12" id="pending_div">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <input type="date" name="pending_date" id="date" placeholder="Select Date"
+                                           class="form-control-new" onChange="expences_pending_new()">
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <input type="text" placeholder="Search employee"
+                                           class="form-control-new" name="pending_search" id="pending_search" onkeyup="expences_pending_new()">
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <a href="javascript:void(0)" class="_new_icon_button_1" data-toggle="modal"
+                                   data-target="#expense-modal"> <i class="fa fa-plus"></i> </a>
+                            </div>
+                            <div class="col-sm-12">
+                                <div id="wait" style="display:none;position:absolute;top:100%;left:50%;padding:2px;"><img
+                                        src='{{ asset('img/demo_wait.gif') }}' width="64" height="64"/><br>Loading..</div>
+                                <table class="table table-bordered">
+                                    <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        @admin
+                                        <th>Employee</th>
+                                        @endadmin
+                                        <th>Description</th>
+                                        <th>Total</th>
+                                        @admin
+                                        <th>Action</th>
+                                        @endadmin
+                                        <th></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody class="return_expence_ajax" id="expence_pending">
+
+                                    <tbody>
+                                </table>
+                                <div id="demo"></div>
                             </div>
                         </div>
-                        <div class="col-sm-3">
-                            <div class="form-group">
-                                <input type="text" placeholder="Search employee"
-                                       class="form-control-new" name="history_search" id="history_search" onkeyup="expences_history_new()">
+                    </div>
+                    <div id="historical_div" class="col-sm-12" style="display:none;">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <input type="date" name="history_date" id="history_date" placeholder="Select Date"
+                                           class="form-control-new">
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <input type="text" placeholder="Search employee"
+                                           class="form-control-new" name="history_search" id="history_search" onkeyup="expences_history_new()">
+                                </div>
+                            </div>
+                            <div class="col-sm-6"></div>
+                            <div class="col-sm-12">
+                                <div id="wait" style="display:none;position:absolute;top:100%;left:50%;padding:2px;"><img
+                                        src='{{ asset('img/demo_wait.gif') }}' width="64" height="64"/><br>Loading..
+                                </div>
+                                <table class="table table-bordered">
+                                    <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        @admin
+                                        <th>Employee</th>
+                                        @endadmin
+                                        <th>Description</th>
+                                        <th>Total</th>
+
+                                        <th></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody class="return_expence_ajax" id="expense_history">
+
+
+                                    </tbody>
+                                </table>
+                                <div id="demo-new"></div>
                             </div>
                         </div>
-                       
-                        <div id="wait" style="display:none;position:absolute;top:100%;left:50%;padding:2px;"><img
-                            src='{{ asset('img/demo_wait.gif') }}' width="64" height="64"/><br>Loading..
                     </div>
-                    <table class="table table-bordered">
-                        <thead>
-                        <tr>
-                            <th>Date</th>
-                            @admin
-                            <th>Employee</th>
-                            @endadmin
-                            <th>Description</th>
-                            <th>Total</th>
-                           
-                            <th></th>
-                        </tr>
-                        </thead>
-                        <tbody class="return_expence_ajax" id="expense_history">
-
-
-                        </tbody>
-                    </table>
-                    </div>
-
                 </div>
-            </div>
-               
+
 
             </div>
         </div><!-------------end--------->
@@ -108,7 +112,7 @@
                 <div class="modal-body">
                     <div class="col-md-12" style="margin-top:40px;margin-bottom:20px;">
                         <form class="expences" action="{{url('expense/addexpense')}}" method="POST"
-                                enctype="multipart/form-data">
+                              enctype="multipart/form-data">
                             <div class="row">
                                 <div class="col-md-6 col-sm-6">
                                     <div class="text_outer">
@@ -193,14 +197,14 @@
                                     <div class="text_outer">
                                         <label for="name" class="">Description</label>
                                         <input type="text" id="description" name="description" class="form-control"
-                                                placeholder="Insert text here">
+                                               placeholder="Insert text here">
                                     </div>
                                 </div>
                                 <div class="col-md-6 col-sm-6">
                                     <div class="col-md-12 col-sm-12">
                                         <label class="form-check-label">
                                             <input class="form-check-input" type="checkbox" name="billable"
-                                                    style="margin-left: -12.01rem;"> Billable
+                                                   style="margin-left: -12.01rem;"> Billable
                                         </label>
                                     </div>
                                     <div class="row">
@@ -209,14 +213,14 @@
 
                                                 <label class="form-check-label">
                                                     <input class="form-check-input" type="checkbox" name=""
-                                                            style="margin-left: -7.25rem;"> Received authorization
+                                                           style="margin-left: -7.25rem;"> Received authorization
                                                 </label>
 
                                             </div>
                                             <div class="col-md-5 col-sm-5">
                                                 <input type="text" id="ireceived_auth" name="received_auth" class="form-control"
-                                                        placeholder=""
-                                                        style="border:0px; border-bottom:1px solid;padding: 0px;background-color: #fff !important;">
+                                                       placeholder=""
+                                                       style="border:0px; border-bottom:1px solid;padding: 0px;background-color: #fff !important;">
 
                                             </div>
                                         </div>
@@ -230,14 +234,14 @@
                                     <div class="text_outer">
                                         <label for="name" class="">Subtotal</label>
                                         <input type="number" id="subtotal" name="subtotal" class="form-control"
-                                                placeholder="Insert text here">
+                                               placeholder="Insert text here">
                                     </div>
                                 </div>
                                 <div class="col-md-6 col-sm-6">
                                     <div class="text_outer">
                                         <label for="name" class="">GST</label>
                                         <input type="number" id="gst" name="gst" class="form-control"
-                                                placeholder="Insert Figure here">
+                                               placeholder="Insert Figure here">
                                     </div>
                                 </div>
                             </div>
@@ -248,14 +252,14 @@
                                     <div class="text_outer">
                                         <label for="name" class="">PST</label>
                                         <input type="number" id="pst" name="pst" class="form-control"
-                                                placeholder="Insert Figure here">
+                                               placeholder="Insert Figure here">
                                     </div>
                                 </div>
                                 <div class="col-md-6 col-sm-6">
                                     <div class="text_outer">
                                         <label for="name" class="">Total</label>
                                         <input type="number" id="total" name="total" class="form-control"
-                                                placeholder="Insert Figure here">
+                                               placeholder="Insert Figure here">
                                     </div>
                                 </div>
                             </div>
@@ -266,7 +270,7 @@
                                         {{ csrf_field() }}
                                         <input type="hidden" name="emp_id" value="{{ auth()->user()->id }}">
                                         <input type="submit" class="btn-dark contact_btn" value="Save"
-                                                data-form="expences">
+                                               data-form="expences">
                                         <span class="close close-span" data-dismiss="modal" aria-label="Close"><i
                                                 class="fa fa-arrow-left"></i> Return to Expense Reports</span>
 
@@ -372,14 +376,14 @@
                                     <div class="text_outer">
                                         <label for="name" class="">Description</label>
                                         <input type="text" name="description" id="edit_description" class="form-control"
-                                                placeholder="Insert text here">
+                                               placeholder="Insert text here">
                                     </div>
                                 </div>
                                 <div class="col-md-6 col-sm-6">
                                     <div class="col-md-12 col-sm-12">
                                         <label class="form-check-label">
                                             <input class="form-check-input" type="checkbox" name="billable" id="edit_billable"
-                                                    style="margin-left: -12.01rem;"> Billable
+                                                   style="margin-left: -12.01rem;"> Billable
                                         </label>
                                     </div>
                                     <div class="row">
@@ -388,14 +392,14 @@
 
                                                 <label class="form-check-label">
                                                     <input class="form-check-input" type="checkbox" name=""
-                                                            style="margin-left: -7.25rem;"> Received authorization
+                                                           style="margin-left: -7.25rem;"> Received authorization
                                                 </label>
 
                                             </div>
                                             <div class="col-md-5 col-sm-5">
                                                 <input type="text" name="received_auth" id="received_auth" class="form-control"
-                                                        placeholder=""
-                                                        style="border:0px; border-bottom:1px solid;padding: 0px;background-color: #fff !important;">
+                                                       placeholder=""
+                                                       style="border:0px; border-bottom:1px solid;padding: 0px;background-color: #fff !important;">
 
                                             </div>
                                         </div>
@@ -409,14 +413,14 @@
                                     <div class="text_outer">
                                         <label for="name" class="">Subtotal</label>
                                         <input type="number" id="edit_subtotal" name="subtotal" class="form-control"
-                                                placeholder="Insert text here">
+                                               placeholder="Insert text here">
                                     </div>
                                 </div>
                                 <div class="col-md-6 col-sm-6">
                                     <div class="text_outer">
                                         <label for="name" class="">GST</label>
                                         <input type="number" id="edit_gst" name="gst" class="form-control"
-                                                placeholder="Insert Figure here">
+                                               placeholder="Insert Figure here">
                                     </div>
                                 </div>
                             </div>
@@ -427,14 +431,14 @@
                                     <div class="text_outer">
                                         <label for="name" class="">PST</label>
                                         <input type="number" id="edit_pst" name="pst" class="form-control"
-                                                placeholder="Insert Figure here">
+                                               placeholder="Insert Figure here">
                                     </div>
                                 </div>
                                 <div class="col-md-6 col-sm-6">
                                     <div class="text_outer">
                                         <label for="name" class="">Total</label>
                                         <input type="number" id="edit_total" name="total" class="form-control"
-                                                placeholder="Insert Figure here">
+                                               placeholder="Insert Figure here">
                                     </div>
                                 </div>
                             </div>
@@ -462,13 +466,14 @@
 
     <script type="text/javascript">
 
-        var id = null;
-        var from = null;
-        var to = null;
-        var history_from = null;
-        var history_to = null;
+        let id, from, to, history_from, history_to = null;
 
         $(document).ready(function () {
+            var date = new Date(), y = date.getFullYear(), m = date.getMonth();
+            from = formatDate(new Date(y, m, 1));
+            to = formatDate(new Date(y, m + 1, 0));
+            expences_pending_new();
+
             $("#historical_span").click(function () {
                 $("#historical_span").addClass("active-span");
                 $("#pending_span").removeClass("active-span");
@@ -483,24 +488,38 @@
                 $("#historical_div").hide();
 
             });
-        });
 
-        $(document).ready(function () {
             $('#date').flatpickr({
                 mode: "range",
+                defaultDate: [from, to],
                 onChange: function (selectedDates, dateStr, instance) {
                     from = formatDate(selectedDates[0]);
                     to = formatDate(selectedDates[1]);
+
+                    if (selectedDates[0] === undefined || (selectedDates[0] !== undefined && selectedDates[1] !== undefined)) {
+                        if (selectedDates[0] === undefined) {
+                            from = to = null;
+                        }
+
+                        expences_pending_new();
+                    }
                 },
             });
-        });
 
-        $(document).ready(function () {
             $('#history_date').flatpickr({
                 mode: "range",
+                defaultDate: [from, to],
                 onChange: function (selectedDates, dateStr, instance) {
                     history_from = formatDate(selectedDates[0]);
                     history_to = formatDate(selectedDates[1]);
+
+                    if (selectedDates[0] === undefined || (selectedDates[0] !== undefined && selectedDates[1] !== undefined)) {
+                        if (selectedDates[0] === undefined) {
+                            history_from = history_to = null;
+                        }
+
+                        expences_history_new();
+                    }
                 },
             });
         });
@@ -514,8 +533,7 @@
                 to: to,
 
             };
-            console.log(data);
-           
+
             $('#wait').css('display', 'inline-block'); // wait for loader
             $.ajax({
                 type: 'post',
@@ -523,103 +541,112 @@
                 data: data,
                 dataType: 'JSON',
                 success: function (results) {
-                    let html = '';
-                    let date = '';
                     if (results.status === 'success') {
                         $('#wait').css('display', 'none');
-                        for (let index = 0; index < results.data.length; index++) {
+                        $('#demo').pagination({
+                            dataSource: results.data,
+                            pageSize: 10,
+                            totalNumber: results.data.length,
+                            callback: function(data, pagination) {
+                                let html = '';
+                                let date = '';
 
-                            if (results.data[index].date != null && results.data[index].date != '') {
-                                time = results.data[index].date.split(' ')[0];
-                                date = new Date(time);
-                                date = date.toDateString().split(' ')[2] + " " + date.toDateString().split(' ')[1] + ", " + date.toDateString().split(' ')[3]
-                            } else {
-                                date = '-';
-                            }
-                            html += `<tr>
+                                for (let index = 0; index < data.length; index++) {
+                                    if (data[index].date != null && data[index].date != '') {
+                                        time = data[index].date.split(' ')[0];
+                                        date = new Date(time);
+                                        date = date.toDateString().split(' ')[2] + " " + date.toDateString().split(' ')[1] + ", " + date.toDateString().split(' ')[3]
+                                    } else {
+                                        date = '-';
+                                    }
+                                    html += `<tr>
                                     <td> ${date} </td>
-                                    <td> ${results.data[index].employee.firstname + ' ' + results.data[index].employee.lastname} </td>
-                                    <td> ${results.data[index].description} </td>
-                                    <td> ${results.data[index].total} </td>
+                                    <td> ${data[index].employee.firstname + ' ' + data[index].employee.lastname} </td>
+                                    <td> ${data[index].description} </td>
+                                    <td> ${data[index].total} </td>
                                     <td>
-                                        <a href="javascript:void(0)" onclick="expence_approve_new('${results.data[index].id}')"><i class="fa fa-check-circle" title="Approved"></i></a>
-                                        <a href="javascript:void(0)" title="Reject!" onclick="expence_reject_new('${results.data[index].id}')"><i class="fa fa-ban"></i></a>
+                                        <a href="javascript:void(0)" onclick="expence_approve_new('${data[index].id}')"><i class="fa fa-check-circle" title="Approved"></i></a>
+                                        <a href="javascript:void(0)" title="Reject!" onclick="expence_reject_new('${data[index].id}')"><i class="fa fa-ban"></i></a>
                                     </td>
                                     <td class="action-box">
-                                        <a href="javascript:void(0);" onclick="OpenEditExpenseModel('${results.data[index].id}') ">EDIT</a>
-                                        <a href="javascript:void(0);" class="down" onclick="deleteconfirm('${results.data[index].id}')">DELETE</a>
+                                        <a href="javascript:void(0);" onclick="OpenEditExpenseModel('${data[index].id}') ">EDIT</a>
+                                        <a href="javascript:void(0);" class="down" onclick="deleteconfirm('${data[index].id}')">DELETE</a>
                                     </td>
                                 </tr>
                                 <tr class="spacer"></tr>`;
-                        }
-                        $('#expence_pending').html(html);
-                       
+                                }
+                                $('#expence_pending').html(html);
+                            }
+                        });
                     } else {
                         swal("Error!", results.message, "error");
                     }
                 }
             });
         }
-        window.onload = function () {
+
+        /*window.onload = function () {
             expences_pending_new()
-        };
+        };*/
 
         function expences_history_new(){
-
-           let history_search = $('#history_search').val();
-
-          
+            let history_search = $('#history_search').val();
             let data = {
                 _token: '{{  @csrf_token() }}',
                 history_search: history_search,
                 history_from: history_from,
                 history_to: history_to,
             };
-            // console.log(data);
 
-           $('#wait').css('display', 'inline-block'); // wait for loader
-           $.ajax({
-               type: 'post',
-               url: "/expense/new/history",
-               data: data,
-               dataType: 'JSON',
-               success: function (results) {
-                   let html = '';
-                   let date = '';
-                   if (results.status === 'success') {
-                       $('#wait').css('display', 'none');
-                       for (let index = 0; index < results.data.length; index++) {
+            $('#wait').css('display', 'inline-block'); // wait for loader
+            $.ajax({
+                type: 'post',
+                url: "/expense/new/history",
+                data: data,
+                dataType: 'JSON',
+                success: function (results) {
+                    if (results.status === 'success') {
+                        $('#wait').css('display', 'none');
+                        $('#demo-new').pagination({
+                            dataSource: results.data,
+                            pageSize: 10,
+                            totalNumber: results.data.length,
+                            callback: function(data, pagination) {
+                                let html = '';
+                                let date = '';
 
-                           if (results.data[index].date != null && results.data[index].date != '') {
-                               time = results.data[index].date.split(' ')[0];
-                               date = new Date(time);
-                               date = date.toDateString().split(' ')[2] + " " + date.toDateString().split(' ')[1] + ", " + date.toDateString().split(' ')[3]
-                           } else {
-                               date = '-';
-                           }
-                           html += `<tr>
+                                for (let index = 0; index < data.length; index++) {
+                                    if (data[index].date != null && data[index].date != '') {
+                                        time = data[index].date.split(' ')[0];
+                                        date = new Date(time);
+                                        date = date.toDateString().split(' ')[2] + " " + date.toDateString().split(' ')[1] + ", " + date.toDateString().split(' ')[3]
+                                    } else {
+                                        date = '-';
+                                    }
+                                    html += `<tr>
                                    <td> ${date} </td>
-                                   <td> ${results.data[index].employee.firstname + ' ' + results.data[index].employee.lastname} </td>
-                                   <td> ${results.data[index].description} </td>
-                                   <td> ${results.data[index].total} </td>
-                                   
+                                   <td> ${data[index].employee.firstname + ' ' + data[index].employee.lastname} </td>
+                                   <td> ${data[index].description} </td>
+                                   <td> ${data[index].total} </td>
+
                                    <td class="action-box">
-                                       <a href="javascript:void(0);" class="down" onclick="deleteconfirm('${results.data[index].id}')">DELETE</a>
+                                       <a href="javascript:void(0);" class="down" onclick="deleteconfirm('${data[index].id}')">DELETE</a>
                                    </td>
                                </tr>
                                <tr class="spacer"></tr>`;
-                       }
-                       $('#expense_history').html(html);
-                      
-                   } else {
-                       swal("Error!", results.message, "error");
-                   }
-               }
-           });
-       }
+                                }
+                                $('#expense_history').html(html);
+                            }
+                        });
+                    } else {
+                        swal("Error!", results.message, "error");
+                    }
+                }
+            });
+        }
 
-       
-    function deleteconfirm(id) {
+
+        function deleteconfirm(id) {
             swal({
                 title: "Delete?",
                 text: "Please ensure and then confirm!",
@@ -760,7 +787,7 @@
             var pst = $('#edit_pst').val();
             var total = $('#edit_total').val();
             var data = new FormData(document.getElementById('editExpenseForm'));
-            
+
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-Token': "{{csrf_token()}}"
@@ -797,56 +824,55 @@
                 day = '0' + day;
 
             return [year, month, day].join('-');
-    }
-    function expence_approve_new(id){
-
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-Token': "{{csrf_token()}}"
-            }
-        });
-        let data = {id: id};
-
-        $.ajax({
-
-            method: "POST",
-            url: "/expense/new/approve/" + id,
-            data: data,
-            success: function( response ) {
-                $.toaster({ message : 'Enabled', title : 'Success', priority : 'success' });
-                setTimeout(function () {
-                    window.location.reload();
-                }, 1000);
-            }
-        });
-
-    }
-
-function expence_reject_new(id){
-
-    $.ajaxSetup({
-        headers: {
-            'X-CSRF-Token': "{{csrf_token()}}"
         }
-    });
-    let data = {id: id};
-    $.ajax({
 
-        method: "POST",
-        url: "/expense/new/reject/" + id,
-        data: data,
+        function expence_approve_new(id){
 
-        success: function( response ) {
-            $.toaster({ message : 'Disabled', title : 'Success', priority : 'success' });
-            setTimeout(function () {
-                window.location.reload();
-            }, 1000);
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-Token': "{{csrf_token()}}"
+                }
+            });
+            let data = {id: id};
+
+            $.ajax({
+
+                method: "POST",
+                url: "/expense/new/approve/" + id,
+                data: data,
+                success: function( response ) {
+                    $.toaster({ message : 'Enabled', title : 'Success', priority : 'success' });
+                    setTimeout(function () {
+                        window.location.reload();
+                    }, 1000);
+                }
+            });
+
         }
-    });
 
-}
+        function expence_reject_new(id){
+
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-Token': "{{csrf_token()}}"
+                }
+            });
+            let data = {id: id};
+            $.ajax({
+
+                method: "POST",
+                url: "/expense/new/reject/" + id,
+                data: data,
+
+                success: function( response ) {
+                    $.toaster({ message : 'Disabled', title : 'Success', priority : 'success' });
+                    setTimeout(function () {
+                        window.location.reload();
+                    }, 1000);
+                }
+            });
+        }
 
     </script>
-
 
 @endsection

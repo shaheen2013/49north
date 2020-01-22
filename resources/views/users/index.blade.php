@@ -137,8 +137,6 @@
                 dataSource: result,
                 pageSize: 10,
                 totalNumber: result.length,
-                showGoInput: true,
-                showGoButton: true,
                 callback: function(data, pagination) {
                     let html = '';
                     data.forEach(function myFunction(value, index, array) {
@@ -156,13 +154,9 @@
                         <td> ${date} </td>
                         <td class="text-right">
                             <a href="{{ url('/') }}/users/${value.id}/edit">Edit</a>
-
                             <a class="down deletejson" data-token="{{ csrf_token() }}"
                                data-url="{{ url('/') }}/users/${value.id}" data-id="${value.id}"
                                data-section="{{ $delSection }}">Delete</a>
-                            <a class="down deletejson" data-token="{{ csrf_token() }}"
-                               data-url="{{ url('/') }}/users/${value.id}" data-id="${value.id}"
-                               data-section="{{ $delSection }}"><i class="fal fa-trash-alt"></i></a>
                         </td>
                     </tr><tr class="spacer"></tr>`;
                     });
