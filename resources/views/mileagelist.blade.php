@@ -3,49 +3,50 @@
 @section('content1')
 
 
-<div class="well-default-trans">
-    <div class="tab-pane" id="nav-mileage" role="tabpanel" aria-labelledby="nav-mileage-tab">
-        <div class="mileage inner-tab-box">
-            <div class="col-md-12">
-                <div class="row">
-                    <div class="col-sm-3">
-                        <div class="form-group">
-                            <input type="date" name="date" id="date"  placeholder="Select Date" class="form-control-new" onChange="searchMileagePage()">
+    <div class="well-default-trans">
+        <div class="tab-pane" id="nav-mileage" role="tabpanel" aria-labelledby="nav-mileage-tab">
+            <div class="mileage inner-tab-box">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <input type="date" name="date" id="date"  placeholder="Select Date" class="form-control-new" onChange="searchMileagePage()">
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-sm-3">
-                        <div class="form-group">
-                            <input type="text" placeholder="Search employee" onkeyup="searchMileagePage()" class="form-control-new" name="search" id="search">
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <input type="text" placeholder="Search employee" onkeyup="searchMileagePage()" class="form-control-new" name="search" id="search">
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="col-sm-6">
-                        <a href="javascript:void(0)" class="_new_icon_button_1" data-toggle="modal" data-target="#mileage-modal"> <i class="fa fa-plus"></i> </a>
-                    </div>
-                    <div class="col-sm-12">
-                        <div id="wait" style="display:none;position:absolute;top:100%;left:50%;padding:2px;"><img src='{{ asset('img/demo_wait.gif') }}' width="64" height="64" /><br>Loading..</div>
-                        <table class="table table-bordered">
-                            <thead>
-                            <tr>
-                                <th>Date</th>
-                                <th>Employee</th>
-                                <th>Reason for mileage</th>
-                                <th>Total Km</th>
-                                <th width="200px" class="text-right">Action</th>
-                            </tr>
-                            </thead>
-                            <tbody class="return_mileagelist" id="mileage_search">
-                            <tbody>
-                        </table>
+                        <div class="col-sm-6">
+                            <a href="javascript:void(0)" class="_new_icon_button_1" data-toggle="modal" data-target="#mileage-modal"> <i class="fa fa-plus"></i> </a>
+                        </div>
+                        <div class="col-sm-12">
+                            <div id="wait" style="display:none;position:absolute;top:100%;left:50%;padding:2px;"><img src='{{ asset('img/demo_wait.gif') }}' width="64" height="64" /><br>Loading..</div>
+                            <table class="table table-bordered">
+                                <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Employee</th>
+                                    <th>Reason for mileage</th>
+                                    <th>Total Km</th>
+                                    <th width="200px" class="text-right">Action</th>
+                                </tr>
+                                </thead>
+                                <tbody class="return_mileagelist" id="mileage_search">
+                                <tbody>
+                            </table>
+                            <div id="demo"></div>
+                        </div>
                     </div>
                 </div>
             </div>
+
+
         </div>
 
-
     </div>
-
-</div>
 
     <!----- Mileage Modal add ---->
     <div id="mileage-modal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
@@ -211,13 +212,10 @@
         </div>
     </div>
 
-      <!--- Mileage edit modal end -->
+    <!--- Mileage edit modal end -->
 
     <script type="text/javascript">
-
-        var id = null;
-        var from = null;
-        var to = null;
+        var id, from, to = null;
         function OpenEditMileageModel(id) {
             console.log(id)
             $('#mileage-modaledit').modal();
@@ -286,21 +284,33 @@
             });
         }
 
+        $(document).ready(function(){
+            var date = new Date(), y = date.getFullYear(), m = date.getMonth();
+            from = formatDate(new Date(y, m, 1));
+            to = formatDate(new Date(y, m + 1, 0));
+            searchMileagePage();
 
+            $('#date').flatpickr({
+                mode: "range",
+                defaultDate: [from, to],
+                onChange: function(selectedDates, dateStr, instance) {
+                    from = formatDate(selectedDates[0]);
+                    to = formatDate(selectedDates[1]);
 
-    $(document).ready(function(){
-        $('#date').flatpickr({
-            mode: "range",
-            onChange: function(selectedDates, dateStr, instance) {
-                from = formatDate(selectedDates[0]);
-                to = formatDate(selectedDates[1]);
-            },
+                    if (selectedDates[0] === undefined || (selectedDates[0] !== undefined && selectedDates[1] !== undefined)) {
+                        if (selectedDates[0] === undefined) {
+                            from = to = null;
+                        }
+
+                        searchMileagePage();
+                    }
+                },
+            });
         });
-    });
 
         function searchMileagePage() {
             let search = $('#search').val();
-            
+
             // console.log(date);
             let data = {
                 _token: '{{  @csrf_token() }}',
@@ -318,41 +328,50 @@
                 data: data,
                 dataType: 'JSON',
                 success: function (results) {
-                    let html = '';
                     let date = '';
                     if (results.status === 'success') {
                         $('#wait').css('display', 'none');
-                        for (let index = 0; index < results.data.length; index++) {
-
-                            if(results.data[index].date != null && results.data[index].date != ''){
-                                time = results.data[index].date.split(' ')[0];
-                                date = new Date(time);
-                                date = date.toDateString().split(' ')[2]+" "+date.toDateString().split(' ')[1]+", "+date.toDateString().split(' ')[3]
-                            }
-                            else{
-                                date = '-';
-                            }
-                            html += `<tr>
+                        $('#demo').pagination({
+                            dataSource: results.data,
+                            pageSize: 10,
+                            totalNumber: results.data.length,
+                            showGoInput: true,
+                            showGoButton: true,
+                            callback: function(data, pagination) {
+                                let html = '';
+                                for (let index = 0; index < data.length; index++) {
+                                    if(data[index].date !== null && data[index].date !== ''){
+                                        var time = data[index].date.split(' ')[0];
+                                        date = new Date(time);
+                                        date = date.toDateString().split(' ')[2]+" "+date.toDateString().split(' ')[1]+", "+date.toDateString().split(' ')[3]
+                                    }
+                                    else{
+                                        date = '-';
+                                    }
+                                    html += `<tr>
                                         <td> ${ date  } </td>
-                                        <td> ${results.data[index].employee.firstname+' '+results.data[index].employee.lastname} </td>
-                                        <td> ${results.data[index].reasonmileage} </td>
-                                        <td> ${results.data[index].kilometers} </td>
+                                        <td> ${data[index].employee.firstname+' '+data[index].employee.lastname} </td>
+                                        <td> ${data[index].reasonmileage} </td>
+                                        <td> ${data[index].kilometers} </td>
                                         <td class="text-right">
-                                            <a href="javascript:void(0);" onclick="OpenEditMileageModel('${results.data[index].id}')">EDIT</a>
-                                            <a href="javascript:void(0);" class="down" onclick="deleteconfirm('${results.data[index].id}')">DELETE</a></td>
+                                            <a href="javascript:void(0);" onclick="OpenEditMileageModel('${data[index].id}')">EDIT</a>
+                                            <a href="javascript:void(0);" class="down" onclick="deleteconfirm('${data[index].id}')">DELETE</a></td>
                                         </td>
                                     </tr><tr class="spacer"></tr>`;
-                        }
-                        $('#mileage_search').html(html);
+                                }
+                                $('#mileage_search').html(html);
+                            }
+                        })
                     } else {
                         swal("Error!", results.message, "error");
                     }
                 }
             });
         }
-        window.onload = function () {
+
+        /*window.onload = function () {
             searchMileagePage()
-        };
+        };*/
 
         function deleteconfirm(id) {
             swal({
@@ -406,6 +425,5 @@
 
             return [year, month, day].join('-');
         }
-
     </script>
 @endsection

@@ -8,7 +8,7 @@
   <meta name="author" content="">
   <meta name="csrf-token" content="{{ csrf_token() }}" />
   <title> North Portal</title>
- 
+
   <!-- Bootstrap  CSS -->
   <link href="{{asset('css/bootstrap.min.css')}}" rel="stylesheet">
   <!-- Custom styles-->
@@ -33,7 +33,7 @@
       <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
         Menu
         <i class="fa fa-bars"></i>
-      </button> 
+      </button>
       <div class="collapse navbar-collapse" id="navbarResponsive">
         <ul id="myTab" role="tablist" class="navbar-nav text-uppercase nav nav-tabs">
           <li class="nav-item">
@@ -62,11 +62,11 @@
                 @csrf
             </form>
           </li>
-         
+
         </ul>
       </div>
     </div>
-            
+
   </nav>
   <div class="col-md-12">
     <nav class="top_tab_details">
@@ -79,7 +79,7 @@
                         <a class="nav-item nav-link" id="nav-time-tab"  href="{{ url('admin/timeoff') }}" role="tab" aria-controls="nav-time" aria-selected="false">Time Off</a>
                         <a class="nav-item nav-link" id="nav-concern_report-tab" href="{{ url('admin/reportconcern') }}" role="tab" aria-controls="nav-concern_report" aria-selected="false">Report a Concern</a>
 
-                        <a class="nav-item nav-link" id="nav-statements-tab" href="{{url('admin/addpaystatement')}}" >Pay Statements</a>
+                        <a class="nav-item nav-link" id="nav-statements-tab" href="{{ route('admin.pay-statements') }}" >Pay Statements</a>
                       </div>
                   </div><!--------------container--------------->
                 </nav>

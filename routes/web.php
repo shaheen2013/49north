@@ -23,23 +23,24 @@ Auth::routes();
 
 Route::group(['middleware' => ['auth']], function () {
 
-    Route::get('', 'HomeController@index')->name('index');
-    Route::get('/home', 'HomeController@home')->name('home');
-    Route::post('/edit_employee', 'HomeController@edit_employee');
+    Route::get('home', 'HomeController@home')->name('home');
+    Route::get('edit-profile', 'HomeController@editProfile')->name('edit-profile');
+    Route::post('edit_employee', 'HomeController@edit_employee');
 
     // agreements
     Route::get('agreementlist', 'AgreementController@agreementlist');
     Route::post('addagreement', 'AgreementController@addagreement')->name('add-agreement');
     Route::delete('delete_agreement/{id}/{type}', 'AgreementController@destroy')->name('delete_agreement');
+    Route::get('agreement/search', 'AgreementController@search')->name('agreement.search');
 
     // Expenses
     Route::group(['prefix' => 'expense', 'as' => 'expense.'], function () {
         Route::get('/list', 'ExpenseController@expenselist');
         Route::post('/addexpense', 'ExpenseController@addexpense');
-       
+
         Route::get('/edit/{id}', 'ExpenseController@edit');
         Route::POST('/update/{id}', 'ExpenseController@update');
-      
+
         Route::post('/new/approve/{id}', 'ExpenseController@approve');
         Route::post('/new/reject/{id}', 'ExpenseController@reject');
 
@@ -86,11 +87,11 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/mileage/edit/{id}', 'MileageController@edit');
     Route::POST('/mileage/update/{id}', 'MileageController@update');
     Route::POST('/mileage/destroy/{id}', 'MileageController@destroy');
+
+    Route::post('/updatemileage', 'MileageController@updatemileage');
+
+    Route::post('/deletemileage/{id}', 'MileageController@deletemileage');
     Route::POST('/mileage/search', 'MileageController@searchMileage');
-
-    // pay statement
-    Route::get('admin/addpaystatement', 'Admin\AdminPaystatementController@paystatement');
-
 
     ///// timeoff route
     Route::group(['prefix' => 'timeoff', 'as' => 'timeoff.'], function () {
@@ -104,28 +105,12 @@ Route::group(['middleware' => ['auth']], function () {
 
     });
 
+    Route::get('force-login/{user}', 'UserController@forceLogin')->name('force-login');
+    Route::get('users/search', 'UserController@search')->name('users.search');
 });
 
 
 Route::resource('posts', 'PostController');
-
-Route::group(['middleware' => ['auth', 'isAdmin']], function () {
-    Route::resource('users', 'UserController');
-    Route::resource('roles', 'RoleController');
-    Route::resource('permissions', 'PermissionController');
-    //Route::resource('agreements','AgreementController');
-});
-
-
-// Route::get('admin/addpaystatement','Admin\PaystatementController@paystatement');
-Route::get('admin/registration', 'Admin\AdminController@index');
-Route::get('admin/agreement', 'Admin\AdminAgreementController@agreementlist');
-Route::get('admin/expences_report', 'Admin\AdminController@expences_report');
-Route::get('admin/milegebook', 'Admin\AdminController@milegebook');
-Route::get('admin/tech_maintanance', 'Admin\AdminController@tech_maintanance');
-Route::get('admin/timeoff', 'Admin\AdminController@timeoff');
-Route::get('admin/reportconcern', 'Admin\AdminController@reportconcern');
-Route::post('admin/add_registration', 'Admin\AdminController@add_registration');
 
 Route::post('/reset/password/{id}', 'UserController@changeUserPassword');
 Route::post('/reset/stuff/password/{id}', 'UserController@changeStuffPassword');

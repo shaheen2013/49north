@@ -1738,6 +1738,15 @@ span.fc-title {
     color: #fff;
 }
 
+.remove-default-style {
+    border: none;
+    float: none;
+    display: inline;
+    padding: initial;
+    margin: initial;
+}
+
+
 
 /*===========================*/
 /*New Style Sheet*/
@@ -1778,6 +1787,6 @@ span.fc-title {
     left: 0;
     height: 35px!important;
 }
-
+.paginationjs{display: inline-block;float: right;}
 ._table th{border: none!important;border-bottom: none!important;}
 .spacer{ height:10px; }
