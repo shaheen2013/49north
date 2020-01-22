@@ -354,4 +354,28 @@ class UserController extends Controller {
             return response()->json(['status' => 'fail', 'error' => $e->getMessages()]);
         }
     }
+
+    /**
+     * Filter agreement
+     * @param Request $request
+     *
+     * @return JsonResponse
+     */
+    public function search(Request $request){
+        try {
+            $data = User::with('employee_details')->orderBy('name')
+                ->where(function ($q) use ($request) {
+                    if (isset($request->search)) {
+                        $q->where('name', 'like', '%' . $request->search . '%');
+                    }
+                    if (isset($request->from) && isset($request->to)) {
+                        $q->whereBetween('created_at', [$request->from, $request->to]);
+                    }
+                })->get();
+
+            return response()->json(['status' => 200, 'data' => $data]);
+        } catch (\Exception $e) {
+            return response()->json(['status' => 500, 'message' => $e->getMessage()]);
+        }
+    }
 }

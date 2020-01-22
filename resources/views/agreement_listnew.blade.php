@@ -32,7 +32,7 @@
                     </thead>
 
                     <tbody id="agreement">
-                    @foreach ($users as $user)
+                    {{--@foreach ($users as $user)
                         <tr style="margin-bottom:10px;">
                             <td>{{date('d M, Y', strtotime($user->created_at))}}</td>
                             <td>{{$user->name}}</td>
@@ -51,7 +51,7 @@
                                     @endadmin
                                 @endif
 
-                                {{-- display amendments --}}
+                                --}}{{-- display amendments --}}{{--
                                 @if($user->activeAgreement['amendments'])
                                     @foreach ($user->activeAgreement['amendments'] AS $amendment)
 
@@ -93,7 +93,7 @@
 
                         </tr>
                         <tr class="spacer"></tr>
-                    @endforeach
+                    @endforeach--}}
                     <tbody>
                 </table>
             </div>
@@ -104,17 +104,26 @@
 
     <script !src="">
         let is_admin = parseInt({{ auth()->user()->is_admin }});
-        let from = null;
-        let to = null;
+        let from, to = null;
 
         $(document).ready(function(){
+            var date = new Date(), y = date.getFullYear(), m = date.getMonth();
+            from = formatDate(new Date(y, m, 1));
+            to = formatDate(new Date(y, m + 1, 0));
+            searchAgreement();
+
             $('#date').flatpickr({
                 mode: "range",
+                defaultDate: [from, to],
                 onChange: function(selectedDates, dateStr, instance) {
                     from = formatDate(selectedDates[0]);
                     to = formatDate(selectedDates[1]);
 
-                    if (selectedDates[1] !== undefined) {
+                    if (selectedDates[0] === undefined || (selectedDates[0] !== undefined && selectedDates[1] !== undefined)) {
+                        if (selectedDates[0] === undefined) {
+                            from = to = null;
+                        }
+
                         searchAgreement();
                     }
                 },
