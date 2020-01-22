@@ -43,49 +43,48 @@ class ExpenseController extends Controller {
             return response()->json(['status'=>'success', 'data' => $data]);
        
     }
-
-    // public function searchExpensePending(Request $request){
+    public function pendingExpense(Request $request){
       
-    //     $data = Expenses::orderByDesc('created_at')->with('employee:id,firstname,lastname')->where('status', null)
-    //         ->where(function ($q) use($request){
-    //             if(isset($request->search)){
-    //                 $q->whereHas('employee', function($sql) use($request){
-    //                     $sql->where('firstname', 'LIKE', '%'.$request->search.'%');
-    //                     $sql->orWhere('lastname', 'LIKE', '%'.$request->search.'%');
+        $data = Expenses::orderByDesc('created_at')->with('employee:id,firstname,lastname')->where('status', null)
+            ->where(function ($q) use($request){
+                if(isset($request->search)){
+                    $q->whereHas('employee', function($sql) use($request){
+                        $sql->where('firstname', 'LIKE', '%'.$request->search.'%');
+                        $sql->orWhere('lastname', 'LIKE', '%'.$request->search.'%');
         
-    //                 });
+                    });
                     
-    //             }
-    //             if(isset($request->from) && isset($request->to)){
-    //                 $q->whereBetween('date', [$request->from, $request->to]);
-    //             }
-    //         });
+                }
+                if(isset($request->from) && isset($request->to)){
+                    $q->whereBetween('date', [$request->from, $request->to]);
+                }
+            });
 
-    //         $data= $data->get();
-    //         return response()->json(['status'=>'success', 'data' => $data]);
+            $data= $data->get();
+            return response()->json(['status'=>'success', 'data' => $data]);
        
-    // }
-    // public function searchExpenseHistory(Request $request){
+    }
+    public function expenseHistory(Request $request){
       
-    //     $data = Expenses::orderByDesc('created_at')->with('employee:id,firstname,lastname')->where('status', 1)
-    //         ->where(function ($q) use($request){
-    //             if(isset($request->search)){
-    //                 $q->whereHas('employee', function($sql) use($request){
-    //                     $sql->where('firstname', 'LIKE', '%'.$request->search.'%');
-    //                     $sql->orWhere('lastname', 'LIKE', '%'.$request->search.'%');
+        $data = Expenses::orderByDesc('created_at')->with('employee:id,firstname,lastname')->where('status', 1)->orWhere(['status' => 2])->get();
+            // ->where(function ($q) use($request){
+            //     if(isset($request->search)){
+            //         $q->whereHas('employee', function($sql) use($request){
+            //             $sql->where('firstname', 'LIKE', '%'.$request->search.'%');
+            //             $sql->orWhere('lastname', 'LIKE', '%'.$request->search.'%');
         
-    //                 });
+            //         });
                     
-    //             }
-    //             if(isset($request->from) && isset($request->to)){
-    //                 $q->whereBetween('date', [$request->from, $request->to]);
-    //             }
-    //         });
+            //     }
+            //     if(isset($request->from) && isset($request->to)){
+            //         $q->whereBetween('date', [$request->from, $request->to]);
+            //     }
+            // });
 
-    //         $data= $data->get();
-    //         return response()->json(['status'=>'success', 'data' => $data]);
+           
+            return response()->json(['status'=>'success', 'data' => $data]);
        
-    // }
+    }
 
     //expense edit page with value
     public function edit(Request $request)
@@ -227,11 +226,17 @@ class ExpenseController extends Controller {
                 ?>
                 <tr style="margin-bottom:10px;">
                     <td><?php echo $expense_list->date ?></td>
+                    <td><?php echo $expense_list->employee->firstname ?></td>
                     <td><?php echo $expense_list->description ?></td>
                     <td><?php echo $expense_list->total ?></td>
+                    <td>
+                        <a href="javascript:void(0)" onclick="expence_approve(<?= $expense_list->id ?>)"><i class="fa fa-check-circle" title="Approved"></i></a>
+                        <a href="javascript:void(0)" title="Reject!" onclick="expence_reject(<?= $expense_list->id ?>)"><i class="fa fa-ban"></i></a>
+                    </td>
                     <td class="action-box">
-                        <!--<a href="javascript:void(0);" onclick="edit_view_ajax(<?= $expense_list->id ?>)" >EDIT</a>--><a
-                            href="javascript:void(0);" class="down" onclick="delete_expense(<?= $expense_list->id ?>)">DELETE</a>
+                        <!--<a href="javascript:void(0);" onclick="edit_view_ajax(<?= $expense_list->id ?>)" >EDIT</a>-->
+                        <a href="javascript:void(0);" class="down" onclick="delete_expense(<?= $expense_list->id ?>)">EDIT</a>
+                        <a href="javascript:void(0);" class="down" onclick="delete_expense(<?= $expense_list->id ?>)">DELETE</a>
                     </td>
                 </tr>
                 <tr class="spacer"></tr>
@@ -245,11 +250,17 @@ class ExpenseController extends Controller {
                 ?>
                 <tr style="margin-bottom:10px;">
                     <td><?php echo $expense_list->date ?></td>
+                    <td><?php echo $expense_list->employee->firstname?></td>
                     <td><?php echo $expense_list->description ?></td>
                     <td><?php echo $expense_list->total ?></td>
+                    <td>
+                        <a href="javascript:void(0)" onclick="expence_approve(<?= $expense_list->id ?>)"><i class="fa fa-check-circle" title="Approved"></i></a>
+                        <a href="javascript:void(0)" title="Reject!" onclick="expence_reject(<?= $expense_list->id ?>)"><i class="fa fa-ban"></i></a>
+                    </td>
                     <td class="action-box">
-                        <!--<a href="javascript:void(0);" onclick="edit_view_ajax(<?= $expense_list->id ?>)" >EDIT</a>--><a
-                            href="javascript:void(0);" class="down" onclick="delete_expense(<?= $expense_list->id ?>)">DELETE</a>
+                        <!--<a href="javascript:void(0);" onclick="edit_view_ajax(<?= $expense_list->id ?>)" >EDIT</a>-->
+                        <a href="javascript:void(0);" class="down" onclick="delete_expense(<?= $expense_list->id ?>)">EDIT</a>
+                        <a href="javascript:void(0);" class="down" onclick="delete_expense(<?= $expense_list->id ?>)">DELETE</a>
                     </td>
                 </tr>
                 <tr class="spacer"></tr>

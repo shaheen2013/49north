@@ -41,7 +41,8 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/delete', 'ExpenseController@delete_expense')->name('delete');
         Route::post('/approve', 'ExpenseController@expense_approve')->name('approve');
         Route::post('/reject', 'ExpenseController@expense_reject')->name('reject');
-        Route::post('/history', 'ExpenseController@expenses_historical')->name('history');
+        // Route::post('/history', 'ExpenseController@searchExpenseHistory')->name('history');
+        Route::post('/new/history', 'ExpenseController@expenseHistory');
         Route::POST('/search', 'ExpenseController@searchExpense');
         // Route::POST('/pending/search', 'ExpenseController@searchExpensePending');
         // Route::POST('/history/search', 'ExpenseController@searchExpenseHistory');
