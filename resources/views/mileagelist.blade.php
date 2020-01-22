@@ -215,9 +215,7 @@
     <!--- Mileage edit modal end -->
 
     <script type="text/javascript">
-        var id = null;
-        var from = null;
-        var to = null;
+        var id, from, to = null;
         function OpenEditMileageModel(id) {
             console.log(id)
             $('#mileage-modaledit').modal();
@@ -286,11 +284,25 @@
         }
 
         $(document).ready(function(){
+            var date = new Date(), y = date.getFullYear(), m = date.getMonth();
+            from = formatDate(new Date(y, m, 1));
+            to = formatDate(new Date(y, m + 1, 0));
+            searchMileagePage();
+
             $('#date').flatpickr({
                 mode: "range",
+                defaultDate: [from, to],
                 onChange: function(selectedDates, dateStr, instance) {
                     from = formatDate(selectedDates[0]);
                     to = formatDate(selectedDates[1]);
+
+                    if (selectedDates[0] === undefined || (selectedDates[0] !== undefined && selectedDates[1] !== undefined)) {
+                        if (selectedDates[0] === undefined) {
+                            from = to = null;
+                        }
+
+                        searchMileagePage();
+                    }
                 },
             });
         });
@@ -322,6 +334,8 @@
                             dataSource: results.data,
                             pageSize: 10,
                             totalNumber: results.data.length,
+                            showGoInput: true,
+                            showGoButton: true,
                             callback: function(data, pagination) {
                                 let html = '';
                                 for (let index = 0; index < data.length; index++) {
@@ -354,9 +368,9 @@
             });
         }
 
-        window.onload = function () {
+        /*window.onload = function () {
             searchMileagePage()
-        };
+        };*/
 
         function deleteconfirm(id) {
             swal({

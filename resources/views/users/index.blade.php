@@ -3,15 +3,29 @@
 @section('title', 'Users')
 
 @section('content1')
+    <div class="well-default-trans">
+        <div class="row">
+            <div class="col-sm-3">
+                <div class="form-group">
+                    <input type="date" name="date" id="date" placeholder="Select Date" class="form-control-new">
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="form-group">
+                    <input type="text" placeholder="Search user" onkeyup="searchAdmin()" class="form-control-new" name="search" id="search">
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <a href="{{ route('users.create') }}" class="btn btn-success pull-right">Add User</a>
+                    <a href="{{ route('admin.permissions.index') }}" class="btn btn-warning pull-right mr-2">Permissions</a>
+                </div>
+            </div>
+        </div>
 
-    <h1>
-        <a href="{{ route('admin.permissions.index') }}" class="btn btn-default pull-right">Permissions</a></h1>
-    <hr>
+        <div id="wait" style="display:none;position:absolute;top:50%;left:50%;padding:2px;"><img src='{{ asset('img/demo_wait.gif') }}' width="64" height="64" /><br>Loading..</div>
 
-    <a href="{{ route('users.create') }}" class="btn btn-success">Add User</a>
-    <div class="table-responsive">
-        <table class="table table-bordered table-striped">
-
+        <table class="table _table _table-bordered">
             <thead>
             <tr>
                 <th>Name</th>
@@ -21,35 +35,140 @@
             </tr>
             </thead>
 
-            <tbody>
+            <tbody id="users">
             @php $delSection = 'users'; @endphp
-            @foreach ($users as $user)
-                <tr class="del-{{ $delSection }}-{{ $user->id }}">
-
-                    <td>
-                        {{ $user->name }}
-                        @if (Auth::user()->is_admin === 1 && $user->id != Auth::user()->id)
-                            <a class="remove-default-style" href="{{ route('force-login',$user->id) }}"><i class="fa fa-sign-in"></i></a>
-                        @endif
-                    </td>
-                    <td>{{ $user->email }}</td>
-                    <td>{{ $user->created_at ? $user->created_at->format('F d, Y h:ia') : 'N/A' }}</td>
-                    <td class="text-center">
-                        <a href="{{ route('users.edit', $user->id) }}" class="btn btn-info pull-left" style="margin-right: 3px;">Edit</a>
-
-                        <a class="btn btn-danger deletejson" data-token="{{ csrf_token() }}"
-                           data-url="{{ route('users.destroy',$user->id) }}" data-id="{{ $user->id }}"
-                           data-section="{{ $delSection }}">Delete</a>
-                        {{--<a class="text-danger deletejson" data-token="{{ csrf_token() }}"
-                           data-url="{{ route('users.destroy',$user->id) }}" data-id="{{ $user->id }}"
-                           data-section="{{ $delSection }}"><i class="fal fa-trash-alt"></i></a>--}}
-                    </td>
-                </tr>
-            @endforeach
             </tbody>
-
         </table>
+
+        <div id="demo"></div>
     </div>
 
+@endsection
 
+@section('js')
+    <script !src="">
+        let is_admin = parseInt({{ auth()->user()->is_admin }});
+        let auth_id = parseInt({{ auth()->id() }});
+        let from, to = null;
+
+        function searchAdmin() {
+            $('#users').html('');
+            $('#wait').css('display', 'inline-block'); // wait for loader
+            let search = $('#search').val();
+            let data = {
+                search: search,
+                from: from,
+                to: to,
+            };
+
+            $.ajax({
+                type: 'get',
+                url: "{{ route('users.search') }}",
+                data: data,
+                dataType: 'JSON',
+                success: function (results) {
+                    $('#wait').css('display', 'none');
+
+                    if (results.status == 200) {
+                        renderHTML(results.data);
+                    } else {
+                        swal("Error!", results.message, "error");
+                    }
+                }
+            });
+        }
+
+        $(document).ready(function(){
+            var date = new Date(), y = date.getFullYear(), m = date.getMonth();
+            from = formatDate(new Date(y, m, 1));
+            to = formatDate(new Date(y, m + 1, 0));
+            searchAdmin();
+
+            $('#date').flatpickr({
+                mode: "range",
+                defaultDate: [from, to],
+                onChange: function(selectedDates, dateStr, instance) {
+                    from = formatDate(selectedDates[0]);
+                    to = formatDate(selectedDates[1]);
+
+                    if (selectedDates[0] === undefined || (selectedDates[0] !== undefined && selectedDates[1] !== undefined)) {
+                        if (selectedDates[0] === undefined) {
+                            from = to = null;
+                        }
+
+                        searchAdmin();
+                    }
+                },
+            });
+
+            /*let users = JSON.parse({!!json_encode($users->toJson())!!});
+            renderHTML(users);*/
+
+            setTimeout(function () {
+                $('.deletejson').click(function ($e) {
+                    $e.preventDefault();
+
+                    if (confirm($confirmText)) {
+                        const $id = $(this).data('id');
+                        const $section = $(this).data('section');
+                        const $url = $(this).data('url');
+                        const $token = $(this).data('token');
+                        console.log('deleting and hide row: ' + $section + ' - ' + $id + ' ... ');
+                        $(".ajax-delete-msg").hide();
+
+                        $.ajax({
+                            url: $url,
+                            data: {id: $id, _method: 'DELETE', '_token': $token, timeing: new Date()},
+                            type: 'DELETE',
+                            dataType: 'JSON',
+                            cache: false,
+                            success: function ($ret) {
+                                $(".ajax-delete-msg").show(); // .fadeOut(6000);
+                                $('.del-' + $section + '-' + $id).html($ret.msg).addClass('text-danger').hide("slow");
+                            }
+                        });
+                    }
+                });
+            }, 1000);
+        });
+
+        function renderHTML(result) {
+            $('#demo').pagination({
+                dataSource: result,
+                pageSize: 10,
+                totalNumber: result.length,
+                showGoInput: true,
+                showGoButton: true,
+                callback: function(data, pagination) {
+                    let html = '';
+                    data.forEach(function myFunction(value, index, array) {
+                        if (value.created_at != null && value.created_at != '') {
+                            time = value.created_at.split(' ')[0];
+                            date = new Date(time);
+                            date = date.toDateString().split(' ')[2]+" "+date.toDateString().split(' ')[1]+", "+date.toDateString().split(' ')[3]
+                        } else {
+                            date = 'N/A';
+                        }
+
+                        html += `<tr class="del-{{ $delSection }}-${value.id}">
+                        <td> ${value.name} ${is_admin === 1 && auth_id != value.id ? '<a class="remove-default-style" href="force-login/' + value.id + '"><i class="fa fa-sign-in"></i></a>' : ''}</td>
+                        <td> ${value.email} </td>
+                        <td> ${date} </td>
+                        <td class="text-right">
+                            <a href="{{ url('/') }}/users/${value.id}/edit">Edit</a>
+
+                            <a class="down deletejson" data-token="{{ csrf_token() }}"
+                               data-url="{{ url('/') }}/users/${value.id}" data-id="${value.id}"
+                               data-section="{{ $delSection }}">Delete</a>
+                            <a class="down deletejson" data-token="{{ csrf_token() }}"
+                               data-url="{{ url('/') }}/users/${value.id}" data-id="${value.id}"
+                               data-section="{{ $delSection }}"><i class="fal fa-trash-alt"></i></a>
+                        </td>
+                    </tr><tr class="spacer"></tr>`;
+                    });
+                    $('#users').html(html);
+                }
+            });
+        }
+    </script>
 @endsection

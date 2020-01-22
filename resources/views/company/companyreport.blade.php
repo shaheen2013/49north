@@ -37,6 +37,8 @@
 
                                 <tbody>
                             </table>
+
+                            <div id="demo"></div>
                         </div>
                     </div>
                 </div>
@@ -255,22 +257,30 @@
                 data: data,
                 dataType: 'JSON',
                 success: function (results) {
-                    let html = '';
-
                     if (results.status === 'success') {
                         $('#wait').css('display', 'none');
-                        for (let index = 0; index < results.data.length; index++) {
-                            html += `<tr>
-                                        <td> ${results.data[index].logo !== null ? '<img src={{ fileUrl() }}'+results.data[index].logo+' height="50px" alt="">' : 'N/A'} </td>
-                                        <td> ${results.data[index].companyname} </td>
-                                        <td> ${results.data[index].email !== null ? results.data[index].email : 'N/A'} </td>
+                        $('#demo').pagination({
+                            dataSource: results.data,
+                            pageSize: 10,
+                            totalNumber: results.data.length,
+                            showGoInput: true,
+                            showGoButton: true,
+                            callback: function(data, pagination) {
+                                let html = '';
+                                for (let index = 0; index < data.length; index++) {
+                                    html += `<tr>
+                                        <td> ${data[index].logo !== null ? '<img src={{ fileUrl() }}'+data[index].logo+' height="50px" alt="">' : 'N/A'} </td>
+                                        <td> ${data[index].companyname} </td>
+                                        <td> ${data[index].email !== null ? data[index].email : 'N/A'} </td>
                                         <td class="text-right">
-                                            <a href="javascript:void(0);" onclick="OpenEditCompanyModel('${results.data[index].id}')">EDIT</a>
-                                            <a href="javascript:void(0);" class="down" onclick="deleteconfirm('${results.data[index].id}')">DELETE</a></td>
+                                            <a href="javascript:void(0);" onclick="OpenEditCompanyModel('${data[index].id}')">EDIT</a>
+                                            <a href="javascript:void(0);" class="down" onclick="deleteconfirm('${data[index].id}')">DELETE</a></td>
                                         </td>
                                     </tr><tr class="spacer"></tr>`;
-                        }
-                        $('#company_search').html(html);
+                                }
+                                $('#company_search').html(html);
+                            }
+                        });
                     } else {
                         swal("Error!", results.message, "error");
                     }
@@ -295,12 +305,10 @@
                         data: {_token: '{{  @csrf_token() }}'},
                         dataType: 'JSON',
                         success: function (results) {
-
                             if (results.success === true) {
                                 swal("Done!", results.message, "success").then(function () {
-
                                     window.location.reload()
-                                })
+                                });
                             } else {
                                 swal("Error!", results.message, "error");
                             }

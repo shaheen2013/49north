@@ -152,8 +152,22 @@
         setTimeout(function () {
             $("p.alert").remove();
         }, 5000); // 5 secs
-
     });
+
+    // Format date
+    function formatDate(date) {
+        var d = new Date(date),
+            month = '' + (d.getMonth() + 1),
+            day = '' + d.getDate(),
+            year = d.getFullYear();
+
+        if (month.length < 2)
+            month = '0' + month;
+        if (day.length < 2)
+            day = '0' + day;
+
+        return [year, month, day].join('-');
+    }
 </script>
 
 <script type="text/javascript" src="{{ asset('js/bootstrap-datepicker.min.js') }}"></script>
@@ -165,6 +179,7 @@
 <script src="{{asset('flatpicker/js/flatpicker.min.js')}}"></script>
 <script src="{{asset('js/pagination.min.js')}}"></script>
 @stack('scripts')
+@yield('js')
 
 </body>
 </html>
