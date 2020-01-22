@@ -37,12 +37,17 @@ Route::group(['middleware' => ['auth']], function () {
     Route::group(['prefix' => 'expense', 'as' => 'expense.'], function () {
         Route::get('/list', 'ExpenseController@expenselist');
         Route::post('/addexpense', 'ExpenseController@addexpense');
-        Route::post('/expense_edit_view', 'ExpenseController@expense_edit_view');
-        Route::post('/edit', 'ExpenseController@expenses_edit')->name('edit');
-        Route::post('/delete', 'ExpenseController@delete_expense')->name('delete');
-        Route::post('/approve', 'ExpenseController@expense_approve')->name('approve');
-        Route::post('/reject', 'ExpenseController@expense_reject')->name('reject');
-        Route::post('/history', 'ExpenseController@expenses_historical')->name('history');
+
+        Route::get('/edit/{id}', 'ExpenseController@edit');
+        Route::POST('/update/{id}', 'ExpenseController@update');
+
+        Route::post('/new/approve/{id}', 'ExpenseController@approve');
+        Route::post('/new/reject/{id}', 'ExpenseController@reject');
+
+        Route::post('/new/history', 'ExpenseController@searchHistory');
+        Route::POST('/pending', 'ExpenseController@searchPending');
+        Route::POST('/destroy/{id}', 'ExpenseController@destroy');
+
     });
 
 

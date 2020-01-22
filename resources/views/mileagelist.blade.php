@@ -197,7 +197,7 @@
                         <div class="row margin-top-30">
                             <div class="form-group" style="width:100%;">
                                 <div class="col-md-12 col-sm-12">
-                                    {{-- <button type="button" id="update" onclick="update_mileage({{ $mileage->id }})" class="btn-dark contact_btn" data-form="expences">Save </button> --}}
+                                    
                                     <button type="button" id="update" onclick="update_mileage(id)" class="btn-dark contact_btn" data-form="expences">Save </button>
                                     <span class="close close-span" data-dismiss="modal" aria-label="Close"><i class="fa fa-arrow-left"></i> Return to Mileage</span>
 
@@ -235,6 +235,7 @@
                             selecteds = '';
                         }
                         $('#edit_companyname').html(company);
+                        
                         $('#edit_date').val(results.data.mileage.date.split(' ')[0]);
                         $('#edit_vehicle').val(results.data.mileage.vehicle);
                         $('#edit_kilometers').val(results.data.mileage.kilometers);
