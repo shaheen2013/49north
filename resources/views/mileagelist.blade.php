@@ -3,49 +3,49 @@
 @section('content1')
 
 
-<div class="well-default-trans">
-    <div class="tab-pane" id="nav-mileage" role="tabpanel" aria-labelledby="nav-mileage-tab">
-        <div class="mileage inner-tab-box">
-            <div class="col-md-12">
-                <div class="row">
-                    <div class="col-sm-3">
-                        <div class="form-group">
-                            <input type="date" name="date" id="date"  placeholder="Select Date" class="form-control-new" onChange="searchMileagePage()">
+    <div class="well-default-trans">
+        <div class="tab-pane" id="nav-mileage" role="tabpanel" aria-labelledby="nav-mileage-tab">
+            <div class="mileage inner-tab-box">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <input type="date" name="date" id="date"  placeholder="Select Date" class="form-control-new" onChange="searchMileagePage()">
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-sm-3">
-                        <div class="form-group">
-                            <input type="text" placeholder="Search employee" onkeyup="searchMileagePage()" class="form-control-new" name="search" id="search">
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <input type="text" placeholder="Search employee" onkeyup="searchMileagePage()" class="form-control-new" name="search" id="search">
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="col-sm-6">
-                        <a href="javascript:void(0)" class="_new_icon_button_1" data-toggle="modal" data-target="#mileage-modal"> <i class="fa fa-plus"></i> </a>
-                    </div>
-                    <div class="col-sm-12">
-                        <div id="wait" style="display:none;position:absolute;top:100%;left:50%;padding:2px;"><img src='{{ asset('img/demo_wait.gif') }}' width="64" height="64" /><br>Loading..</div>
-                        <table class="table table-bordered">
-                            <thead>
-                            <tr>
-                                <th>Date</th>
-                                <th>Employee</th>
-                                <th>Reason for mileage</th>
-                                <th>Total Km</th>
-                                <th width="200px" class="text-right">Action</th>
-                            </tr>
-                            </thead>
-                            <tbody class="return_mileagelist" id="mileage_search">
-                            <tbody>
-                        </table>
+                        <div class="col-sm-6">
+                            <a href="javascript:void(0)" class="_new_icon_button_1" data-toggle="modal" data-target="#mileage-modal"> <i class="fa fa-plus"></i> </a>
+                        </div>
+                        <div class="col-sm-12">
+                            <div id="wait" style="display:none;position:absolute;top:100%;left:50%;padding:2px;"><img src='{{ asset('img/demo_wait.gif') }}' width="64" height="64" /><br>Loading..</div>
+                            <table class="table table-bordered">
+                                <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Employee</th>
+                                    <th>Reason for mileage</th>
+                                    <th>Total Km</th>
+                                    <th width="200px" class="text-right">Action</th>
+                                </tr>
+                                </thead>
+                                <tbody class="return_mileagelist" id="mileage_search">
+                                <tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
+
+
         </div>
 
-
     </div>
-
-</div>
 
     <!----- Mileage Modal add ---->
     <div id="mileage-modal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
@@ -211,10 +211,9 @@
         </div>
     </div>
 
-      <!--- Mileage edit modal end -->
+    <!--- Mileage edit modal end -->
 
     <script type="text/javascript">
-
         var id = null;
         var from = null;
         var to = null;
@@ -285,21 +284,19 @@
             });
         }
 
-
-
-    $(document).ready(function(){
-        $('#date').flatpickr({
-            mode: "range",
-            onChange: function(selectedDates, dateStr, instance) {
-                from = formatDate(selectedDates[0]);
-                to = formatDate(selectedDates[1]);
-            },
+        $(document).ready(function(){
+            $('#date').flatpickr({
+                mode: "range",
+                onChange: function(selectedDates, dateStr, instance) {
+                    from = formatDate(selectedDates[0]);
+                    to = formatDate(selectedDates[1]);
+                },
+            });
         });
-    });
 
         function searchMileagePage() {
             let search = $('#search').val();
-            
+
             // console.log(date);
             let data = {
                 _token: '{{  @csrf_token() }}',
@@ -349,6 +346,7 @@
                 }
             });
         }
+
         window.onload = function () {
             searchMileagePage()
         };
@@ -406,5 +404,16 @@
             return [year, month, day].join('-');
         }
 
+        $('#demo').pagination({
+            dataSource: [],
+            pageSize: 5,
+            showGoInput: true,
+            showGoButton: true,
+            callback: function(data, pagination) {
+                // template method of yourself
+                var html = template(data);
+                dataContainer.html(html);
+            }
+        })
     </script>
 @endsection

@@ -138,7 +138,7 @@
                 dataType: 'JSON',
                 success: function (results) {
                     $('#wait').css('display', 'none');
-                    let html, date, empAgreement, codeOfConduct = '';
+                    let html, date, empAgreement, codeOfConduct, amendments = '';
 
                     if (results.status == 200) {
                         for (let index = 0; index < results.data.length; index++) {
@@ -154,9 +154,29 @@
                                 if (is_admin) {
                                     empAgreement = `<a href="javascript:void(0);" onclick="show_modal_agreement('${results.data[index].id}','EA')">EDIT</a>
                                                     <a href="${results.data[index].active_agreement_url}" target="_blank">View</a>
-                                                    <a href="javascript:void(0);" onclick="delete_agreement('${results.data[index].active_agreement.id}'),'EA'" class="down">DELETE</a>`;
+                                                    <a href="javascript:void(0);" onclick="delete_agreement('${results.data[index].active_agreement.id}','EA')" class="down">DELETE</a>`;
+
+                                    if (results.data[index].active_agreement.amendments.length > 0) {
+                                        results.data[index].active_agreement.amendments.forEach(function myFunction(value, index, array) {
+                                            amendments = `<br>${index}
+                                                        <a href="${value.amendment_url}" target="_blank">View</a>
+                                                        <br>
+                                                        <a href="javascript:void(0);" onclick="delete_agreement('${value.id}','COC')" class="down">DELETE</a>`;
+                                        });
+
+                                        empAgreement += amendments;
+                                    }
                                 } else {
                                     empAgreement = `<a href="${results.data[index].active_agreement_url}" target="_blank">View</a>`;
+
+                                    if (results.data[index].active_agreement.amendments.length > 0) {
+                                        results.data[index].active_agreement.amendments.forEach(function myFunction(value, index, array) {
+                                            amendments = `<br>${index}
+                                                        <a href="${value.amendment_url}" target="_blank">View</a>`;
+                                        });
+
+                                        empAgreement += amendments;
+                                    }
                                 }
                             } else {
                                 empAgreement = `<a href="javascript:void(0);" onclick="show_modal_agreement('${results.data[index].id}','EA')">Upload</a>`;
@@ -164,14 +184,14 @@
 
                             if (results.data[index].active_codeofconduct) {
                                 if (is_admin) {
-                                    codeOfConduct = `<a href="javascript:void(0);" onclick="show_modal_agreement('${results.data[index].id}'),'COC'">EDIT</a>
+                                    codeOfConduct = `<a href="javascript:void(0);" onclick="show_modal_agreement('${results.data[index].id}','COC')">EDIT</a>
                                                     <a href="${results.data[index].active_code_of_conduct_url}" target="_blank">View</a>
-                                                    <a href="javascript:void(0);" onclick="delete_agreement('${results.data[index].active_codeofconduct.id}'),'COC'" class="down">DELETE</a>`;
+                                                    <a href="javascript:void(0);" onclick="delete_agreement('${results.data[index].active_codeofconduct.id}','COC')" class="down">DELETE</a>`;
                                 } else {
                                     codeOfConduct = `<a href="${results.data[index].active_code_of_conduct_url}" target="_blank">View</a>`;
                                 }
                             } else {
-                                codeOfConduct = `<a href="javascript:void(0);" onclick="show_modal_agreement('${results.data[index].id}'),'COC'">Upload</a>`;
+                                codeOfConduct = `<a href="javascript:void(0);" onclick="show_modal_agreement('${results.data[index].id}','COC')">Upload</a>`;
                             }
 
                             html += `<tr>
