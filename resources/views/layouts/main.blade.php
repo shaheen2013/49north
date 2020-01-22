@@ -163,6 +163,7 @@
 <script src="{{ URL::asset('toaster/jquery.toaster.js') }}"></script>
 <script src="{{ URL::asset('assets/jquery-spinner/js/jquery.spinner.js') }}"></script>
 <script src="{{asset('flatpicker/js/flatpicker.min.js')}}"></script>
+<script src="{{asset('js/pagination.min.js')}}"></script>
 @stack('scripts')
 
 </body>

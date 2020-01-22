@@ -1787,6 +1787,6 @@ span.fc-title {
     left: 0;
     height: 35px!important;
 }
-
+.paginationjs{display: inline-block;float: right;}
 ._table th{border: none!important;border-bottom: none!important;}
 .spacer{ height:10px; }

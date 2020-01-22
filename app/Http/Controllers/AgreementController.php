@@ -146,6 +146,12 @@ class AgreementController extends Controller {
             foreach ($data as $datum) {
                 if($datum->activeAgreement) {
                     $datum->active_agreement_url = fileUrl($datum->activeAgreement->agreement, true);
+
+                    if (count($datum->activeAgreement->amendments)) {
+                        foreach ($datum->activeAgreement->amendments as $amendment) {
+                            $amendment->amendment_url = fileUrl($amendment->agreement, true);
+                        }
+                    }
                 }
 
                 if($datum->activeCodeofconduct) {
