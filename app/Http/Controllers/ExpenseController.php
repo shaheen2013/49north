@@ -24,7 +24,7 @@ class ExpenseController extends Controller {
 
     public function searchExpense(Request $request){
       
-        $data = Expenses::orderByDesc('created_at')->with('employee:id,firstname,lastname')->where('status', null)
+        $data = Expenses::orderByDesc('created_at')->with('employee:id,firstname,lastname')
             ->where(function ($q) use($request){
                 if(isset($request->search)){
                     $q->whereHas('employee', function($sql) use($request){
@@ -43,52 +43,52 @@ class ExpenseController extends Controller {
             return response()->json(['status'=>'success', 'data' => $data]);
        
     }
-    public function pendingExpense(Request $request){
+    
+    public function searchHistory(Request $request){
       
-        $data = Expenses::orderByDesc('created_at')->with('employee:id,firstname,lastname')->where('status', null)
-            ->where(function ($q) use($request){
-                if(isset($request->search)){
-                    $q->whereHas('employee', function($sql) use($request){
-                        $sql->where('firstname', 'LIKE', '%'.$request->search.'%');
-                        $sql->orWhere('lastname', 'LIKE', '%'.$request->search.'%');
-        
-                    });
-                    
-                }
-                if(isset($request->from) && isset($request->to)){
-                    $q->whereBetween('date', [$request->from, $request->to]);
-                }
-            });
+        $data = Expenses::orderByDesc('created_at')->with('employee:id,firstname,lastname')->where('status', 1)->orWhere(['status' => 2])
+        ->where(function ($q) use($request){
+            if(isset($request->history_search)){
+                $q->whereHas('employee', function($sql) use($request){
+                    $sql->where('firstname', 'LIKE', '%'.$request->history_search.'%');
+                    $sql->orWhere('lastname', 'LIKE', '%'.$request->history_search.'%');
+    
+                });
+                
+            }
+            if(isset($request->history_from) && isset($request->history_to)){
+                $q->whereBetween('date', [$request->history_from, $request->history_to]);
+            }
+        });
 
-            $data= $data->get();
-            return response()->json(['status'=>'success', 'data' => $data]);
+        $data= $data->get();
+        return response()->json(['status'=>'success', 'data' => $data]);
        
     }
-    public function expenseHistory(Request $request){
-      
-        $data = Expenses::orderByDesc('created_at')->with('employee:id,firstname,lastname')->where('status', 1)->orWhere(['status' => 2])->get();
-            // ->where(function ($q) use($request){
-            //     if(isset($request->search)){
-            //         $q->whereHas('employee', function($sql) use($request){
-            //             $sql->where('firstname', 'LIKE', '%'.$request->search.'%');
-            //             $sql->orWhere('lastname', 'LIKE', '%'.$request->search.'%');
-        
-            //         });
-                    
-            //     }
-            //     if(isset($request->from) && isset($request->to)){
-            //         $q->whereBetween('date', [$request->from, $request->to]);
-            //     }
-            // });
 
-           
-            return response()->json(['status'=>'success', 'data' => $data]);
+    public function searchPending(Request $request){
+      
+        $data = Expenses::orderByDesc('created_at')->with('employee:id,firstname,lastname')->where('status', null)
+        ->where(function ($q) use($request){
+            if(isset($request->pending_search)){
+                $q->whereHas('employee', function($sql) use($request){
+                    $sql->where('firstname', 'LIKE', '%'.$request->pending_search.'%');
+                    $sql->orWhere('lastname', 'LIKE', '%'.$request->pending_search.'%');
+    
+                });
+                
+            }
+            if(isset($request->from) && isset($request->to)){
+                $q->whereBetween('date', [$request->from, $request->to]);
+            }
+        });
+        $data= $data->get();   
+        return response()->json(['status'=>'success', 'data' => $data]);
        
     }
 
     //expense edit page with value
-    public function edit(Request $request)
-    {
+    public function edit(Request $request) {
         // $emp_id = auth()->user()->id;
         $data['expense'] = Expenses::where('id', $request->id)->first();
         $data['companies'] = Company::all();
@@ -102,8 +102,7 @@ class ExpenseController extends Controller {
         return response()->json(['status'=>'fail']);
     }
 
-    public function update(Request $request, $id)
-    {
+    public function update(Request $request, $id) {
         // Validate form data
         $rules = [
            
@@ -147,8 +146,7 @@ class ExpenseController extends Controller {
         }
        
     }
-    public function destroy($id)
-    {
+    public function destroy($id) {
         $expense = Expenses::findOrFail($id);
         if ($expense->delete() == 1) {
             $success = true;
@@ -182,38 +180,30 @@ class ExpenseController extends Controller {
         return redirect()->back()->with('alert-info', $msg);
     }
 
-    ///// To edit details of expense
-    public function expenses_edit (Request $request) {
-        $data = $request->all();
-        $id = $data['id'];
-
-        $receiptname = '';
-        if ($request->hasFile('receipt')) {
-            $file = $request->file('receipt');
-            $receiptname = rand(11111, 99999) . '.' . $file->getClientOriginalExtension();
-            $request->file('receipt')->move("receipt", $receiptname);
-        }
-
-        $data['receipt'] = $receiptname;
-
-        Expenses::where('id', $id)->update($data);
-        $msg = 'Expense Updated successfully';
-
-        return redirect()->back()->with('alert-info', $msg);
-    }
-
-   
-
     /// approved expense
-    public function expense_approve (Request $request) {
-        $id = $request->id;
-        Expenses::where('id', $id)->update(['status' => '1']);
+    public function approve($id) {
+        $data = Expenses::find($id);
+        $data->status = 1;
+        $data->save();
+        if($data->update()){
+            return response()->json(['status'=>'success']);
+        }
+        return response()->json(['status'=>'fail']);
+        // $id = $request->id;
+        // Expenses::where('id', $id)->update(['status' => '1']);
     }
 
     /// expense reject
-    public function expense_reject (Request $request) {
-        $id = $request->id;
-        Expenses::where('id', $id)->update(['status' => '2']);
+    public function reject($id) {
+        $data = Expenses::find($id);
+        $data->status = 2;
+        $data->save();
+        if($data->update()){
+            return response()->json(['status'=>'success']);
+        }
+        return response()->json(['status'=>'fail']);
+        // $id = $request->id;
+        // Expenses::where('id', $id)->update(['status' => '2']);
     }
 
     ///// expenses history
