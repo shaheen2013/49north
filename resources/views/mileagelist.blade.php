@@ -37,6 +37,7 @@
                                 <tbody class="return_mileagelist" id="mileage_search">
                                 <tbody>
                             </table>
+                            <div id="demo"></div>
                         </div>
                     </div>
                 </div>
@@ -314,32 +315,38 @@
                 data: data,
                 dataType: 'JSON',
                 success: function (results) {
-                    let html = '';
                     let date = '';
                     if (results.status === 'success') {
                         $('#wait').css('display', 'none');
-                        for (let index = 0; index < results.data.length; index++) {
-
-                            if(results.data[index].date != null && results.data[index].date != ''){
-                                time = results.data[index].date.split(' ')[0];
-                                date = new Date(time);
-                                date = date.toDateString().split(' ')[2]+" "+date.toDateString().split(' ')[1]+", "+date.toDateString().split(' ')[3]
-                            }
-                            else{
-                                date = '-';
-                            }
-                            html += `<tr>
+                        $('#demo').pagination({
+                            dataSource: results.data,
+                            pageSize: 10,
+                            totalNumber: results.data.length,
+                            callback: function(data, pagination) {
+                                let html = '';
+                                for (let index = 0; index < data.length; index++) {
+                                    if(data[index].date !== null && data[index].date !== ''){
+                                        var time = data[index].date.split(' ')[0];
+                                        date = new Date(time);
+                                        date = date.toDateString().split(' ')[2]+" "+date.toDateString().split(' ')[1]+", "+date.toDateString().split(' ')[3]
+                                    }
+                                    else{
+                                        date = '-';
+                                    }
+                                    html += `<tr>
                                         <td> ${ date  } </td>
-                                        <td> ${results.data[index].employee.firstname+' '+results.data[index].employee.lastname} </td>
-                                        <td> ${results.data[index].reasonmileage} </td>
-                                        <td> ${results.data[index].kilometers} </td>
+                                        <td> ${data[index].employee.firstname+' '+data[index].employee.lastname} </td>
+                                        <td> ${data[index].reasonmileage} </td>
+                                        <td> ${data[index].kilometers} </td>
                                         <td class="text-right">
-                                            <a href="javascript:void(0);" onclick="OpenEditMileageModel('${results.data[index].id}')">EDIT</a>
-                                            <a href="javascript:void(0);" class="down" onclick="deleteconfirm('${results.data[index].id}')">DELETE</a></td>
+                                            <a href="javascript:void(0);" onclick="OpenEditMileageModel('${data[index].id}')">EDIT</a>
+                                            <a href="javascript:void(0);" class="down" onclick="deleteconfirm('${data[index].id}')">DELETE</a></td>
                                         </td>
                                     </tr><tr class="spacer"></tr>`;
-                        }
-                        $('#mileage_search').html(html);
+                                }
+                                $('#mileage_search').html(html);
+                            }
+                        })
                     } else {
                         swal("Error!", results.message, "error");
                     }
@@ -403,17 +410,5 @@
 
             return [year, month, day].join('-');
         }
-
-        $('#demo').pagination({
-            dataSource: [],
-            pageSize: 5,
-            showGoInput: true,
-            showGoButton: true,
-            callback: function(data, pagination) {
-                // template method of yourself
-                var html = template(data);
-                dataContainer.html(html);
-            }
-        })
     </script>
 @endsection

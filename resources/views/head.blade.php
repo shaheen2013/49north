@@ -17,7 +17,7 @@
     <!-- Bootstrap core JavaScript -->
     <script src="{{asset('js/jquery.min.js')}}"></script>
     <!-- Bootstrap core JavaScript -->
-   
+
     <script src="{{asset('js/bootstrap.min.js')}}"></script>
     <!-- Plugin JavaScript -->
     <script src="{{asset('js/jquery.easing.min.js')}}"></script>
@@ -29,9 +29,10 @@
     <link rel="stylesheet" href="{{ asset('flatpicker/css/flatpickr.min.css') }}">
 
     <link rel="stylesheet" href="{{ asset('assets/jquery-spinner/css/bootstrap-spinner.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/paginationjs/2.1.5/pagination.css"/>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.2.0/sweetalert2.all.min.js"></script>
-   
+
     @stack('after-styles')
 
     <script>
