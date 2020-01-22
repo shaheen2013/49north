@@ -4,47 +4,6 @@ $(".nav_mileage,.active_mileage").click(function(){
 	get_mileagelist();
 });
 
-
-function get_mileagelist()
-{
-	var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-
-	$.ajax({
-		type:'POST',
-		url:"./mileagelist",
-		dataType:'html',
-		data: {_token: CSRF_TOKEN},
-		success:function(response)
-		{
-		   resp = JSON.parse(response);
-	      $(".return_mileagelist").html(resp.data);
-
-		}
-	});
-}
-
-
-
-
-
-function addmileage_details()
-{
-     form_data =  $('#employee_mileage').serialize();
-    console.log(form_data);
-	$.ajax({
-		type:'post',
-		url: './addmileage',
-		data:form_data,
-		success:function(response)
-		{
-			$('#mileage-modal').modal('hide');
-			get_mileagelist();
-		  swal("Your information is submitted Successfully","", "success");
-
-		}
-	});
-}
-
 function edit_mileage(id)
 {
 	var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');

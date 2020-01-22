@@ -74,7 +74,7 @@
                       <div class="nav nav-tabs" id="nav-tab" role="tablist">
                         <a class="nav-item nav-link nav_agreement" id="agree" href="{{ url('admin/agreement') }}" role="tab" aria-controls="nav-agree" aria-selected="true" >Agreement</a>
                         <a class="nav-item nav-link nav_expense" id="nav-expense-tab" href="{{ url('admin/expences_report') }}" role="tab" aria-controls="nav-expense" aria-selected="true">Expense Report</a>
-                        <a class="nav-item nav-link nav_mileage" id="nav-mileage-tab" href="{{ url('admin/milegebook') }}" role="tab" aria-controls="nav-mileage" aria-selected="false" >Mileage Book</a>
+                        <a class="nav-item nav-link nav_mileage" id="nav-mileage-tab" href="{{ route('admin.mileage-book') }}" role="tab" aria-controls="nav-mileage" aria-selected="false" >Mileage Book</a>
                         <a class="nav-item nav-link" id="nav-maintenance-tab" href="{{ url('admin/tech_maintanance') }}" role="tab" aria-controls="nav-maintenance" aria-selected="false">Tech Maintenance</a>
                         <a class="nav-item nav-link" id="nav-time-tab"  href="{{ url('admin/timeoff') }}" role="tab" aria-controls="nav-time" aria-selected="false">Time Off</a>
                         <a class="nav-item nav-link" id="nav-concern_report-tab" href="{{ url('admin/reportconcern') }}" role="tab" aria-controls="nav-concern_report" aria-selected="false">Report a Concern</a>

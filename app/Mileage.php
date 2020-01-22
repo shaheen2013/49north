@@ -10,10 +10,8 @@ class Mileage extends Model {
     use HasEmployee;
     use  SoftDeletes;
 
-    protected $guarded = [];
-
     public $table = "mileages";
-    protected $fillable = ['company', 'date', 'vehicle', 'kilometers', 'reasonmileage'];
-
+    protected $guarded = [];
+    protected $fillable = ['emp_id', 'company', 'date', 'vehicle', 'kilometers', 'reasonmileage'];
 
 }

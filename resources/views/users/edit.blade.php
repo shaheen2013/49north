@@ -275,11 +275,7 @@
     var user_id = null
     function resetStuffPassword(id){
         user_id = id;
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-Token': "{{csrf_token()}}"
-            }
-        });
+
         console.log(user_id)
 
         $.ajax({
@@ -299,8 +295,8 @@
                     swal("Error!", results.message, "error");
                 }
             }
-        });               
-    } 
+        });
+    }
 
     </script>
 

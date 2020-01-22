@@ -76,8 +76,8 @@
             <a class="nav-item nav-link  {{ (request()->is('agreementlist')) ? 'active' : '' }}" id="agreement_list"
                href="{{ url('agreementlist') }}">Agreements</a>
 
-            <a class="nav-item nav-link  {{ (request()->is('mileagelist')) ? 'active' : '' }}" id="agreement_list"
-               href="{{ url('mileagelist') }}">Mileage</a>
+            <a class="nav-item nav-link  {{ (request()->is('mileage/*')) ? 'active' : '' }}" id="agreement_list"
+               href="{{ route('mileage.mileage-list') }}">Mileage</a>
 
             <a class="nav-item nav-link  {{ (request()->is('expense/list')) ? 'active' : '' }}" id="agreement_list"
                href="{{ url('expense/list') }}">Expense</a>

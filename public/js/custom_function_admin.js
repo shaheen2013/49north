@@ -19,13 +19,13 @@ function get_agreementlist()
 function show_modal_agreement(id,type)
 {  //alert('edfds');
 	$('#show_modal_agreement').modal('show');
-	$('#employee_id_modal').val(id);  
+	$('#employee_id_modal').val(id);
 	$('#agreement_type').val(type);
 }
 
 $(".nav_agreement").click(function(){
 	get_agreementlist();
-});	
+});
 
 $('#upload_agreement').submit(function(e)
 {
@@ -33,15 +33,15 @@ $('#upload_agreement').submit(function(e)
     var form_data =  new FormData($("#upload_agreement")[0]);
 	$.ajax({
 		type:'post',
-		url: './addagreement',		
+		url: './addagreement',
 		data:form_data,
 		processData: false,
   		contentType: false,
 		success:function(response)
 		{
-			
+
 			$('#show_modal_agreement').modal('hide');
-			
+
 		  swal(response.desc,"", response.status);
 		  get_agreementlist();
 
@@ -73,49 +73,7 @@ function delete_agreement(id,type)
 
 $(".nav_mileage,.active_mileage").click(function(){
 	get_mileagelist();
-});	
-
-
-function get_mileagelist()
-{
-	var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-
-	$.ajax({
-		type:'POST',
-		url:"./mileagelist",
-		dataType:'html',
-		data: {_token: CSRF_TOKEN},
-		success:function(response)
-		{
-		   resp = JSON.parse(response);
-	      $(".return_mileagelist").html(resp.data);
-
-		}
-	});
-}
-
-
-
-
-
-function addmileage_details()
-{	
-     form_data =  $('#employee_mileage').serialize();
-    
-	$.ajax({
-		type:'post',
-		url: './addmileage',		
-		data:form_data,		
-		success:function(response)
-		{  
-			$('#mileage-modal').modal('hide');
-			//get_mileagelist();
-		  swal("Your information is submitted Successfully","", "success");
-		  location.reload();
-
-		}
-	});
-}
+});
 
 function edit_mileage(id)
 {
@@ -124,10 +82,10 @@ function edit_mileage(id)
 	$.ajax({
 		type:'post',
 		url: './get_mileagedetails/'+id,
-		dataType:'html',		
+		dataType:'html',
 		data: {_token: CSRF_TOKEN},
 		success:function(response)
-		{ 
+		{
 			//$("#employee_mileageedit").html(response);
 			$("#employee_mileageedit").html(response);
 
@@ -142,10 +100,10 @@ function delete_mileage(id)
 	$.ajax({
 		type:'post',
 		url: './deletemileage/'+id,
-		dataType:'html',		
+		dataType:'html',
 		data: {_token: CSRF_TOKEN},
 		success:function(response)
-		{ 
+		{
 			//get_mileagelist();
 		  swal("Deleted Successfully","", "success");
 		  location.reload();
@@ -159,7 +117,7 @@ function employee_agreement()
 	$.ajax({
 		type:'post',
 		url: './employee_agreementlist',
-		dataType:'html',		
+		dataType:'html',
 		data: {_token: CSRF_TOKEN},
 		success:function(response)
 		{
@@ -199,7 +157,7 @@ function expences_listed(){
 
 /*$(".nav_expense").click(function(){
 	expences_listed();
-});	
+});
 
 $('.expences').submit(function(e)
 {
@@ -207,7 +165,7 @@ $('.expences').submit(function(e)
     var form_data =  new FormData($(".expences")[0]);
 	$.ajax({
 		type:'post',
-		url: './expences',		
+		url: './expences',
 		data:form_data,
 		processData: false,
   		contentType: false,
@@ -241,7 +199,7 @@ function edit_expences()
     var form_data =  new FormData($(".expences_edit1")[0]);
 	$.ajax({
 		type:'post',
-		url: './expences_edit',		
+		url: './expences_edit',
 		data:form_data,
 		processData: false,
   		contentType: false,
@@ -256,7 +214,7 @@ function edit_expences()
 
 
 
-      
+
 function delete_expence(id){
 
 	var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
@@ -351,7 +309,7 @@ function maintanance_list(){
     var form_data =  new FormData($(".maintenance1")[0]);
 	$.ajax({
 		type:'post',
-		url: './maintenance',		
+		url: './maintenance',
 		data:form_data,
 		processData: false,
   		contentType: false,
@@ -386,10 +344,10 @@ function mainance_edit_view_ajax(id){
 
 function maintenance1_edit(){
 	//var frm=$('.maintenance1_edit').serialize()
-	var form_data = new FormData($(".maintenance1_edit")[0]); 
+	var form_data = new FormData($(".maintenance1_edit")[0]);
 	$.ajax({
 		type:'post',
-		url: './maintenance1_edit',		
+		url: './maintenance1_edit',
 		data:form_data,
 		processData: false,
   		contentType: false,
@@ -473,4 +431,4 @@ function paystatement_modal(id)
 {
 	$('#empidstatement').val(id);
 	$('#show_modal_paystatement').modal('show');
-} 
+}

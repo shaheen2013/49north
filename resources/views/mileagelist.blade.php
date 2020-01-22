@@ -10,7 +10,7 @@
                     <div class="row">
                         <div class="col-sm-3">
                             <div class="form-group">
-                                <input type="date" name="date" id="date"  placeholder="Select Date" class="form-control-new" onChange="searchMileagePage()">
+                                <input type="date" name="date" id="date" placeholder="Select Date" class="form-control-new" onChange="searchMileagePage()">
                             </div>
                         </div>
                         <div class="col-sm-3">
@@ -20,10 +20,12 @@
                         </div>
 
                         <div class="col-sm-6">
-                            <a href="javascript:void(0)" class="_new_icon_button_1" data-toggle="modal" data-target="#mileage-modal"> <i class="fa fa-plus"></i> </a>
+                            <a href="javascript:void(0)" onclick="$('#mileage-modaledit input').val(''); $('#update').attr('onclick', 'update_mileage(0);');" class="_new_icon_button_1" data-toggle="modal" data-target="#mileage-modaledit"> <i class="fa fa-plus"></i> </a>
                         </div>
                         <div class="col-sm-12">
-                            <div id="wait" style="display:none;position:absolute;top:100%;left:50%;padding:2px;"><img src='{{ asset('img/demo_wait.gif') }}' width="64" height="64" /><br>Loading..</div>
+                            <div id="wait" style="display:none;position:absolute;top:100%;left:50%;padding:2px;">
+                                <img src='{{ asset('img/demo_wait.gif') }}' width="64" height="64"/><br>Loading..
+                            </div>
                             <table class="table table-bordered">
                                 <thead>
                                 <tr>
@@ -31,7 +33,7 @@
                                     <th>Employee</th>
                                     <th>Reason for mileage</th>
                                     <th>Total Km</th>
-                                    <th width="200px" class="text-right">Action</th>
+                                    <th class="text-center">Action</th>
                                 </tr>
                                 </thead>
                                 <tbody class="return_mileagelist" id="mileage_search">
@@ -42,108 +44,19 @@
                     </div>
                 </div>
             </div>
-
-
-        </div>
-
-    </div>
-
-    <!----- Mileage Modal add ---->
-    <div id="mileage-modal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-
-                <div class="modal-body">
-                    <div class="col-md-12" style="margin-top:40px;margin-bottom:20px;">
-                        <form id="employee_mileage">
-
-                            <div class="row">
-                                <div class="col-md-6 col-sm-6">
-                                    <div class="text_outer">
-                                        <label for="name" class="">Company</label>
-                                        <select class="select_status form-control" name="companyname" id="companyname">
-                                            <option>Select</option>
-                                            @foreach($companies as $company)
-                                                <option value="{{$company->companyname}}">{{$company->companyname}}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-
-                                </div>
-
-                                <div class="col-md-6 col-sm-6">
-                                    <div class="text_outer">
-                                        <label for="name" class="">Date</label>
-                                        <input type="date" placeholder="" name="date" class="form-control" id="date">
-                                    </div>
-
-
-                                </div>
-                            </div>
-                            <div class="clearfix"></div>
-
-                            <div class="row">
-                                <div class="col-md-6 col-sm-6">
-                                    <div class="text_outer">
-                                        <label for="name" class="">Vehicle</label>
-                                        <input type="text" id="vehicle" name="vehicle" class="form-control" placeholder="Insert text here">
-                                    </div>
-
-
-                                </div>
-                                <div class="col-md-6 col-sm-6">
-                                    <div class="text_outer">
-                                        <label for="name" class="">No of kilometers</label>
-                                        <input type="number" id="kilometers" name="kilometers" class="form-control" placeholder="Insert figure here">
-                                    </div>
-
-
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-md-12 col-sm-12">
-                                    <div class="text_outer">
-                                        <label for="name" class="">Reason for mileage</label>
-                                        <input type="text" id="reasonformileage" name="reasonformileage" class="form-control" placeholder="Insert text here">
-                                    </div>
-                                </div>
-
-                            </div>
-                            </hr>
-                            <div class="row margin-top-30">
-                                <div class="form-group" style="width:100%;">
-                                    <div class="col-md-12 col-sm-12">
-                                        <button type="button" onclick="addmileage_details();" class="btn-dark contact_btn">Save</button>
-                                        <span class="close close-span" data-dismiss="modal" aria-label="Close"><i class="fa fa-arrow-left"></i> Return to Mileage</span>
-
-                                    </div>
-                                </div>
-                            </div>
-
-                        </form>
-                    </div>
-
-                </div>
-
-            </div>
         </div>
     </div>
-
-    <!--- Mileage modal end -->
-
 
     <!----- Mileage Modal edit ---->
     <div id="mileage-modaledit" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
-
                 <div class="modal-body">
                     <div class="col-md-12" style="margin-top:40px;margin-bottom:20px;">
                         <div class="row">
                             <div class="col-md-6 col-sm-6">
                                 <div class="text_outer">
-                                    <label for="name" class="">Company</label>
+                                    <label for="edit_companyname" class="">Company</label>
                                     <select class="select_status form-control" name="companyname" id="edit_companyname">
                                         <option>Select</option>
                                         @foreach($companies as $company)
@@ -151,63 +64,48 @@
                                         @endforeach
                                     </select>
                                 </div>
-
                             </div>
-
                             <div class="col-md-6 col-sm-6">
                                 <div class="text_outer">
-                                    <label for="name" class="">Date</label>
+                                    <label for="edit_date" class="">Date</label>
                                     <input type="date" placeholder="" name="date" class="form-control" id="edit_date">
                                 </div>
-
-
                             </div>
                         </div>
                         <div class="clearfix"></div>
-
                         <div class="row">
                             <div class="col-md-6 col-sm-6">
                                 <div class="text_outer">
-                                    <label for="name" class="">Vehicle</label>
+                                    <label for="edit_vehicle" class="">Vehicle</label>
                                     <input type="text" id="edit_vehicle" name="vehicle" class="form-control" placeholder="Insert text here">
                                 </div>
-
-
                             </div>
                             <div class="col-md-6 col-sm-6">
                                 <div class="text_outer">
-                                    <label for="name" class="">No of kilometers</label>
+                                    <label for="edit_kilometers" class="">No of kilometers</label>
                                     <input type="number" id="edit_kilometers" name="kilometers" class="form-control" placeholder="Insert figure here">
                                 </div>
-
-
                             </div>
                         </div>
-
                         <div class="row">
                             <div class="col-md-12 col-sm-12">
                                 <div class="text_outer">
-                                    <label for="name" class="">Reason for mileage</label>
+                                    <label for="edit_reasonformileage" class="">Reason for mileage</label>
                                     <input type="text" id="edit_reasonformileage" name="reasonformileage" class="form-control" placeholder="Insert text here">
                                 </div>
                             </div>
-
                         </div>
-                        </hr>
+                        <hr>
                         <div class="row margin-top-30">
                             <div class="form-group" style="width:100%;">
                                 <div class="col-md-12 col-sm-12">
-
-                                    <button type="button" id="update" onclick="update_mileage(id)" class="btn-dark contact_btn" data-form="expences">Save </button>
+                                    <button type="button" id="update" onclick="update_mileage(id)" class="btn-dark contact_btn" data-form="expences">Save</button>
                                     <span class="close close-span" data-dismiss="modal" aria-label="Close"><i class="fa fa-arrow-left"></i> Return to Mileage</span>
-
                                 </div>
                             </div>
                         </div>
                     </div>
-
                 </div>
-
             </div>
         </div>
     </div>
@@ -215,23 +113,25 @@
     <!--- Mileage edit modal end -->
 
     <script type="text/javascript">
-        var id, from, to = null;
+        let id, from, to = null;
+
         function OpenEditMileageModel(id) {
-            console.log(id)
+            console.log(id);
             $('#mileage-modaledit').modal();
             $.ajax({
-                type: 'GET',
-                url: "/mileage/edit/"+id,
+                type: 'POST',
+                data: {id: id},
+                url: "{{ route('mileage.edit') }}",
                 dataType: 'JSON',
                 success: function (results) {
                     if (results.status === 'success') {
                         let company = '';
                         let selecteds = '';
-                        for (let i = 0; i < results.data.companies.length; i++){
-                            if (results.data.companies[i].id === results.data.mileage.company){
+                        for (let i = 0; i < results.data.companies.length; i++) {
+                            if (results.data.companies[i].id === results.data.mileage.company) {
                                 selecteds = 'selected';
                             }
-                            company += ` <option value="${ results.data.companies[i].id }" ${ selecteds }>${ results.data.companies[i].companyname }</option>`;
+                            company += ` <option value="${results.data.companies[i].id}" ${selecteds}>${results.data.companies[i].companyname}</option>`;
                             selecteds = '';
                         }
                         $('#edit_companyname').html(company);
@@ -250,32 +150,24 @@
         }
 
         function update_mileage(id) {
-            $('#update').attr('disabled','disabled');
-            var company = $('#edit_companyname').val();
-            var date = $('#edit_date').val();
-            var vehicle = $('#edit_vehicle').val();
-            var kilometers = $('#edit_kilometers').val();
-            var reasonmileage = $('#edit_reasonformileage').val();
-            var data = {
-                company:company,
-                date:date,
-                vehicle:vehicle,
-                kilometers:kilometers,
-                reasonmileage:reasonmileage,
+            $('#update').attr('disabled', 'disabled');
 
-            }
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-Token': "{{csrf_token()}}"
-                }
-            });
+            const data = {
+                company: $('#edit_companyname').val(),
+                date: $('#edit_date').val(),
+                vehicle: $('#edit_vehicle').val(),
+                kilometers: $('#edit_kilometers').val(),
+                reasonmileage: $('#edit_reasonformileage').val(),
+                id: id
+            };
+
             $.ajax({
                 method: "POST",
-                url: "/mileage/update/"+id,
+                url: "{{ route('mileage.update') }}",
                 data: data,
                 dataType: 'JSON',
-                success: function( response ) {
-                    $.toaster({ message : 'Updated successfully', title : 'Success', priority : 'success' });
+                success: function (response) {
+                    $.toaster({message: 'Updated successfully', title: 'Success', priority: 'success'});
                     searchMileagePage();
                     $('#mileage-modaledit').modal('hide');
                     $('#update').removeAttr('disabled');
@@ -284,8 +176,8 @@
             });
         }
 
-        $(document).ready(function(){
-            var date = new Date(), y = date.getFullYear(), m = date.getMonth();
+        $(document).ready(function () {
+            const date = new Date(), y = date.getFullYear(), m = date.getMonth();
             from = formatDate(new Date(y, m, 1));
             to = formatDate(new Date(y, m + 1, 0));
             searchMileagePage();
@@ -293,7 +185,7 @@
             $('#date').flatpickr({
                 mode: "range",
                 defaultDate: [from, to],
-                onChange: function(selectedDates, dateStr, instance) {
+                onChange: function (selectedDates, dateStr, instance) {
                     from = formatDate(selectedDates[0]);
                     to = formatDate(selectedDates[1]);
 
@@ -313,7 +205,6 @@
 
             // console.log(date);
             let data = {
-                _token: '{{  @csrf_token() }}',
                 search: search,
                 from: from,
                 to: to,
@@ -324,7 +215,7 @@
             $('#wait').css('display', 'inline-block'); // wait for loader
             $.ajax({
                 type: 'post',
-                url: "/mileage/search",
+                url: "{{ route('mileage.search-mileage') }}",
                 data: data,
                 dataType: 'JSON',
                 success: function (results) {
@@ -335,20 +226,19 @@
                             dataSource: results.data,
                             pageSize: 10,
                             totalNumber: results.data.length,
-                            callback: function(data, pagination) {
+                            callback: function (data, pagination) {
                                 let html = '';
                                 for (let index = 0; index < data.length; index++) {
-                                    if(data[index].date !== null && data[index].date !== ''){
+                                    if (data[index].date !== null && data[index].date !== '') {
                                         var time = data[index].date.split(' ')[0];
                                         date = new Date(time);
-                                        date = date.toDateString().split(' ')[2]+" "+date.toDateString().split(' ')[1]+", "+date.toDateString().split(' ')[3]
-                                    }
-                                    else{
+                                        date = date.toDateString().split(' ')[2] + " " + date.toDateString().split(' ')[1] + ", " + date.toDateString().split(' ')[3]
+                                    } else {
                                         date = '-';
                                     }
                                     html += `<tr>
-                                        <td> ${ date  } </td>
-                                        <td> ${data[index].employee.firstname+' '+data[index].employee.lastname} </td>
+                                        <td> ${date} </td>
+                                        <td> ${data[index].employee.firstname + ' ' + data[index].employee.lastname} </td>
                                         <td> ${data[index].reasonmileage} </td>
                                         <td> ${data[index].kilometers} </td>
                                         <td class="text-right">
@@ -384,8 +274,8 @@
                 if (e.value === true) {
                     $.ajax({
                         type: 'post',
-                        url: "/mileage/destroy/" + id,
-                        data: {_token: '{{  @csrf_token() }}'},
+                        url: "{{ route('mileage.destroy') }}",
+                        data: {id: id},
                         dataType: 'JSON',
                         success: function (results) {
 
@@ -411,10 +301,9 @@
 
         // Format date
         function formatDate(date) {
-            var d = new Date(date),
-                month = '' + (d.getMonth() + 1),
-                day = '' + d.getDate(),
-                year = d.getFullYear();
+            const d = new Date(date), year = d.getFullYear();
+            let month = '' + (d.getMonth() + 1),
+                day = '' + d.getDate();
 
             if (month.length < 2)
                 month = '0' + month;
@@ -423,5 +312,6 @@
 
             return [year, month, day].join('-');
         }
+
     </script>
 @endsection

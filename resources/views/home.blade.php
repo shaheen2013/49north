@@ -281,13 +281,9 @@
 
 <script type="text/javascript">
 
-    var id = null
+    var id = null;
     function resetPassword(id){
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-Token': "{{csrf_token()}}"
-            }
-        });
+
         // console.log(id)
 
         $.ajax({
@@ -307,8 +303,8 @@
                     swal("Error!", results.message, "error");
                 }
             }
-        });               
-    } 
+        });
+    }
 
     </script>
 

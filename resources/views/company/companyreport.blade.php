@@ -246,9 +246,7 @@
         function searchCompanyPage() {
             let search = $('#search').val();
             let data = {
-                _token: '{{  @csrf_token() }}',
                 search: search,
-
             };
             $('#wait').css('display', 'inline-block'); // wait for loader
             $.ajax({
@@ -300,7 +298,6 @@
                     $.ajax({
                         type: 'post',
                         url: "/company/destroy/" + id,
-                        data: {_token: '{{  @csrf_token() }}'},
                         dataType: 'JSON',
                         success: function (results) {
                             if (results.success === true) {

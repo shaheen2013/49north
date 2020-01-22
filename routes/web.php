@@ -50,7 +50,6 @@ Route::group(['middleware' => ['auth']], function () {
 
     });
 
-
     Route::group(['prefix' => 'company'], function () {
         Route::get('', 'CompanyController@index')->name('company.index');
         Route::POST('/search', 'CompanyController@searchCompanyPage');
@@ -60,7 +59,6 @@ Route::group(['middleware' => ['auth']], function () {
         Route::POST('/update/{id}', 'CompanyController@update');
         Route::POST('/destroy/{id}', 'CompanyController@destroy');
     });
-
 
     Route::post('/reset_apssword', 'RegisterController@reset_password')->name('reset_apssword');
     Route::post('/registration', 'RegisterController@store')->name('registration');
@@ -80,18 +78,19 @@ Route::group(['middleware' => ['auth']], function () {
     });
 
     // mileage
-    Route::get('/mileagelist', 'MileageController@mileagelist')->name('mileagelist');
-    Route::post('/addmileage', 'MileageController@addmileage')->name('addmileage');
-    Route::post('/employeemileage', 'MileageController@employee_mileagelist');
+    Route::group(['prefix' => 'mileage', 'as' => 'mileage.'], function () {
+        Route::get('mileagelist', 'MileageController@mileagelist')->name('mileage-list');
 
-    Route::get('/mileage/edit/{id}', 'MileageController@edit');
-    Route::POST('/mileage/update/{id}', 'MileageController@update');
-    Route::POST('/mileage/destroy/{id}', 'MileageController@destroy');
+        // I don't think these are in use
+        // Route::post('/employeemileage', 'MileageController@employee_mileagelist')->name('employee-mileage');
+        //Route::post('/updatemileage', 'MileageController@updatemileage')->name('update-mileage');
+        //Route::post('/deletemileage/{id}', 'MileageController@deletemileage')->name('delete-mileage');
 
-    Route::post('/updatemileage', 'MileageController@updatemileage');
-
-    Route::post('/deletemileage/{id}', 'MileageController@deletemileage');
-    Route::POST('/mileage/search', 'MileageController@searchMileage');
+        Route::post('edit', 'MileageController@edit')->name('edit');
+        Route::post('update', 'MileageController@update')->name('update');
+        Route::post('destroy', 'MileageController@destroy')->name('destroy');
+        Route::post('search', 'MileageController@searchMileage')->name('search-mileage');
+    });
 
     ///// timeoff route
     Route::group(['prefix' => 'timeoff', 'as' => 'timeoff.'], function () {
@@ -108,7 +107,6 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('force-login/{user}', 'UserController@forceLogin')->name('force-login');
     Route::get('users/search', 'UserController@search')->name('users.search');
 });
-
 
 Route::resource('posts', 'PostController');
 

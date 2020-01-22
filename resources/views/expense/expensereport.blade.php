@@ -30,7 +30,8 @@
                             </div>
                             <div class="col-sm-12">
                                 <div id="wait" style="display:none;position:absolute;top:100%;left:50%;padding:2px;"><img
-                                        src='{{ asset('img/demo_wait.gif') }}' width="64" height="64"/><br>Loading..</div>
+                                        src='{{ asset('img/demo_wait.gif') }}' width="64" height="64"/><br>Loading..
+                                </div>
                                 <table class="table table-bordered">
                                     <thead>
                                     <tr>
@@ -116,8 +117,8 @@
                             <div class="row">
                                 <div class="col-md-6 col-sm-6">
                                     <div class="text_outer">
-                                        <label for="name" class="">Company</label>
-                                        <select class="select_status form-control" name="company">
+                                        <label for="company" class="">Company</label>
+                                        <select class="select_status form-control" name="company" id="company">
                                             <option value="">Select</option>
                                             @foreach($companies as $company_ex_report)
                                                 <option
@@ -129,8 +130,8 @@
 
                                 <div class="col-md-6 col-sm-6">
                                     <div class="text_outer">
-                                        <label for="name" class="">Date</label>
-                                        <input type="date" placeholder="" class="form-control" name="date">
+                                        <label for="expense_date" class="">Date</label>
+                                        <input type="date" placeholder="" class="form-control" name="date" id="expense_date">
                                     </div>
 
 
@@ -141,8 +142,8 @@
                             <div class="row">
                                 <div class="col-md-6 col-sm-6">
                                     <div class="text_outer">
-                                        <label for="name" class="">Category</label>
-                                        <select class="select_status form-control" name="category">
+                                        <label for="category" class="">Category</label>
+                                        <select class="select_status form-control" name="category" id="category">
                                             <option value="">Select</option>
                                             @foreach($category as $category_ex_report)
                                                 <option
@@ -155,8 +156,8 @@
                                 </div>
                                 <div class="col-md-6 col-sm-6">
                                     <div class="text_outer">
-                                        <label for="name" class="">Purchase via</label>
-                                        <select class="select_status form-control" name="purchase">
+                                        <label for="purchase" class="">Purchase via</label>
+                                        <select class="select_status form-control" name="purchase" id="purchase">
                                             <option value="">Select</option>
                                             @foreach($purchases as $purchases_ex_report)
                                                 <option
@@ -173,8 +174,8 @@
                             <div class="row">
                                 <div class="col-md-6 col-sm-6">
                                     <div class="text_outer">
-                                        <label for="name" class="">Project</label>
-                                        <select class="select_status form-control" name="project">
+                                        <label for="project" class="">Project</label>
+                                        <select class="select_status form-control" name="project" id="project">
                                             <option value="">Select</option>
                                             @foreach($project as $project_ex_report)
                                                 <option
@@ -195,7 +196,7 @@
                             <div class="row">
                                 <div class="col-md-6 col-sm-6">
                                     <div class="text_outer">
-                                        <label for="name" class="">Description</label>
+                                        <label for="description" class="">Description</label>
                                         <input type="text" id="description" name="description" class="form-control"
                                                placeholder="Insert text here">
                                     </div>
@@ -232,14 +233,14 @@
                             <div class="row">
                                 <div class="col-md-6 col-sm-6">
                                     <div class="text_outer">
-                                        <label for="name" class="">Subtotal</label>
+                                        <label for="subtotal" class="">Subtotal</label>
                                         <input type="number" id="subtotal" name="subtotal" class="form-control"
                                                placeholder="Insert text here">
                                     </div>
                                 </div>
                                 <div class="col-md-6 col-sm-6">
                                     <div class="text_outer">
-                                        <label for="name" class="">GST</label>
+                                        <label for="gst" class="">GST</label>
                                         <input type="number" id="gst" name="gst" class="form-control"
                                                placeholder="Insert Figure here">
                                     </div>
@@ -250,20 +251,20 @@
                             <div class="row">
                                 <div class="col-md-6 col-sm-6">
                                     <div class="text_outer">
-                                        <label for="name" class="">PST</label>
+                                        <label for="pst" class="">PST</label>
                                         <input type="number" id="pst" name="pst" class="form-control"
                                                placeholder="Insert Figure here">
                                     </div>
                                 </div>
                                 <div class="col-md-6 col-sm-6">
                                     <div class="text_outer">
-                                        <label for="name" class="">Total</label>
+                                        <label for="total" class="">Total</label>
                                         <input type="number" id="total" name="total" class="form-control"
                                                placeholder="Insert Figure here">
                                     </div>
                                 </div>
                             </div>
-                            </hr>
+                            <hr>
                             <div class="row margin-top-30">
                                 <div class="form-group" style="width:100%;">
                                     <div class="col-md-12 col-sm-12">
@@ -294,7 +295,7 @@
                             <div class="row">
                                 <div class="col-md-6 col-sm-6">
                                     <div class="text_outer">
-                                        <label for="name" class="">Company</label>
+                                        <label for="edit_company" class="">Company</label>
                                         <select class="select_status form-control" name="company" id="edit_company">
                                             <option value="">Select</option>
                                             @foreach($companies as $company_ex_report)
@@ -307,7 +308,7 @@
 
                                 <div class="col-md-6 col-sm-6">
                                     <div class="text_outer">
-                                        <label for="name" class="">Date</label>
+                                        <label for="edit_date" class="">Date</label>
                                         <input type="date" placeholder="" class="form-control" name="date" id="edit_date">
                                     </div>
 
@@ -319,7 +320,7 @@
                             <div class="row">
                                 <div class="col-md-6 col-sm-6">
                                     <div class="text_outer">
-                                        <label for="name" class="">Category</label>
+                                        <label for="edit_category" class="">Category</label>
                                         <select class="select_status form-control" name="category" id="edit_category">
                                             <option value="">Select</option>
                                             @foreach($category as $category_ex_report)
@@ -333,7 +334,7 @@
                                 </div>
                                 <div class="col-md-6 col-sm-6">
                                     <div class="text_outer">
-                                        <label for="name" class="">Purchase via</label>
+                                        <label for="edit_purchase" class="">Purchase via</label>
                                         <select class="select_status form-control" name="purchase" id="edit_purchase">
                                             <option value="">Select</option>
                                             @foreach($purchases as $purchases_ex_report)
@@ -351,7 +352,7 @@
                             <div class="row">
                                 <div class="col-md-6 col-sm-6">
                                     <div class="text_outer">
-                                        <label for="name" class="">Project</label>
+                                        <label for="edit_project" class="">Project</label>
                                         <select class="select_status form-control" name="project" id="edit_project">
                                             <option value="">Select</option>
                                             @foreach($project as $project_ex_report)
@@ -374,7 +375,7 @@
                             <div class="row">
                                 <div class="col-md-6 col-sm-6">
                                     <div class="text_outer">
-                                        <label for="name" class="">Description</label>
+                                        <label for="edit_description" class="">Description</label>
                                         <input type="text" name="description" id="edit_description" class="form-control"
                                                placeholder="Insert text here">
                                     </div>
@@ -411,14 +412,14 @@
                             <div class="row">
                                 <div class="col-md-6 col-sm-6">
                                     <div class="text_outer">
-                                        <label for="name" class="">Subtotal</label>
+                                        <label for="edit_subtotal" class="">Subtotal</label>
                                         <input type="number" id="edit_subtotal" name="subtotal" class="form-control"
                                                placeholder="Insert text here">
                                     </div>
                                 </div>
                                 <div class="col-md-6 col-sm-6">
                                     <div class="text_outer">
-                                        <label for="name" class="">GST</label>
+                                        <label for="edit_gst" class="">GST</label>
                                         <input type="number" id="edit_gst" name="gst" class="form-control"
                                                placeholder="Insert Figure here">
                                     </div>
@@ -429,26 +430,28 @@
                             <div class="row">
                                 <div class="col-md-6 col-sm-6">
                                     <div class="text_outer">
-                                        <label for="name" class="">PST</label>
+                                        <label for="edit_pst" class="">PST</label>
                                         <input type="number" id="edit_pst" name="pst" class="form-control"
                                                placeholder="Insert Figure here">
                                     </div>
                                 </div>
                                 <div class="col-md-6 col-sm-6">
                                     <div class="text_outer">
-                                        <label for="name" class="">Total</label>
+                                        <label for="edit_total" class="">Total</label>
                                         <input type="number" id="edit_total" name="total" class="form-control"
                                                placeholder="Insert Figure here">
                                     </div>
                                 </div>
                             </div>
-                            </hr>
+                            <hr>
                             <div class="row margin-top-30">
                                 <div class="form-group" style="width:100%;">
                                     <div class="col-md-12 col-sm-12">
                                         {{ csrf_field() }}
                                         <input type="hidden" name="emp_id" value="{{ auth()->user()->id }}">
-                                        <button type="button" id="update" onclick="update_expense({{ auth()->user()->id }})" class="btn-dark contact_btn" data-form="expences">Save </button>
+                                        <button type="button" id="update" onclick="update_expense({{ auth()->user()->id }})" class="btn-dark contact_btn" data-form="expences">
+                                            Save
+                                        </button>
                                         <span class="close close-span" data-dismiss="modal" aria-label="Close"><i class="fa fa-arrow-left"></i> Return to Expense Reports</span>
 
                                     </div>
@@ -462,14 +465,13 @@
     </div>
     <!--ajax come modal-->
 
-    </div>
 
     <script type="text/javascript">
 
         let id, from, to, history_from, history_to = null;
 
         $(document).ready(function () {
-            var date = new Date(), y = date.getFullYear(), m = date.getMonth();
+            const date = new Date(), y = date.getFullYear(), m = date.getMonth();
             from = formatDate(new Date(y, m, 1));
             to = formatDate(new Date(y, m + 1, 0));
             expences_pending_new();
@@ -524,10 +526,9 @@
             });
         });
 
-        function expences_pending_new(){
+        function expences_pending_new() {
             let pending_search = $('#pending_search').val();
             let data = {
-                _token: '{{  @csrf_token() }}',
                 pending_search: pending_search,
                 from: from,
                 to: to,
@@ -547,7 +548,7 @@
                             dataSource: results.data,
                             pageSize: 10,
                             totalNumber: results.data.length,
-                            callback: function(data, pagination) {
+                            callback: function (data, pagination) {
                                 let html = '';
                                 let date = '';
 
@@ -564,11 +565,11 @@
                                     <td> ${data[index].employee.firstname + ' ' + data[index].employee.lastname} </td>
                                     <td> ${data[index].description} </td>
                                     <td> ${data[index].total} </td>
-                                    <td>
+                                    <td class="text-center">
                                         <a href="javascript:void(0)" onclick="expence_approve_new('${data[index].id}')"><i class="fa fa-check-circle" title="Approved"></i></a>
                                         <a href="javascript:void(0)" title="Reject!" onclick="expence_reject_new('${data[index].id}')"><i class="fa fa-ban"></i></a>
                                     </td>
-                                    <td class="action-box">
+                                    <td class="text-center">
                                         <a href="javascript:void(0);" onclick="OpenEditExpenseModel('${data[index].id}') ">EDIT</a>
                                         <a href="javascript:void(0);" class="down" onclick="deleteconfirm('${data[index].id}')">DELETE</a>
                                     </td>
@@ -589,10 +590,9 @@
             expences_pending_new()
         };*/
 
-        function expences_history_new(){
+        function expences_history_new() {
             let history_search = $('#history_search').val();
             let data = {
-                _token: '{{  @csrf_token() }}',
                 history_search: history_search,
                 history_from: history_from,
                 history_to: history_to,
@@ -611,7 +611,7 @@
                             dataSource: results.data,
                             pageSize: 10,
                             totalNumber: results.data.length,
-                            callback: function(data, pagination) {
+                            callback: function (data, pagination) {
                                 let html = '';
                                 let date = '';
 
@@ -660,7 +660,6 @@
                     $.ajax({
                         type: 'post',
                         url: "/expense/destroy/" + id,
-                        data: {_token: '{{  @csrf_token() }}'},
                         dataType: 'JSON',
                         success: function (results) {
 
@@ -733,16 +732,14 @@
                             selectedpr = '';
                         }
                         let check = '';
-                        if(results.data.expense.billable != null ){
-                            check = $('#edit_billable').attr('checked',true);
-                        }
-                        else{
+                        if (results.data.expense.billable != null) {
+                            check = $('#edit_billable').attr('checked', true);
+                        } else {
                             check = $('#edit_billable').val(results.data.expense.billable);
                         }
-                        if(results.data.expense.billable != null ){
-                            check = $('#edit_billable').attr('checked',true);
-                        }
-                        else{
+                        if (results.data.expense.billable != null) {
+                            check = $('#edit_billable').attr('checked', true);
+                        } else {
                             check = $('#edit_billable').val(results.data.expense.billable);
                         }
 
@@ -756,7 +753,7 @@
                         $('#edit_project').html(project);
                         $('#edit_project').val(results.data.expense.project);
                         $('#edit_description').val(results.data.expense.description);
-                        $('#edit_receipt_show').attr('src','{{ fileUrl() }}' + results.data.expense.receipt);
+                        $('#edit_receipt_show').attr('src', '{{ fileUrl() }}' + results.data.expense.receipt);
                         $('#edit_billable').val(check);
                         $('#received_auth').val(results.data.expense.received_auth);
                         $('#edit_subtotal').val(results.data.expense.subtotal);
@@ -788,11 +785,6 @@
             var total = $('#edit_total').val();
             var data = new FormData(document.getElementById('editExpenseForm'));
 
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-Token': "{{csrf_token()}}"
-                }
-            });
             $.ajax({
                 method: "POST",
                 url: "/expense/update/" + id,
@@ -826,7 +818,7 @@
             return [year, month, day].join('-');
         }
 
-        function expence_approve_new(id){
+        function expence_approve_new(id) {
 
             $.ajaxSetup({
                 headers: {
@@ -840,8 +832,8 @@
                 method: "POST",
                 url: "/expense/new/approve/" + id,
                 data: data,
-                success: function( response ) {
-                    $.toaster({ message : 'Enabled', title : 'Success', priority : 'success' });
+                success: function (response) {
+                    $.toaster({message: 'Enabled', title: 'Success', priority: 'success'});
                     setTimeout(function () {
                         window.location.reload();
                     }, 1000);
@@ -850,13 +842,8 @@
 
         }
 
-        function expence_reject_new(id){
+        function expence_reject_new(id) {
 
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-Token': "{{csrf_token()}}"
-                }
-            });
             let data = {id: id};
             $.ajax({
 
@@ -864,8 +851,8 @@
                 url: "/expense/new/reject/" + id,
                 data: data,
 
-                success: function( response ) {
-                    $.toaster({ message : 'Disabled', title : 'Success', priority : 'success' });
+                success: function (response) {
+                    $.toaster({message: 'Disabled', title: 'Success', priority: 'success'});
                     setTimeout(function () {
                         window.location.reload();
                     }, 1000);
