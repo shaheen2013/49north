@@ -20,33 +20,12 @@ class ExpenseController extends Controller {
         return view('expense.expensereport', $data);
     }
 
-    //search expense
+  
 
-    public function searchExpense(Request $request){
-      
-        $data = Expenses::orderByDesc('created_at')->with('employee:id,firstname,lastname')
-            ->where(function ($q) use($request){
-                if(isset($request->search)){
-                    $q->whereHas('employee', function($sql) use($request){
-                        $sql->where('firstname', 'LIKE', '%'.$request->search.'%');
-                        $sql->orWhere('lastname', 'LIKE', '%'.$request->search.'%');
-        
-                    });
-                    
-                }
-                if(isset($request->from) && isset($request->to)){
-                    $q->whereBetween('date', [$request->from, $request->to]);
-                }
-            });
-
-            $data= $data->get();
-            return response()->json(['status'=>'success', 'data' => $data]);
-       
-    }
-    
+   //search history
     public function searchHistory(Request $request){
       
-        $data = Expenses::orderByDesc('created_at')->with('employee:id,firstname,lastname')->where('status', 1)->orWhere(['status' => 2])
+        $data = Expenses::orderByDesc('created_at')->with('employee:id,firstname,lastname')->where('status', '!=', null)
         ->where(function ($q) use($request){
             if(isset($request->history_search)){
                 $q->whereHas('employee', function($sql) use($request){
@@ -65,6 +44,8 @@ class ExpenseController extends Controller {
         return response()->json(['status'=>'success', 'data' => $data]);
        
     }
+
+    //search pending
 
     public function searchPending(Request $request){
       
@@ -146,6 +127,8 @@ class ExpenseController extends Controller {
         }
        
     }
+
+    //expense destroy
     public function destroy($id) {
         $expense = Expenses::findOrFail($id);
         if ($expense->delete() == 1) {
@@ -189,8 +172,7 @@ class ExpenseController extends Controller {
             return response()->json(['status'=>'success']);
         }
         return response()->json(['status'=>'fail']);
-        // $id = $request->id;
-        // Expenses::where('id', $id)->update(['status' => '1']);
+       
     }
 
     /// expense reject
@@ -202,67 +184,7 @@ class ExpenseController extends Controller {
             return response()->json(['status'=>'success']);
         }
         return response()->json(['status'=>'fail']);
-        // $id = $request->id;
-        // Expenses::where('id', $id)->update(['status' => '2']);
-    }
-
-    ///// expenses history
-
-    public function expenses_historical () {
-        ob_start();
-        if (auth()->user()->user_type == 'is_admin') {
-            $expense = Expenses::where(['delete_status' => NULL, 'status' => 1])->orWhere(['status' => 2])->get();
-            foreach ($expense as $expense_list) {
-                ?>
-                <tr style="margin-bottom:10px;">
-                    <td><?php echo $expense_list->date ?></td>
-                    <td><?php echo $expense_list->employee->firstname ?></td>
-                    <td><?php echo $expense_list->description ?></td>
-                    <td><?php echo $expense_list->total ?></td>
-                    <td>
-                        <a href="javascript:void(0)" onclick="expence_approve(<?= $expense_list->id ?>)"><i class="fa fa-check-circle" title="Approved"></i></a>
-                        <a href="javascript:void(0)" title="Reject!" onclick="expence_reject(<?= $expense_list->id ?>)"><i class="fa fa-ban"></i></a>
-                    </td>
-                    <td class="action-box">
-                        <!--<a href="javascript:void(0);" onclick="edit_view_ajax(<?= $expense_list->id ?>)" >EDIT</a>-->
-                        <a href="javascript:void(0);" class="down" onclick="delete_expense(<?= $expense_list->id ?>)">EDIT</a>
-                        <a href="javascript:void(0);" class="down" onclick="delete_expense(<?= $expense_list->id ?>)">DELETE</a>
-                    </td>
-                </tr>
-                <tr class="spacer"></tr>
-                <?php
-            }
-            $data = ob_get_clean();
-        }
-        else {
-            $expense = Expenses::where(['emp_id' => auth()->user()->id, 'delete_status' => NULL, 'status' => 1])->orWhere(['status' => 2])->get();
-            foreach ($expense as $expense_list) {
-                ?>
-                <tr style="margin-bottom:10px;">
-                    <td><?php echo $expense_list->date ?></td>
-                    <td><?php echo $expense_list->employee->firstname?></td>
-                    <td><?php echo $expense_list->description ?></td>
-                    <td><?php echo $expense_list->total ?></td>
-                    <td>
-                        <a href="javascript:void(0)" onclick="expence_approve(<?= $expense_list->id ?>)"><i class="fa fa-check-circle" title="Approved"></i></a>
-                        <a href="javascript:void(0)" title="Reject!" onclick="expence_reject(<?= $expense_list->id ?>)"><i class="fa fa-ban"></i></a>
-                    </td>
-                    <td class="action-box">
-                        <!--<a href="javascript:void(0);" onclick="edit_view_ajax(<?= $expense_list->id ?>)" >EDIT</a>-->
-                        <a href="javascript:void(0);" class="down" onclick="delete_expense(<?= $expense_list->id ?>)">EDIT</a>
-                        <a href="javascript:void(0);" class="down" onclick="delete_expense(<?= $expense_list->id ?>)">DELETE</a>
-                    </td>
-                </tr>
-                <tr class="spacer"></tr>
-                <?php
-            }
-            $data = ob_get_clean();
-        }
-
-        echo json_encode([
-            "data" => $data,
-        ]);
-
+       
     }
 
 }

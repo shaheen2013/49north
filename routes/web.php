@@ -45,8 +45,6 @@ Route::group(['middleware' => ['auth']], function () {
 
         Route::post('/new/history', 'ExpenseController@searchHistory');
         Route::POST('/pending', 'ExpenseController@searchPending');
-        // Route::POST('/search', 'ExpenseController@searchExpense');
-
         Route::POST('/destroy/{id}', 'ExpenseController@destroy');
 
     });

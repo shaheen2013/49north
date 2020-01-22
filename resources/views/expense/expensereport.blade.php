@@ -7,8 +7,8 @@
         <div class="tab-pane" id="nav-expense" role="tabpanel" aria-labelledby="nav-employee-tab">
             <div class="expense inner-tab-box">
                 <div class="col-md-12">
-                <h3><span class="active-span" id="pending_span" onclick="expences_pending_new(this.value)">Pending </span> |
-                    <span id="historical_span" onclick="expences_history_new(this.value)"> Historical</span>
+                <h3><span class="active-span" id="pending_span" onclick="expences_pending_new()">Pending </span> |
+                    <span id="historical_span" onclick="expences_history_new()"> Historical</span>
                 </h3>
                 <div class="col-sm-12" id="pending_div">
                     <div class="row">
@@ -66,10 +66,7 @@
                                        class="form-control-new" name="history_search" id="history_search" onkeyup="expences_history_new()">
                             </div>
                         </div>
-                        <div class="col-sm-6">
-                            <a href="javascript:void(0)" class="_new_icon_button_1" data-toggle="modal"
-                               data-target="#expense-modal"> <i class="fa fa-plus"></i> </a>
-                        </div>
+                       
                         <div id="wait" style="display:none;position:absolute;top:100%;left:50%;padding:2px;"><img
                             src='{{ asset('img/demo_wait.gif') }}' width="64" height="64"/><br>Loading..
                     </div>
@@ -82,13 +79,11 @@
                             @endadmin
                             <th>Description</th>
                             <th>Total</th>
-                            @admin
-                            <th>Action</th>
-                            @endadmin
+                           
                             <th></th>
                         </tr>
                         </thead>
-                        <tbody class="return_expence_ajax" id="expence_history">
+                        <tbody class="return_expence_ajax" id="expense_history">
 
 
                         </tbody>
@@ -512,8 +507,6 @@
 
         function expences_pending_new(){
             let pending_search = $('#pending_search').val();
-
-            // console.log(date);
             let data = {
                 _token: '{{  @csrf_token() }}',
                 pending_search: pending_search,
@@ -572,17 +565,17 @@
         };
 
         function expences_history_new(){
-           
-           let history_search = $('#history_search').val();
-           
 
-            // console.log(date);
+           let history_search = $('#history_search').val();
+
+          
             let data = {
                 _token: '{{  @csrf_token() }}',
                 history_search: history_search,
                 history_from: history_from,
                 history_to: history_to,
             };
+            // console.log(data);
 
            $('#wait').css('display', 'inline-block'); // wait for loader
            $.ajax({
@@ -609,18 +602,14 @@
                                    <td> ${results.data[index].employee.firstname + ' ' + results.data[index].employee.lastname} </td>
                                    <td> ${results.data[index].description} </td>
                                    <td> ${results.data[index].total} </td>
-                                   <td>
-                                       <a href="javascript:void(0)" onclick="expence_approve_new('${results.data[index].id}')"><i class="fa fa-check-circle" title="Approved"></i></a>
-                                       <a href="javascript:void(0)" title="Reject!" onclick="expence_reject_new('${results.data[index].id}')"><i class="fa fa-ban"></i></a>
-                                   </td>
+                                   
                                    <td class="action-box">
-                                       <a href="javascript:void(0);" onclick="OpenEditExpenseModel('${results.data[index].id}') ">EDIT</a>
                                        <a href="javascript:void(0);" class="down" onclick="deleteconfirm('${results.data[index].id}')">DELETE</a>
                                    </td>
                                </tr>
                                <tr class="spacer"></tr>`;
                        }
-                       $('#expence_history').html(html);
+                       $('#expense_history').html(html);
                       
                    } else {
                        swal("Error!", results.message, "error");
@@ -629,63 +618,7 @@
            });
        }
 
-       function searchExpensePage() {
-            let search = $('#search').val();
-
-            // console.log(date);
-            let data = {
-                _token: '{{  @csrf_token() }}',
-                search: search,
-                from: from,
-                to: to,
-
-            };
-            console.log(data);
-
-            $('#wait').css('display', 'inline-block'); // wait for loader
-            $.ajax({
-                type: 'post',
-                url: "/expense/search",
-                data: data,
-                dataType: 'JSON',
-                success: function (results) {
-                    let html = '';
-                    let date = '';
-                    if (results.status === 'success') {
-                        $('#wait').css('display', 'none');
-                        for (let index = 0; index < results.data.length; index++) {
-
-                            if (results.data[index].date != null && results.data[index].date != '') {
-                                time = results.data[index].date.split(' ')[0];
-                                date = new Date(time);
-                                date = date.toDateString().split(' ')[2] + " " + date.toDateString().split(' ')[1] + ", " + date.toDateString().split(' ')[3]
-                            } else {
-                                date = '-';
-                            }
-                            html += `<tr>
-                                    <td> ${date} </td>
-                                    <td> ${results.data[index].employee.firstname + ' ' + results.data[index].employee.lastname} </td>
-                                    <td> ${results.data[index].description} </td>
-                                    <td> ${results.data[index].total} </td>
-                                    <td>
-                                        <a href="javascript:void(0)" onclick="expence_approve('${results.data[index].id}')"><i class="fa fa-check-circle" title="Approved"></i></a>
-                                        <a href="javascript:void(0)" title="Reject!" onclick="expence_reject('${results.data[index].id}')"><i class="fa fa-ban"></i></a>
-                                    </td>
-                                    <td class="action-box">
-                                        <a href="javascript:void(0);" onclick="OpenEditExpenseModel('${results.data[index].id}') ">EDIT</a>
-                                        <a href="javascript:void(0);" class="down" onclick="deleteconfirm('${results.data[index].id}')">DELETE</a>
-                                    </td>
-                                </tr>
-                                <tr class="spacer"></tr>`;
-                        }
-                        $('#expense_search').html(html);
-                       
-                    } else {
-                        swal("Error!", results.message, "error");
-                    }
-                }
-            });
-    }
+       
     function deleteconfirm(id) {
             swal({
                 title: "Delete?",
