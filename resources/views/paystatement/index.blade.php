@@ -7,15 +7,27 @@
                             <h3><span  class="active-span" id="active_contracts_span">Paystatement  </span></h3>
 
                             <div id="active_contracts_div">
-                                <div class="top_part_">
-                                    <ul>
-                                    	<li>Emp id</li>
-                                        <li>Date</li>
-                                        <li>Descripon</li>
-                                        <li style="float:right;">Action</li>
-                                    </ul>
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <input type="date" name="date" id="date" placeholder="Select Date"
+                                               class="form-control-new" onChange="searchPayStatementsPage()">
+                                    </div>
                                 </div>
-                              @if($user_list)
+                                <div class="col-sm-12">
+
+                                    <table class="table table-bordered">
+                                        <thead>
+                                        <tr>
+                                            <th>Emp id</th>
+                                            <th>Date</th>
+                                            <th>Descripon</th>
+                                            <th>Action</th>
+                                            
+                                        </tr>
+                                        </thead>
+                                        <tbody class="return_expence_ajax" id="payments_search">
+
+                                            @if($user_list)
                             	@foreach($user_list as $plist)
                                 <div class="download_file">
                                     <div class="left_part">
@@ -31,9 +43,16 @@
 
                                         @endif
                                     </div>
-                                </div><!------------------>
+                                </div>
                               @endforeach
                             @endif
+                
+                
+                                        </tbody>
+                                    </table>
+
+                                </div>
+                              
                             </div>
 
                         </div>
@@ -88,4 +107,75 @@
 </div>
 </div>
 
+<script type="text/javascript">
+    var from = null;
+    var to = null;
+    $(document).ready(function () {
+        $('#date').flatpickr({
+            mode: "range",
+            onChange: function (selectedDates, dateStr, instance) {
+                from = formatDate(selectedDates[0]);
+                to = formatDate(selectedDates[1]);
+            },
+        });
+    });
+    function searchPayStatementsPage() {
+       
+        let data = {
+            _token: '{{  @csrf_token() }}',
+            from: from,
+            to: to,
+
+        };
+        console.log(data);
+        $('#wait').css('display', 'inline-block'); // wait for loader
+        $.ajax({
+                type: 'post',
+                url: "/paystatement/search",
+                data: data,
+                dataType: 'JSON',
+                success: function (results) {
+                    let html = '';
+                    let date = '';
+                    let pdfname = '';
+                    if (results.status === 'success') {
+                        $('#wait').css('display', 'none');
+                        for (let index = 0; index < results.data.length; index++) {
+
+                            if (results.data[index].date != null && results.data[index].date != '') {
+                                time = results.data[index].date.split(' ')[0];
+                                date = new Date(time);
+                                date = date.toDateString().split(' ')[2] + " " + date.toDateString().split(' ')[1] + ", " + date.toDateString().split(' ')[3]
+                            } else {
+                                date = 'view';
+                            }
+                            if (results.data[index].pdfname) {
+                                // pdfname ='-' ;
+                                pdfname = results.data[index].pdfname != '' ? `<a href="{{url('/')}}/paystatement/${results.data[index].pdfname}" target="_blank">VIEW</a>` : `<a href="#" onclick="paystatement_modal('${results.data[index].emp_id}')">UPLOAD</a>`;
+                            } 
+                            
+                            html += `<tr>
+
+                                    <td> ${results.data[index].emp_id} </td>
+                                    <td> ${date} </td>
+                                    <td> ${results.data[index].description} </td>
+                                    
+                                    <td class="action-box">
+                                        ${pdfname}
+                                    </td>
+                                </tr>`;
+                        }
+                        $('#payments_search').html(html);
+                       
+                    } else {
+                        swal("Error!", results.message, "error");
+                    }
+                }
+            });
+    }
+
+    window.onload = function () {
+        searchPayStatementsPage()
+        };
+</script>
 @endsection

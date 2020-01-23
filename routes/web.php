@@ -104,6 +104,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::group(['prefix' => 'paystatement', 'as' => 'paystatement.'], function () {
         Route::get('/list', 'PaystatementController@paylist');
         Route::post('/add', 'PaystatementController@addpaystatement')->name('add');
+        Route::POST('/search', 'PaystatementController@searchPaymentPage');
 
     });
 
