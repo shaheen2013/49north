@@ -1402,7 +1402,7 @@ tbody tr {
 	margin-bottom:10px;
 }
 td {
-
+    vertical-align: middle!important;
 	padding:10px;
 }
 th {
@@ -1413,15 +1413,19 @@ th {
 td a {
     border: 1px solid #ccc;
     display: inline-block;
-    /*float: left;*/
     text-align: center;
-    padding: 0 35px;
-    margin: 0 0 0 14px;
+    padding: 5px 20px;
+    margin: 0 0 0 5px;
     color: #ccc;
+    text-decoration: none;
+    border-radius: 28px;
+    font-size: 13px;
+    text-transform: uppercase;
+}
+td a:hover {
     text-decoration: none;
 }
 td a.down {
-    padding: 0 15px !important;
     color: #760800 !important;
     border-color: #760800 !important;
 }
@@ -1790,3 +1794,16 @@ span.fc-title {
 .paginationjs{display: inline-block;float: right;}
 ._table th{border: none!important;border-bottom: none!important;}
 .spacer{ height:10px; }
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+#wait,#wait-his{
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid #3498db;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 2s linear infinite;
+}
+

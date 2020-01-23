@@ -8,20 +8,19 @@
             <div class="expense inner-tab-box">
                 <div class="col-md-12">
                     <div class="row">
-                        <div class="col-sm-3">
+                        <div class="col-sm-2">
                             <div class="form-group">
-                                <input type="text" placeholder="Search Company" onkeyup="searchCompanyPage()"
-                                       class="form-control-new" name="search" id="search">
+                                <input type="text" placeholder="Search Company" onkeyup="searchCompanyPage()" class="form-control-new" name="search" id="search">
                             </div>
+                        </div>
+                        <div class="col-sm-1">
+                            <div id="wait"></div>
                         </div>
                         <div class="col-sm-9">
                             <a href="javascript:void(0)" class="_new_icon_button_1" data-toggle="modal"
                                data-target="#company-modal">
                                 <i class="fa fa-plus"></i>
                             </a>
-                        </div>
-                        <div class="col-sm-12 text-center">
-                            <img id="wait" src='{{ asset('img/demo_wait.gif') }}' width="50" height="50" />
                         </div>
                         <div class="col-sm-12">
                             <table class="table _table _table-bordered">
@@ -35,17 +34,14 @@
                                 </thead>
                                 <tbody class="return_expence_ajax" id="company_search">
 
-                                <tbody>
+                                </tbody>
                             </table>
-
-                            <div id="demo"></div>
+                            <div id="paginate"></div>
                         </div>
                     </div>
                 </div>
-
-
             </div>
-        </div><!-------------end--------->
+        </div>
 
     </div>
 
@@ -257,7 +253,7 @@
                 success: function (results) {
                     if (results.status === 'success') {
                         $('#wait').css('display', 'none');
-                        $('#demo').pagination({
+                        $('#paginate').pagination({
                             dataSource: results.data,
                             pageSize: 10,
                             totalNumber: results.data.length,

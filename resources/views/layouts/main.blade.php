@@ -99,6 +99,7 @@
 
 
     @if ($errors->any())
+        <br>
         <div class="alert alert-danger all_errors">
             @foreach ($errors->all() as $error)
                 <li>{{ $error }}</li>
@@ -106,6 +107,7 @@
         </div>
     @endif
     <div class="ajax-delete-msg" style="display: none">
+        <br>
         <div class="alert alert-danger" role="alert">
             You have successfully deleted an item.
         </div>
@@ -113,6 +115,7 @@
     <div class="flash-message">
         @foreach (['danger', 'warning', 'success', 'info'] as $msg)
             @if(session()->has('alert-' . $msg))
+                <br>
                 <p class="alert alert-{{ $msg }}">
                     {!! nl2br(session()->get('alert-' . $msg)) !!} <a href="#" class="close" data-dismiss="alert"
                                                                       aria-label="close">&times;</a>

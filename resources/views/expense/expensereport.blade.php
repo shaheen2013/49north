@@ -3,102 +3,102 @@
 @section('content1')
 
 
-    <div class="container-fluid">
+    <div class="well-default-trans">
         <div class="tab-pane" id="nav-expense" role="tabpanel" aria-labelledby="nav-employee-tab">
             <div class="expense inner-tab-box">
-                <div class="col-md-12">
-                    <h3><span class="active-span" id="pending_span" onclick="expences_pending_new()">Pending </span> |
+                <div class="col-sm-12">
+                    <h3>
+                        <span class="active-span" id="pending_span" onclick="expences_pending_new()">Pending </span> |
                         <span id="historical_span" onclick="expences_history_new()"> Historical</span>
                     </h3>
-                    <div class="col-sm-12" id="pending_div">
-                        <div class="row">
-                            <div class="col-sm-3">
-                                <div class="form-group">
-                                    <input type="date" name="pending_date" id="date" placeholder="Select Date"
-                                           class="form-control-new" onChange="expences_pending_new()">
-                                </div>
-                            </div>
-                            <div class="col-sm-3">
-                                <div class="form-group">
-                                    <input type="text" placeholder="Search employee"
-                                           class="form-control-new" name="pending_search" id="pending_search" onkeyup="expences_pending_new()">
-                                </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <a href="javascript:void(0)" class="_new_icon_button_1" data-toggle="modal"
-                                   data-target="#expense-modal"> <i class="fa fa-plus"></i> </a>
-                            </div>
-                            <div class="col-sm-12">
-                                <div id="wait" style="display:none;position:absolute;top:100%;left:50%;padding:2px;"><img
-                                        src='{{ asset('img/demo_wait.gif') }}' width="64" height="64"/><br>Loading..
-                                </div>
-                                <table class="table table-bordered">
-                                    <thead>
-                                    <tr>
-                                        <th>Date</th>
-                                        @admin
-                                        <th>Employee</th>
-                                        @endadmin
-                                        <th>Description</th>
-                                        <th>Total</th>
-                                        @admin
-                                        <th>Action</th>
-                                        @endadmin
-                                        <th></th>
-                                    </tr>
-                                    </thead>
-                                    <tbody class="return_expence_ajax" id="expence_pending">
-
-                                    <tbody>
-                                </table>
-                                <div id="demo"></div>
+                    <br>
+                </div>
+                <div class="col-sm-12" id="pending_div">
+                    <div class="row">
+                        <div class="col-sm-2">
+                            <div class="form-group">
+                                <input type="text" placeholder="Search employee"
+                                       class="form-control-new" name="pending_search" id="pending_search" onkeyup="expences_pending_new()">
                             </div>
                         </div>
-                    </div>
-                    <div id="historical_div" class="col-sm-12" style="display:none;">
-                        <div class="row">
-                            <div class="col-sm-3">
-                                <div class="form-group">
-                                    <input type="date" name="history_date" id="history_date" placeholder="Select Date"
-                                           class="form-control-new">
-                                </div>
+                        <div class="col-sm-2">
+                            <div class="form-group">
+                                <input type="date" name="pending_date" id="date" placeholder="Select Date"
+                                       class="form-control-new" onChange="expences_pending_new()">
                             </div>
-                            <div class="col-sm-3">
-                                <div class="form-group">
-                                    <input type="text" placeholder="Search employee"
-                                           class="form-control-new" name="history_search" id="history_search" onkeyup="expences_history_new()">
-                                </div>
-                            </div>
-                            <div class="col-sm-6"></div>
-                            <div class="col-sm-12">
-                                <div id="wait" style="display:none;position:absolute;top:100%;left:50%;padding:2px;"><img
-                                        src='{{ asset('img/demo_wait.gif') }}' width="64" height="64"/><br>Loading..
-                                </div>
-                                <table class="table table-bordered">
-                                    <thead>
-                                    <tr>
-                                        <th>Date</th>
-                                        @admin
-                                        <th>Employee</th>
-                                        @endadmin
-                                        <th>Description</th>
-                                        <th>Total</th>
+                        </div>
+                        <div class="col-sm-1">
+                            <div id="wait"></div>
+                        </div>
+                        <div class="col-sm-7">
+                            <a href="javascript:void(0)" class="_new_icon_button_1" data-toggle="modal"
+                               data-target="#expense-modal"> <i class="fa fa-plus"></i> </a>
+                        </div>
+                        <div class="col-sm-12">
+                            <table class="table _table _table-bordered">
+                                <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    @admin
+                                    <th>Employee</th>
+                                    @endadmin
+                                    <th>Description</th>
+                                    <th>Total</th>
+                                    @admin
+                                    <th>Action</th>
+                                    @endadmin
+                                    <th></th>
+                                </tr>
+                                </thead>
+                                <tbody class="return_expence_ajax" id="expence_pending">
 
-                                        <th></th>
-                                    </tr>
-                                    </thead>
-                                    <tbody class="return_expence_ajax" id="expense_history">
-
-
-                                    </tbody>
-                                </table>
-                                <div id="demo-new"></div>
-                            </div>
+                                </tbody>
+                            </table>
+                            <div id="paginate"></div>
                         </div>
                     </div>
                 </div>
+                <div id="historical_div" class="col-sm-12" style="display:none;">
+                    <div class="row">
+                        <div class="col-sm-2">
+                            <div class="form-group">
+                                <input type="text" placeholder="Search employee"
+                                       class="form-control-new" name="history_search" id="history_search" onkeyup="expences_history_new()">
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            <div class="form-group">
+                                <input type="date" name="history_date" id="history_date" placeholder="Select Date"
+                                       class="form-control-new">
+                            </div>
+                        </div>
+                        <div class="col-sm-1">
+                            <div id="wait-his"></div>
+                        </div>
+                        <div class="col-sm-7"></div>
+                        <div class="col-sm-12">
+                            <table class="table _table _table-bordered">
+                                <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    @admin
+                                    <th>Employee</th>
+                                    @endadmin
+                                    <th>Description</th>
+                                    <th>Total</th>
+
+                                    <th></th>
+                                </tr>
+                                </thead>
+                                <tbody class="return_expence_ajax" id="expense_history">
 
 
+                                </tbody>
+                            </table>
+                            <div id="paginate-new"></div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div><!-------------end--------->
 
@@ -493,6 +493,8 @@
 
             $('#date').flatpickr({
                 mode: "range",
+                altInput: true,
+                altFormat: 'j M, Y',
                 defaultDate: [from, to],
                 onChange: function (selectedDates, dateStr, instance) {
                     from = formatDate(selectedDates[0]);
@@ -510,6 +512,8 @@
 
             $('#history_date').flatpickr({
                 mode: "range",
+                altInput: true,
+                altFormat: 'j M, Y',
                 defaultDate: [from, to],
                 onChange: function (selectedDates, dateStr, instance) {
                     history_from = formatDate(selectedDates[0]);
@@ -536,6 +540,7 @@
             };
 
             $('#wait').css('display', 'inline-block'); // wait for loader
+            $('#wait-his').css('display', 'inline-block'); // wait for loader
             $.ajax({
                 type: 'post',
                 url: "/expense/pending",
@@ -544,7 +549,8 @@
                 success: function (results) {
                     if (results.status === 'success') {
                         $('#wait').css('display', 'none');
-                        $('#demo').pagination({
+                        $('#wait-his').css('display', 'none');
+                        $('#paginate').pagination({
                             dataSource: results.data,
                             pageSize: 10,
                             totalNumber: results.data.length,
@@ -599,6 +605,7 @@
             };
 
             $('#wait').css('display', 'inline-block'); // wait for loader
+            $('#wait-his').css('display', 'inline-block'); // wait for loader
             $.ajax({
                 type: 'post',
                 url: "/expense/new/history",
@@ -607,7 +614,8 @@
                 success: function (results) {
                     if (results.status === 'success') {
                         $('#wait').css('display', 'none');
-                        $('#demo-new').pagination({
+                        $('#wait-his').css('display', 'none');
+                        $('#paginate-new').pagination({
                             dataSource: results.data,
                             pageSize: 10,
                             totalNumber: results.data.length,

@@ -30,7 +30,7 @@
                                             </tr>
                                             <tr class="spacer"></tr>
                                         @endforeach
-                                        <tbody>
+                                        </tbody>
                                     </table>
                                 </div>
                                 <div id="historical_div" style="display:none;">

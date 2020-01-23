@@ -5,17 +5,18 @@
 @section('content1')
     <div class="well-default-trans">
         <div class="row">
-            <div class="col-sm-3">
-                <div class="form-group">
-                    <input type="date" name="date" id="date" placeholder="Select Date" class="form-control-new">
-                </div>
-            </div>
-            <div class="col-sm-3">
+            <div class="col-sm-2">
                 <div class="form-group">
                     <input type="text" placeholder="Search user" onkeyup="searchAdmin()" class="form-control-new" name="search" id="search">
                 </div>
             </div>
-            <div class="col-sm-6">
+            <div class="col-sm-2">
+                <div class="form-group"> <input type="text" name="date" id="date" placeholder="Select Date" class="form-control-new"> </div>
+            </div>
+            <div class="col-sm-1">
+                <div id="wait"></div>
+            </div>
+            <div class="col-sm-7">
                 <div class="form-group">
                     <a href="{{ route('users.create') }}" class="btn btn-success pull-right">Add User</a>
                     <a href="{{ route('admin.permissions.index') }}" class="btn btn-warning pull-right mr-2">Permissions</a>
@@ -40,7 +41,7 @@
             </tbody>
         </table>
 
-        <div id="demo"></div>
+        <div id="paginate"></div>
     </div>
 
 @endsection
@@ -86,16 +87,16 @@
 
             $('#date').flatpickr({
                 mode: "range",
+                altInput: true,
+                altFormat: 'j M, Y',
                 defaultDate: [from, to],
                 onChange: function(selectedDates, dateStr, instance) {
                     from = formatDate(selectedDates[0]);
                     to = formatDate(selectedDates[1]);
-
                     if (selectedDates[0] === undefined || (selectedDates[0] !== undefined && selectedDates[1] !== undefined)) {
                         if (selectedDates[0] === undefined) {
                             from = to = null;
                         }
-
                         searchAdmin();
                     }
                 },
@@ -133,7 +134,7 @@
         });
 
         function renderHTML(result) {
-            $('#demo').pagination({
+            $('#paginate').pagination({
                 dataSource: result,
                 pageSize: 10,
                 totalNumber: result.length,
