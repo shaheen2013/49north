@@ -47,41 +47,53 @@ class MileageController extends Controller {
      *
      * @return JsonResponse
      */
-    public function searchMileage (Request $request) {
-        $type = auth()->user()->is_admin;
-        if ($type == '1') {
-            $data = Mileage::orderByDesc('created_at')->with('employee:id,firstname,lastname')->where(function ($q) use ($request) {
-                if (isset($request->search)) {
-                    $q->whereHas('employee', function ($sql) use ($request) {
-                        $sql->where('firstname', 'LIKE', '%' . $request->search . '%');
-                        $sql->orWhere('lastname', 'LIKE', '%' . $request->search . '%');
+   
 
-                    });
+    public function searchPendingMileage (Request $request) {
 
-                }
-                if (isset($request->from) && isset($request->to)) {
-                    $q->whereBetween('date', [$request->from, $request->to]);
-                    // $q->whereBetween('date', array($request->from, $request->to));
-                }
-            });
+        $data = Mileage::orderByDesc('created_at')->with('employee')->whereNull('status')
+        ->where(function ($q) use ($request) {
+            if (isset($request->search)) {
+                $q->whereHas('employee', function ($sql) use ($request) {
+                    $sql->where('firstname', 'LIKE', '%' . $request->search . '%');
+                    $sql->orWhere('lastname', 'LIKE', '%' . $request->search . '%');
 
-            $data = $data->get();
+                });
 
-            return response()->json(['status' => 'success', 'data' => $data]);
-        }
+            }
+            if (isset($request->from) && isset($request->to)) {
+                $q->whereBetween('date', [$request->from, $request->to]);
+            }
+        });
 
-        else {
-            $data = Auth::user()->mileage()->where('status', 'A')->orderByDesc('created_at')->where(function ($q) use ($request) {
-                if (isset($request->date)) {
-                    $q->whereDate('date', '=', $request->date);
-                }
-            });
+        $data = $data->get();
 
-            $data = $data->get();
+        return response()->json(['status' => 'success', 'data' => $data]);
+     
+    }
 
-            return response()->json(['status' => 'success', 'data' => $data]);
+    public function searchHistoryMileage (Request $request) { 
 
-        }
+        $data = Mileage::orderByDesc('created_at')->with('employee')->whereNotNull('status')
+        ->where(function ($q) use ($request) {
+            if (isset($request->history_search)) {
+                $q->whereHas('employee', function ($sql) use ($request) {
+                    $sql->where('firstname', 'LIKE', '%' . $request->history_search . '%');
+                    $sql->orWhere('lastname', 'LIKE', '%' . $request->history_search . '%');
+
+                });
+
+            }
+            if (isset($request->history_from) && isset($request->history_to)) {
+                $q->whereBetween('date', [$request->history_from, $request->history_to]);
+                
+            }
+        });
+
+        $data = $data->get();
+
+        return response()->json(['status' => 'success', 'data' => $data]);
+       
     }
 
     /**
@@ -171,6 +183,30 @@ class MileageController extends Controller {
             'success' => $success,
             'message' => $message,
         ]);
+    }
+
+     /// approved mileage
+     public function mileageApprove($id) {
+        $data = Mileage::find($id);
+        $data->status = 'A';
+        $data->save();
+        if($data->update()){
+            return response()->json(['status'=>'success']);
+        }
+        return response()->json(['status'=>'fail']);
+       
+    }
+
+    /// reject mileage
+    public function mileageReject($id) {
+        $data = Mileage::find($id);
+        $data->status = 'D';
+        $data->save();
+        if($data->update()){
+            return response()->json(['status'=>'success']);
+        }
+        return response()->json(['status'=>'fail']);
+       
     }
 
 }

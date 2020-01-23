@@ -89,7 +89,10 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('edit', 'MileageController@edit')->name('edit');
         Route::post('update', 'MileageController@update')->name('update');
         Route::post('destroy', 'MileageController@destroy')->name('destroy');
-        Route::post('search', 'MileageController@searchMileage')->name('search-mileage');
+        Route::post('/approve/{id}', 'MileageController@mileageApprove');
+        Route::post('/reject/{id}', 'MileageController@mileageReject');
+        Route::post('/search/pending', 'MileageController@searchPendingMileage')->name('search-pending-mileage');
+        Route::post('/search/history', 'MileageController@searchHistoryMileage')->name('search-history-mileage');
     });
 
     ///// timeoff route

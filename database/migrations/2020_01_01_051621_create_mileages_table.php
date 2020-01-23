@@ -21,7 +21,7 @@ class CreateMileagesTable extends Migration
 			$table->string('vehicle');
 			$table->string('kilometers');
 			$table->string('reasonmileage');
-			$table->enum('status',['A','D'])->default('A');
+			$table->enum('status',['A','D'])->nullable();
             $table->timestamps();
         });
     }
