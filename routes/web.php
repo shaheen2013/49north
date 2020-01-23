@@ -65,7 +65,6 @@ Route::group(['middleware' => ['auth']], function () {
 
     ///// Maintenance
     Route::group(['prefix' => 'maintenance', 'as' => 'maintenance.'], function () {
-
         Route::get('/list', 'MaintenanceController@Maintenance_list')->name('list');
         Route::post('/add', 'MaintenanceController@addmaintenance')->name('add');
         Route::post('/editview', 'MaintenanceController@edit_maintenanceview')->name('editview');
@@ -73,8 +72,8 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/delete', 'MaintenanceController@delete')->name('delete');
         Route::post('/ticket_inprogress', 'MaintenanceController@ticket_inprogress')->name('ticket_inprogress');
         Route::post('/ticket_cancel', 'MaintenanceController@ticket_cancel')->name('ticket_cancel');
-      
-
+        Route::get('search', 'MaintenanceController@search')->name('search');
+        /* Route::post('/complited_ticket', 'Maintenance_ticket_controller@complited_ticket')->name('complited_ticket');*/
     });
 
     // mileage

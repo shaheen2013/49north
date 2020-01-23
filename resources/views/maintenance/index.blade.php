@@ -2,15 +2,38 @@
 
 @section('content1')
 
-    <div class="container-fluid">
+    <div class="well-default-trans">
 
         <div class="tab-pane" id="nav-maintenance" role="tabpanel" aria-labelledby="nav-maintenance-tab">
             <div class="maintenance inner-tab-box">
-                <h3><span class="active-span" id="active_ticket_span" onclick="maintanance_list(this.value)">Active Tickets</span> |
-                    <span id="complited_ticket_span" onclick="complited_ticket(this.value)">Completed Tickets</span><span><i class="fa fa-plus" data-toggle="modal" data-target="#maintenance-modal" style="background-color:#cecece; font-size:11px; padding:5px; border-radius:50%;color:#fff; float:right;"></i></span>
-                </h3>
+                <div class="col-sm-12">
+                    <h3>
+                        <span class="active-span" id="active_ticket_span" onclick="searchMaintenance()">Active Tickets</span> |
+                        <span id="complited_ticket_span" onclick="searchComplitedTicket()">Completed Tickets</span>
+                    </h3>
+                    <br>
+                </div>
+                <div class="row">
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <input type="text" placeholder="Search employee" class="form-control-new" name="pending_search" id="pending_search" onkeyup="searchMaintenance()">
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <input type="date" name="pending_date" id="date" placeholder="Select Date" class="form-control-new">
+                        </div>
+                    </div>
+                    <div class="col-sm-1">
+                        <div id="wait"></div>
+                    </div>
+                    <div class="col-sm-7">
+                        <a href="javascript:void(0)" class="_new_icon_button_1" data-toggle="modal" data-target="#maintenance-modal"><i class="fa fa-plus"></i></a>
+                    </div>
+                </div>
+
                 <div id="active_ticket_div">
-                    <table style="width:100%;">
+                    <table style="width:100%;" class="table _table _table-bordered">
                         <thead>
                         <tr>
                             <th>#</th>
@@ -23,41 +46,11 @@
                             @endadmin
                         </tr>
                         </thead>
-                        <tbody class="maintanance_list_come_ajax">
-                        @if($maintanance)
+                        <tbody class="maintanance_list_come_ajax" id="maintanance">
 
-                            @foreach ($maintanance as $maintanance_list)
-                                <tr style="margin-bottom:10px;">
-                                    <td>{{ "#00".$maintanance_list->id }}</td>
-                                    <td>{{ $maintanance_list->subject }}</td>
-                                    <td><?php
-                                        if ($maintanance_list->status == NULL) {
-                                            echo "Pending";
-                                        }
-                                        elseif ($maintanance_list->status == 1) {
-                                            echo "in progress";
-                                        }
-                                        elseif ($maintanance_list->status == 2) {
-                                            echo "Close";
-                                        }
-                                        ?></td>
-                                    <td>{{ $maintanance_list->updated_at }}</td>
-                                    <td>{{ $maintanance_list->employee->name }}</td>
-                                    @admin
-                                    <td>
-                                        <a href="javascript:void(0)" onclick="ticket_inprogress({{ $maintanance_list->id  }})"><i class="fa fa-check-circle" title="In Progress"></i></a>
-                                        <a href="javascript:void(0)" title="Cancel!" onclick="ticket_cancel({{ $maintanance_list->id  }})"><i class="fa fa-ban"></i></a>
-                                    </td>
-                                    @endadmin
-
-                                    <td class="action-box"><a href="javascript:void(0);" onclick="mainance_edit_view_ajax({{ $maintanance_list->id }})">EDIT</a>
-                                        <a href="javascript:void(0);" class="down" onclick="delete_maintance({{ $maintanance_list->id }})">DELETE</a></td>
-                                </tr>
-                                <tr class="spacer"></tr>
-                            @endforeach
-                        @endif
                         </tbody>
                     </table>
+                    <div id="paginate"></div>
                 </div>
 
                 <div id="complited_ticket_div" style="display:none;">
@@ -72,39 +65,15 @@
                             <th></th>
                         </tr>
                         </thead>
-                        <tbody class="maintanance_list_come_ajax_completed_ticket">
-                        @foreach ($maintanance1 as $maintanance_list)
+                        <tbody class="maintanance_list_come_ajax_completed_ticket" id="maintanance-completed">
 
-                            <tr style="margin-bottom:10px;">
-                                <td>{{ "#00".$maintanance_list->id }}</td>
-                                <td>{{ $maintanance_list->subject }}</td>
-                                <td><?php
-                                    if ($maintanance_list->status == NULL) {
-                                        echo "Pending";
-                                    }
-                                    elseif ($maintanance_list->status == 1) {
-                                        echo "in progress";
-                                    }
-                                    elseif ($maintanance_list->status == 2) {
-                                        echo "Close";
-                                    }
-                                    ?></td>
-                                <td>{{ $maintanance_list->updated_at }}</td>
-                                <td>{{ $maintanance_list->employee->name }}</td>
-                                <td>
-                                    <a href="javascript:void(0)">View</a>
-                                </td>
-
-                            </tr>
-                            <tr class="spacer"></tr>
-                        @endforeach
                         </tbody>
                     </table>
+                    <div id="paginate-completed"></div>
                 </div>
             </div>
         </div><!-------------end--------->
     </div>
-
 
     <div id="edit-maintenance-modal" class="modal fade bs-example-modal-lg edit-maintenance-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
         <!-- modal come on ajax-->
@@ -200,11 +169,15 @@
         </div>
     </div>
 
+@endsection
 
+@section('js')
     <script type="text/javascript">
+        let is_admin = parseInt({{ auth()->user()->is_admin }});
+        let auth_id = parseInt({{ auth()->id() }});
+        let from, to = null;
 
         $(document).ready(function () {
-
             $("#active_ticket_span").click(function () {
                 $("#active_ticket_span").addClass("active-span");
                 $("#complited_ticket_span").removeClass("active-span");
@@ -212,6 +185,7 @@
                 $("#complited_ticket_div").hide();
 
             });
+
             $("#complited_ticket_span").click(function () {
                 $("#complited_ticket_span").addClass("active-span");
                 $("#active_ticket_span").removeClass("active-span");
@@ -219,7 +193,151 @@
                 $("#complited_ticket_div").show();
             });
 
-        });
-    </script>
+            var date = new Date(), y = date.getFullYear(), m = date.getMonth();
+            from = formatDate(new Date(y, m, 1));
+            to = formatDate(new Date(y, m + 1, 0));
+            searchMaintenance();
 
+            $('#date').flatpickr({
+                mode: "range",
+                altInput: true,
+                altFormat: 'j M, Y',
+                defaultDate: [from, to],
+                onChange: function(selectedDates, dateStr, instance) {
+                    from = formatDate(selectedDates[0]);
+                    to = formatDate(selectedDates[1]);
+                    if (selectedDates[0] === undefined || (selectedDates[0] !== undefined && selectedDates[1] !== undefined)) {
+                        if (selectedDates[0] === undefined) {
+                            from = to = null;
+                        }
+                        searchMaintenance();
+                    }
+                },
+            });
+        });
+
+        function searchMaintenance() {
+            $('#active_ticket_div').show();
+            $('#complited_ticket_div').hide();
+            $('#maintanance').html('');
+            $('#wait').css('display', 'inline-block'); // wait for loader
+            let search = $('#pending_search').val();
+            let data = {
+                search: search,
+                from: from,
+                to: to,
+                id: 'maintenance',
+            };
+
+            $.ajax({
+                type: 'get',
+                url: "{{ route('maintenance.search') }}",
+                data: data,
+                dataType: 'JSON',
+                success: function (results) {
+                    $('#wait').css('display', 'none');
+
+                    if (results.status == 200) {
+                        renderHTML(results.data, '#paginate', '#maintanance');
+                    } else {
+                        swal("Error!", results.message, "error");
+                    }
+                }
+            });
+        }
+
+        function renderHTML(result, id, htmlId) {
+            $(id).pagination({
+                dataSource: result,
+                pageSize: 10,
+                totalNumber: result.length,
+                callback: function(data, pagination) {
+                    let html, status, adminOption, action = '';
+                    data.forEach(function myFunction(value, index, array) {
+                        if (value.status === null) {
+                            status = 'Pending';
+                        }
+                        else if (value.status == 1) {
+                            status = "in progress";
+                        }
+                        else if (value.status == 2) {
+                            status = "Close";
+                        }
+
+                        if (is_admin == 1 && htmlId === '#maintanance') {
+                            adminOption = `<td class="text-right">
+                                <a href="javascript:void(0)" onclick="ticket_inprogress(${value.id})"><i class="fa fa-check-circle" title="In Progress"></i></a>
+                                <a href="javascript:void(0)" title="Cancel!" onclick="ticket_cancel(${value.id})"><i class="fa fa-ban"></i></a>
+                            </td>`;
+                        }
+
+                        if (htmlId === '#maintanance') {
+                            action = `<td class="action-box">
+                            <a href="javascript:void(0);" onclick="mainance_edit_view_ajax(${ value.id })">EDIT</a>
+                            <a href="javascript:void(0);" class="down" onclick="delete_maintance(${ value.id })">DELETE</a>
+                        </td>`;
+                        } else {
+                            action = `<td></td>`;
+                        }
+
+                        html += `<tr>
+                        <td> "#00${value.id}"</td>
+                        <td> ${value.subject} </td>
+                        <td> ${status} </td>
+                        <td> ${value.updated_at} </td>
+                        <td> ${value.employee.firstname} ${value.employee.lastname}</td>
+                        ${adminOption}
+                        ${action}
+                    </tr><tr class="spacer"></tr>`;
+                    });
+                    $(htmlId).html(html);
+                }
+            });
+        }
+
+        function searchComplitedTicket() {
+            $('#active_ticket_div').hide();
+            $('#complited_ticket_div').show();
+            $('#maintanance').html('');
+            $('#wait').css('display', 'inline-block'); // wait for loader
+            let search = $('#pending_search').val();
+            let data = {
+                search: search,
+                from: from,
+                to: to,
+                id: 'completed',
+            };
+
+            $.ajax({
+                type: 'get',
+                url: "{{ route('maintenance.search') }}",
+                data: data,
+                dataType: 'JSON',
+                success: function (results) {
+                    $('#wait').css('display', 'none');
+
+                    if (results.status == 200) {
+                        renderHTML(results.data, '#paginate-completed', '#maintanance-completed');
+                    } else {
+                        swal("Error!", results.message, "error");
+                    }
+                }
+            });
+        }
+
+        function ticket_inprogress(id){
+            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+            $.ajax({
+                type:'POST',
+                url:"./ticket_inprogress",
+                dataType:'html',
+                data: {_token: CSRF_TOKEN ,
+                    id: id},
+                success:function(response)
+                {
+                    searchMaintenance();
+                }
+            });
+        }
+    </script>
 @endsection
