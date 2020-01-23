@@ -7,22 +7,24 @@
         <div class="tab-pane" id="nav-mileage" role="tabpanel" aria-labelledby="nav-mileage-tab">
             <div class="mileage inner-tab-box">
                 <div class="col-md-12">
-                    <div class="row">
-                        <div class="col-sm-3">
-                            <div class="form-group">
-                                <input type="date" name="date" id="date" placeholder="Select Date" class="form-control-new" onChange="searchMileagePage()">
-                            </div>
-                        </div>
-                        <div class="col-sm-3">
-                            <div class="form-group">
-                                <input type="text" placeholder="Search employee" onkeyup="searchMileagePage()" class="form-control-new" name="search" id="search">
-                            </div>
-                        </div>
-
-                        <div class="col-sm-6">
-                            <a href="javascript:void(0)" onclick="$('#mileage-modaledit input').val(''); $('#update').attr('onclick', 'update_mileage(0);');" class="_new_icon_button_1" data-toggle="modal" data-target="#mileage-modaledit"> <i class="fa fa-plus"></i> </a>
-                        </div>
-                        <div class="col-sm-12">
+                    <h3><span class="active-span" id="pending_span" onclick="expences_pending_new()">Pending </span> |
+                        <span id="historical_span" onclick="expences_history_new()"> Historical</span>
+                    </h3>
+                    <div class="col-sm-12" id="pending_div">
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <input type="date" name="date" id="date" placeholder="Select Date" class="form-control-new" onChange="searchMileagePage()">
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <input type="text" placeholder="Search employee" onkeyup="searchMileagePage()" class="form-control-new" name="search" id="search">
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <a href="javascript:void(0)" onclick="$('#mileage-modaledit input').val(''); $('#update').attr('onclick', 'update_mileage(0);');" class="_new_icon_button_1" data-toggle="modal" data-target="#mileage-modaledit"> <i class="fa fa-plus"></i> </a>
+                                </div>
                             <div id="wait" style="display:none;position:absolute;top:100%;left:50%;padding:2px;">
                                 <img src='{{ asset('img/demo_wait.gif') }}' width="64" height="64"/><br>Loading..
                             </div>
@@ -34,12 +36,53 @@
                                     <th>Reason for mileage</th>
                                     <th>Total Km</th>
                                     <th class="text-center">Action</th>
+                                    <th></th>
                                 </tr>
                                 </thead>
                                 <tbody class="return_mileagelist" id="mileage_search">
                                 <tbody>
                             </table>
                             <div id="demo"></div>
+                        </div>
+                    </div>
+
+                    <div id="historical_div" class="col-sm-12" style="display:none;">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <input type="date" name="history_date" id="history_date" placeholder="Select Date"
+                                           class="form-control-new">
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <input type="text" placeholder="Search employee"
+                                           class="form-control-new" name="history_search" id="history_search" onkeyup="expences_history_new()">
+                                </div>
+                            </div>
+                            <div class="col-sm-6"></div>
+                            <div class="col-sm-12">
+                                <div id="wait" style="display:none;position:absolute;top:100%;left:50%;padding:2px;"><img
+                                        src='{{ asset('img/demo_wait.gif') }}' width="64" height="64"/><br>Loading..
+                                </div>
+                                <table class="table table-bordered">
+                                    <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                    <th>Employee</th>
+                                    <th>Reason for mileage</th>
+                                    <th>Total Km</th>
+
+                                        <th></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody class="return_expence_ajax" id="expense_history">
+
+
+                                    </tbody>
+                                </table>
+                                <div id="demo-new"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -241,6 +284,10 @@
                                         <td> ${data[index].employee.firstname + ' ' + data[index].employee.lastname} </td>
                                         <td> ${data[index].reasonmileage} </td>
                                         <td> ${data[index].kilometers} </td>
+                                        <td class="text-center">
+                                            <a href="javascript:void(0)" onclick="expence_approve_new('${data[index].id}')"><i class="fa fa-check-circle" title="Approved"></i></a>
+                                            <a href="javascript:void(0)" title="Reject!" onclick="expence_reject_new('${data[index].id}')"><i class="fa fa-ban"></i></a>
+                                        </td>
                                         <td class="text-right">
                                             <a href="javascript:void(0);" onclick="OpenEditMileageModel('${data[index].id}')">EDIT</a>
                                             <a href="javascript:void(0);" class="down" onclick="deleteconfirm('${data[index].id}')">DELETE</a></td>

@@ -173,4 +173,28 @@ class MileageController extends Controller {
         ]);
     }
 
+     /// approved mileage
+     public function mileageApprove($id) {
+        $data = Mileage::find($id);
+        $data->status = 'A';
+        $data->save();
+        if($data->update()){
+            return response()->json(['status'=>'success']);
+        }
+        return response()->json(['status'=>'fail']);
+       
+    }
+
+    /// reject mileage
+    public function mileageReject($id) {
+        $data = Mileage::find($id);
+        $data->status = 'D';
+        $data->save();
+        if($data->update()){
+            return response()->json(['status'=>'success']);
+        }
+        return response()->json(['status'=>'fail']);
+       
+    }
+
 }
