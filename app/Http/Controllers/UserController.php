@@ -366,7 +366,9 @@ class UserController extends Controller {
             $data = User::with('employee_details')->orderBy('name')
                 ->where(function ($q) use ($request) {
                     if (isset($request->search)) {
-                        $q->where('name', 'like', '%' . $request->search . '%');
+                        $q->where('name', 'like', '%' . $request->search . '%')
+                            ->orWhere('email', 'like', '%' . $request->search . '%')
+                            ->orWhere('created_at', 'like', '%' . $request->search . '%');
                     }
                     if (isset($request->from) && isset($request->to)) {
                         $q->whereBetween('created_at', [$request->from, $request->to]);

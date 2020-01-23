@@ -7,7 +7,6 @@ use App\{User,Expenses,Company,Project,Purchases,Categorys,Maintenance_ticket};
 use DB;
 class MaintenanceController extends Controller
 {
-
 	/// Maintennace List
     function Maintenance_list()
     {
@@ -50,22 +49,55 @@ class MaintenanceController extends Controller
     /// delete tickets
     function delete(Request $request)
     {
-        $id = $request->id;
-        Maintenance_ticket::where(['id' => $id])->update(['delete_status' => 1]);
+        Maintenance_ticket::destroy($request->id);
+
         $msg = 'Ticket deleted';
         return redirect()->back()->with('alert-info',$msg);
     }
 
-
     function ticket_inprogress(Request $request)
     {
-         $id = $request->id;
+        $id = $request->id;
         Maintenance_ticket::where(['id' => $id])->update(['status' => 1]);
-    }
 
+        return response()->json(['status' => 200]);
+    }
 
     public function ticket_cancel (Request $request) {
         $id = $request->id;
         Maintenance_ticket::where(['id' => $id])->update(['status' => 2]);
+    }
+
+    /**
+     * Filter agreement
+     * @param Request $request
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function search(Request $request){
+        try {
+            $data = Maintenance_ticket::select('maintenance_tickets.*')->with('employee')
+                ->leftjoin('employee_details AS emp','emp.id','=','maintenance_tickets.emp_id')
+                ->where(function ($q) use ($request) {
+                    if (isset($request->search)) {
+                        $q->where('maintenance_tickets.subject', 'like', '%' . $request->search . '%')
+                            ->orWhere('maintenance_tickets.status', 'like', '%' . $request->search . '%')
+                            ->orWhere(\DB::raw("CONCAT(emp.firstname, ' ', emp.lastname)"), 'like', '%' . $request->search . '%')
+                            ->orWhere('maintenance_tickets.updated_at', 'like', '%' . $request->search . '%');
+                    }
+                    if (isset($request->from) && isset($request->to)) {
+                        $q->whereBetween('maintenance_tickets.updated_at', [$request->from, $request->to]);
+                    }
+                    if ($request->id == 'completed') {
+                        $q->where('maintenance_tickets.status', '>', 0);
+                    } else {
+                        $q->whereNull('maintenance_tickets.status');
+                    }
+                })->get();
+
+            return response()->json(['status' => 200, 'data' => $data]);
+        } catch (\Exception $e) {
+            return response()->json(['status' => 500, 'message' => $e->getMessage()]);
+        }
     }
 }

@@ -377,22 +377,6 @@ function delete_maintance(id){
 	});
 }
 
-function ticket_inprogress(id){
-  var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-  $.ajax({
-		type:'POST',
-		url:"./ticket_inprogress",
-		dataType:'html',
-		data: {_token: CSRF_TOKEN ,
-			   id: id},
-		success:function(response)
-		{
-	   	  //maintanance_list();
-		  //swal("Tech Maintenance Inprogress Successfully","", "success");
-		  location.reload();
-		}
-  });
-}
 
 function ticket_cancel(id){
 	var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
