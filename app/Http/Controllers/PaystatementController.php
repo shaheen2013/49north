@@ -31,6 +31,49 @@ class PaystatementController extends Controller
      * @param Request $request
      * @return RedirectResponse
      */
+
+    public function store(Request $request)
+    {
+        // Validate form data
+        $rules = [
+            'pdfname' => 'required|file|mimes:pdf',
+            'description' => 'required|string|max:491',
+            'date' => 'required',
+           
+        ];
+
+        $validator = validator($request->all(), $rules, []);
+
+        if ($validator->fails()) {
+            return response()->json(['status' => 'fail', 'errors' => $validator->getMessageBag()->toarray()]);
+        }
+
+        try {
+            $data = request()->except(['_token']);
+            $pdfname = null;
+
+            if ($request->hasFile('pdfname')) {
+                $pdfname = fileUpload('pdfname', true);
+                // $pdfname = fileUpload('pdfname');
+                $data['pdfname'] = $pdfname;
+            }
+
+            $emp_id_exists = Paystatement::find($data['emp_id']);
+
+            if ($emp_id_exists) {
+                Paystatement::where('emp_id', '=', $data['emp_id'])->update($data);
+                return response()->json(['status' => 'success']);
+            } else{
+                Paystatement::insert($data);
+                return response()->json(['status' => 'success']);
+            }
+
+            return response()->json(['status' => 'fail']);
+        } catch (\Exception $e) {
+            return response()->json(['status' => 'fail', 'msg' => $e->getMessage()]);
+        }
+    }
+
     function addpaystatement(Request $request)
     {
         $data = request()->except(['_token']);
@@ -54,21 +97,21 @@ class PaystatementController extends Controller
     }
 
     public function searchPaymentPage(Request $request){
-
-        // $data = DB::table('users as  u')
-        //     ->leftJoin('paystatements as p', 'u.id', '=', 'p.emp_id')
-        //     ->select('p.*', 'u.id as empid')
-        //     ->where(function ($q) use($request){
-        //         if(isset($request->from) && isset($request->to)){
-        //             $q->whereBetween('date', [$request->from, $request->to]);
-        //         }
-        //         });
-        $data = Paystatement::with('users')->where(function ($q) use($request){
-            if(isset($request->from) && isset($request->to)){
-                $q->whereBetween('date', [$request->from, $request->to]);
-            }
+        $data = DB::table('users as  u')
+            ->leftJoin('paystatements as p', 'u.id', '=', 'p.emp_id')
+            ->select('p.*', 'u.id as empid')
+            ->where(function ($q) use($request){
+                if(isset($request->from) && isset($request->to)){
+                    $q->whereBetween('date', [$request->from, $request->to]);
+                }
             });
-            $data= $data->get();
+
+        $data= $data->get();
+
+        foreach ($data as &$datum) {
+            $datum->pdfname = fileUrl($datum->pdfname, true);
+        }
+
         return response()->json(['status'=>'success', 'data' => $data]);
     }
 
