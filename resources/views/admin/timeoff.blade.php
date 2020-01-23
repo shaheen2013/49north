@@ -1,5 +1,5 @@
  @include('admin.adminnav')
-  <div class="container-fluid">    
+  <div class="container-fluid">
 
      <div class="tab-pane" id="nav-time" role="tabpanel" aria-labelledby="nav-time-tab">
                         <div class="time inner-tab-box">
@@ -8,7 +8,7 @@
                             </div>
                             <div class="request">
                                 <h3>Pending | <span>Historical</span></h3>
-                                
+
                                 <table style="width:100%;">
                                     <thead>
                                         <tr>
@@ -32,13 +32,13 @@
                                             <td class="action-box"><a href="javascript:void();" data-toggle="modal" data-target="#time-modal">EDIT</a><a href="#" class="down">DELETE</a></td>
                                         </tr>
                                         <tr class="spacer"></tr>
-                                        
-                                    <tbody>
+
+                                    </tbody>
                                 </table>
                             </div>
                             <div class="calender">
                             </div>
-                             
+
                         </div>
                       </div><!-------------end--------->
 

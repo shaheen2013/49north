@@ -8,25 +8,24 @@
             <div class="mileage inner-tab-box">
                 <div class="col-md-12">
                     <div class="row">
-                        <div class="col-sm-3">
-                            <div class="form-group">
-                                <input type="date" name="date" id="date" placeholder="Select Date" class="form-control-new" onChange="searchMileagePage()">
-                            </div>
-                        </div>
-                        <div class="col-sm-3">
+                        <div class="col-sm-2">
                             <div class="form-group">
                                 <input type="text" placeholder="Search employee" onkeyup="searchMileagePage()" class="form-control-new" name="search" id="search">
                             </div>
                         </div>
-
-                        <div class="col-sm-6">
+                        <div class="col-sm-2">
+                            <div class="form-group">
+                                <input type="text" name="date" id="date" placeholder="Select Date" class="form-control-new" onChange="searchMileagePage()">
+                            </div>
+                        </div>
+                        <div class="col-sm-1">
+                            <div id="wait"></div>
+                        </div>
+                        <div class="col-sm-7">
                             <a href="javascript:void(0)" onclick="$('#mileage-modaledit input').val(''); $('#update').attr('onclick', 'update_mileage(0);');" class="_new_icon_button_1" data-toggle="modal" data-target="#mileage-modaledit"> <i class="fa fa-plus"></i> </a>
                         </div>
                         <div class="col-sm-12">
-                            <div id="wait" style="display:none;position:absolute;top:100%;left:50%;padding:2px;">
-                                <img src='{{ asset('img/demo_wait.gif') }}' width="64" height="64"/><br>Loading..
-                            </div>
-                            <table class="table table-bordered">
+                            <table class="table _table _table-bordered">
                                 <thead>
                                 <tr>
                                     <th>Date</th>
@@ -37,9 +36,9 @@
                                 </tr>
                                 </thead>
                                 <tbody class="return_mileagelist" id="mileage_search">
-                                <tbody>
+                                </tbody>
                             </table>
-                            <div id="demo"></div>
+                            <div id="paginate"></div>
                         </div>
                     </div>
                 </div>
@@ -184,6 +183,8 @@
 
             $('#date').flatpickr({
                 mode: "range",
+                altInput: true,
+                altFormat: 'j M, Y',
                 defaultDate: [from, to],
                 onChange: function (selectedDates, dateStr, instance) {
                     from = formatDate(selectedDates[0]);
@@ -202,16 +203,12 @@
 
         function searchMileagePage() {
             let search = $('#search').val();
-
-            // console.log(date);
             let data = {
                 search: search,
                 from: from,
                 to: to,
 
             };
-            console.log(data);
-
             $('#wait').css('display', 'inline-block'); // wait for loader
             $.ajax({
                 type: 'post',
@@ -222,7 +219,7 @@
                     let date = '';
                     if (results.status === 'success') {
                         $('#wait').css('display', 'none');
-                        $('#demo').pagination({
+                        $('#paginate').pagination({
                             dataSource: results.data,
                             pageSize: 10,
                             totalNumber: results.data.length,
@@ -256,11 +253,6 @@
                 }
             });
         }
-
-        /*window.onload = function () {
-            searchMileagePage()
-        };*/
-
         function deleteconfirm(id) {
             swal({
                 title: "Delete?",
