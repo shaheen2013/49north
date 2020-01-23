@@ -73,19 +73,13 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/delete', 'MaintenanceController@delete')->name('delete');
         Route::post('/ticket_inprogress', 'MaintenanceController@ticket_inprogress')->name('ticket_inprogress');
         Route::post('/ticket_cancel', 'MaintenanceController@ticket_cancel')->name('ticket_cancel');
-        /* Route::post('/complited_ticket', 'Maintenance_ticket_controller@complited_ticket')->name('complited_ticket');*/
+      
 
     });
 
     // mileage
     Route::group(['prefix' => 'mileage', 'as' => 'mileage.'], function () {
         Route::get('mileagelist', 'MileageController@mileagelist')->name('mileage-list');
-
-        // I don't think these are in use
-        // Route::post('/employeemileage', 'MileageController@employee_mileagelist')->name('employee-mileage');
-        //Route::post('/updatemileage', 'MileageController@updatemileage')->name('update-mileage');
-        //Route::post('/deletemileage/{id}', 'MileageController@deletemileage')->name('delete-mileage');
-
         Route::post('edit', 'MileageController@edit')->name('edit');
         Route::post('update', 'MileageController@update')->name('update');
         Route::post('destroy', 'MileageController@destroy')->name('destroy');
@@ -105,6 +99,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/list', 'PaystatementController@paylist');
         Route::post('/add', 'PaystatementController@addpaystatement')->name('add');
         Route::POST('/search', 'PaystatementController@searchPaymentPage');
+        Route::post('/store', 'PaystatementController@store');
 
     });
 
