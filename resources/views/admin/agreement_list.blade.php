@@ -48,7 +48,7 @@
                                             </tr>
                                             <tr class="spacer"></tr>
 
-                                        <tbody>
+                                        </tbody>
                                             @endforeach
                                             @endif
                                     </table>

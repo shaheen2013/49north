@@ -44,7 +44,7 @@
                 </tr>
                 <tr class="spacer"></tr>
               <?php  } ?>
-                                <tbody>
+                                </tbody>
                             </table>
                           </div>
 
@@ -85,7 +85,7 @@
                 </tr>
                 <tr class="spacer"></tr>
             <?php } ?>
-                                <tbody>
+                                </tbody>
                             </table>
                           </div>
                         </div>

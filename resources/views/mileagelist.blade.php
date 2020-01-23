@@ -7,29 +7,34 @@
         <div class="tab-pane" id="nav-mileage" role="tabpanel" aria-labelledby="nav-mileage-tab">
             <div class="mileage inner-tab-box">
                 <div class="col-md-12">
-                    <h3><span class="active-span" id="pending_span" onclick="searchPendingMileagePage()">Pending </span> |
-                        <span id="historical_span" onclick="searchHistoryMileagePage()"> Historical</span>
-                    </h3>
+                    <div class="col-sm-12">
+                        <h3>
+                            <span class="active-span" id="pending_span" onclick="searchPendingMileagePage()">Pending </span> |
+                            <span id="historical_span" onclick="searchHistoryMileagePage()"> Historical</span>
+                        </h3>
+                        <br>
+                    </div>
+
                     <div class="col-sm-12" id="pending_div">
                         <div class="row">
-                            <div class="col-sm-3">
-                                <div class="form-group">
-                                    <input type="date" name="date" id="date" placeholder="Select Date" class="form-control-new" onChange="searchPendingMileagePage()">
-                                </div>
-                            </div>
-                            <div class="col-sm-3">
+                            <div class="col-sm-2">
                                 <div class="form-group">
                                     <input type="text" placeholder="Search employee" onkeyup="searchPendingMileagePage()" class="form-control-new" name="search" id="search">
                                 </div>
                             </div>
-                            <div class="col-sm-6">
+                            <div class="col-sm-2">
+                                <div class="form-group">
+                                    <input type="text" name="date" id="date" placeholder="Select Date" class="form-control-new" onChange="searchPendingMileagePage()">
+                                </div>
+                            </div>
+                            <div class="col-sm-1">
+                                <div id="wait"></div>
+                            </div>
+                            <div class="col-sm-7">
                                 <a href="javascript:void(0)" onclick="$('#mileage-modaledit input').val(''); $('#update').attr('onclick', 'update_mileage(0);');" class="_new_icon_button_1"  data-toggle="modal" data-target="#mileage-modaledit"> <i class="fa fa-plus"></i> </a>
                             </div>
                             <div class="col-sm-12">
-                                <div id="wait" style="display:none;position:absolute;top:100%;left:50%;padding:2px;">
-                                    <img src='{{ asset('img/demo_wait.gif') }}' width="64" height="64"/><br>Loading..
-                                </div>
-                                <table class="table table-bordered">
+                                <table class="table _table _table-bordered">
                                     <thead>
                                     <tr>
                                         <th>Date</th>
@@ -43,50 +48,46 @@
                                     <tbody class="return_mileagelist" id="mileage_pending">
                                     <tbody>
                                 </table>
-                                <div id="demo"></div>
+                                <div id="paginate"></div>
                             </div>
                         </div>
                     </div>
-
-
                     <div id="historical_div" class="col-sm-12" style="display:none;">
                         <div class="row">
-                            <div class="col-sm-3">
-                                <div class="form-group">
-                                    <input type="date" name="history_date" id="history_date" placeholder="Select Date" class="form-control-new" onChange="searchHistoryMileagePage()">
-                                </div>
-                            </div>
-                            <div class="col-sm-3">
+                            <div class="col-sm-2">
                                 <div class="form-group">
                                     <input type="text" placeholder="Search employee" onkeyup="searchHistoryMileagePage()" class="form-control-new" name="history_search" id="history_search">
                                 </div>
                             </div>
-                            <div class="col-sm-6"></div>
-                            <div class="col-sm-12">
-                                <div id="wait" style="display:none;position:absolute;top:100%;left:50%;padding:2px;">
-                                    <img src='{{ asset('img/demo_wait.gif') }}' width="64" height="64"/><br>Loading..
+                            <div class="col-sm-2">
+                                <div class="form-group">
+                                    <input type="text" name="history_date" id="history_date" placeholder="Select Date" class="form-control-new" onChange="searchHistoryMileagePage()">
                                 </div>
-                                <table class="table table-bordered">
+                            </div>
+                            <div class="col-sm-1">
+                                <div id="wait-his"></div>
+                            </div>
+                            <div class="col-sm-7"></div>
+                            <div class="col-sm-12">
+                                <table class="table _table _table-bordered">
                                     <thead>
                                     <tr>
                                         <th>Date</th>
                                         <th>Employee</th>
                                         <th>Reason for mileage</th>
                                         <th>Total Km</th>
-
                                         <th></th>
                                     </tr>
                                     </thead>
                                     <tbody class="return_expence_ajax" id="mileage_history">
 
-
                                     </tbody>
                                 </table>
-                                <div id="demo-new"></div>
+                                <div id="paginate-new"></div>
                             </div>
                         </div>
-                    </div> 
-                </div> 
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -191,6 +192,8 @@
 
             $('#date').flatpickr({
                 mode: "range",
+                altInput: true,
+                altFormat: 'j M, Y',
                 defaultDate: [from, to],
                 onChange: function (selectedDates, dateStr, instance) {
                     from = formatDate(selectedDates[0]);
@@ -208,6 +211,8 @@
 
             $('#history_date').flatpickr({
                 mode: "range",
+                altInput: true,
+                altFormat: 'j M, Y',
                 defaultDate: [from, to],
                 onChange: function (selectedDates, dateStr, instance) {
                     history_from = formatDate(selectedDates[0]);
@@ -298,6 +303,7 @@
             console.log(data);
 
             $('#wait').css('display', 'inline-block'); // wait for loader
+            $('#wait-his').css('display', 'inline-block'); // wait for loader
             $.ajax({
                 type: 'post',
                 url: "{{ route('mileage.search-pending-mileage') }}",
@@ -307,7 +313,8 @@
                     let date = '';
                     if (results.status === 'success') {
                         $('#wait').css('display', 'none');
-                        $('#demo').pagination({
+                        $('#wait-his').css('display', 'none');
+                        $('#paginate').pagination({
                             dataSource: results.data,
                             pageSize: 10,
                             totalNumber: results.data.length,
@@ -359,6 +366,7 @@
             console.log(data);
 
             $('#wait').css('display', 'inline-block'); // wait for loader
+            $('#wait-his').css('display', 'inline-block'); // wait for loader
             $.ajax({
                 type: 'post',
                 url: "{{ route('mileage.search-history-mileage') }}",
@@ -368,7 +376,8 @@
                     let date = '';
                     if (results.status === 'success') {
                         $('#wait').css('display', 'none');
-                        $('#demo-new').pagination({
+                        $('#wait-his').css('display', 'none');
+                        $('#paginate-new').pagination({
                             dataSource: results.data,
                             pageSize: 10,
                             totalNumber: results.data.length,
@@ -387,8 +396,8 @@
                                         <td> ${data[index].employee.firstname + ' ' + data[index].employee.lastname} </td>
                                         <td> ${data[index].reasonmileage} </td>
                                         <td> ${data[index].kilometers} </td>
-                                        
-                                        <td class="text-right"> 
+
+                                        <td class="text-right">
                                             <a href="javascript:void(0);" class="down" onclick="deleteconfirm('${data[index].id}')">DELETE</a></td>
                                         </td>
                                     </tr><tr class="spacer"></tr>`;
@@ -423,8 +432,8 @@
 
                             if (results.success === true) {
                                 swal("Done!", results.message, "success").then(function () {
-
-                                    window.location.reload()
+                                    searchPendingMileagePage()
+                                    searchHistoryMileagePage()
                                 })
                             } else {
                                 swal("Error!", results.message, "error");
@@ -457,9 +466,8 @@
             data: data,
             success: function (response) {
                 $.toaster({message: 'Enabled', title: 'Success', priority: 'success'});
-                setTimeout(function () {
-                    window.location.reload();
-                }, 1000);
+                searchPendingMileagePage()
+                searchHistoryMileagePage()
             }
             });
 
@@ -476,9 +484,8 @@
 
             success: function (response) {
                 $.toaster({message: 'Disabled', title: 'Success', priority: 'success'});
-                setTimeout(function () {
-                    window.location.reload();
-                }, 1000);
+                searchPendingMileagePage()
+                searchHistoryMileagePage()
             }
             });
         }

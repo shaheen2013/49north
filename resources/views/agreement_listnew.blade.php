@@ -4,101 +4,40 @@
 
     <div class="well-default-trans">
 
-        <div class="tab-pane employeeagreements" id="nav-agreements" role="tabpanel" aria-labelledby="nav-agreements-tab">
+        <div class="tab-pane inner-tab-box" id="nav-agreements" role="tabpanel" aria-labelledby="nav-agreements-tab">
 
-            <!--- employee agreement   -->
             <div class="row">
-                <div class="col-sm-3">
-                    <div class="form-group">
-                        <input type="date" name="date" id="date" placeholder="Select Date" class="form-control-new">
-                    </div>
-                </div>
-                <div class="col-sm-3">
+                <div class="col-sm-2">
                     <div class="form-group">
                         <input type="text" placeholder="Search agreement" onkeyup="searchAgreement()" class="form-control-new" name="search" id="search">
                     </div>
                 </div>
-            </div>
-            <div style="width:100%;">
-                <div id="wait" style="display:none;position:absolute;top:50%;left:50%;padding:2px;"><img src='{{ asset('img/demo_wait.gif') }}' width="64" height="64" /><br>Loading..</div>
-                <table style="width:100%;">
-                    <thead>
-                    <tr>
-                        <th>Date</th>
-                        <th>Employee Name</th>
-                        <th class="text-right">Employee Agreement</th>
-                        <th class="text-right">Code of Conduct</th>
-                    </tr>
-                    </thead>
-
-                    <tbody id="agreement">
-                    {{--@foreach ($users as $user)
-                        <tr style="margin-bottom:10px;">
-                            <td>{{date('d M, Y', strtotime($user->created_at))}}</td>
-                            <td>{{$user->name}}</td>
-                            <td class="text-right">
-                                @if($user->activeAgreement)
-                                    @admin
-                                    <a href="javascript:void(0);" onclick="show_modal_agreement('{{$user->id}}','EA')">Edit</a>
-                                    @endadmin
-                                    <a href="{{fileUrl($user->activeAgreement->agreement, true)}}" target="_blank">View</a>
-                                    @admin
-                                    <a href="javascript:void(0);" onclick="delete_agreement('{{$user->activeAgreement->id}}','EA')" class="down">DELETE</a>
-                                    @endadmin
-                                @else
-                                    @admin
-                                    <a href="javascript:void(0);" onclick="show_modal_agreement('{{$user->id}}','EA')">Upload</a>
-                                    @endadmin
-                                @endif
-
-                                --}}{{-- display amendments --}}{{--
-                                @if($user->activeAgreement['amendments'])
-                                    @foreach ($user->activeAgreement['amendments'] AS $amendment)
-
-                                        <br>{{ $loop->iteration }})
-                                        <a href="{{fileUrl($amendment->agreement, true)}}" target="_blank">View</a>
-
-                                        @admin
-                                        <br>
-                                        <a href="javascript:void(0);" onclick="delete_agreement('{{$user->activeAgreement->id}}','EA')" class="down">DELETE</a>
-                                        @endadmin
-                                    @endforeach
-                                @endif
-                            </td>
-
-                            <td class="text-right">
-                                @if($user->activeCodeofconduct)
-                                    @admin
-                                    <a href="javascript:void(0);" onclick="show_modal_agreement('{{$user->id}}','COC')">Edit</a>
-                                    @endadmin
-
-                                    <a href="{{fileUrl($user->activeCodeofconduct->coc_agreement, true)}}" target="_blank">View</a>
-
-                                    @admin
-                                    <a href="javascript:void(0);" onclick="delete_agreement('{{$user->activeCodeofconduct->id}}','COC')" class="down">DELETE</a>
-                                    @endadmin
-
-                                <!--<a class="btn btn-danger deletejson" data-token="{{ csrf_token() }}"
-                                           data-url="{{ url('delete_agreement',$user->id,'COC') }}" data-id="{{ $user->id }}"
-                                           >Delete</a>-->
-
-
-                                @else
-                                    @admin
-                                    <a href="javascript:void(0);" onclick="show_modal_agreement('{{$user->id}}','COC')">Upload</a>
-                                    @endadmin
-                                @endif
-
-                            </td>
-
+                <div class="col-sm-2">
+                    <div class="form-group">
+                        <input type="text" name="date" id="date" placeholder="Select Date" class="form-control-new">
+                    </div>
+                </div>
+                <div class="col-sm-1">
+                    <div id="wait"></div>
+                </div>
+                <div class="col-sm-12">
+                    <table class="table _table _table-bordered">
+                        <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Employee Name</th>
+                            <th class="text-right">Employee Agreement</th>
+                            <th class="text-right">Code of Conduct</th>
                         </tr>
-                        <tr class="spacer"></tr>
-                    @endforeach--}}
-                    <tbody>
-                </table>
+                        </thead>
+
+                        <tbody id="agreement">
+                        </tbody>
+                    </table>
+                </div>
             </div>
 
-        </div><!-------------end--------->
+        </div>
 
     </div>
 
@@ -114,6 +53,8 @@
 
             $('#date').flatpickr({
                 mode: "range",
+                altInput: true,
+                altFormat: 'j M, Y',
                 defaultDate: [from, to],
                 onChange: function(selectedDates, dateStr, instance) {
                     from = formatDate(selectedDates[0]);
