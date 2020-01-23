@@ -163,13 +163,13 @@
                                 date = new Date(time);
                                 date = date.toDateString().split(' ')[2] + " " + date.toDateString().split(' ')[1] + ", " + date.toDateString().split(' ')[3]
                             } else {
-                                date = '-';
+                                date = '';
                             }
 
                             if (data[index].description != null && data[index].description != '') {
                                 description = data[index].description;
                             } else {
-                                description = '-';
+                                description = '';
                             }
 
                             if (data[index].description != null && data[index].description != '') {
