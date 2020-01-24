@@ -37,9 +37,9 @@
         </div>
 
     </div>
-
+@endsection
+@push('scripts')
     <script !src="">
-        let is_admin = parseInt({{ auth()->user()->is_admin }});
         let from, to = null;
 
         $(document).ready(function () {
@@ -177,4 +177,5 @@
         }
     </script>
 
-@endsection
+@endpush
+

@@ -59,11 +59,13 @@
                     </div>
                     <div id="historical_div" class="col-sm-12" style="display:none;">
                         <div class="row">
+                            @admin
                             <div class="col-sm-2">
                                 <div class="form-group">
                                     <input type="text" placeholder="Search employee" onkeyup="searchHistoryMileagePage()" class="form-control-new" name="history_search" id="history_search">
                                 </div>
                             </div>
+                            @endadmin
                             <div class="col-sm-2">
                                 <div class="form-group">
                                     <input type="text" name="history_date" id="history_date" placeholder="Select Date" class="form-control-new" onChange="searchHistoryMileagePage()">

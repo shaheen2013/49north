@@ -45,8 +45,6 @@
 
 @section('js')
     <script !src="">
-        let is_admin = parseInt({{ auth()->user()->is_admin }});
-        let auth_id = parseInt({{ auth()->id() }});
         let from, to = null;
 
         function searchAdmin() {

@@ -173,6 +173,7 @@
     }
 
     const is_admin = parseInt({{ auth()->user()->is_admin }});
+    const auth_id = parseInt({{ auth()->id() }});
 </script>
 
 <script type="text/javascript" src="{{ asset('js/bootstrap-datepicker.min.js') }}"></script>
