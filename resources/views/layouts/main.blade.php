@@ -155,6 +155,12 @@
         setTimeout(function () {
             $("p.alert").remove();
         }, 5000); // 5 secs
+
+        $(".flatpickr").flatpickr({
+            altInput: true,
+            altFormat: "F j, Y",
+            dateFormat: "Y-m-d",
+        });
     });
 
     // Format date

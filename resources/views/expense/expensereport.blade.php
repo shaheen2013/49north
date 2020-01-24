@@ -101,10 +101,7 @@
                 </div>
             </div>
         </div><!-------------end--------->
-
     </div>
-
-
 
     <div id="expense-modal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
@@ -131,10 +128,8 @@
                                 <div class="col-md-6 col-sm-6">
                                     <div class="text_outer">
                                         <label for="expense_date" class="">Date</label>
-                                        <input type="date" placeholder="" class="form-control" name="date" id="expense_date">
+                                        <input type="date" placeholder="Select Date" class="flatpickr form-control" name="date" id="expense_date">
                                     </div>
-
-
                                 </div>
                             </div>
                             <div class="clearfix"></div>
@@ -197,32 +192,24 @@
                                 <div class="col-md-6 col-sm-6">
                                     <div class="text_outer">
                                         <label for="description" class="">Description</label>
-                                        <input type="text" id="description" name="description" class="form-control"
-                                               placeholder="Insert text here">
+                                        <input type="text" id="description" name="description" class="form-control" placeholder="Insert text here">
                                     </div>
                                 </div>
                                 <div class="col-md-6 col-sm-6">
                                     <div class="col-md-12 col-sm-12">
                                         <label class="form-check-label">
-                                            <input class="form-check-input" type="checkbox" name="billable"
-                                                   style="margin-left: -12.01rem;"> Billable
+                                            <input class="form-check-input" type="checkbox" name="billable" style="margin-left: -12.01rem;"> Billable
                                         </label>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-12" style="display:inline-flex;">
                                             <div class="col-md-7 col-sm-7">
-
                                                 <label class="form-check-label">
-                                                    <input class="form-check-input" type="checkbox" name=""
-                                                           style="margin-left: -7.25rem;"> Received authorization
+                                                    <input class="form-check-input" type="checkbox" name="" style="margin-left: -7.25rem;"> Received authorization
                                                 </label>
-
                                             </div>
                                             <div class="col-md-5 col-sm-5">
-                                                <input type="text" id="ireceived_auth" name="received_auth" class="form-control"
-                                                       placeholder=""
-                                                       style="border:0px; border-bottom:1px solid;padding: 0px;background-color: #fff !important;">
-
+                                                <input type="text" id="ireceived_auth" name="received_auth" class="form-control" placeholder="" style="border:0px; border-bottom:1px solid;padding: 0px;background-color: #fff !important;">
                                             </div>
                                         </div>
                                     </div>
@@ -234,15 +221,13 @@
                                 <div class="col-md-6 col-sm-6">
                                     <div class="text_outer">
                                         <label for="subtotal" class="">Subtotal</label>
-                                        <input type="number" id="subtotal" name="subtotal" class="form-control"
-                                               placeholder="Insert text here">
+                                        <input type="number" id="subtotal" name="subtotal" class="form-control" placeholder="Insert text here">
                                     </div>
                                 </div>
                                 <div class="col-md-6 col-sm-6">
                                     <div class="text_outer">
                                         <label for="gst" class="">GST</label>
-                                        <input type="number" id="gst" name="gst" class="form-control"
-                                               placeholder="Insert Figure here">
+                                        <input type="number" id="gst" name="gst" class="form-control" placeholder="Insert Figure here">
                                     </div>
                                 </div>
                             </div>
@@ -252,15 +237,13 @@
                                 <div class="col-md-6 col-sm-6">
                                     <div class="text_outer">
                                         <label for="pst" class="">PST</label>
-                                        <input type="number" id="pst" name="pst" class="form-control"
-                                               placeholder="Insert Figure here">
+                                        <input type="number" id="pst" name="pst" class="form-control" placeholder="Insert Figure here">
                                     </div>
                                 </div>
                                 <div class="col-md-6 col-sm-6">
                                     <div class="text_outer">
                                         <label for="total" class="">Total</label>
-                                        <input type="number" id="total" name="total" class="form-control"
-                                               placeholder="Insert Figure here">
+                                        <input type="number" id="total" name="total" class="form-control" placeholder="Insert Figure here">
                                     </div>
                                 </div>
                             </div>
@@ -270,11 +253,8 @@
                                     <div class="col-md-12 col-sm-12">
                                         {{ csrf_field() }}
                                         <input type="hidden" name="emp_id" value="{{ auth()->user()->id }}">
-                                        <input type="submit" class="btn-dark contact_btn" value="Save"
-                                               data-form="expences">
-                                        <span class="close close-span" data-dismiss="modal" aria-label="Close"><i
-                                                class="fa fa-arrow-left"></i> Return to Expense Reports</span>
-
+                                        <button type="submit" class="btn-dark contact_btn" data-form="expences">Save</button>
+                                        <span class="close close-span" data-dismiss="modal" aria-label="Close"><i class="fa fa-arrow-left"></i> Return to Expense Reports</span>
                                     </div>
                                 </div>
                             </div>
@@ -286,6 +266,7 @@
             </div>
         </div>
     </div>
+
     <div id="expense-modal-edit2" class="modal fade bs-example-modal-lg expense-modal-edit" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -305,14 +286,11 @@
                                         </select>
                                     </div>
                                 </div>
-
                                 <div class="col-md-6 col-sm-6">
                                     <div class="text_outer">
                                         <label for="edit_date" class="">Date</label>
-                                        <input type="date" placeholder="" class="form-control" name="date" id="edit_date">
+                                        <input type="date" placeholder="Select Date" class="flatpickr form-control" name="date" id="edit_date">
                                     </div>
-
-
                                 </div>
                             </div>
                             <div class="clearfix"></div>
@@ -329,8 +307,6 @@
                                             @endforeach
                                         </select>
                                     </div>
-
-
                                 </div>
                                 <div class="col-md-6 col-sm-6">
                                     <div class="text_outer">
@@ -343,8 +319,6 @@
                                             @endforeach
                                         </select>
                                     </div>
-
-
                                 </div>
                             </div>
                             <div class="clearfix"></div>
@@ -376,32 +350,24 @@
                                 <div class="col-md-6 col-sm-6">
                                     <div class="text_outer">
                                         <label for="edit_description" class="">Description</label>
-                                        <input type="text" name="description" id="edit_description" class="form-control"
-                                               placeholder="Insert text here">
+                                        <input type="text" name="description" id="edit_description" class="form-control" placeholder="Insert text here">
                                     </div>
                                 </div>
                                 <div class="col-md-6 col-sm-6">
                                     <div class="col-md-12 col-sm-12">
                                         <label class="form-check-label">
-                                            <input class="form-check-input" type="checkbox" name="billable" id="edit_billable"
-                                                   style="margin-left: -12.01rem;"> Billable
+                                            <input class="form-check-input" type="checkbox" name="billable" id="edit_billable" style="margin-left: -12.01rem;"> Billable
                                         </label>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-12" style="display:inline-flex;">
                                             <div class="col-md-7 col-sm-7">
-
                                                 <label class="form-check-label">
-                                                    <input class="form-check-input" type="checkbox" name=""
-                                                           style="margin-left: -7.25rem;"> Received authorization
+                                                    <input class="form-check-input" type="checkbox" name="" style="margin-left: -7.25rem;"> Received authorization
                                                 </label>
-
                                             </div>
                                             <div class="col-md-5 col-sm-5">
-                                                <input type="text" name="received_auth" id="received_auth" class="form-control"
-                                                       placeholder=""
-                                                       style="border:0px; border-bottom:1px solid;padding: 0px;background-color: #fff !important;">
-
+                                                <input type="text" name="received_auth" id="received_auth" class="form-control" placeholder="" style="border:0px; border-bottom:1px solid;padding: 0px;background-color: #fff !important;">
                                             </div>
                                         </div>
                                     </div>
@@ -413,15 +379,13 @@
                                 <div class="col-md-6 col-sm-6">
                                     <div class="text_outer">
                                         <label for="edit_subtotal" class="">Subtotal</label>
-                                        <input type="number" id="edit_subtotal" name="subtotal" class="form-control"
-                                               placeholder="Insert text here">
+                                        <input type="number" id="edit_subtotal" name="subtotal" class="form-control" placeholder="Insert text here">
                                     </div>
                                 </div>
                                 <div class="col-md-6 col-sm-6">
                                     <div class="text_outer">
                                         <label for="edit_gst" class="">GST</label>
-                                        <input type="number" id="edit_gst" name="gst" class="form-control"
-                                               placeholder="Insert Figure here">
+                                        <input type="number" id="edit_gst" name="gst" class="form-control" placeholder="Insert Figure here">
                                     </div>
                                 </div>
                             </div>
@@ -431,15 +395,13 @@
                                 <div class="col-md-6 col-sm-6">
                                     <div class="text_outer">
                                         <label for="edit_pst" class="">PST</label>
-                                        <input type="number" id="edit_pst" name="pst" class="form-control"
-                                               placeholder="Insert Figure here">
+                                        <input type="number" id="edit_pst" name="pst" class="form-control" placeholder="Insert Figure here">
                                     </div>
                                 </div>
                                 <div class="col-md-6 col-sm-6">
                                     <div class="text_outer">
                                         <label for="edit_total" class="">Total</label>
-                                        <input type="number" id="edit_total" name="total" class="form-control"
-                                               placeholder="Insert Figure here">
+                                        <input type="number" id="edit_total" name="total" class="form-control" placeholder="Insert Figure here">
                                     </div>
                                 </div>
                             </div>
@@ -453,7 +415,6 @@
                                             Save
                                         </button>
                                         <span class="close close-span" data-dismiss="modal" aria-label="Close"><i class="fa fa-arrow-left"></i> Return to Expense Reports</span>
-
                                     </div>
                                 </div>
                             </div>

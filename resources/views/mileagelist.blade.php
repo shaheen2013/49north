@@ -115,7 +115,7 @@
                             <div class="col-md-6 col-sm-6">
                                 <div class="text_outer">
                                     <label for="edit_date" class="">Date</label>
-                                    <input type="date" placeholder="" name="date" class="form-control" id="edit_date">
+                                    <input type="text" placeholder="Select Date" name="date" class="flatpickr form-control" id="edit_date">
                                 </div>
                             </div>
                         </div>
@@ -124,15 +124,13 @@
                             <div class="col-md-6 col-sm-6">
                                 <div class="text_outer">
                                     <label for="edit_vehicle" class="">Vehicle</label>
-                                    <input type="text" id="edit_vehicle" name="vehicle" class="form-control"
-                                           placeholder="Insert text here">
+                                    <input type="text" id="edit_vehicle" name="vehicle" class="form-control" placeholder="Insert text here">
                                 </div>
                             </div>
                             <div class="col-md-6 col-sm-6">
                                 <div class="text_outer">
                                     <label for="edit_kilometers" class="">No of kilometers</label>
-                                    <input type="number" id="edit_kilometers" name="kilometers" class="form-control"
-                                           placeholder="Insert figure here">
+                                    <input type="number" id="edit_kilometers" name="kilometers" class="form-control" placeholder="Insert figure here">
                                 </div>
                             </div>
                         </div>
@@ -140,8 +138,7 @@
                             <div class="col-md-12 col-sm-12">
                                 <div class="text_outer">
                                     <label for="edit_reasonformileage" class="">Reason for mileage</label>
-                                    <input type="text" id="edit_reasonformileage" name="reasonformileage"
-                                           class="form-control" placeholder="Insert text here">
+                                    <input type="text" id="edit_reasonformileage" name="reasonformileage" class="form-control" placeholder="Insert text here">
                                 </div>
                             </div>
                         </div>
@@ -149,11 +146,9 @@
                         <div class="row margin-top-30">
                             <div class="form-group" style="width:100%;">
                                 <div class="col-md-12 col-sm-12">
-                                    <button type="button" id="update" onclick="update_mileage(id)"
-                                            class="btn-dark contact_btn" data-form="expences">Save
+                                    <button type="button" id="update" onclick="update_mileage(id)" class="btn-dark contact_btn" data-form="expences">Save
                                     </button>
-                                    <span class="close close-span" data-dismiss="modal" aria-label="Close"><i
-                                            class="fa fa-arrow-left"></i> Return to Mileage</span>
+                                    <span class="close close-span" data-dismiss="modal" aria-label="Close"><i class="fa fa-arrow-left"></i> Return to Mileage</span>
                                 </div>
                             </div>
                         </div>

@@ -28,7 +28,7 @@
                         <div id="wait"></div>
                     </div>
                     <div class="col-sm-7">
-                        <a href="javascript:void(0)" class="_new_icon_button_1" data-toggle="modal" data-target="#maintenance-modal"><i class="fa fa-plus"></i></a>
+                        <a href="javascript:void(0)" class="_new_icon_button_1" data-toggle="modal" data-target="#maintenance-modal" style="padding: 7px 12px"><i class="fa fa-plus"></i></a>
                     </div>
                 </div>
 
@@ -148,7 +148,7 @@
                                     </div>
                                 </div>
                             </div>
-                            </hr>
+                            <hr>
                             <div class="row margin-top-30">
                                 <div class="form-group" style="width:100%;">
                                     <div class="col-md-12 col-sm-12">

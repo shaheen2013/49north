@@ -95,6 +95,10 @@ class MaintenanceController extends Controller
                     }
                 })->get();
 
+            /*foreach ($data as $datum) {
+                $datum->updated_at = $datum->updated_at->createFromFormat('d M, Y');
+            }*/
+
             return response()->json(['status' => 200, 'data' => $data]);
         } catch (\Exception $e) {
             return response()->json(['status' => 500, 'message' => $e->getMessage()]);
