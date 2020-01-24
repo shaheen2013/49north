@@ -1,41 +1,36 @@
 @extends('layouts.main')
 @section('content1')
 
-    <div class="container-fluid">
+    <div class="well-default-trans">
         <div class="tab-pane " id="nav-statements" aria-labelledby="nav-statements-tab">
             <div class="agreements">
-                <h3><span class="active-span" id="active_contracts_span">Paystatement  </span></h3>
-
-                <div id="active_contracts_div">
-                    <div class="col-sm-3">
+                <div class="row">
+                    <div class="col-sm-2">
                         <div class="form-group">
-                            <input type="date" name="date" id="date" placeholder="Select Date"
+                            <input type="date" name="pending_date" id="date" placeholder="Select Date"
                                    class="form-control-new" onChange="searchPayStatementsPage()">
                         </div>
                     </div>
                     <div class="col-sm-1">
                         <div id="wait"></div>
                     </div>
-                    <div class="top_part_">
-                        <ul>
-                            <li>Emp id</li>
-                            <li>Date</li>
-                            <li>Descripon</li>
-                            <li style="float:right;">Action</li>
-                        </ul>
+                    <div class="col-sm-12">
+                        <table class="table _table _table-bordered">
+                            <thead>
+                            <tr>
+                                <th>Emp id</th>
+                                <th>Date</th>
+                                <th>Description</th>
+                                <th class="text-right">Action</th>
+                            </tr>
+                            </thead>
+                            <tbody class="return_expence_ajax" id="payments_search">
+
+                            </tbody>
+                        </table>
+                        <div id="paginate"></div>
                     </div>
-                    @if($user_list)
-
-                        <div id="payments_search">
-
-                        </div>
-
-                    @endif
-                   
-
                 </div>
-                <div id="paginate"></div>
-
             </div>
         </div>
 
@@ -108,7 +103,7 @@
             var description = $('#description').val();
             var date = $('#date').val();
             var data = new FormData(document.getElementById('createPayForm'));
-            
+
             $.ajax({
                 method: "POST",
                 url: "/paystatement/store", //resource route
@@ -144,7 +139,7 @@
                 data: data,
                 dataType: 'JSON',
                 success: function (results) {
-                   
+
                     if (results.status === 'success') {
                         $('#wait').css('display', 'none');
                         $('#paginate').pagination({
@@ -178,20 +173,12 @@
                                 pdfname = `<a href="#" onclick="paystatement_modal('${data[index].empid}')">UPLOAD</a>`
                             }
 
-                            html += `
-                            <div class="download_file">
-                            <div class="left_part">
-
-                                    <p> ${data[index].empid} </p>
-                                    <p> ${date} </p>
-                                    <p> ${description} </p>
-                                </div>
-
-                                    <div class="right_part">
-                                        ${pdfname}
-                                    </div>
-                                    </div>
-                                `;
+                            html += `<tr>
+                                <td>${data[index].empid}</td>
+                                <td> ${date} </td>
+                                <td>${description} </td>
+                                <td class="text-right">${pdfname}</td>
+                            </tr>`;
                         }
                         $('#payments_search').html(html);
                     }
