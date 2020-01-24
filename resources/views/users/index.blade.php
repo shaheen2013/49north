@@ -10,9 +10,6 @@
                     <input type="text" placeholder="Search user" onkeyup="searchAdmin()" class="form-control-new" name="search" id="search">
                 </div>
             </div>
-            <div class="col-sm-2">
-                <div class="form-group"> <input type="text" name="date" id="date" placeholder="Select Date" class="form-control-new"> </div>
-            </div>
             <div class="col-sm-1">
                 <div id="wait"></div>
             </div>
