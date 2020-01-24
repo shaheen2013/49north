@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\{RedirectResponse,Request};
 use Illuminate\View\View;
-use App\{Paystatement};
+use App\{Paystatement, Employee_detail, User};
 use Illuminate\Support\Facades\DB;
 
 class PaystatementController extends Controller
@@ -21,8 +22,9 @@ class PaystatementController extends Controller
             ->leftJoin('paystatements as p', 'u.id', '=', 'p.emp_id')
             ->select('p.*', 'u.id as empid')
             ->get();
+        $user = User::where('is_admin', 0)->get();
 
-        return view('paystatement/index')->with('user_list', $user_list);
+        return view('paystatement/index', compact('user_list','user'));
     }
 
     /**
@@ -36,10 +38,11 @@ class PaystatementController extends Controller
     {
         // Validate form data
         $rules = [
+            'emp_id' =>'required',
             'pdfname' => 'required|file|mimes:pdf',
             'description' => 'required|string|max:491',
             'date' => 'required',
-           
+
         ];
 
         $validator = validator($request->all(), $rules, []);
@@ -49,7 +52,7 @@ class PaystatementController extends Controller
         }
 
         try {
-            $data = request()->except(['_token']);
+            $data = $request->all();
             $pdfname = null;
 
             if ($request->hasFile('pdfname')) {
@@ -57,54 +60,36 @@ class PaystatementController extends Controller
                 // $pdfname = fileUpload('pdfname');
                 $data['pdfname'] = $pdfname;
             }
+            $data['created_at'] = Carbon::now();
 
-            $emp_id_exists = Paystatement::find($data['emp_id']);
+            $check = Paystatement::insert($data);
 
-            if ($emp_id_exists) {
-                Paystatement::where('emp_id', '=', $data['emp_id'])->update($data);
+            if ($check) {
                 return response()->json(['status' => 'success']);
             } else{
-                Paystatement::insert($data);
-                return response()->json(['status' => 'success']);
+                return response()->json(['status' => 'fail']);
             }
-
-            return response()->json(['status' => 'fail']);
         } catch (\Exception $e) {
             return response()->json(['status' => 'fail', 'msg' => $e->getMessage()]);
         }
     }
 
-    function addpaystatement(Request $request)
-    {
-        $data = request()->except(['_token']);
-        $statementname = '';
-        if ($request->hasFile('pdfname')) {
-            $file = $request->file('pdfname');
-            $statementname = rand(11111, 99999) . '.' . $file->getClientOriginalExtension();
-            $request->file('pdfname')->move("public/paystatement", $statementname);
-        }
-        $data['pdfname'] = $statementname;
-
-        $empid_exists = Paystatement::find($data['emp_id']);
-        if ($empid_exists) {
-            Paystatement::where('emp_id', '=', $data['emp_id'])->update($data);
-            $msg = 'Paystatement updated successfully';
-        } else {
-            Paystatement::insert($data);
-            $msg = 'Paystatement added successfully';
-        }
-        return redirect()->back()->with('alert-info', $msg);
-    }
-
     public function searchPaymentPage(Request $request){
-        $data = DB::table('users as  u')
-            ->leftJoin('paystatements as p', 'u.id', '=', 'p.emp_id')
-            ->select('p.*', 'u.id as empid')
-            ->where(function ($q) use($request){
-                if(isset($request->from) && isset($request->to)){
-                    $q->whereBetween('date', [$request->from, $request->to]);
-                }
-            });
+
+        $data = Paystatement::orderByDesc('date')->with('employee')
+        ->where(function ($q) use($request){
+            if(isset($request->search)){
+                $q->whereHas('employee', function($sql) use($request){
+                    $sql->where('firstname', 'LIKE', '%'.$request->search.'%');
+                    $sql->orWhere('lastname', 'LIKE', '%'.$request->search.'%');
+
+                });
+
+            }
+            if(isset($request->from) && isset($request->to)){
+                $q->whereBetween('date', [$request->from, $request->to]);
+            }
+        });
 
         $data= $data->get();
 
@@ -113,6 +98,24 @@ class PaystatementController extends Controller
         }
 
         return response()->json(['status'=>'success', 'data' => $data]);
+    }
+
+    public function destroy($id) {
+        $type = auth()->user()->is_admin;
+        if ($type == '1') {
+        $pay = Paystatement::where('id', $id)->first();
+        if ($pay->delete() == 1) {
+            $success = true;
+            $message = "pay Statements deleted successfully";
+        } else {
+            $success = false;
+            $message = "pay Statements not found";
+        }
+        }
+        return response()->json([
+            'success' => $success,
+            'message' => $message,
+        ]);
     }
 
 

@@ -4,21 +4,40 @@
     <div class="well-default-trans">
         <div class="tab-pane " id="nav-statements" aria-labelledby="nav-statements-tab">
             <div class="agreements">
+                <div class="col-sm-12">
+                    <h3>
+                        <span class="active-span" id="pending_span">Pay Statements </span> 
+                       
+                    </h3>
+                    <br>
+                </div>
+                <div class="col-sm-12" id="pending_div">
                 <div class="row">
                     <div class="col-sm-2">
                         <div class="form-group">
-                            <input type="date" name="pending_date" id="date" placeholder="Select Date"
-                                   class="form-control-new" onChange="searchPayStatementsPage()">
+                            <input type="text" placeholder="Search employee"
+                                   class="form-control-new" name="search" id="search" onkeyup="searchPayStatementsPage()">
                         </div>
                     </div>
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <input type="date" name="date" id="date" placeholder="Select Date" class="form-control-new" onChange="searchPayStatementsPage()">
+                        </div>
+                    </div>
+                    
                     <div class="col-sm-1">
                         <div id="wait"></div>
                     </div>
+                    @if(auth()->user()->is_admin ==1)
+                    <div class="col-sm-7">
+                        <a href="javascript:void(0)" class="_new_icon_button_1" data-toggle="modal" data-target="#show_modal_paystatement"> <i class="fa fa-plus"></i> </a>
+                    </div>
+                    @endif
                     <div class="col-sm-12">
                         <table class="table _table _table-bordered">
                             <thead>
                             <tr>
-                                <th>Emp id</th>
+                                <th>Employee</th>
                                 <th>Date</th>
                                 <th>Description</th>
                                 <th class="text-right">Action</th>
@@ -30,6 +49,7 @@
                         </table>
                         <div id="paginate"></div>
                     </div>
+                </div>
                 </div>
             </div>
         </div>
@@ -43,8 +63,18 @@
                     <div class="modal-body">
                         <div class="col-md-12" style="margin-top:40px;margin-bottom:20px;">
                             <form id="createPayForm">
-                            <input type="hidden" name="emp_id" id="empidstatement">
                                 <div class="row">
+                                    <div class="col-md-6 col-sm-6">
+                                        <div class="text_outer">
+                                            <label for="company" class="">Employee</label>
+                                            <select class="select_status form-control" name="emp_id" id="emp_id">
+                                                <option value="">Select</option>
+                                                @foreach($user as $usr)
+                                                    <option value="{{ $usr->id }}">{{ $usr->name}}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
                                     <div class="col-md-4">
                                         <div class="text_outer">
                                             <label for="name" class="">Description</label>
@@ -88,11 +118,28 @@
         var from = null;
         var to = null;
         $(document).ready(function () {
+            const date = new Date(), y = date.getFullYear(), m = date.getMonth();
+            from = formatDate(new Date(y, m, 1));
+            to = formatDate(new Date(y, m + 1, 0));
+            searchPayStatementsPage();
+
             $('#date').flatpickr({
                 mode: "range",
+                altInput: true,
+                altFormat: 'j M, Y',
+                defaultDate: [from, to],
                 onChange: function (selectedDates, dateStr, instance) {
                     from = formatDate(selectedDates[0]);
                     to = formatDate(selectedDates[1]);
+
+                    if (selectedDates[0] === undefined || (selectedDates[0] !== undefined && selectedDates[1] !== undefined)) {
+                        if (selectedDates[0] === undefined) {
+                            from = to = null;
+                        }
+
+                        searchPayStatementsPage();
+                    }
+                   
                 },
             });
         });
@@ -100,8 +147,6 @@
         function create_upload(event){
             event.preventDefault();
             $('#create').attr('disabled','disabled');
-            var description = $('#description').val();
-            var date = $('#date').val();
             var data = new FormData(document.getElementById('createPayForm'));
 
             $.ajax({
@@ -126,8 +171,10 @@
         }
 
         function searchPayStatementsPage() {
+            let search = $('#search').val();
             let data = {
                 _token: '{{  @csrf_token() }}',
+                search: search,
                 from: from,
                 to: to,
 
@@ -150,7 +197,7 @@
                                 let html = '';
                                 let date = '';
                                 let description = '';
-                                let pdfname = '';
+                                let action = '';
                         for (let index = 0; index < data.length; index++) {
 
                             if (data[index].date != null && data[index].date != '') {
@@ -166,18 +213,24 @@
                             } else {
                                 description = '';
                             }
-
-                            if (data[index].description != null && data[index].description != '') {
-                                pdfname = `<a href="${data[index].pdfname}" target="_blank">VIEW</a>`;
-                            } else {
-                                pdfname = `<a href="#" onclick="paystatement_modal('${data[index].empid}')">UPLOAD</a>`
+                            let admin_user = '{{ auth()->user()->is_admin }}';
+                            // console.log(admin_user);
+                            
+                            if(admin_user == 1){
+                                action = `<a href="javascript:void(0);" class="down" onclick="deleteconfirm('${data[index].id}')">DELETE</a>`;
+                            }
+                            else{
+                                action = '' ;
                             }
 
                             html += `<tr>
-                                <td>${data[index].empid}</td>
+                                <td>${data[index].employee.firstname + ' ' + data[index].employee.lastname}</td>
                                 <td> ${date} </td>
                                 <td>${description} </td>
-                                <td class="text-right">${pdfname}</td>
+                                <td class="text-right">
+                                    <a href="${data[index].pdfname}" target="_blank">VIEW</a>
+                                    ${action}
+                                    </td>
                             </tr>`;
                         }
                         $('#payments_search').html(html);
@@ -191,8 +244,57 @@
             });
         }
 
-        window.onload = function () {
-            searchPayStatementsPage()
-        };
+        function deleteconfirm(id) {
+            swal({
+                title: "Delete?",
+                text: "Please ensure and then confirm!",
+                type: "warning",
+                showCancelButton: !0,
+                confirmButtonText: "Yes, delete it!",
+                cancelButtonText: "No, cancel!",
+                reverseButtons: !0
+            }).then(function (e) {
+                if (e.value === true) {
+                    $.ajax({
+                        type: 'post',
+                        url: "/paystatement/destroy/" + id,
+                        dataType: 'JSON',
+                        success: function (results) {
+
+                            if (results.success === true) {
+                                swal("Done!", results.message, "success").then(function () {
+
+                                    window.location.reload()
+                                })
+                            } else {
+                                swal("Error!", results.message, "error");
+                            }
+                        }
+                    });
+
+                } else {
+                    e.dismiss;
+                }
+
+            }, function (dismiss) {
+                return false;
+            })
+        }
+
+        // Format date
+        function formatDate(date) {
+            var d = new Date(date),
+                month = '' + (d.getMonth() + 1),
+                day = '' + d.getDate(),
+                year = d.getFullYear();
+
+            if (month.length < 2)
+                month = '0' + month;
+            if (day.length < 2)
+                day = '0' + day;
+
+            return [year, month, day].join('-');
+        }
+        
     </script>
 @endsection

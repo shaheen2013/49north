@@ -31,8 +31,7 @@
                             <div id="wait"></div>
                         </div>
                         <div class="col-sm-7">
-                            <a href="javascript:void(0)" class="_new_icon_button_1" data-toggle="modal"
-                               data-target="#expense-modal"> <i class="fa fa-plus"></i> </a>
+                            <a href="javascript:void(0)" class="_new_icon_button_1" data-toggle="modal" data-target="#expense-modal"> <i class="fa fa-plus"></i> </a>
                         </div>
                         <div class="col-sm-12">
                             <table class="table _table _table-bordered">
