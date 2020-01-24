@@ -6,8 +6,8 @@
             <div class="agreements">
                 <div class="col-sm-12">
                     <h3>
-                        <span class="active-span" id="pending_span">Pay Statements </span> 
-                       
+                        <span class="active-span" id="pending_span">Pay Statements </span>
+
                     </h3>
                     <br>
                 </div>
@@ -15,8 +15,8 @@
                 <div class="row">
                     <div class="col-sm-2">
                         <div class="form-group">
-                            <input type="text" placeholder="Search employee"
-                                   class="form-control-new" name="search" id="search" onkeyup="searchPayStatementsPage()">
+                            <input type="text" placeholder="Search employee" class="form-control-new" name="search" id="search" onkeyup="searchPayStatementsPage()">
+                            <span class="remove-button" onclick="document.getElementById('search').value = '';searchPayStatementsPage()"><i class="fa fa-times" aria-hidden="true"></i></span>
                         </div>
                     </div>
                     <div class="col-sm-2">
@@ -24,7 +24,7 @@
                             <input type="date" name="date" id="date" placeholder="Select Date" class="form-control-new" onChange="searchPayStatementsPage()">
                         </div>
                     </div>
-                    
+
                     <div class="col-sm-1">
                         <div id="wait"></div>
                     </div>
@@ -139,7 +139,7 @@
 
                         searchPayStatementsPage();
                     }
-                   
+
                 },
             });
         });
@@ -172,6 +172,11 @@
 
         function searchPayStatementsPage() {
             let search = $('#search').val();
+            if ($.trim(search).length > 0) {
+                $('.remove-button').show();
+            } else {
+                $('.remove-button').hide();
+            }
             let data = {
                 _token: '{{  @csrf_token() }}',
                 search: search,
@@ -215,7 +220,7 @@
                             }
                             let admin_user = '{{ auth()->user()->is_admin }}';
                             // console.log(admin_user);
-                            
+
                             if(admin_user == 1){
                                 action = `<a href="javascript:void(0);" class="down" onclick="deleteconfirm('${data[index].id}')">DELETE</a>`;
                             }
@@ -295,6 +300,6 @@
 
             return [year, month, day].join('-');
         }
-        
+
     </script>
 @endsection

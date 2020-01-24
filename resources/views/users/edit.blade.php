@@ -36,7 +36,7 @@
                 <div class="col-md-3">
                     <div class="text_outer">
                         {{ Form::label('dob', 'Date of birth') }}
-                        {{ Form::date('dob', null, array('class' => 'form-control')) }}
+                        {{ Form::date('dob', null, array('class' => 'flatpickr form-control', 'placeholder' => 'Select Date of birth')) }}
                     </div>
                 </div>
 
