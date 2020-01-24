@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\{Model, SoftDeletes};
 class Paystatement extends Model {
     use HasEmployee;
     use  SoftDeletes;
+    use  SearchTrait;
 
     public $timestamps = false;
 
