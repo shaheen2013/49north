@@ -1807,3 +1807,11 @@ span.fc-title {
     animation: spin 2s linear infinite;
 }
 
+.remove-button {
+    position: absolute;
+    right: 28px;
+    top: 8px;
+    display: none;
+    cursor: pointer;
+    color: #7e7e7e;
+}

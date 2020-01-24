@@ -8,7 +8,7 @@ use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Database\Eloquent\{Model, SoftDeletes};
 class Expenses extends Authenticatable {
-    use Notifiable, HasRoles, HasEmployee;
+    use Notifiable, HasRoles, HasEmployee, SearchTrait;
     use  SoftDeletes;
 
     public $table = "expenses";

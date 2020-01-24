@@ -1,8 +1,6 @@
 @extends('layouts.main')
 @include('modal')
 @section('content1')
-
-
     <div class="well-default-trans">
         <div class="tab-pane" id="nav-expense" role="tabpanel" aria-labelledby="nav-employee-tab">
             <div class="expense inner-tab-box">
@@ -11,6 +9,7 @@
                         <div class="col-sm-2">
                             <div class="form-group">
                                 <input type="text" placeholder="Search Company" onkeyup="searchCompanyPage()" class="form-control-new" name="search" id="search">
+                                <span class="remove-button" onclick="document.getElementById('search').value = '';searchCompanyPage()"><i class="fa fa-times" aria-hidden="true"></i></span>
                             </div>
                         </div>
                         <div class="col-sm-1">
@@ -42,7 +41,6 @@
                 </div>
             </div>
         </div>
-
     </div>
 
     <div id="company-modal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog"
@@ -241,6 +239,13 @@
 
         function searchCompanyPage() {
             let search = $('#search').val();
+
+            if ($.trim(search).length > 0) {
+                $('.remove-button').show();
+            } else {
+                $('.remove-button').hide();
+            }
+
             let data = {
                 search: search,
             };
@@ -315,5 +320,4 @@
             })
         }
     </script>
-
 @endsection

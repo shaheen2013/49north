@@ -20,7 +20,7 @@
                             @admin
                             <div class="col-sm-2">
                                 <div class="form-group">
-                                    <input type="text" placeholder="Search employee" onkeyup="searchPendingMileagePage()" class="form-control-new" name="search" id="search">
+                                    <input type="text" placeholder="Search employee" onkeyup="searchPendingMileagePage()" class="form-control-new" name="search" id="search"><span class="remove-button" onclick="document.getElementById('search').value = '';searchPendingMileagePage()"><i class="fa fa-times" aria-hidden="true"></i></span>
                                 </div>
                             </div>
                             @endadmin
@@ -62,7 +62,7 @@
                             @admin
                             <div class="col-sm-2">
                                 <div class="form-group">
-                                    <input type="text" placeholder="Search employee" onkeyup="searchHistoryMileagePage()" class="form-control-new" name="history_search" id="history_search">
+                                    <input type="text" placeholder="Search employee" onkeyup="searchHistoryMileagePage()" class="form-control-new" name="history_search" id="history_search"><span class="remove-button" onclick="document.getElementById('history_search').value = '';searchHistoryMileagePage()"><i class="fa fa-times" aria-hidden="true"></i></span>
                                 </div>
                             </div>
                             @endadmin
@@ -171,7 +171,7 @@
 
     <script type="text/javascript">
 
-        let id, from, to, history_from, history_to = null;
+        let id = from = to = history_from = history_to = null;
 
         $(document).ready(function () {
             const date = new Date(), y = date.getFullYear(), m = date.getMonth();
@@ -297,6 +297,12 @@
         function searchPendingMileagePage() {
             let search = $('#search').val();
 
+            if ($.trim(search).length > 0) {
+                $('.remove-button').show();
+            } else {
+                $('.remove-button').hide();
+            }
+
             // console.log(date);
             let data = {
                 search: search,
@@ -304,7 +310,6 @@
                 to: to,
 
             };
-            console.log(data);
 
             $('#wait').css('display', 'inline-block'); // wait for loader
             $('#wait-his').css('display', 'inline-block'); // wait for loader
@@ -366,14 +371,18 @@
         function searchHistoryMileagePage() {
             let history_search = $('#history_search').val();
 
+            if ($.trim(history_search).length > 0) {
+                $('.remove-button').show();
+            } else {
+                $('.remove-button').hide();
+            }
+
             // console.log(date);
             let data = {
                 history_search: history_search,
                 history_from: history_from,
                 history_to: history_to,
-
             };
-            console.log(data);
 
             $('#wait').css('display', 'inline-block'); // wait for loader
             $('#wait-his').css('display', 'inline-block'); // wait for loader
@@ -499,7 +508,6 @@
                 }
             });
         }
-
 
         // Format date
         function formatDate(date) {

@@ -8,9 +8,9 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class ExpenseController extends Controller {
-
     ///   Add Expenselist
-    function expenselist () {
+    function expenselist ()
+    {
         $data['companies'] = Company::all();
         $data['project'] = Project::all();
         $data['purchases'] = Purchases::all();
@@ -20,73 +20,71 @@ class ExpenseController extends Controller {
         return view('expense.expensereport', $data);
     }
 
-  
-
    //search history
-    public function searchHistory(Request $request){
-      
+    public function searchHistory(Request $request)
+    {
         $data = Expenses::orderByDesc('created_at')->with('employee:id,firstname,lastname')->where('status', '!=', null)
         ->where(function ($q) use($request){
             if(isset($request->history_search)){
                 $q->whereHas('employee', function($sql) use($request){
                     $sql->where('firstname', 'LIKE', '%'.$request->history_search.'%');
                     $sql->orWhere('lastname', 'LIKE', '%'.$request->history_search.'%');
-    
+
                 });
-                
+
             }
             if(isset($request->history_from) && isset($request->history_to)){
                 $q->whereBetween('date', [$request->history_from, $request->history_to]);
             }
         });
 
-        $data= $data->get();
+        $data= $data->isEmployee()->get();
         return response()->json(['status'=>'success', 'data' => $data]);
-       
     }
 
     //search pending
-
-    public function searchPending(Request $request){
-      
+    public function searchPending(Request $request)
+    {
         $data = Expenses::orderByDesc('created_at')->with('employee:id,firstname,lastname')->where('status', null)
         ->where(function ($q) use($request){
             if(isset($request->pending_search)){
                 $q->whereHas('employee', function($sql) use($request){
                     $sql->where('firstname', 'LIKE', '%'.$request->pending_search.'%');
                     $sql->orWhere('lastname', 'LIKE', '%'.$request->pending_search.'%');
-    
+
                 });
-                
+
             }
             if(isset($request->from) && isset($request->to)){
                 $q->whereBetween('date', [$request->from, $request->to]);
             }
         });
-        $data= $data->get();   
+        $data= $data->isEmployee()->get();
+
         return response()->json(['status'=>'success', 'data' => $data]);
-       
     }
 
     //expense edit page with value
-    public function edit(Request $request) {
+    public function edit(Request $request)
+    {
         // $emp_id = auth()->user()->id;
         $data['expense'] = Expenses::where('id', $request->id)->first();
         $data['companies'] = Company::all();
         $data['project'] = Project::all();
         $data['purchases'] = Purchases::all();
         $data['category'] = Categorys::all();
-       
+
         if($data){
             return response()->json(['status'=>'success', 'data'=>$data]);
         }
         return response()->json(['status'=>'fail']);
     }
 
-    public function update(Request $request, $id) {
+    public function update(Request $request, $id)
+    {
         // Validate form data
         $rules = [
-           
+
             'receipt' => 'nullable|image',
         ];
 
@@ -125,11 +123,12 @@ class ExpenseController extends Controller {
         } catch (\Exception $e) {
             return response()->json(['status' => 'fail', 'msg' => $e->getMessage()]);
         }
-       
+
     }
 
     //expense destroy
-    public function destroy($id) {
+    public function destroy($id)
+    {
         $expense = Expenses::findOrFail($id);
         if ($expense->delete() == 1) {
             $success = true;
@@ -145,7 +144,8 @@ class ExpenseController extends Controller {
     }
 
     ///////  Add Expense
-    function addexpense (Request $request) {
+    function addexpense (Request $request)
+    {
         $data = $request->all();
         //receipt code   code
         $receiptname = '';
@@ -164,7 +164,8 @@ class ExpenseController extends Controller {
     }
 
     /// approved expense
-    public function approve($id) {
+    public function approve($id)
+    {
         $data = Expenses::find($id);
         $data->status = 1;
         $data->save();
@@ -172,11 +173,12 @@ class ExpenseController extends Controller {
             return response()->json(['status'=>'success']);
         }
         return response()->json(['status'=>'fail']);
-       
+
     }
 
     /// expense reject
-    public function reject($id) {
+    public function reject($id)
+    {
         $data = Expenses::find($id);
         $data->status = 2;
         $data->save();
@@ -184,7 +186,6 @@ class ExpenseController extends Controller {
             return response()->json(['status'=>'success']);
         }
         return response()->json(['status'=>'fail']);
-       
-    }
 
+    }
 }

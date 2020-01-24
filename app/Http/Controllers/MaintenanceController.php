@@ -80,10 +80,12 @@ class MaintenanceController extends Controller
                 ->leftjoin('employee_details AS emp','emp.id','=','maintenance_tickets.emp_id')
                 ->where(function ($q) use ($request) {
                     if (isset($request->search)) {
-                        $q->where('maintenance_tickets.subject', 'like', '%' . $request->search . '%')
-                            ->orWhere('maintenance_tickets.status', 'like', '%' . $request->search . '%')
-                            ->orWhere(\DB::raw("CONCAT(emp.firstname, ' ', emp.lastname)"), 'like', '%' . $request->search . '%')
-                            ->orWhere('maintenance_tickets.updated_at', 'like', '%' . $request->search . '%');
+                        $q->where(function ($query) use ($request) {
+                            $query->where('maintenance_tickets.subject', 'like', '%' . $request->search . '%')
+                                ->orWhere('maintenance_tickets.status', 'like', '%' . $request->search . '%')
+                                ->orWhere(\DB::raw("CONCAT(emp.firstname, ' ', emp.lastname)"), 'like', '%' . $request->search . '%')
+                                ->orWhere('maintenance_tickets.updated_at', 'like', '%' . $request->search . '%');
+                        });
                     }
                     if (isset($request->from) && isset($request->to)) {
                         $q->whereBetween('maintenance_tickets.updated_at', [$request->from, $request->to]);
@@ -93,11 +95,11 @@ class MaintenanceController extends Controller
                     } else {
                         $q->whereNull('maintenance_tickets.status');
                     }
-                })->get();
+                })->isEmployee()->get();
 
-            /*foreach ($data as $datum) {
-                $datum->updated_at = $datum->updated_at->createFromFormat('d M, Y');
-            }*/
+            foreach ($data as $datum) {
+                $datum->updated_at_formatted = date('d M, Y', strtotime($datum->updated_at));
+            }
 
             return response()->json(['status' => 200, 'data' => $data]);
         } catch (\Exception $e) {

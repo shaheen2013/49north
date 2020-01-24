@@ -17,8 +17,8 @@
                     <div class="row">
                         <div class="col-sm-2">
                             <div class="form-group">
-                                <input type="text" placeholder="Search employee"
-                                       class="form-control-new" name="pending_search" id="pending_search" onkeyup="expences_pending_new()">
+                                <input type="text" placeholder="Search expense" class="form-control-new" name="pending_search" id="pending_search" onkeyup="expences_pending_new()">
+                                <span class="remove-button" onclick="document.getElementById('pending_search').value = '';expences_pending_new()"><i class="fa fa-times" aria-hidden="true"></i></span>
                             </div>
                         </div>
                         <div class="col-sm-2">
@@ -62,8 +62,8 @@
                     <div class="row">
                         <div class="col-sm-2">
                             <div class="form-group">
-                                <input type="text" placeholder="Search employee"
-                                       class="form-control-new" name="history_search" id="history_search" onkeyup="expences_history_new()">
+                                <input type="text" placeholder="Search expense" class="form-control-new" name="history_search" id="history_search" onkeyup="expences_history_new()">
+                                <span class="remove-button" onclick="document.getElementById('history_search').value = '';expences_history_new()"><i class="fa fa-times" aria-hidden="true"></i></span>
                             </div>
                         </div>
                         <div class="col-sm-2">
@@ -429,7 +429,7 @@
 
     <script type="text/javascript">
 
-        let id, from, to, history_from, history_to = null;
+        let id = from = to = history_from = history_to = null;
 
         $(document).ready(function () {
             const date = new Date(), y = date.getFullYear(), m = date.getMonth();
@@ -493,15 +493,20 @@
 
         function expences_pending_new() {
             let pending_search = $('#pending_search').val();
+            if ($.trim(pending_search).length > 0) {
+                $('.remove-button').show();
+            } else {
+                $('.remove-button').hide();
+            }
             let data = {
                 pending_search: pending_search,
                 from: from,
                 to: to,
-
             };
 
             $('#wait').css('display', 'inline-block'); // wait for loader
             $('#wait-his').css('display', 'inline-block'); // wait for loader
+
             $.ajax({
                 type: 'post',
                 url: "/expense/pending",
@@ -516,8 +521,7 @@
                             pageSize: 10,
                             totalNumber: results.data.length,
                             callback: function (data, pagination) {
-                                let html = '';
-                                let date = '';
+                                let html = date = adminOption = '';
 
                                 for (let index = 0; index < data.length; index++) {
                                     if (data[index].date != null && data[index].date != '') {
@@ -527,14 +531,19 @@
                                     } else {
                                         date = '-';
                                     }
+
+                                    if (is_admin == 1) {
+                                        adminOption = `<a href="javascript:void(0)" onclick="expence_approve_new('${data[index].id}')"><i class="fa fa-check-circle" title="Approved"></i></a>
+                                        <a href="javascript:void(0)" title="Reject!" onclick="expence_reject_new('${data[index].id}')"><i class="fa fa-ban"></i></a>`;
+                                    }
+
                                     html += `<tr>
                                     <td> ${date} </td>
                                     <td> ${data[index].employee.firstname + ' ' + data[index].employee.lastname} </td>
                                     <td> ${data[index].description} </td>
                                     <td> ${data[index].total} </td>
                                     <td class="text-center">
-                                        <a href="javascript:void(0)" onclick="expence_approve_new('${data[index].id}')"><i class="fa fa-check-circle" title="Approved"></i></a>
-                                        <a href="javascript:void(0)" title="Reject!" onclick="expence_reject_new('${data[index].id}')"><i class="fa fa-ban"></i></a>
+                                        ${adminOption}
                                     </td>
                                     <td class="text-center">
                                         <a href="javascript:void(0);" onclick="OpenEditExpenseModel('${data[index].id}') ">EDIT</a>
@@ -553,12 +562,13 @@
             });
         }
 
-        /*window.onload = function () {
-            expences_pending_new()
-        };*/
-
         function expences_history_new() {
             let history_search = $('#history_search').val();
+            if ($.trim(history_search).length > 0) {
+                $('.remove-button').show();
+            } else {
+                $('.remove-button').hide();
+            }
             let data = {
                 history_search: history_search,
                 history_from: history_from,
@@ -653,7 +663,6 @@
         }
 
         function OpenEditExpenseModel(id) {
-            console.log(id)
             $('#expense-modal-edit2').modal();
             $.ajax({
                 type: 'GET',

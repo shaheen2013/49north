@@ -13,26 +13,27 @@
                     </h3>
                     <br>
                 </div>
-                <div class="row">
-                    <div class="col-sm-2">
-                        <div class="form-group">
-                            <input type="text" placeholder="Search employee" class="form-control-new" name="pending_search" id="pending_search" onkeyup="searchMaintenance()">
-                        </div>
-                    </div>
-                    <div class="col-sm-2">
-                        <div class="form-group">
-                            <input type="date" name="pending_date" id="date" placeholder="Select Date" class="form-control-new">
-                        </div>
-                    </div>
-                    <div class="col-sm-1">
-                        <div id="wait"></div>
-                    </div>
-                    <div class="col-sm-7">
-                        <a href="javascript:void(0)" class="_new_icon_button_1" data-toggle="modal" data-target="#maintenance-modal" style="padding: 7px 12px"><i class="fa fa-plus"></i></a>
-                    </div>
-                </div>
 
                 <div id="active_ticket_div">
+                    <div class="row">
+                        <div class="col-sm-2">
+                            <div class="form-group">
+                                <input type="text" placeholder="Search employee" class="form-control-new" name="pending_search" id="pending_search" onkeyup="searchMaintenance()">
+                                <span class="remove-button" onclick="document.getElementById('pending_search').value = '';searchMaintenance()"><i class="fa fa-times" aria-hidden="true"></i></span>
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            <div class="form-group">
+                                <input type="date" name="pending_date" id="date" placeholder="Select Date" class="form-control-new">
+                            </div>
+                        </div>
+                        <div class="col-sm-1">
+                            <div id="wait"></div>
+                        </div>
+                        <div class="col-sm-7">
+                            <a href="javascript:void(0)" class="_new_icon_button_1" data-toggle="modal" data-target="#maintenance-modal" style="padding: 7px 12px"><i class="fa fa-plus"></i></a>
+                        </div>
+                    </div>
                     <table style="width:100%;" class="table _table _table-bordered">
                         <thead>
                         <tr>
@@ -54,6 +55,25 @@
                 </div>
 
                 <div id="complited_ticket_div" style="display:none;">
+                    <div class="row">
+                        <div class="col-sm-2">
+                            <div class="form-group">
+                                <input type="text" placeholder="Search employee" class="form-control-new" name="completed_search" id="completed_search" onkeyup="searchComplitedTicket()">
+                                <span class="remove-button" onclick="document.getElementById('completed_search').value = '';searchComplitedTicket()"><i class="fa fa-times" aria-hidden="true"></i></span>
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            <div class="form-group">
+                                <input type="date" name="pending_date" id="date-completed" placeholder="Select Date" class="form-control-new">
+                            </div>
+                        </div>
+                        <div class="col-sm-1">
+                            <div id="wait-his"></div>
+                        </div>
+                        <div class="col-sm-7">
+                            <a href="javascript:void(0)" class="_new_icon_button_1" data-toggle="modal" data-target="#maintenance-modal" style="padding: 7px 12px"><i class="fa fa-plus"></i></a>
+                        </div>
+                    </div>
                     <table style="width:100%;">
                         <thead>
                         <tr>
@@ -174,7 +194,7 @@
 @section('js')
     <script type="text/javascript">
 
-        let from, to = null;
+        let from = to = fromCompleted = toCompleted = null;
 
         $(document).ready(function () {
             $("#active_ticket_span").click(function () {
@@ -193,8 +213,8 @@
             });
 
             var date = new Date(), y = date.getFullYear(), m = date.getMonth();
-            from = formatDate(new Date(y, m, 1));
-            to = formatDate(new Date(y, m + 1, 0));
+            from = fromCompleted = formatDate(new Date(y, m, 1));
+            to = toCompleted = formatDate(new Date(y, m + 1, 0));
             searchMaintenance();
 
             $('#date').flatpickr({
@@ -213,6 +233,23 @@
                     }
                 },
             });
+
+            $('#date-completed').flatpickr({
+                mode: "range",
+                altInput: true,
+                altFormat: 'j M, Y',
+                defaultDate: [fromCompleted, toCompleted],
+                onChange: function(selectedDates, dateStr, instance) {
+                    fromCompleted = formatDate(selectedDates[0]);
+                    toCompleted = formatDate(selectedDates[1]);
+                    if (selectedDates[0] === undefined || (selectedDates[0] !== undefined && selectedDates[1] !== undefined)) {
+                        if (selectedDates[0] === undefined) {
+                            fromCompleted = toCompleted = null;
+                        }
+                        searchComplitedTicket();
+                    }
+                },
+            });
         });
 
         function searchMaintenance() {
@@ -221,6 +258,11 @@
             $('#maintanance').html('');
             $('#wait').css('display', 'inline-block'); // wait for loader
             let search = $('#pending_search').val();
+            if ($.trim(search).length > 0) {
+                $('.remove-button').show();
+            } else {
+                $('.remove-button').hide();
+            }
             let data = {
                 search: search,
                 from: from,
@@ -251,7 +293,7 @@
                 pageSize: 10,
                 totalNumber: result.length,
                 callback: function(data, pagination) {
-                    let html, status, adminOption, action = '';
+                    let html = status = adminOption = action = '';
                     data.forEach(function myFunction(value, index, array) {
                         if (value.status === null) {
                             status = 'Pending';
@@ -283,7 +325,7 @@
                         <td> "#00${value.id}"</td>
                         <td> ${value.subject} </td>
                         <td> ${status} </td>
-                        <td> ${value.updated_at} </td>
+                        <td> ${value.updated_at_formatted} </td>
                         <td> ${value.employee.firstname} ${value.employee.lastname}</td>
                         ${adminOption}
                         ${action}
@@ -298,12 +340,19 @@
             $('#active_ticket_div').hide();
             $('#complited_ticket_div').show();
             $('#maintanance').html('');
-            $('#wait').css('display', 'inline-block'); // wait for loader
-            let search = $('#pending_search').val();
+            $('#wait-his').css('display', 'inline-block'); // wait for loader
+            let search = $('#completed_search').val();
+
+            if ($.trim(search).length > 0) {
+                $('.remove-button').show();
+            } else {
+                $('.remove-button').hide();
+            }
+
             let data = {
                 search: search,
-                from: from,
-                to: to,
+                from: fromCompleted,
+                to: toCompleted,
                 id: 'completed',
             };
 
@@ -313,7 +362,7 @@
                 data: data,
                 dataType: 'JSON',
                 success: function (results) {
-                    $('#wait').css('display', 'none');
+                    $('#wait-his').css('display', 'none');
 
                     if (results.status == 200) {
                         renderHTML(results.data, '#paginate-completed', '#maintanance-completed');
