@@ -99,6 +99,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/add', 'PaystatementController@addpaystatement')->name('add');
         Route::POST('/search', 'PaystatementController@searchPaymentPage');
         Route::post('/store', 'PaystatementController@store');
+        Route::POST('/destroy/{id}', 'PaystatementController@destroy');
 
     });
 

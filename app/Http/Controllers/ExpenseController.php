@@ -33,12 +33,9 @@ class ExpenseController extends Controller {
                 });
 
             }
-            if(isset($request->history_from) && isset($request->history_to)){
-                $q->whereBetween('date', [$request->history_from, $request->history_to]);
-            }
         });
-
-        $data= $data->isEmployee()->get();
+        $data->dateSearch('date');
+        $data->isEmployee()->get();
         return response()->json(['status'=>'success', 'data' => $data]);
     }
 
@@ -55,11 +52,9 @@ class ExpenseController extends Controller {
                 });
 
             }
-            if(isset($request->from) && isset($request->to)){
-                $q->whereBetween('date', [$request->from, $request->to]);
-            }
         });
-        $data= $data->isEmployee()->get();
+        $data->dateSearch('date');
+        $data->isEmployee()->get();
 
         return response()->json(['status'=>'success', 'data' => $data]);
     }
