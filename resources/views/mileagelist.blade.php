@@ -17,11 +17,13 @@
 
                     <div class="col-sm-12" id="pending_div">
                         <div class="row">
+                            @admin
                             <div class="col-sm-2">
                                 <div class="form-group">
                                     <input type="text" placeholder="Search employee" onkeyup="searchPendingMileagePage()" class="form-control-new" name="search" id="search">
                                 </div>
                             </div>
+                            @endadmin
                             <div class="col-sm-2">
                                 <div class="form-group">
                                     <input type="text" name="date" id="date" placeholder="Select Date" class="form-control-new" onChange="searchPendingMileagePage()">
@@ -30,8 +32,9 @@
                             <div class="col-sm-1">
                                 <div id="wait"></div>
                             </div>
-                            <div class="col-sm-7">
-                                <a href="javascript:void(0)" onclick="$('#mileage-modaledit input').val(''); $('#update').attr('onclick', 'update_mileage(0);');" class="_new_icon_button_1"  data-toggle="modal" data-target="#mileage-modaledit"> <i class="fa fa-plus"></i> </a>
+                            <div class="@admin col-sm-7 @else col-sm-8 @endadmin ">
+                                <a href="javascript:void(0)" onclick="$('#mileage-modaledit input').val(''); $('#update').attr('onclick', 'update_mileage(0);');" class="_new_icon_button_1" data-toggle="modal" data-target="#mileage-modaledit">
+                                    <i class="fa fa-plus"></i> </a>
                             </div>
                             <div class="col-sm-12">
                                 <table class="table _table _table-bordered">
@@ -41,7 +44,9 @@
                                         <th>Employee</th>
                                         <th>Reason for mileage</th>
                                         <th>Total Km</th>
+                                        @admin
                                         <th class="text-center">Action</th>
+                                        @endadmin
                                         <th></th>
                                     </tr>
                                     </thead>
@@ -54,11 +59,13 @@
                     </div>
                     <div id="historical_div" class="col-sm-12" style="display:none;">
                         <div class="row">
+                            @admin
                             <div class="col-sm-2">
                                 <div class="form-group">
                                     <input type="text" placeholder="Search employee" onkeyup="searchHistoryMileagePage()" class="form-control-new" name="history_search" id="history_search">
                                 </div>
                             </div>
+                            @endadmin
                             <div class="col-sm-2">
                                 <div class="form-group">
                                     <input type="text" name="history_date" id="history_date" placeholder="Select Date" class="form-control-new" onChange="searchHistoryMileagePage()">
@@ -157,7 +164,9 @@
             </div>
         </div>
     </div>
+@endsection
 
+@push('scripts')
     <!--- Mileage edit modal end -->
 
     <script type="text/javascript">
@@ -277,7 +286,7 @@
                 dataType: 'JSON',
                 success: function (response) {
                     $.toaster({message: 'Updated successfully', title: 'Success', priority: 'success'});
-                    searchMileagePage();
+                    searchPendingMileagePage();
                     $('#mileage-modaledit').modal('hide');
                     $('#update').removeAttr('disabled');
                 }
@@ -327,16 +336,22 @@
                                         <td> ${date} </td>
                                         <td> ${data[index].employee.firstname + ' ' + data[index].employee.lastname} </td>
                                         <td> ${data[index].reasonmileage} </td>
-                                        <td> ${data[index].kilometers} </td>
+                                        <td> ${data[index].kilometers} </td>`;
+                                    if (is_admin) {
+                                        html += `
+
                                         <td class="text-center">
                                             <a href="javascript:void(0)" onclick="mileage_approve('${data[index].id}')"><i class="fa fa-check-circle" title="Approved"></i></a>
                                             <a href="javascript:void(0)" title="Reject!" onclick="mileage_reject('${data[index].id}')"><i class="fa fa-ban"></i></a>
-                                        </td>
+                                        </td>`;
+                                    }
+                                    html += `
                                         <td class="text-right">
                                             <a href="javascript:void(0);" onclick="OpenEditMileageModel('${data[index].id}')">EDIT</a>
                                             <a href="javascript:void(0);" class="down" onclick="deleteconfirm('${data[index].id}')">DELETE</a></td>
                                         </td>
                                     </tr><tr class="spacer"></tr>`;
+
                                 }
                                 $('#mileage_pending').html(html);
                             }
@@ -448,22 +463,22 @@
         function mileage_approve(id) {
 
             $.ajaxSetup({
-            headers: {
-                'X-CSRF-Token': "{{csrf_token()}}"
-            }
+                headers: {
+                    'X-CSRF-Token': "{{csrf_token()}}"
+                }
             });
             let data = {id: id};
 
             $.ajax({
 
-            method: "POST",
-            url: "/mileage/approve/" + id,
-            data: data,
-            success: function (response) {
-                $.toaster({message: 'Enabled', title: 'Success', priority: 'success'});
-                searchPendingMileagePage()
-                searchHistoryMileagePage()
-            }
+                method: "POST",
+                url: "/mileage/approve/" + id,
+                data: data,
+                success: function (response) {
+                    $.toaster({message: 'Enabled', title: 'Success', priority: 'success'});
+                    searchPendingMileagePage()
+                    searchHistoryMileagePage()
+                }
             });
 
         }
@@ -473,15 +488,15 @@
             let data = {id: id};
             $.ajax({
 
-            method: "POST",
-            url: "/mileage/reject/" + id,
-            data: data,
+                method: "POST",
+                url: "/mileage/reject/" + id,
+                data: data,
 
-            success: function (response) {
-                $.toaster({message: 'Disabled', title: 'Success', priority: 'success'});
-                searchPendingMileagePage()
-                searchHistoryMileagePage()
-            }
+                success: function (response) {
+                    $.toaster({message: 'Disabled', title: 'Success', priority: 'success'});
+                    searchPendingMileagePage()
+                    searchHistoryMileagePage()
+                }
             });
         }
 
@@ -501,4 +516,4 @@
         }
 
     </script>
-@endsection
+@endpush
