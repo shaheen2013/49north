@@ -25,7 +25,7 @@ class ExpenseController extends Controller {
    //search history
     public function searchHistory(Request $request){
       
-        $data = Expenses::orderByDesc('created_at')->with('employee:id,firstname,lastname')->where('status', '!=', null)
+        $data = Expenses::orderByDesc('created_at')->with('employee')->where('status', '!=', null)
         ->where(function ($q) use($request){
             if(isset($request->history_search)){
                 $q->whereHas('employee', function($sql) use($request){
@@ -49,7 +49,7 @@ class ExpenseController extends Controller {
 
     public function searchPending(Request $request){
       
-        $data = Expenses::orderByDesc('created_at')->with('employee:id,firstname,lastname')->where('status', null)
+        $data = Expenses::orderByDesc('created_at')->with('employee')->where('status', null)
         ->where(function ($q) use($request){
             if(isset($request->pending_search)){
                 $q->whereHas('employee', function($sql) use($request){

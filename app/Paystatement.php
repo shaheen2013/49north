@@ -2,10 +2,12 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
+// use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\{Model, SoftDeletes};
 
 class Paystatement extends Model {
     use HasEmployee;
+    use  SoftDeletes;
 
     public $timestamps = false;
 
