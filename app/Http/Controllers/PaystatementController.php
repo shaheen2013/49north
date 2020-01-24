@@ -111,6 +111,8 @@ class PaystatementController extends Controller
             $success = false;
             $message = "pay Statements not found";
         }
+        } else{
+            $message = "You can't delete. Only Admin can delete!!";
         }
         return response()->json([
             'success' => $success,
