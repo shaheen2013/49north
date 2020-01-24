@@ -17,8 +17,8 @@
                     <div class="row">
                         <div class="col-sm-2">
                             <div class="form-group">
-                                <input type="text" placeholder="Search employee"
-                                       class="form-control-new" name="pending_search" id="pending_search" onkeyup="expences_pending_new()">
+                                <input type="text" placeholder="Search expense" class="form-control-new" name="pending_search" id="pending_search" onkeyup="expences_pending_new()">
+                                <span class="remove-button" onclick="document.getElementById('pending_search').value = '';expences_pending_new()"><i class="fa fa-times" aria-hidden="true"></i></span>
                             </div>
                         </div>
                         <div class="col-sm-2">
@@ -61,8 +61,8 @@
                     <div class="row">
                         <div class="col-sm-2">
                             <div class="form-group">
-                                <input type="text" placeholder="Search employee"
-                                       class="form-control-new" name="history_search" id="history_search" onkeyup="expences_history_new()">
+                                <input type="text" placeholder="Search expense" class="form-control-new" name="history_search" id="history_search" onkeyup="expences_history_new()">
+                                <span class="remove-button" onclick="document.getElementById('history_search').value = '';expences_history_new()"><i class="fa fa-times" aria-hidden="true"></i></span>
                             </div>
                         </div>
                         <div class="col-sm-2">
@@ -100,10 +100,7 @@
                 </div>
             </div>
         </div><!-------------end--------->
-
     </div>
-
-
 
     <div id="expense-modal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
@@ -130,10 +127,8 @@
                                 <div class="col-md-6 col-sm-6">
                                     <div class="text_outer">
                                         <label for="expense_date" class="">Date</label>
-                                        <input type="date" placeholder="" class="form-control" name="date" id="expense_date">
+                                        <input type="date" placeholder="Select Date" class="flatpickr form-control" name="date" id="expense_date">
                                     </div>
-
-
                                 </div>
                             </div>
                             <div class="clearfix"></div>
@@ -196,32 +191,24 @@
                                 <div class="col-md-6 col-sm-6">
                                     <div class="text_outer">
                                         <label for="description" class="">Description</label>
-                                        <input type="text" id="description" name="description" class="form-control"
-                                               placeholder="Insert text here">
+                                        <input type="text" id="description" name="description" class="form-control" placeholder="Insert text here">
                                     </div>
                                 </div>
                                 <div class="col-md-6 col-sm-6">
                                     <div class="col-md-12 col-sm-12">
                                         <label class="form-check-label">
-                                            <input class="form-check-input" type="checkbox" name="billable"
-                                                   style="margin-left: -12.01rem;"> Billable
+                                            <input class="form-check-input" type="checkbox" name="billable" style="margin-left: -12.01rem;"> Billable
                                         </label>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-12" style="display:inline-flex;">
                                             <div class="col-md-7 col-sm-7">
-
                                                 <label class="form-check-label">
-                                                    <input class="form-check-input" type="checkbox" name=""
-                                                           style="margin-left: -7.25rem;"> Received authorization
+                                                    <input class="form-check-input" type="checkbox" name="" style="margin-left: -7.25rem;"> Received authorization
                                                 </label>
-
                                             </div>
                                             <div class="col-md-5 col-sm-5">
-                                                <input type="text" id="ireceived_auth" name="received_auth" class="form-control"
-                                                       placeholder=""
-                                                       style="border:0px; border-bottom:1px solid;padding: 0px;background-color: #fff !important;">
-
+                                                <input type="text" id="ireceived_auth" name="received_auth" class="form-control" placeholder="" style="border:0px; border-bottom:1px solid;padding: 0px;background-color: #fff !important;">
                                             </div>
                                         </div>
                                     </div>
@@ -233,15 +220,13 @@
                                 <div class="col-md-6 col-sm-6">
                                     <div class="text_outer">
                                         <label for="subtotal" class="">Subtotal</label>
-                                        <input type="number" id="subtotal" name="subtotal" class="form-control"
-                                               placeholder="Insert text here">
+                                        <input type="number" id="subtotal" name="subtotal" class="form-control" placeholder="Insert text here">
                                     </div>
                                 </div>
                                 <div class="col-md-6 col-sm-6">
                                     <div class="text_outer">
                                         <label for="gst" class="">GST</label>
-                                        <input type="number" id="gst" name="gst" class="form-control"
-                                               placeholder="Insert Figure here">
+                                        <input type="number" id="gst" name="gst" class="form-control" placeholder="Insert Figure here">
                                     </div>
                                 </div>
                             </div>
@@ -251,15 +236,13 @@
                                 <div class="col-md-6 col-sm-6">
                                     <div class="text_outer">
                                         <label for="pst" class="">PST</label>
-                                        <input type="number" id="pst" name="pst" class="form-control"
-                                               placeholder="Insert Figure here">
+                                        <input type="number" id="pst" name="pst" class="form-control" placeholder="Insert Figure here">
                                     </div>
                                 </div>
                                 <div class="col-md-6 col-sm-6">
                                     <div class="text_outer">
                                         <label for="total" class="">Total</label>
-                                        <input type="number" id="total" name="total" class="form-control"
-                                               placeholder="Insert Figure here">
+                                        <input type="number" id="total" name="total" class="form-control" placeholder="Insert Figure here">
                                     </div>
                                 </div>
                             </div>
@@ -269,11 +252,8 @@
                                     <div class="col-md-12 col-sm-12">
                                         {{ csrf_field() }}
                                         <input type="hidden" name="emp_id" value="{{ auth()->user()->id }}">
-                                        <input type="submit" class="btn-dark contact_btn" value="Save"
-                                               data-form="expences">
-                                        <span class="close close-span" data-dismiss="modal" aria-label="Close"><i
-                                                class="fa fa-arrow-left"></i> Return to Expense Reports</span>
-
+                                        <button type="submit" class="btn-dark contact_btn" data-form="expences">Save</button>
+                                        <span class="close close-span" data-dismiss="modal" aria-label="Close"><i class="fa fa-arrow-left"></i> Return to Expense Reports</span>
                                     </div>
                                 </div>
                             </div>
@@ -285,6 +265,7 @@
             </div>
         </div>
     </div>
+
     <div id="expense-modal-edit2" class="modal fade bs-example-modal-lg expense-modal-edit" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -304,14 +285,11 @@
                                         </select>
                                     </div>
                                 </div>
-
                                 <div class="col-md-6 col-sm-6">
                                     <div class="text_outer">
                                         <label for="edit_date" class="">Date</label>
-                                        <input type="date" placeholder="" class="form-control" name="date" id="edit_date">
+                                        <input type="date" placeholder="Select Date" class="flatpickr form-control" name="date" id="edit_date">
                                     </div>
-
-
                                 </div>
                             </div>
                             <div class="clearfix"></div>
@@ -328,8 +306,6 @@
                                             @endforeach
                                         </select>
                                     </div>
-
-
                                 </div>
                                 <div class="col-md-6 col-sm-6">
                                     <div class="text_outer">
@@ -342,8 +318,6 @@
                                             @endforeach
                                         </select>
                                     </div>
-
-
                                 </div>
                             </div>
                             <div class="clearfix"></div>
@@ -375,32 +349,24 @@
                                 <div class="col-md-6 col-sm-6">
                                     <div class="text_outer">
                                         <label for="edit_description" class="">Description</label>
-                                        <input type="text" name="description" id="edit_description" class="form-control"
-                                               placeholder="Insert text here">
+                                        <input type="text" name="description" id="edit_description" class="form-control" placeholder="Insert text here">
                                     </div>
                                 </div>
                                 <div class="col-md-6 col-sm-6">
                                     <div class="col-md-12 col-sm-12">
                                         <label class="form-check-label">
-                                            <input class="form-check-input" type="checkbox" name="billable" id="edit_billable"
-                                                   style="margin-left: -12.01rem;"> Billable
+                                            <input class="form-check-input" type="checkbox" name="billable" id="edit_billable" style="margin-left: -12.01rem;"> Billable
                                         </label>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-12" style="display:inline-flex;">
                                             <div class="col-md-7 col-sm-7">
-
                                                 <label class="form-check-label">
-                                                    <input class="form-check-input" type="checkbox" name=""
-                                                           style="margin-left: -7.25rem;"> Received authorization
+                                                    <input class="form-check-input" type="checkbox" name="" style="margin-left: -7.25rem;"> Received authorization
                                                 </label>
-
                                             </div>
                                             <div class="col-md-5 col-sm-5">
-                                                <input type="text" name="received_auth" id="received_auth" class="form-control"
-                                                       placeholder=""
-                                                       style="border:0px; border-bottom:1px solid;padding: 0px;background-color: #fff !important;">
-
+                                                <input type="text" name="received_auth" id="received_auth" class="form-control" placeholder="" style="border:0px; border-bottom:1px solid;padding: 0px;background-color: #fff !important;">
                                             </div>
                                         </div>
                                     </div>
@@ -412,15 +378,13 @@
                                 <div class="col-md-6 col-sm-6">
                                     <div class="text_outer">
                                         <label for="edit_subtotal" class="">Subtotal</label>
-                                        <input type="number" id="edit_subtotal" name="subtotal" class="form-control"
-                                               placeholder="Insert text here">
+                                        <input type="number" id="edit_subtotal" name="subtotal" class="form-control" placeholder="Insert text here">
                                     </div>
                                 </div>
                                 <div class="col-md-6 col-sm-6">
                                     <div class="text_outer">
                                         <label for="edit_gst" class="">GST</label>
-                                        <input type="number" id="edit_gst" name="gst" class="form-control"
-                                               placeholder="Insert Figure here">
+                                        <input type="number" id="edit_gst" name="gst" class="form-control" placeholder="Insert Figure here">
                                     </div>
                                 </div>
                             </div>
@@ -430,15 +394,13 @@
                                 <div class="col-md-6 col-sm-6">
                                     <div class="text_outer">
                                         <label for="edit_pst" class="">PST</label>
-                                        <input type="number" id="edit_pst" name="pst" class="form-control"
-                                               placeholder="Insert Figure here">
+                                        <input type="number" id="edit_pst" name="pst" class="form-control" placeholder="Insert Figure here">
                                     </div>
                                 </div>
                                 <div class="col-md-6 col-sm-6">
                                     <div class="text_outer">
                                         <label for="edit_total" class="">Total</label>
-                                        <input type="number" id="edit_total" name="total" class="form-control"
-                                               placeholder="Insert Figure here">
+                                        <input type="number" id="edit_total" name="total" class="form-control" placeholder="Insert Figure here">
                                     </div>
                                 </div>
                             </div>
@@ -452,7 +414,6 @@
                                             Save
                                         </button>
                                         <span class="close close-span" data-dismiss="modal" aria-label="Close"><i class="fa fa-arrow-left"></i> Return to Expense Reports</span>
-
                                     </div>
                                 </div>
                             </div>
@@ -467,7 +428,7 @@
 
     <script type="text/javascript">
 
-        let id, from, to, history_from, history_to = null;
+        let id = from = to = history_from = history_to = null;
 
         $(document).ready(function () {
             const date = new Date(), y = date.getFullYear(), m = date.getMonth();
@@ -531,15 +492,20 @@
 
         function expences_pending_new() {
             let pending_search = $('#pending_search').val();
+            if ($.trim(pending_search).length > 0) {
+                $('.remove-button').show();
+            } else {
+                $('.remove-button').hide();
+            }
             let data = {
                 pending_search: pending_search,
                 from: from,
                 to: to,
-
             };
 
             $('#wait').css('display', 'inline-block'); // wait for loader
             $('#wait-his').css('display', 'inline-block'); // wait for loader
+
             $.ajax({
                 type: 'post',
                 url: "/expense/pending",
@@ -554,8 +520,7 @@
                             pageSize: 10,
                             totalNumber: results.data.length,
                             callback: function (data, pagination) {
-                                let html = '';
-                                let date = '';
+                                let html = date = adminOption = '';
 
                                 for (let index = 0; index < data.length; index++) {
                                     if (data[index].date != null && data[index].date != '') {
@@ -565,14 +530,19 @@
                                     } else {
                                         date = '-';
                                     }
+
+                                    if (is_admin == 1) {
+                                        adminOption = `<a href="javascript:void(0)" onclick="expence_approve_new('${data[index].id}')"><i class="fa fa-check-circle" title="Approved"></i></a>
+                                        <a href="javascript:void(0)" title="Reject!" onclick="expence_reject_new('${data[index].id}')"><i class="fa fa-ban"></i></a>`;
+                                    }
+
                                     html += `<tr>
                                     <td> ${date} </td>
                                     <td> ${data[index].employee.firstname + ' ' + data[index].employee.lastname} </td>
                                     <td> ${data[index].description} </td>
                                     <td> ${data[index].total} </td>
                                     <td class="text-center">
-                                        <a href="javascript:void(0)" onclick="expence_approve_new('${data[index].id}')"><i class="fa fa-check-circle" title="Approved"></i></a>
-                                        <a href="javascript:void(0)" title="Reject!" onclick="expence_reject_new('${data[index].id}')"><i class="fa fa-ban"></i></a>
+                                        ${adminOption}
                                     </td>
                                     <td class="text-center">
                                         <a href="javascript:void(0);" onclick="OpenEditExpenseModel('${data[index].id}') ">EDIT</a>
@@ -591,16 +561,17 @@
             });
         }
 
-        /*window.onload = function () {
-            expences_pending_new()
-        };*/
-
         function expences_history_new() {
             let history_search = $('#history_search').val();
+            if ($.trim(history_search).length > 0) {
+                $('.remove-button').show();
+            } else {
+                $('.remove-button').hide();
+            }
             let data = {
                 history_search: history_search,
-                history_from: history_from,
-                history_to: history_to,
+                from: history_from,
+                to: history_to,
             };
 
             $('#wait').css('display', 'inline-block'); // wait for loader
@@ -691,7 +662,6 @@
         }
 
         function OpenEditExpenseModel(id) {
-            console.log(id)
             $('#expense-modal-edit2').modal();
             $.ajax({
                 type: 'GET',

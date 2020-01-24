@@ -10,7 +10,7 @@
                 @admin
                     <div class="col-sm-2">
                         <div class="form-group">
-                            <input type="text" placeholder="Search agreement" onkeyup="searchAgreement()" class="form-control-new" name="search" id="search">
+                            <input type="text" placeholder="Search agreement" onkeyup="searchAgreement()" class="form-control-new" name="search" id="search"><span class="remove-button" onclick="document.getElementById('search').value = '';searchAgreement()"><i class="fa fa-times" aria-hidden="true"></i></span>
                         </div>
                     </div>
                     <div class="col-sm-1">
@@ -40,7 +40,7 @@
 @endsection
 @push('scripts')
     <script !src="">
-        let from, to = null;
+        let from = to = null;
 
         $(document).ready(function () {
             var date = new Date(), y = date.getFullYear(), m = date.getMonth();
@@ -72,6 +72,11 @@
             $('#agreement').html('');
             $('#wait').css('display', 'inline-block'); // wait for loader
             let search = $('#search').val();
+            if ($.trim(search).length > 0) {
+                $('.remove-button').show();
+            } else {
+                $('.remove-button').hide();
+            }
             let data = {
                 search: search,
                 from: from,
@@ -85,7 +90,7 @@
                 dataType: 'JSON',
                 success: function (results) {
                     $('#wait').css('display', 'none');
-                    let html, date, empAgreement, codeOfConduct, amendments = '';
+                    let html = date = empAgreement = codeOfConduct = amendments = '';
 
                     if (results.status == 200) {
                         for (let index = 0; index < results.data.length; index++) {
@@ -127,6 +132,8 @@
                                 }
                             } else if (is_admin) {
                                 empAgreement = `<a href="javascript:void(0);" onclick="show_modal_agreement('${results.data[index].id}','EA')">Upload</a>`;
+                            } else {
+                                empAgreement = 'N/A';
                             }
 
                             if (results.data[index].active_codeofconduct) {
@@ -139,6 +146,8 @@
                                 }
                             } else if (is_admin) {
                                 codeOfConduct = `<a href="javascript:void(0);" onclick="show_modal_agreement('${results.data[index].id}','COC')">Upload</a>`;
+                            } else {
+                                codeOfConduct = 'N/A';
                             }
 
                             html += `<tr>
@@ -176,6 +185,5 @@
             return [year, month, day].join('-');
         }
     </script>
-
 @endpush
 

@@ -7,7 +7,7 @@
         <div class="row">
             <div class="col-sm-2">
                 <div class="form-group">
-                    <input type="text" placeholder="Search user" onkeyup="searchAdmin()" class="form-control-new" name="search" id="search">
+                    {{--<input type="text" placeholder="Search user" onkeyup="searchAdmin()" class="form-control-new" name="search" id="search">--}}
                 </div>
             </div>
             <div class="col-sm-1">
@@ -45,7 +45,7 @@
 
 @section('js')
     <script !src="">
-        let from, to = null;
+        let from = to = null;
 
         function searchAdmin() {
             $('#users').html('');
@@ -76,8 +76,8 @@
 
         $(document).ready(function(){
             var date = new Date(), y = date.getFullYear(), m = date.getMonth();
-            from = formatDate(new Date(y, m, 1));
-            to = formatDate(new Date(y, m + 1, 0));
+            /*from = formatDate(new Date(y, m, 1));
+            to = formatDate(new Date(y, m + 1, 0));*/
             searchAdmin();
 
             $('#date').flatpickr({
@@ -96,9 +96,6 @@
                     }
                 },
             });
-
-            /*let users = JSON.parse({!!json_encode($users->toJson())!!});
-            renderHTML(users);*/
 
             setTimeout(function () {
                 $('.deletejson').click(function ($e) {

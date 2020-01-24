@@ -20,7 +20,7 @@
                             @admin
                             <div class="col-sm-2">
                                 <div class="form-group">
-                                    <input type="text" placeholder="Search employee" onkeyup="searchPendingMileagePage()" class="form-control-new" name="search" id="search">
+                                    <input type="text" placeholder="Search employee" onkeyup="searchPendingMileagePage()" class="form-control-new" name="search" id="search"><span class="remove-button" onclick="document.getElementById('search').value = '';searchPendingMileagePage()"><i class="fa fa-times" aria-hidden="true"></i></span>
                                 </div>
                             </div>
                             @endadmin
@@ -62,7 +62,7 @@
                             @admin
                             <div class="col-sm-2">
                                 <div class="form-group">
-                                    <input type="text" placeholder="Search employee" onkeyup="searchHistoryMileagePage()" class="form-control-new" name="history_search" id="history_search">
+                                    <input type="text" placeholder="Search employee" onkeyup="searchHistoryMileagePage()" class="form-control-new" name="history_search" id="history_search"><span class="remove-button" onclick="document.getElementById('history_search').value = '';searchHistoryMileagePage()"><i class="fa fa-times" aria-hidden="true"></i></span>
                                 </div>
                             </div>
                             @endadmin
@@ -122,7 +122,7 @@
                             <div class="col-md-6 col-sm-6">
                                 <div class="text_outer">
                                     <label for="edit_date" class="">Date</label>
-                                    <input type="date" placeholder="" name="date" class="form-control" id="edit_date">
+                                    <input type="text" placeholder="Select Date" name="date" class="flatpickr form-control" id="edit_date">
                                 </div>
                             </div>
                         </div>
@@ -131,15 +131,13 @@
                             <div class="col-md-6 col-sm-6">
                                 <div class="text_outer">
                                     <label for="edit_vehicle" class="">Vehicle</label>
-                                    <input type="text" id="edit_vehicle" name="vehicle" class="form-control"
-                                           placeholder="Insert text here">
+                                    <input type="text" id="edit_vehicle" name="vehicle" class="form-control" placeholder="Insert text here">
                                 </div>
                             </div>
                             <div class="col-md-6 col-sm-6">
                                 <div class="text_outer">
                                     <label for="edit_kilometers" class="">No of kilometers</label>
-                                    <input type="number" id="edit_kilometers" name="kilometers" class="form-control"
-                                           placeholder="Insert figure here">
+                                    <input type="number" id="edit_kilometers" name="kilometers" class="form-control" placeholder="Insert figure here">
                                 </div>
                             </div>
                         </div>
@@ -147,8 +145,7 @@
                             <div class="col-md-12 col-sm-12">
                                 <div class="text_outer">
                                     <label for="edit_reasonformileage" class="">Reason for mileage</label>
-                                    <input type="text" id="edit_reasonformileage" name="reasonformileage"
-                                           class="form-control" placeholder="Insert text here">
+                                    <input type="text" id="edit_reasonformileage" name="reasonformileage" class="form-control" placeholder="Insert text here">
                                 </div>
                             </div>
                         </div>
@@ -156,11 +153,9 @@
                         <div class="row margin-top-30">
                             <div class="form-group" style="width:100%;">
                                 <div class="col-md-12 col-sm-12">
-                                    <button type="button" id="update" onclick="update_mileage(id)"
-                                            class="btn-dark contact_btn" data-form="expences">Save
+                                    <button type="button" id="update" onclick="update_mileage(id)" class="btn-dark contact_btn" data-form="expences">Save
                                     </button>
-                                    <span class="close close-span" data-dismiss="modal" aria-label="Close"><i
-                                            class="fa fa-arrow-left"></i> Return to Mileage</span>
+                                    <span class="close close-span" data-dismiss="modal" aria-label="Close"><i class="fa fa-arrow-left"></i> Return to Mileage</span>
                                 </div>
                             </div>
                         </div>
@@ -176,7 +171,7 @@
 
     <script type="text/javascript">
 
-        let id, from, to, history_from, history_to = null;
+        let id = from = to = history_from = history_to = null;
 
         $(document).ready(function () {
             const date = new Date(), y = date.getFullYear(), m = date.getMonth();
@@ -302,6 +297,12 @@
         function searchPendingMileagePage() {
             let search = $('#search').val();
 
+            if ($.trim(search).length > 0) {
+                $('.remove-button').show();
+            } else {
+                $('.remove-button').hide();
+            }
+
             // console.log(date);
             let data = {
                 search: search,
@@ -309,7 +310,6 @@
                 to: to,
 
             };
-            console.log(data);
 
             $('#wait').css('display', 'inline-block'); // wait for loader
             $('#wait-his').css('display', 'inline-block'); // wait for loader
@@ -371,14 +371,18 @@
         function searchHistoryMileagePage() {
             let history_search = $('#history_search').val();
 
+            if ($.trim(history_search).length > 0) {
+                $('.remove-button').show();
+            } else {
+                $('.remove-button').hide();
+            }
+
             // console.log(date);
             let data = {
                 history_search: history_search,
                 history_from: history_from,
                 history_to: history_to,
-
             };
-            console.log(data);
 
             $('#wait').css('display', 'inline-block'); // wait for loader
             $('#wait-his').css('display', 'inline-block'); // wait for loader
@@ -504,7 +508,6 @@
                 }
             });
         }
-
 
         // Format date
         function formatDate(date) {
