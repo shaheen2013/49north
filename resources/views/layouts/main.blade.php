@@ -159,7 +159,7 @@
 
     // Format date
     function formatDate(date) {
-        var d = new Date(date),
+        let d = new Date(date),
             month = '' + (d.getMonth() + 1),
             day = '' + d.getDate(),
             year = d.getFullYear();
@@ -171,6 +171,8 @@
 
         return [year, month, day].join('-');
     }
+
+    const is_admin = parseInt({{ auth()->user()->is_admin }});
 </script>
 
 <script type="text/javascript" src="{{ asset('js/bootstrap-datepicker.min.js') }}"></script>
