@@ -173,8 +173,7 @@
 
 @section('js')
     <script type="text/javascript">
-        let is_admin = parseInt({{ auth()->user()->is_admin }});
-        let auth_id = parseInt({{ auth()->id() }});
+
         let from, to = null;
 
         $(document).ready(function () {

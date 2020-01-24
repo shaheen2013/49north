@@ -7,8 +7,7 @@ use Illuminate\Database\Eloquent\{Model, SoftDeletes};
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Mileage extends Model {
-    use HasEmployee;
-    use  SoftDeletes;
+    use HasEmployee, SoftDeletes, SearchTrait;
 
     public $table = "mileages";
     protected $guarded = [];

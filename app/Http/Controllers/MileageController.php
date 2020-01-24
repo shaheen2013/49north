@@ -29,10 +29,10 @@ class MileageController extends Controller {
 
         $type = auth()->user()->is_admin;
         if ($type == '1') {
-            $data['mileage_list'] = Mileage::where('status', '<>', 'D')->orderByDesc('created_at')->with('employee:id,firstname,lastname')->get();
+            $data['mileage_list'] = Mileage::where('status', '<>', 'D')->orderByDesc('date')->with('employee:id,firstname,lastname')->get();
         }
         else {
-            $data['mileage_list'] = Auth::user()->mileage()->where('status', 'A')->orderByDesc('created_at')->get();
+            $data['mileage_list'] = Auth::user()->mileage()->where('status', 'A')->orderByDesc('date')->get();
 
         }
 
@@ -47,53 +47,60 @@ class MileageController extends Controller {
      *
      * @return JsonResponse
      */
-   
 
+    /**
+     * @param Request $request
+     *
+     * @return JsonResponse
+     */
     public function searchPendingMileage (Request $request) {
 
-        $data = Mileage::orderByDesc('created_at')->with('employee')->whereNull('status')
-        ->where(function ($q) use ($request) {
-            if (isset($request->search)) {
-                $q->whereHas('employee', function ($sql) use ($request) {
-                    $sql->where('firstname', 'LIKE', '%' . $request->search . '%');
-                    $sql->orWhere('lastname', 'LIKE', '%' . $request->search . '%');
-
-                });
-
-            }
-            if (isset($request->from) && isset($request->to)) {
-                $q->whereBetween('date', [$request->from, $request->to]);
-            }
-        });
-
-        $data = $data->get();
+        $data = $this->_searchMileage('search', true);
 
         return response()->json(['status' => 'success', 'data' => $data]);
-     
     }
 
-    public function searchHistoryMileage (Request $request) { 
+    /**
+     * @param string $searchField
+     * @param bool   $isPending
+     *
+     * @return mixed
+     */
+    private function _searchMileage ($searchField, $isPending = true) {
+        $query = Mileage::orderByDesc('date')->with('employee');
 
-        $data = Mileage::orderByDesc('created_at')->with('employee')->whereNotNull('status')
-        ->where(function ($q) use ($request) {
-            if (isset($request->history_search)) {
-                $q->whereHas('employee', function ($sql) use ($request) {
-                    $sql->where('firstname', 'LIKE', '%' . $request->history_search . '%');
-                    $sql->orWhere('lastname', 'LIKE', '%' . $request->history_search . '%');
+        if ($search = request()->input($searchField)) {
+            $query->whereHas('employee', function ($sql) use ($search) {
+                $sql->where('firstname', 'LIKE', '%' . $search . '%');
+                $sql->orWhere('lastname', 'LIKE', '%' . $search . '%');
+            });
+        }
 
-                });
+        $query->dateSearch('date');
+        $query->isEmployee();
 
-            }
-            if (isset($request->history_from) && isset($request->history_to)) {
-                $q->whereBetween('date', [$request->history_from, $request->history_to]);
-                
-            }
-        });
+        // pending has not status
+        if ($isPending) {
+            $query->whereNull('status');
+        }
+        else {
+            $query->whereNotNull('status');
+        }
 
-        $data = $data->get();
+        return $query->get();
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @return JsonResponse
+     */
+    public function searchHistoryMileage (Request $request) {
+
+        $data = $this->_searchMileage('history_search', false);
 
         return response()->json(['status' => 'success', 'data' => $data]);
-       
+
     }
 
     /**
@@ -185,28 +192,30 @@ class MileageController extends Controller {
         ]);
     }
 
-     /// approved mileage
-     public function mileageApprove($id) {
+    /// approved mileage
+    public function mileageApprove ($id) {
         $data = Mileage::find($id);
         $data->status = 'A';
         $data->save();
-        if($data->update()){
-            return response()->json(['status'=>'success']);
+        if ($data->update()) {
+            return response()->json(['status' => 'success']);
         }
-        return response()->json(['status'=>'fail']);
-       
+
+        return response()->json(['status' => 'fail']);
+
     }
 
     /// reject mileage
-    public function mileageReject($id) {
+    public function mileageReject ($id) {
         $data = Mileage::find($id);
         $data->status = 'D';
         $data->save();
-        if($data->update()){
-            return response()->json(['status'=>'success']);
+        if ($data->update()) {
+            return response()->json(['status' => 'success']);
         }
-        return response()->json(['status'=>'fail']);
-       
+
+        return response()->json(['status' => 'fail']);
+
     }
 
 }

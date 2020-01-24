@@ -7,19 +7,16 @@
         <div class="tab-pane inner-tab-box" id="nav-agreements" role="tabpanel" aria-labelledby="nav-agreements-tab">
 
             <div class="row">
-                <div class="col-sm-2">
-                    <div class="form-group">
-                        <input type="text" placeholder="Search agreement" onkeyup="searchAgreement()" class="form-control-new" name="search" id="search">
+                @admin
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <input type="text" placeholder="Search agreement" onkeyup="searchAgreement()" class="form-control-new" name="search" id="search">
+                        </div>
                     </div>
-                </div>
-                <div class="col-sm-2">
-                    <div class="form-group">
-                        <input type="text" name="date" id="date" placeholder="Select Date" class="form-control-new">
+                    <div class="col-sm-1">
+                        <div id="wait"></div>
                     </div>
-                </div>
-                <div class="col-sm-1">
-                    <div id="wait"></div>
-                </div>
+                @endadmin
                 <div class="col-sm-12">
                     <table class="table _table _table-bordered">
                         <thead>
@@ -40,12 +37,12 @@
         </div>
 
     </div>
-
+@endsection
+@push('scripts')
     <script !src="">
-        let is_admin = parseInt({{ auth()->user()->is_admin }});
         let from, to = null;
 
-        $(document).ready(function(){
+        $(document).ready(function () {
             var date = new Date(), y = date.getFullYear(), m = date.getMonth();
             from = formatDate(new Date(y, m, 1));
             to = formatDate(new Date(y, m + 1, 0));
@@ -56,7 +53,7 @@
                 altInput: true,
                 altFormat: 'j M, Y',
                 defaultDate: [from, to],
-                onChange: function(selectedDates, dateStr, instance) {
+                onChange: function (selectedDates, dateStr, instance) {
                     from = formatDate(selectedDates[0]);
                     to = formatDate(selectedDates[1]);
 
@@ -95,7 +92,7 @@
                             if (results.data[index].created_at != null && results.data[index].created_at != '') {
                                 time = results.data[index].created_at.split(' ')[0];
                                 date = new Date(time);
-                                date = date.toDateString().split(' ')[2]+" "+date.toDateString().split(' ')[1]+", "+date.toDateString().split(' ')[3]
+                                date = date.toDateString().split(' ')[2] + " " + date.toDateString().split(' ')[1] + ", " + date.toDateString().split(' ')[3]
                             } else {
                                 date = '-';
                             }
@@ -128,7 +125,7 @@
                                         empAgreement += amendments;
                                     }
                                 }
-                            } else {
+                            } else if (is_admin) {
                                 empAgreement = `<a href="javascript:void(0);" onclick="show_modal_agreement('${results.data[index].id}','EA')">Upload</a>`;
                             }
 
@@ -140,18 +137,18 @@
                                 } else {
                                     codeOfConduct = `<a href="${results.data[index].active_code_of_conduct_url}" target="_blank">View</a>`;
                                 }
-                            } else {
+                            } else if (is_admin) {
                                 codeOfConduct = `<a href="javascript:void(0);" onclick="show_modal_agreement('${results.data[index].id}','COC')">Upload</a>`;
                             }
 
                             html += `<tr>
-                                        <td> ${ date  } </td>
-                                        <td> ${results.data[index].firstname+' '+results.data[index].lastname} </td>
+                                        <td> ${date} </td>
+                                        <td> ${results.data[index].firstname + ' ' + results.data[index].lastname} </td>
                                         <td class="text-right">
-                                            ${ empAgreement }
+                                            ${empAgreement}
                                         </td>
                                         <td class="text-right">
-                                            ${ codeOfConduct }
+                                            ${codeOfConduct}
                                         </td>
                                     </tr><tr class="spacer"></tr>`;
                         }
@@ -180,4 +177,5 @@
         }
     </script>
 
-@endsection
+@endpush
+

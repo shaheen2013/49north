@@ -9,12 +9,11 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Validation\{Rule,ValidationException};
+use Illuminate\Validation\{Rule, ValidationException};
 use Illuminate\Http\{JsonResponse, RedirectResponse, Request};
 use Illuminate\Routing\Redirector;
 use Illuminate\View\View;
 use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
-
 
 class UserController extends Controller {
 
@@ -23,10 +22,9 @@ class UserController extends Controller {
      *
      * @return Factory|View
      */
-     use SendsPasswordResetEmails;
+    use SendsPasswordResetEmails;
 
-    public function index ()
-    {
+    public function index () {
         //Get all users and pass it to the view
         $users = User::with('employee_details')->orderBy('name')->get();
 
@@ -38,8 +36,7 @@ class UserController extends Controller {
      *
      * @return Factory|View
      */
-    public function create ()
-    {
+    public function create () {
         //Get all roles and pass it to the view
         $user = new User();
 
@@ -51,8 +48,7 @@ class UserController extends Controller {
      *
      * @return array
      */
-    public function attributes ()
-    {
+    public function attributes () {
         return [
             'password' => 'Password must contain a lower case, uppercase, number and special character',
         ];
@@ -66,8 +62,7 @@ class UserController extends Controller {
      * @return RedirectResponse
      * @throws ValidationException
      */
-    public function store (Request $request)
-    {
+    public function store (Request $request) {
         $id = $request->input('id');
 
         //Validate name, email and password fields
@@ -164,8 +159,7 @@ class UserController extends Controller {
      *
      * @return RedirectResponse|Redirector
      */
-    public function show ($id)
-    {
+    public function show ($id) {
         return redirect('users');
     }
 
@@ -176,8 +170,7 @@ class UserController extends Controller {
      *
      * @return Factory|View
      */
-    public function edit ($id)
-    {
+    public function edit ($id) {
         $u = User::findOrFail($id); //Get user with specified id
         //DB::enableQueryLog();
         $user = Employee_detail::find($u->id);
@@ -208,8 +201,7 @@ class UserController extends Controller {
      *
      * @return JsonResponse|RedirectResponse
      */
-    public function destroy ($id)
-    {
+    public function destroy ($id) {
         //Find a user with a given id and delete
         $user = User::find($id);
         $success = $user->exists ? true : false;
@@ -217,6 +209,7 @@ class UserController extends Controller {
 
         return response()->json(['success' => $success]);
     }
+
     public function forceLogin (User $user) {
         // only allow forced login when user is an admin
         if (Auth::user()->is_admin === 1 && !request()->input('return')) {
@@ -233,12 +226,12 @@ class UserController extends Controller {
 
         return redirect()->route('home');
     }
-    public function changeUserPassword(Request $request, $id)
-    {
-        try{
+
+    public function changeUserPassword (Request $request, $id) {
+        try {
             $user = User::find($id);
             $pass = '';
-            $symbols = array();
+            $symbols = [];
             $length = 8;
             $used_symbols = '';
             $characters = "lower_case,upper_case,numbers,special_symbols";
@@ -246,14 +239,14 @@ class UserController extends Controller {
             $symbols["upper_case"] = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
             $symbols["numbers"] = '1234567890';
             $symbols["special_symbols"] = '!?~@#-_+<>[]{}';
-            $characters = explode(",",$characters);
-            foreach ($characters as $key=>$value) {
-                $used_symbols .= $symbols[$value];
+            $characters = explode(",", $characters);
+            foreach ($characters as $key => $value) {
+                $used_symbols .= $symbols[ $value ];
             }
             $symbols_length = strlen($used_symbols) - 1;
             for ($i = 0; $i < $length; $i++) {
                 $n = rand(0, $symbols_length);
-                $pass .= $used_symbols[$n];
+                $pass .= $used_symbols[ $n ];
             }
             $user->password = bcrypt($pass);
             $user->save();
@@ -261,7 +254,8 @@ class UserController extends Controller {
             if ($user->update() == 1) {
                 $success = true;
                 $message = "Password send your email";
-            } else {
+            }
+            else {
                 $success = false;
                 $message = "There is a problem";
             }
@@ -280,7 +274,8 @@ class UserController extends Controller {
 
                 if (count($emails)) {
                     Mail::to($emails)->send(new PasswordReset($pass));
-                } else {
+                }
+                else {
                     $message = "You have no email!";
                 }
             }
@@ -289,17 +284,16 @@ class UserController extends Controller {
                 'success' => $success,
                 'message' => $message,
             ]);
-        } catch(\Exception $e){
+        } catch (\Exception $e) {
             return response()->json(['status' => 'fail', 'error' => $e->getMessages()]);
         }
     }
 
-    public function changeStuffPassword(Request $request, $id)
-    {
-        try{
+    public function changeStuffPassword (Request $request, $id) {
+        try {
             $user = User::findOrFail($id);
             $pass = '';
-            $symbols = array();
+            $symbols = [];
             $length = 8;
             $used_symbols = '';
             $characters = "lower_case,upper_case,numbers,special_symbols";
@@ -307,14 +301,14 @@ class UserController extends Controller {
             $symbols["upper_case"] = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
             $symbols["numbers"] = '1234567890';
             $symbols["special_symbols"] = '!?~@#-_+<>[]{}';
-            $characters = explode(",",$characters);
-            foreach ($characters as $key=>$value) {
-                $used_symbols .= $symbols[$value];
+            $characters = explode(",", $characters);
+            foreach ($characters as $key => $value) {
+                $used_symbols .= $symbols[ $value ];
             }
             $symbols_length = strlen($used_symbols) - 1;
             for ($i = 0; $i < $length; $i++) {
                 $n = rand(0, $symbols_length);
-                $pass .= $used_symbols[$n];
+                $pass .= $used_symbols[ $n ];
             }
             $user->password = bcrypt($pass);
             $user->save();
@@ -322,7 +316,8 @@ class UserController extends Controller {
             if ($user->update() == 1) {
                 $success = true;
                 $message = "Password send your email";
-            } else {
+            }
+            else {
                 $success = false;
                 $message = "There is a problem";
             }
@@ -341,7 +336,8 @@ class UserController extends Controller {
 
                 if (count($emails)) {
                     Mail::to($emails)->send(new PasswordReset($pass));
-                } else {
+                }
+                else {
                     $message = "You have no email!";
                 }
             }
@@ -350,31 +346,25 @@ class UserController extends Controller {
                 'success' => $success,
                 'message' => $message,
             ]);
-        } catch(\Exception $e){
+        } catch (\Exception $e) {
             return response()->json(['status' => 'fail', 'error' => $e->getMessages()]);
         }
     }
 
     /**
      * Filter agreement
+     *
      * @param Request $request
      *
      * @return JsonResponse
      */
-    public function search(Request $request){
+    public function search (Request $request) {
         try {
-            $data = User::with('employee_details')->orderBy('name')
-                ->where(function ($q) use ($request) {
+            $data = User::with('employee_details')->orderBy('name')->where(function ($q) use ($request) {
                     if (isset($request->search)) {
-                        $q->where('name', 'like', '%' . $request->search . '%')
-                            ->orWhere('email', 'like', '%' . $request->search . '%')
-                            ->orWhere('created_at', 'like', '%' . $request->search . '%');
-                    }
-                    if (isset($request->from) && isset($request->to)) {
-                        $q->whereBetween('created_at', [$request->from, $request->to]);
+                        $q->where('name', 'like', '%' . $request->search . '%')->orWhere('email', 'like', '%' . $request->search . '%');
                     }
                 })->get();
-
             return response()->json(['status' => 200, 'data' => $data]);
         } catch (\Exception $e) {
             return response()->json(['status' => 500, 'message' => $e->getMessage()]);

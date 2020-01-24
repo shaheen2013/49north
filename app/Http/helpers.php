@@ -1,6 +1,6 @@
 <?php
 
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\{Storage,Config};
 
 if (! function_exists('get_times')) {
     function get_times( $default = '19:00', $interval = '+30 minutes' ) {
@@ -72,7 +72,7 @@ if (! function_exists('fileUrl')) {
                 $expiry = "+10 minutes";
 
                 $command = $client->getCommand('GetObject', [
-                    'Bucket' => \Config::get('filesystems.disks.s3.bucket'),
+                    'Bucket' => Config::get('filesystems.disks.s3.bucket'),
                     'Key'    => $value
                 ]);
 
