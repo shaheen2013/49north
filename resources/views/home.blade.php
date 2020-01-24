@@ -259,7 +259,7 @@
             </div>
             <div class="margin-10"></div>
             <div class="margin-10"></div>
-            @if(auth()->user()->is_admin == 1)
+            @admin
                 <div class="emergency">
                     <h2 class="form_title">Admin</h2>
                     <div class="row">
@@ -271,7 +271,7 @@
                         </div>
                     </div>
                 </div>
-            @endif
+            @endadmin
             {{ Form::button(auth()->user()->id ? 'Save Changes' : 'Add', array('class' => 'btn btn-lg btn-dark contact_btn','type'=>'submit')) }}
 
             {{ Form::close() }}

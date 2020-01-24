@@ -7,7 +7,7 @@
         <div class="tab-pane inner-tab-box" id="nav-agreements" role="tabpanel" aria-labelledby="nav-agreements-tab">
 
             <div class="row">
-                @if (auth()->user()->is_admin)
+                @admin
                     <div class="col-sm-2">
                         <div class="form-group">
                             <input type="text" placeholder="Search agreement" onkeyup="searchAgreement()" class="form-control-new" name="search" id="search">
@@ -16,7 +16,7 @@
                     <div class="col-sm-1">
                         <div id="wait"></div>
                     </div>
-                @endif
+                @endadmin
                 <div class="col-sm-12">
                     <table class="table _table _table-bordered">
                         <thead>
