@@ -20,9 +20,50 @@ class Expenses extends Authenticatable {
      * @var array
      */
     protected $guard = [];
+    protected $guarded  = [];
 
     /* public function setPasswordAttribute($password)
      {
          $this->attributes['password'] = bcrypt($password);
      }*/
+
+    /**
+     * Get the company that owns the expense
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function companyRel()
+    {
+        return $this->belongsTo(Company::class, 'company', 'id');
+    }
+
+    /**
+     * Get the category that owns the expense
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function categoryRel()
+    {
+        return $this->belongsTo(Categorys::class, 'category', 'id');
+    }
+
+    /**
+     * Get the purchase that owns the expense
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function purchaseRel()
+    {
+        return $this->belongsTo(Purchases::class, 'purchase', 'id');
+    }
+
+    /**
+     * Get the project that owns the expense
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function projectRel()
+    {
+        return $this->belongsTo(Project::class, 'project', 'id');
+    }
 }

@@ -110,10 +110,7 @@
 
                                     if (results.data[index].active_agreement.amendments.length > 0) {
                                         results.data[index].active_agreement.amendments.forEach(function myFunction(value, index, array) {
-                                            amendments = `<br>${index}
-                                                        <a href="${value.amendment_url}" target="_blank">View</a>
-                                                        <br>
-                                                        <a href="javascript:void(0);" onclick="delete_agreement('${value.id}','COC')" class="down">DELETE</a>`;
+                                            amendments = `<br>${index + 1}<a href="${value.amendment_url}" target="_blank">View</a><a href="javascript:void(0);" onclick="delete_agreement('${value.id}','COC')" class="down">DELETE</a>`;
                                         });
 
                                         empAgreement += amendments;
@@ -123,8 +120,7 @@
 
                                     if (results.data[index].active_agreement.amendments.length > 0) {
                                         results.data[index].active_agreement.amendments.forEach(function myFunction(value, index, array) {
-                                            amendments = `<br>${index}
-                                                        <a href="${value.amendment_url}" target="_blank">View</a>`;
+                                            amendments = `<br>${index + 1}<a href="${value.amendment_url}" target="_blank">View</a>`;
                                         });
 
                                         empAgreement += amendments;

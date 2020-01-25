@@ -108,8 +108,7 @@
                 <!-- body modal -->
                 <div class="modal-body">
                     <div class="col-md-12" style="margin-top:40px;margin-bottom:20px;">
-                        <form class="expences" action="{{url('expense/addexpense')}}" method="POST"
-                              enctype="multipart/form-data">
+                        <form class="expences" action="{{url('expense/addexpense')}}" method="POST" id="addexpense-form" onsubmit="storeExpense()" enctype="multipart/form-data">
                             <div class="row">
                                 <div class="col-md-6 col-sm-6">
                                     <div class="text_outer">
@@ -145,8 +144,6 @@
                                             @endforeach
                                         </select>
                                     </div>
-
-
                                 </div>
                                 <div class="col-md-6 col-sm-6">
                                     <div class="text_outer">
@@ -159,8 +156,6 @@
                                             @endforeach
                                         </select>
                                     </div>
-
-
                                 </div>
                             </div>
                             <div class="clearfix"></div>
@@ -204,7 +199,7 @@
                                         <div class="col-md-12" style="display:inline-flex;">
                                             <div class="col-md-7 col-sm-7">
                                                 <label class="form-check-label">
-                                                    <input class="form-check-input" type="checkbox" name="" style="margin-left: -7.25rem;"> Received authorization
+                                                    <input class="form-check-input" type="checkbox" id="authorization" style="margin-left: -7.25rem;"> Received authorization
                                                 </label>
                                             </div>
                                             <div class="col-md-5 col-sm-5">
@@ -362,7 +357,7 @@
                                         <div class="col-md-12" style="display:inline-flex;">
                                             <div class="col-md-7 col-sm-7">
                                                 <label class="form-check-label">
-                                                    <input class="form-check-input" type="checkbox" name="" style="margin-left: -7.25rem;"> Received authorization
+                                                    <input class="form-check-input" type="checkbox" id="authorization-edit" style="margin-left: -7.25rem;"> Received authorization
                                                 </label>
                                             </div>
                                             <div class="col-md-5 col-sm-5">
@@ -623,7 +618,6 @@
             });
         }
 
-
         function deleteconfirm(id) {
             swal({
                 title: "Delete?",
@@ -747,6 +741,31 @@
         }
 
         function update_expense(id) {
+            if ($('#authorization-edit').prop('checked')) {
+                submitUpdateForm(id);
+            } else {
+                swal({
+                    title: "Confirm",
+                    text: "Are you sure want to update without receive authorization!",
+                    type: "warning",
+                    showCancelButton: !0,
+                    confirmButtonText: "Yes, create!",
+                    cancelButtonText: "No, cancel!",
+                    reverseButtons: !0
+                }).then(function (e) {
+                    if (e.value === true) {
+                        submitUpdateForm(id);
+                    } else {
+                        e.dismiss;
+                    }
+
+                }, function (dismiss) {
+                    return false;
+                })
+            }
+        }
+
+        function submitUpdateForm(id) {
             $('#update').attr('disabled', 'disabled');
             var company = $('#edit_company').val();
             var date = $('#edit_date').val();
@@ -772,11 +791,11 @@
                 cache: false,
                 success: function (response) {
                     $.toaster({message: 'Updated successfully', title: 'Success', priority: 'success'});
-                    searchExpensePage();
+                    expences_pending_new();
+                    expences_history_new();
                     $('#expense-modal-edit2').modal('hide');
                     $('#update').removeAttr('disabled');
                 }
-
             });
         }
 
@@ -835,6 +854,33 @@
                     }, 1000);
                 }
             });
+        }
+
+        function storeExpense() {
+            event.preventDefault();
+
+            if ($('#authorization').prop('checked')) {
+                event.target.submit();
+            } else {
+                swal({
+                    title: "Confirm",
+                    text: "Are you sure want to create without receive authorization!",
+                    type: "warning",
+                    showCancelButton: !0,
+                    confirmButtonText: "Yes, create!",
+                    cancelButtonText: "No, cancel!",
+                    reverseButtons: !0
+                }).then(function (e) {
+                    if (e.value === true) {
+                        $('#addexpense-form').submit();
+                    } else {
+                        e.dismiss;
+                    }
+
+                }, function (dismiss) {
+                    return false;
+                })
+            }
         }
 
     </script>

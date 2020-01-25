@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\{Company, Project, Purchases, Categorys, Expenses};
+use App\{Company, Mail\ExpenseCreated, Project, Purchases, Categorys, Expenses};
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 
 class ExpenseController extends Controller {
@@ -79,7 +80,6 @@ class ExpenseController extends Controller {
     {
         // Validate form data
         $rules = [
-
             'receipt' => 'nullable|image',
         ];
 
@@ -88,7 +88,8 @@ class ExpenseController extends Controller {
         if ($validator->fails()) {
             return response()->json(['status' => 'fail', 'errors' => $validator->getMessageBag()->toarray()]);
         }
-        try {// return $request->all();
+
+        try {
             $data = Expenses::findOrFail($id);
             $receipt = null;
 
@@ -111,6 +112,12 @@ class ExpenseController extends Controller {
             $data->total = $request->total;
 
             if ($data->update()) {
+                $company = Company::findOrFail($request->company);
+
+                if ($company) {
+                    Mail::to($company->email)->send(new ExpenseCreated($data, true));
+                }
+
                 return response()->json(['status' => 'success']);
             }
 
@@ -118,7 +125,6 @@ class ExpenseController extends Controller {
         } catch (\Exception $e) {
             return response()->json(['status' => 'fail', 'msg' => $e->getMessage()]);
         }
-
     }
 
     //expense destroy
@@ -142,18 +148,18 @@ class ExpenseController extends Controller {
     function addexpense (Request $request)
     {
         $data = $request->all();
-        //receipt code   code
-        $receiptname = '';
+
         if ($request->hasFile('receipt')) {
-            $file = $request->file('receipt');
-            $receiptname = rand(11111, 99999) . '.' . $file->getClientOriginalExtension();
-            $request->file('receipt')->move("receipt", $receiptname);
+            $data['receipt'] = fileUpload('receipt');
         }
 
-        $data['receipt'] = $receiptname;
-
-        Expenses::insert($data);
+        $expense = Expenses::create($data);
         $msg = "Expense added successfully";
+        $company = Company::findOrFail($request->company);
+
+        if ($company) {
+            Mail::to($company->email)->send(new ExpenseCreated($expense, false));
+        }
 
         return redirect()->back()->with('alert-info', $msg);
     }
