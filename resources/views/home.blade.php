@@ -37,7 +37,7 @@
                     <div class="col-md-3">
                         <div class="text_outer">
                             {{ Form::label('dob', 'Date of birth') }}
-                            {{ Form::date('dob', null, array('class' => 'form-control')) }}
+                            {{ Form::date('dob', null, array('class' => 'flatpickr form-control', 'Placeholder' => 'Select Date of birth')) }}
                         </div>
                     </div>
 
@@ -82,9 +82,9 @@
                 <div class="row">
 
                     <div class="col-md-6">
-                        <div class="text_outer file_upload">
-                            <label for="name" class="">Profile photo</label>
-                            <input type="file" id="profile_pic" name="profile_pic" class="form-control">
+                        <div class="text_outer">
+                            <label for="profile_pic" class=""><i class="fa fa-fw fa-photo"></i> Profile photo</label>
+                            <input type="file" name="profile_pic" id="profile_pic" class="form-control _input_choose_file">
                         </div>
                     </div>
 

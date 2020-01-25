@@ -34,8 +34,8 @@ class ExpenseController extends Controller {
 
             }
         });
-        $data->dateSearch('date');
-        $data->isEmployee()->get();
+        $data = $data->dateSearch('date');
+        $data = $data->isEmployee()->get();
         return response()->json(['status'=>'success', 'data' => $data]);
     }
 
@@ -53,8 +53,8 @@ class ExpenseController extends Controller {
 
             }
         });
-        $data->dateSearch('date');
-        $data->isEmployee()->get();
+        $data = $data->dateSearch('date');
+        $data = $data->isEmployee()->get();
 
         return response()->json(['status'=>'success', 'data' => $data]);
     }

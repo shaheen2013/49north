@@ -180,8 +180,8 @@
                                 </div>
                                 <div class="col-md-6 col-sm-6">
                                     <div class="text_outer">
-                                        <label for="name" class="">Select Receipt</label>
-                                        <input type="file" name="receipt" class="form-control">
+                                        <label for="name"><i class="fa fa-fw fa-photo"></i> Select Receipt</label>
+                                        <input type="file" name="receipt" class="form-control _input_choose_file">
                                     </div>
                                 </div>
                             </div>
@@ -337,9 +337,9 @@
                                 </div>
                                 <div class="col-md-6 col-sm-6">
                                     <div class="text_outer">
-                                        <label for="name" class="">Select Receipt</label>
+                                        <label for="name"><i class="fa fa-fw fa-photo"></i> Select Receipt</label>
                                         <img src="" id="edit_receipt_show" alt="" width="50" height="50">
-                                        <input type="file" name="receipt" id="edit_receipt" class="form-control">
+                                        <input type="file" name="receipt" class="form-control _input_choose_file">
                                     </div>
                                 </div>
                             </div>

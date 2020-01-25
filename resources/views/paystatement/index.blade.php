@@ -6,15 +6,17 @@
             <div class="agreements">
                 <div class="col-sm-12" id="pending_div">
                     <div class="row">
+                        @if(auth()->user()->is_admin ==1)
                         <div class="col-sm-2">
                             <div class="form-group">
-                                <input type="text" placeholder="Search employee" class="form-control-new" name="search"
+                                <input type="text" placeholder="Search pay-statement" class="form-control-new" name="search"
                                        id="search" onkeyup="searchPayStatementsPage()">
                                 <span class="remove-button"
                                       onclick="document.getElementById('search').value = '';searchPayStatementsPage()"><i
                                         class="fa fa-times" aria-hidden="true"></i></span>
                             </div>
                         </div>
+                        @endif
                         <div class="col-sm-2">
                             <div class="form-group">
                                 <input type="text" name="date" id="date" placeholder="Select Date"
@@ -27,8 +29,7 @@
                         </div>
                         @if(auth()->user()->is_admin ==1)
                             <div class="col-sm-7">
-                                <a href="javascript:void(0)" class="_new_icon_button_1" data-toggle="modal"
-                                   data-target="#show_modal_paystatement"> <i class="fa fa-plus"></i> </a>
+                                <a href="javascript:void(0)" class="_new_icon_button_1" data-toggle="modal" data-target="#show_modal_paystatement" style="padding: 7px 12px;"> <i class="fa fa-plus"></i> </a>
                             </div>
                         @endif
                         <div class="col-sm-12">
@@ -83,19 +84,17 @@
                                     <div class="col-md-6">
                                         <div class="text_outer">
                                             <label for="name" class="">Date</label>
-                                            <input type="date" id="date" name="date" class="form-control"
-                                                   placeholder="Insert text here">
+                                            <input type="date" id="date" name="date" class="flatpickr form-control" placeholder="Insert text here">
                                         </div>
                                     </div>
                                     <div class="col-md-6">
-                                        <div class="text_outer file_upload" style="height: 60px;">
-                                            <label for="name" class="">Upload PDF</label>
-                                            <input type="file" name="pdfname" class="form-control" id="pdfname"
-                                                   style="height: 30px;" required>
+                                        <div class="text_outer">
+                                            <label for="name" class=""><i class="fa fa-fw fa-photo"></i> Upload PDF</label>
+                                            <input type="file" name="pdfname" id="pdfname" class="form-control _input_choose_file">
                                         </div>
                                     </div>
                                 </div>
-                                </hr>
+                                <hr>
                                 <div class="row margin-top-30">
                                     <div class="form-group" style="width:100%;">
                                         <div class="col-md-12 col-sm-12">
