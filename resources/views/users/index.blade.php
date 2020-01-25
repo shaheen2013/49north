@@ -7,13 +7,14 @@
         <div class="row">
             <div class="col-sm-2">
                 <div class="form-group">
+                    <h4>Employee List</h4>
                     {{--<input type="text" placeholder="Search user" onkeyup="searchAdmin()" class="form-control-new" name="search" id="search">--}}
                 </div>
             </div>
             <div class="col-sm-1">
                 <div id="wait"></div>
             </div>
-            <div class="col-sm-7">
+            <div class="col-sm-9">
                 <div class="form-group">
                     <a href="{{ route('users.create') }}" class="btn btn-success pull-right">Add User</a>
                     <a href="{{ route('admin.permissions.index') }}" class="btn btn-warning pull-right mr-2">Permissions</a>

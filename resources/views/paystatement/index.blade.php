@@ -4,52 +4,50 @@
     <div class="well-default-trans">
         <div class="tab-pane " id="nav-statements" aria-labelledby="nav-statements-tab">
             <div class="agreements">
-                <div class="col-sm-12">
-                    <h3>
-                        <span class="active-span" id="pending_span">Pay Statements </span>
-
-                    </h3>
-                    <br>
-                </div>
                 <div class="col-sm-12" id="pending_div">
-                <div class="row">
-                    <div class="col-sm-2">
-                        <div class="form-group">
-                            <input type="text" placeholder="Search employee" class="form-control-new" name="search" id="search" onkeyup="searchPayStatementsPage()">
-                            <span class="remove-button" onclick="document.getElementById('search').value = '';searchPayStatementsPage()"><i class="fa fa-times" aria-hidden="true"></i></span>
+                    <div class="row">
+                        <div class="col-sm-2">
+                            <div class="form-group">
+                                <input type="text" placeholder="Search employee" class="form-control-new" name="search"
+                                       id="search" onkeyup="searchPayStatementsPage()">
+                                <span class="remove-button"
+                                      onclick="document.getElementById('search').value = '';searchPayStatementsPage()"><i
+                                        class="fa fa-times" aria-hidden="true"></i></span>
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            <div class="form-group">
+                                <input type="text" name="date" id="date" placeholder="Select Date"
+                                       class="form-control-new" onChange="searchPayStatementsPage()">
+                            </div>
+                        </div>
+
+                        <div class="col-sm-1">
+                            <div id="wait"></div>
+                        </div>
+                        @if(auth()->user()->is_admin ==1)
+                            <div class="col-sm-7">
+                                <a href="javascript:void(0)" class="_new_icon_button_1" data-toggle="modal"
+                                   data-target="#show_modal_paystatement"> <i class="fa fa-plus"></i> </a>
+                            </div>
+                        @endif
+                        <div class="col-sm-12">
+                            <table class="table _table _table-bordered">
+                                <thead>
+                                <tr>
+                                    <th>Employee</th>
+                                    <th>Date</th>
+                                    <th>Description</th>
+                                    <th class="text-right">Action</th>
+                                </tr>
+                                </thead>
+                                <tbody class="return_expence_ajax" id="payments_search">
+
+                                </tbody>
+                            </table>
+                            <div id="paginate"></div>
                         </div>
                     </div>
-                    <div class="col-sm-2">
-                        <div class="form-group">
-                            <input type="date" name="date" id="date" placeholder="Select Date" class="form-control-new" onChange="searchPayStatementsPage()">
-                        </div>
-                    </div>
-
-                    <div class="col-sm-1">
-                        <div id="wait"></div>
-                    </div>
-                    @if(auth()->user()->is_admin ==1)
-                    <div class="col-sm-7">
-                        <a href="javascript:void(0)" class="_new_icon_button_1" data-toggle="modal" data-target="#show_modal_paystatement"> <i class="fa fa-plus"></i> </a>
-                    </div>
-                    @endif
-                    <div class="col-sm-12">
-                        <table class="table _table _table-bordered">
-                            <thead>
-                            <tr>
-                                <th>Employee</th>
-                                <th>Date</th>
-                                <th>Description</th>
-                                <th class="text-right">Action</th>
-                            </tr>
-                            </thead>
-                            <tbody class="return_expence_ajax" id="payments_search">
-
-                            </tbody>
-                        </table>
-                        <div id="paginate"></div>
-                    </div>
-                </div>
                 </div>
             </div>
         </div>
@@ -64,7 +62,7 @@
                         <div class="col-md-12" style="margin-top:40px;margin-bottom:20px;">
                             <form id="createPayForm">
                                 <div class="row">
-                                    <div class="col-md-6 col-sm-6">
+                                    <div class="col-md-6">
                                         <div class="text_outer">
                                             <label for="company" class="">Employee</label>
                                             <select class="select_status form-control" name="emp_id" id="emp_id">
@@ -75,22 +73,25 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-md-6">
                                         <div class="text_outer">
                                             <label for="name" class="">Description</label>
-                                            <input type="text" id="description" name="description" class="form-control" placeholder="Insert text here">
+                                            <input type="text" id="description" name="description" class="form-control"
+                                                   placeholder="Insert text here">
                                         </div>
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-md-6">
                                         <div class="text_outer">
                                             <label for="name" class="">Date</label>
-                                            <input type="date" id="date" name="date" class="form-control" placeholder="Insert text here">
+                                            <input type="date" id="date" name="date" class="form-control"
+                                                   placeholder="Insert text here">
                                         </div>
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-md-6">
                                         <div class="text_outer file_upload" style="height: 60px;">
                                             <label for="name" class="">Upload PDF</label>
-                                            <input type="file" name="pdfname" class="form-control" id="pdfname" style="height: 30px;" required>
+                                            <input type="file" name="pdfname" class="form-control" id="pdfname"
+                                                   style="height: 30px;" required>
                                         </div>
                                     </div>
                                 </div>
@@ -98,7 +99,9 @@
                                 <div class="row margin-top-30">
                                     <div class="form-group" style="width:100%;">
                                         <div class="col-md-12 col-sm-12">
-                                            <button type="button" id="create" onclick="create_upload(event)" class="btn-dark contact_btn" data-form="expences">Save</button>
+                                            <button type="button" id="create" onclick="create_upload(event)"
+                                                    class="btn-dark contact_btn" data-form="expences">Save
+                                            </button>
                                             <span class="close close-span" data-dismiss="modal" aria-label="Close"><i
                                                     class="fa fa-arrow-left"></i> Return to Paystatement</span>
                                         </div>
@@ -136,7 +139,6 @@
                         if (selectedDates[0] === undefined) {
                             from = to = null;
                         }
-
                         searchPayStatementsPage();
                     }
 
@@ -144,9 +146,9 @@
             });
         });
 
-        function create_upload(event){
+        function create_upload(event) {
             event.preventDefault();
-            $('#create').attr('disabled','disabled');
+            $('#create').attr('disabled', 'disabled');
             var data = new FormData(document.getElementById('createPayForm'));
 
             $.ajax({
@@ -157,8 +159,9 @@
                 processData: false,  // Important!
                 contentType: false,
                 cache: false,
-                success: function( response ) {
-                    if (response.status == 'success') {
+                success: function (response) {
+                    if (response.status === 'success') {
+                        $('#createPayForm')[0].reset();
                         $.toaster({message: 'Created successfully', title: 'Success', priority: 'success'});
                         searchPayStatementsPage();
                         $('#show_modal_paystatement').modal('hide');
@@ -198,37 +201,36 @@
                             dataSource: results.data,
                             pageSize: 10,
                             totalNumber: results.data.length,
-                            callback: function(data, pagination) {
+                            callback: function (data, pagination) {
                                 let html = '';
                                 let date = '';
                                 let description = '';
                                 let action = '';
-                        for (let index = 0; index < data.length; index++) {
+                                for (let index = 0; index < data.length; index++) {
 
-                            if (data[index].date != null && data[index].date != '') {
-                                time = data[index].date.split(' ')[0];
-                                date = new Date(time);
-                                date = date.toDateString().split(' ')[2] + " " + date.toDateString().split(' ')[1] + ", " + date.toDateString().split(' ')[3]
-                            } else {
-                                date = '';
-                            }
+                                    if (data[index].date != null && data[index].date != '') {
+                                        time = data[index].date.split(' ')[0];
+                                        date = new Date(time);
+                                        date = date.toDateString().split(' ')[2] + " " + date.toDateString().split(' ')[1] + ", " + date.toDateString().split(' ')[3]
+                                    } else {
+                                        date = '';
+                                    }
 
-                            if (data[index].description != null && data[index].description != '') {
-                                description = data[index].description;
-                            } else {
-                                description = '';
-                            }
-                            let admin_user = '{{ auth()->user()->is_admin }}';
-                            // console.log(admin_user);
+                                    if (data[index].description != null && data[index].description != '') {
+                                        description = data[index].description;
+                                    } else {
+                                        description = '';
+                                    }
+                                    let admin_user = '{{ auth()->user()->is_admin }}';
+                                    // console.log(admin_user);
 
-                            if(admin_user == 1){
-                                action = `<a href="javascript:void(0);" class="down" onclick="deleteconfirm('${data[index].id}')">DELETE</a>`;
-                            }
-                            else{
-                                action = '' ;
-                            }
+                                    if (admin_user == 1) {
+                                        action = `<a href="javascript:void(0);" class="down" onclick="deleteconfirm('${data[index].id}')">DELETE</a>`;
+                                    } else {
+                                        action = '';
+                                    }
 
-                            html += `<tr>
+                                    html += `<tr>
                                 <td>${data[index].employee.firstname + ' ' + data[index].employee.lastname}</td>
                                 <td> ${date} </td>
                                 <td>${description} </td>
@@ -236,11 +238,11 @@
                                     <a href="${data[index].pdfname}" target="_blank">VIEW</a>
                                     ${action}
                                     </td>
-                            </tr>`;
-                        }
-                        $('#payments_search').html(html);
-                    }
-                    });
+                            </tr><tr class="spacer"></tr>`;
+                                }
+                                $('#payments_search').html(html);
+                            }
+                        });
 
                     } else {
                         swal("Error!", results.message, "error");

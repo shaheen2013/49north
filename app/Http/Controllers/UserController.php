@@ -360,7 +360,7 @@ class UserController extends Controller {
      */
     public function search (Request $request) {
         try {
-            $data = User::with('employee_details')->orderBy('name')->where(function ($q) use ($request) {
+            $data = User::with('employee_details')->where('is_admin', '!=', 1)->orderBy('name')->where(function ($q) use ($request) {
                     if (isset($request->search)) {
                         $q->where('name', 'like', '%' . $request->search . '%')->orWhere('email', 'like', '%' . $request->search . '%');
                     }

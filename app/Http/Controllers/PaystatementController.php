@@ -76,7 +76,6 @@ class PaystatementController extends Controller
 
     public function searchPaymentPage(Request $request)
     {
-
         $data = Paystatement::orderByDesc('date')->with('employee')
             ->where(function ($q) use ($request) {
                 if (isset($request->search)) {
@@ -87,14 +86,12 @@ class PaystatementController extends Controller
                     });
 
                 }
-                if (auth()->user()->is_admin != '1') {
+                if (auth()->user()->is_admin != 1) {
                     $q->where('emp_id', auth()->user()->id);
                 }
-                if (isset($request->from) && isset($request->to)) {
-                }
             });
-        $data->dateSearch('date');
-        $data->isEmployee()->get();
+        $data = $data->dateSearch('date');
+        $data = $data->isEmployee()->get();
 
         foreach ($data as &$datum) {
             $datum->pdfname = fileUrl($datum->pdfname, true);
