@@ -82,6 +82,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('edit', 'MileageController@edit')->name('edit');
         Route::post('update', 'MileageController@update')->name('update');
         Route::post('destroy', 'MileageController@destroy')->name('destroy');
+        Route::post('/pending/{id}', 'MileageController@mileagePending');
         Route::post('/approve/{id}', 'MileageController@mileageApprove');
         Route::post('/reject/{id}', 'MileageController@mileageReject');
         Route::post('/search/pending', 'MileageController@searchPendingMileage')->name('search-pending-mileage');
