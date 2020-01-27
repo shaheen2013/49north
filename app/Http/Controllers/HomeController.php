@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\User;
 
-use App\{Expenses,Employee_detail};
+use App\{Company, Expenses, Employee_detail};
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\{RedirectResponse,Request};
@@ -18,7 +18,8 @@ class HomeController extends Controller {
      * @return Factory|View
      */
     public function home () {
-        return view('dashboard');
+        $activeMenu = 'dashboard';
+        return view('dashboard', compact('activeMenu'));
     }
 
     /**
@@ -26,12 +27,14 @@ class HomeController extends Controller {
      *
      * @return Renderable
      */
-    public function editProfile () {
-
+    public function editProfile()
+    {
         $emp_id = auth()->user()->id;
+        $activeMenu = 'profile';
+        $companies = Company::Latest()->get();
         $data['user'] = DB::table('users as u')->join('employee_details as ed', 'u.id', '=', 'ed.id')->select('ed.*')->where('u.id', '=', $emp_id)->first();
 
-        return view('home', $data);
+        return view('home', $data, compact('activeMenu', 'companies'));
     }
 
     /**
@@ -102,7 +105,6 @@ class HomeController extends Controller {
         ]);
     }
 
-
     /**
      * @param Request $request
      */
@@ -111,8 +113,6 @@ class HomeController extends Controller {
         $id = $data['id'];
         Expenses::where('id', $id)->update($data);
     }
-
-
 
     /**
      *
@@ -162,7 +162,6 @@ class HomeController extends Controller {
 
     }
 
-
     /**
      * @return Factory|View
      */
@@ -186,6 +185,7 @@ class HomeController extends Controller {
         $rules = [
             'firstname' => 'required|max:120',
             'lastname'  => 'required|max:120',
+            'company_id'  => 'nullable|integer',
             'email'     => Rule::unique('users')->ignore($id) // require unique email address
         ];
 
@@ -242,6 +242,10 @@ class HomeController extends Controller {
         ]);
         $user_array['profile_pic'] = $profilepicname;
 
+        if (isset($request->company_id)) {
+            $user_array['company_id'] = $request->company_id;
+        }
+
         if ($id) {
             $user = User::find($id);
             $user->update($input);
@@ -268,7 +272,4 @@ class HomeController extends Controller {
         //Redirect to the users.index view and display message
         return redirect()->route('home')->with('alert-info', $msg);
     }
-
-
-
 }

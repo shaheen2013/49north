@@ -31,7 +31,8 @@ class Employee_detail extends Model {
         'emergency_contact_name',
         'reltn_emergency_contact',
         'emergency_contact_phone',
-        'emergency_contact_email'
+        'emergency_contact_email',
+        'company_id'
     ];
 
     /**
@@ -62,5 +63,11 @@ class Employee_detail extends Model {
         return $this->hasOne(Codeofconduct::class,'emp_id')->where('status','A');
     }
 
-
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function company()
+    {
+        return $this->belongsTo(Company::class);
+    }
 }

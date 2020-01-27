@@ -14,7 +14,9 @@ class AgreementController extends Controller {
     /**
      * @return Factory|View
      */
-    function agreementlist () {
+    function agreementlist()
+    {
+        $activeMenu = 'profile';
         $q = Employee_detail::orderBy('firstname')->with('activeAgreement', 'activeCodeofconduct', 'activeAgreement.amendments');
 
         /// if employee is not admin
@@ -23,7 +25,7 @@ class AgreementController extends Controller {
         }
         $users = $q->get();
 
-        return view('agreement_listnew', compact('users'));
+        return view('agreement_listnew', compact('users', 'activeMenu'));
     }
 
     /**

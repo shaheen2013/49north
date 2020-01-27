@@ -27,9 +27,10 @@ class AdminRolesController extends Controller {
      * @return Factory|View
      */
     public function create () {
+        $activeMenu = 'admin';
         $role = new Role();
 
-        return view('admin.permission.admin-permission-role-edit', compact('role'));
+        return view('admin.permission.admin-permission-role-edit', compact('role', 'activeMenu'));
     }
 
     /**
@@ -37,7 +38,7 @@ class AdminRolesController extends Controller {
      *
      * @param Request $request
      *
-     * @return Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store (Request $request) {
         $input = $request->except(['_token']);
@@ -71,10 +72,11 @@ class AdminRolesController extends Controller {
      *
      * @param Role $role
      *
-     * @return Response
+     * @return Factory|View
      */
     public function edit (Role $role) {
-        return view('admin.permission.admin-permission-role-edit', compact('role'));
+        $activeMenu = 'admin';
+        return view('admin.permission.admin-permission-role-edit', compact('role', 'activeMenu'));
     }
 
     /**

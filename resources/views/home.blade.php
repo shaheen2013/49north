@@ -259,6 +259,27 @@
             </div>
             <div class="margin-10"></div>
             <div class="margin-10"></div>
+
+            {{--@if(!auth()->user()->is_admin)--}}
+            <div class="emergency">
+                <h2 class="form_title">Company</h2>
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="text_outer">
+                            <label for="company_id" class="">Company</label>
+                            <select class="select_status form-control" name="company_id">
+                                <option selected disabled>Select Company</option>
+                                @foreach($companies as $company)
+                                <option value="{{ $company->id }}" {{ auth()->user()->employee_details && auth()->user()->employee_details->company_id && auth()->user()->employee_details->company_id == $company->id ? 'selected' : '' }}>{{ $company->companyname }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="margin-10"></div>
+            <div class="margin-10"></div>
+            {{--@endif--}}
             @admin
                 <div class="emergency">
                     <h2 class="form_title">Admin</h2>
@@ -272,6 +293,7 @@
                     </div>
                 </div>
             @endadmin
+
             {{ Form::button(auth()->user()->id ? 'Save Changes' : 'Add', array('class' => 'btn btn-lg btn-dark contact_btn','type'=>'submit')) }}
 
             {{ Form::close() }}

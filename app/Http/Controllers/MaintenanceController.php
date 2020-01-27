@@ -10,10 +10,11 @@ class MaintenanceController extends Controller
 	/// Maintennace List
     function Maintenance_list()
     {
+        $activeMenu = 'admin';
     	$data['maintanance'] = Maintenance_ticket::where(['delete_status' => NULL, 'status' => NULL])->with('employee:id,firstname,lastname')->get();
         $data['maintanance1'] = Maintenance_ticket::where(['delete_status' => NULL, 'status' => 1])->orWhere(['status' => 2])->with('employee:id,firstname,lastname')->get();
         $data['category'] = Categorys::all();
-    	return view('maintenance.index',$data);
+    	return view('maintenance.index', $data, compact('activeMenu'));
     }
 
 
