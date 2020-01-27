@@ -221,7 +221,7 @@
             var data = new FormData(document.getElementById('editCompanyForm'));
             $.ajax({
                 method: "POST",
-                url: "company/update/"+id, //resource route
+                url: "company/update/"+id,
                 data: data,
                 enctype: 'multipart/form-data',
                 processData: false,  // Important!
