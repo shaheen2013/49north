@@ -18,13 +18,14 @@ class PaystatementController extends Controller
     function paylist()
     {
         //$data['user_list'] = User::all();
+        $activeMenu = 'profile';
         $user_list = DB::table('users as  u')
             ->leftJoin('paystatements as p', 'u.id', '=', 'p.emp_id')
             ->select('p.*', 'u.id as empid')
             ->get();
         $user = User::where('is_admin', 0)->get();
 
-        return view('paystatement/index', compact('user_list', 'user'));
+        return view('paystatement/index', compact('user_list', 'user', 'activeMenu'));
     }
 
     /**

@@ -62,5 +62,11 @@ class Employee_detail extends Model {
         return $this->hasOne(Codeofconduct::class,'emp_id')->where('status','A');
     }
 
-
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function company()
+    {
+        return $this->belongsTo(Company::class);
+    }
 }

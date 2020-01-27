@@ -254,6 +254,23 @@
         </div><!--------Emergency Contact Information----------->
 
         <div class="emergency">
+            <h2 class="form_title">Company</h2>
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="text_outer">
+                        <label for="company_id" class="">Company</label>
+                        <select class="select_status form-control" name="company_id">
+                            <option selected disabled>Select Company</option>
+                            @foreach($companies as $company)
+                                <option value="{{ $company->id }}" {{ $user->company_id && $user->company_id == $company->id ? 'selected' : '' }}>{{ $company->companyname }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="emergency">
             <h2 class="form_title">Admin</h2>
             <div class="row">
                 <div class='col-md-3'>
