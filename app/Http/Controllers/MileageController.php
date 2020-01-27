@@ -77,7 +77,7 @@ class MileageController extends Controller {
         }
 
         $query->dateSearch('date');
-        $query->isEmployee();
+        // $query->isEmployee();
 
         // pending has not status
         if ($isPending) {
@@ -190,6 +190,19 @@ class MileageController extends Controller {
             'success' => $success,
             'message' => $message,
         ]);
+    }
+
+    /// Pending mileage
+    public function mileagePending ($id) {
+        $data = Mileage::find($id);
+        $data->status = null;
+        $data->save();
+        if ($data->update()) {
+            return response()->json(['status' => 'success']);
+        }
+
+        return response()->json(['status' => 'fail']);
+
     }
 
     /// approved mileage

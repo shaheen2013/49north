@@ -44,9 +44,9 @@
                                         <th>Employee</th>
                                         <th>Reason for mileage</th>
                                         <th>Total Km</th>
-                                        @admin
+                                        {{-- @admin --}}
                                         <th class="text-center">Action</th>
-                                        @endadmin
+                                        {{-- @endadmin --}}
                                         <th></th>
                                     </tr>
                                     </thead>
@@ -83,6 +83,7 @@
                                         <th>Employee</th>
                                         <th>Reason for mileage</th>
                                         <th>Total Km</th>
+                                        <th class="text-center">Action</th>
                                         <th></th>
                                     </tr>
                                     </thead>
@@ -329,6 +330,8 @@
                             totalNumber: results.data.length,
                             callback: function (data, pagination) {
                                 let html = '';
+                                let action = '';
+                                let date = '';
                                 for (let index = 0; index < data.length; index++) {
                                     if (data[index].date !== null && data[index].date !== '') {
                                         var time = data[index].date.split(' ')[0];
@@ -337,19 +340,30 @@
                                     } else {
                                         date = '-';
                                     }
+
+                                    let admin_user = '{{ auth()->user()->is_admin }}';
+                                    // console.log(admin_user);
+
+                                    if (admin_user == 1) {
+                                        action = `<a href="javascript:void(0)" title="Reject!" onclick="mileage_reject('${data[index].id}')"><i class="fa fa-ban"></i></a>`;
+                                    } else {
+                                        action = '';
+                                    }
+
                                     html += `<tr>
                                         <td> ${date} </td>
                                         <td> ${data[index].employee.firstname + ' ' + data[index].employee.lastname} </td>
                                         <td> ${data[index].reasonmileage} </td>
                                         <td> ${data[index].kilometers} </td>`;
-                                    if (is_admin) {
+                                   
                                         html += `
 
                                         <td class="text-center">
                                             <a href="javascript:void(0)" onclick="mileage_approve('${data[index].id}')"><i class="fa fa-check-circle" title="Approved"></i></a>
-                                            <a href="javascript:void(0)" title="Reject!" onclick="mileage_reject('${data[index].id}')"><i class="fa fa-ban"></i></a>
+                                            
+                                            ${action}
                                         </td>`;
-                                    }
+                                  
                                     html += `
                                         <td class="text-right">
                                             <a href="javascript:void(0);" onclick="OpenEditMileageModel('${data[index].id}')">EDIT</a>
@@ -415,6 +429,10 @@
                                         <td> ${data[index].employee.firstname + ' ' + data[index].employee.lastname} </td>
                                         <td> ${data[index].reasonmileage} </td>
                                         <td> ${data[index].kilometers} </td>
+                                        
+                                        <td class="text-center">
+                                            <a href="javascript:void(0)" onclick="mileage_pending('${data[index].id}')"><i class="fa fa-check-circle" title="Pending"></i></a>
+                                        </td>
 
                                         <td class="text-right">
                                             <a href="javascript:void(0);" class="down" onclick="deleteconfirm('${data[index].id}')">DELETE</a></td>
@@ -467,6 +485,29 @@
             }, function (dismiss) {
                 return false;
             })
+        }
+
+        function mileage_pending(id) {
+
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-Token': "{{csrf_token()}}"
+                }
+            });
+            let data = {id: id};
+
+            $.ajax({
+
+                method: "POST",
+                url: "/mileage/pending/" + id,
+                data: data,
+                success: function (response) {
+                    $.toaster({message: 'Pending', title: 'Success', priority: 'success'});
+                    searchPendingMileagePage()
+                    searchHistoryMileagePage()
+                }
+            });
+
         }
 
         function mileage_approve(id) {
