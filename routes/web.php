@@ -87,12 +87,15 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/reject/{id}', 'MileageController@mileageReject');
         Route::post('/search/pending', 'MileageController@searchPendingMileage')->name('search-pending-mileage');
         Route::post('/search/history', 'MileageController@searchHistoryMileage')->name('search-history-mileage');
-        Route::get('/journal', 'JournalController@index');
-        Route::post('/journal/store', 'JournalController@store')->name('journal.store');
-        Route::get('/journal/edit/{id}', 'JournalController@edit');
-        Route::POST('/journal/update/{id}', 'JournalController@update');
-        Route::post('/search/journal', 'JournalController@searchJournal')->name('search-journal');
-        Route::POST('/journal/destroy/{id}', 'JournalController@destroy');
+    });
+    // Journal
+    Route::group(['prefix' => 'journal', 'as' => 'journal.'], function () {
+        Route::get('/', 'JournalController@index');
+        Route::post('/store', 'JournalController@store')->name('store');
+        Route::post('/search', 'JournalController@searchJournal')->name('search-journal');
+        Route::get('/edit/{id}', 'JournalController@edit')->name('edit-single-journal');
+        Route::POST('/update/{id}', 'JournalController@update');
+        Route::POST('/destroy/{id}', 'JournalController@destroy');
     });
 
     ///// timeoff route
@@ -100,7 +103,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/list', 'TimeoffController@timeofflist')->name('list');
     });
 
-     
+
 
     //// Paystatement route
     Route::group(['prefix' => 'paystatement', 'as' => 'paystatement.'], function () {

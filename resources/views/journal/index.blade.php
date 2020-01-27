@@ -37,8 +37,7 @@
                                         <th>Date</th>
                                         <th>Title</th>
                                         <th>Description</th>
-                                        <th class="text-center">Action</th>
-                                        <th></th>
+                                        <th class="text-right">Action</th>
                                     </tr>
                                     </thead>
                                     <tbody class="return_mileagelist" id="search_journal">
@@ -55,14 +54,13 @@
 
 
     <!----- Journal Modal ---->
-    <div id="journal-modal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog"
-         aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div id="journal-modal" class="modal fade bs-example-modal-lg" tabindex="-1">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-body">
                     <div class="col-md-12" style="margin-top:40px;margin-bottom:20px;">
                         <div class="row">
-                           
+
                             <div class="col-md-6 col-sm-6">
                                 <div class="text_outer">
                                     <label for="edit_date" class="">Date</label>
@@ -72,22 +70,24 @@
                             <div class="col-md-6 col-sm-6">
                                 <div class="text_outer">
                                     <label for="edit_vehicle" class="">Title</label>
-                                    <input type="text" id="title" name="title" class="form-control" placeholder="Insert text here">
+                                    <input type="text" id="title" name="title" class="form-control" placeholder="Insert title here">
                                 </div>
                             </div>
-                        </div>
-                        <div class="clearfix"></div>
-                       
-                        <div class="row">
                             <div class="col-md-12 col-sm-12">
                                 <div class="text_outer">
-                                    <textarea rows="4" cols="50" name="details" placeholder="Insert text here" id="details"> </textarea>
+                                    <textarea style="min-height: 100px" name="details" class="form-control" placeholder="Insert text here" id="details"></textarea>
                                 </div>
                             </div>
                         </div>
                         <hr>
-                        <div class="col-md-12 col-sm-12"><button type="button" id="create" onclick="create_journal(event)" class="btn-dark contact_btn" data-form="expences">Save</button>
-                            <span class="close close-span" data-dismiss="modal" aria-label="Close"><i class="fa fa-arrow-left"></i> Return to journal Reports</span>
+                        <div class="row margin-top-30">
+                            <div class="form-group" style="width:100%;">
+                                <div class="col-md-12 col-sm-12">
+                                    <button type="button" onclick="create_journal(event)" class="btn-dark contact_btn" data-form="expences">Save
+                                    </button>
+                                    <span class="close close-span" data-dismiss="modal" aria-label="Close"><i class="fa fa-arrow-left"></i>  Return to journal Reports</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -104,7 +104,7 @@
                 <div class="modal-body">
                     <div class="col-md-12" style="margin-top:40px;margin-bottom:20px;">
                         <div class="row">
-                           
+
                             <div class="col-md-6 col-sm-6">
                                 <div class="text_outer">
                                     <label for="edit_date" class="">Date</label>
@@ -114,22 +114,24 @@
                             <div class="col-md-6 col-sm-6">
                                 <div class="text_outer">
                                     <label for="edit_vehicle" class="">Title</label>
-                                    <input type="text" id="edit_title" name="title" class="form-control" placeholder="Insert text here">
+                                    <input type="text" id="edit_title" name="title" class="form-control" placeholder="Insert title here">
                                 </div>
                             </div>
-                        </div>
-                        <div class="clearfix"></div>
-                       
-                        <div class="row">
                             <div class="col-md-12 col-sm-12">
                                 <div class="text_outer">
-                                    <textarea rows="4" cols="50" name="details" placeholder="Insert text here" id="edit_details"> </textarea>
+                                    <textarea style="min-height: 100px" name="details" class="form-control" placeholder="Insert text here" id="edit_details"></textarea>
                                 </div>
                             </div>
                         </div>
                         <hr>
-                        <div class="col-md-12 col-sm-12"><button type="button" id="update" onclick="update_journal(id)" class="btn-dark contact_btn" data-form="expences">Save</button>
-                            <span class="close close-span" data-dismiss="modal" aria-label="Close"><i class="fa fa-arrow-left"></i> Return to journal Reports</span>
+                        <div class="row margin-top-30">
+                            <div class="form-group" style="width:100%;">
+                                <div class="col-md-12 col-sm-12">
+                                    <button type="button" id="update" onclick="update_journal('')" class="btn-dark contact_btn" data-form="expences">Save
+                                    </button>
+                                    <span class="close close-span" data-dismiss="modal" aria-label="Close"><i class="fa fa-arrow-left"></i>  Return to journal Reports</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -154,7 +156,7 @@
             $("#pending_span").click(function () {
                 $("#pending_span").addClass("active-span");
                 $("#pending_div").show();
-              
+
 
             });
 
@@ -184,12 +186,12 @@
             var date = $('#create_date').val();
             var title = $('#title').val();
             var details = $('#details').val();
-           
+
             var data = {
                 date:date,
                 title:title,
                 details:details,
-                
+
             }
             // console.log(data)
             if(date == '' || title == ''|| details == ''){
@@ -206,14 +208,13 @@
             $.ajax({
                 method: "POST",
                 // url: "/mileage/journal/store",
-                url: "{{ route('mileage.journal.store') }}",
+                url: "{{ route('journal.store') }}",
                 data: data,
                 dataType: 'JSON',
                 success: function( response ) {
                     $.toaster({ message : 'Created successfully', title : 'Success', priority : 'success' });
-                    setTimeout(function () {
-                        window.location.reload();
-                    }, 1000);
+                    $('#journal-modal').modal('hide');
+                    searchJournalPage();
                 }
 
             });
@@ -224,18 +225,18 @@
             console.log(id);
             $('#journal-edit-modal').modal();
             $.ajax({
-                type: 'POST',
                 type: 'GET',
-                url: "/mileage/journal/edit/"+id,
+                url: "/journal/edit/"+id,
                 dataType: 'JSON',
                 success: function (results) {
-                    
-                    if (results.status === 'success') { 
-                       
+
+                    if (results.status === 'success') {
+
                         $('#edit_date').val(results.data.date.split(' ')[0]);
                         $('#edit_title').val(results.data.title);
                         $('#edit_details').val(results.data.details);
                         $('#update').attr('onclick', 'update_journal(' + id + ')');
+                        $('#update').attr('data-id', id);
                     } else {
                         swal("Error!", results.message, "error");
                     }
@@ -255,7 +256,7 @@
 
             $.ajax({
                 method: "POST",
-                url: "/mileage/journal/update/"+id,
+                url: "/journal/update/"+id,
                 data: data,
                 dataType: 'JSON',
                 success: function (response) {
@@ -281,7 +282,7 @@
             $('#wait-his').css('display', 'inline-block'); // wait for loader
             $.ajax({
                 type: 'post',
-                url: "{{ route('mileage.search-journal') }}",
+                url: "{{ route('journal.search-journal') }}",
                 data: data,
                 dataType: 'JSON',
                 success: function (results) {
@@ -308,7 +309,7 @@
                                         <td> ${date} </td>
                                         <td> ${data[index].title} </td>
                                         <td> ${data[index].details} </td>`;
-                                  
+
                                     html += `
                                         <td class="text-right">
                                             <a href="javascript:void(0);" onclick="OpenEditJournalModel('${data[index].id}')">EDIT</a>
@@ -339,7 +340,7 @@
                 if (e.value === true) {
                     $.ajax({
                         type: 'post',
-                        url: "/mileage/journal/destroy/" + id,
+                        url: "/journal/destroy/" + id,
                         dataType: 'JSON',
                         success: function (results) {
 
@@ -362,9 +363,9 @@
             })
         }
 
-        
-       
-       
+
+
+
         // Format date
         function formatDate(date) {
             const d = new Date(date), year = d.getFullYear();
