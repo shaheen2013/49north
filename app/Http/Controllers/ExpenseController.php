@@ -12,13 +12,14 @@ class ExpenseController extends Controller {
     ///   Add Expenselist
     function expenselist ()
     {
+        $activeMenu = 'admin';
         $data['companies'] = Company::all();
         $data['project'] = Project::all();
         $data['purchases'] = Purchases::all();
         $data['category'] = Categorys::all();
         $data['expense'] = Expenses::where(['delete_status' => NULL, 'status' => NULL])->get();
 
-        return view('expense.expensereport', $data);
+        return view('expense.expensereport', $data, compact('activeMenu'));
     }
 
    //search history

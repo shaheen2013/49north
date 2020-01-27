@@ -16,19 +16,21 @@ class AdminPermissionsController extends Controller {
      * @return Factory|View
      */
     public function index () {
+        $activeMenu = 'admin';
         $roles = Role::with('permissions')->orderBy('orderval')->get();
         $permissions = Permission::pluck('name','id');
 
-        return view('admin.permission.admin-permission-index', compact('roles', 'permissions'));
+        return view('admin.permission.admin-permission-index', compact('roles', 'permissions', 'activeMenu'));
     }
 
     /**
      * @return Factory|View
      */
     public function create () {
+        $activeMenu = 'admin';
         $permission = new Permission();
         $roles = Role::orderBy('orderval')->pluck('name','id');
-        return view('admin.permission.admin-permission-edit', compact('permission','roles'));
+        return view('admin.permission.admin-permission-edit', compact('permission','roles', 'activeMenu'));
     }
 
     /**
@@ -75,10 +77,11 @@ class AdminPermissionsController extends Controller {
      * @return Factory|View
      */
     public function edit (Permission $permission) {
+        $activeMenu = 'admin';
         $roles = Role::orderBy('orderval')->pluck('name','id');
         $rolePermissions = $permission->roles()->pluck('id','id')->first();
 
-        return view('admin.permission.admin-permission-edit',compact('permission','roles','rolePermissions'));
+        return view('admin.permission.admin-permission-edit',compact('permission','roles','rolePermissions', 'activeMenu'));
     }
 
     /**

@@ -8,6 +8,8 @@ class TimeoffController extends Controller
 {
     function timeofflist()
     {
-    	return view('timeoff.index');
+        $activeMenu = 'admin';
+
+    	return view('timeoff.index', compact('activeMenu'));
     }
 }

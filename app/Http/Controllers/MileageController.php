@@ -25,8 +25,9 @@ class MileageController extends Controller {
      *
      * @return Factory|View
      */
-    public function mileagelist (Request $request) {
-
+    public function mileagelist(Request $request)
+    {
+        $activeMenu = 'admin';
         $type = auth()->user()->is_admin;
         if ($type == '1') {
             $data['mileage_list'] = Mileage::where('status', '<>', 'D')->orderByDesc('date')->with('employee:id,firstname,lastname')->get();
@@ -39,7 +40,7 @@ class MileageController extends Controller {
         $data['companies'] = Company::all();
         $date_key = $request->date;
 
-        return view('mileagelist', $data)->with('date_key', $date_key);
+        return view('mileagelist', $data, compact('activeMenu'))->with('date_key', $date_key);
     }
 
     /**

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Company;
 use App\Mail\PasswordReset;
 use App\User;
 use App\Employee_detail;
@@ -16,19 +17,20 @@ use Illuminate\View\View;
 use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
 
 class UserController extends Controller {
+    use SendsPasswordResetEmails;
 
     /**
      * Display a listing of the resource.
      *
      * @return Factory|View
      */
-    use SendsPasswordResetEmails;
-
-    public function index () {
+    public function index()
+    {
         //Get all users and pass it to the view
+        $activeMenu = 'admin';
         $users = User::with('employee_details')->orderBy('name')->get();
 
-        return view('users.index')->with('users', $users);
+        return view('users.index', compact('activeMenu'))->with('users', $users);
     }
 
     /**
@@ -36,11 +38,14 @@ class UserController extends Controller {
      *
      * @return Factory|View
      */
-    public function create () {
+    public function create()
+    {
         //Get all roles and pass it to the view
+        $companies = Company::Latest()->get();
+        $activeMenu = 'admin';
         $user = new User();
 
-        return view('users.edit', compact('user'));
+        return view('users.edit', compact('user', 'activeMenu', 'companies'));
     }
 
     /**
@@ -48,7 +53,8 @@ class UserController extends Controller {
      *
      * @return array
      */
-    public function attributes () {
+    public function attributes()
+    {
         return [
             'password' => 'Password must contain a lower case, uppercase, number and special character',
         ];
@@ -62,13 +68,15 @@ class UserController extends Controller {
      * @return RedirectResponse
      * @throws ValidationException
      */
-    public function store (Request $request) {
+    public function store(Request $request)
+    {
         $id = $request->input('id');
 
         //Validate name, email and password fields
         $rules = [
             'firstname' => 'required|max:120',
             'lastname'  => 'required|max:120',
+            'company_id'  => 'nullable|integer',
             'email'     => Rule::unique('users')->ignore($id) // require unique email address
         ];
 
@@ -125,6 +133,10 @@ class UserController extends Controller {
         ]);
         $user_array['profile_pic'] = $profilepicname;
 
+        if (isset($request->company_id)) {
+            $user_array['company_id'] = $request->company_id;
+        }
+
         if ($id) {
             $user = User::find($id);
             $user->update($input);
@@ -145,7 +157,6 @@ class UserController extends Controller {
         }
         else {
             $user->employee_details()->create($user_array);
-
         }
 
         //Redirect to the users.index view and display message
@@ -159,7 +170,8 @@ class UserController extends Controller {
      *
      * @return RedirectResponse|Redirector
      */
-    public function show ($id) {
+    public function show($id)
+    {
         return redirect('users');
     }
 
@@ -170,7 +182,10 @@ class UserController extends Controller {
      *
      * @return Factory|View
      */
-    public function edit ($id) {
+    public function edit($id)
+    {
+        $activeMenu = 'admin';
+        $companies = Company::Latest()->get();
         $u = User::findOrFail($id); //Get user with specified id
         //DB::enableQueryLog();
         $user = Employee_detail::find($u->id);
@@ -190,8 +205,7 @@ class UserController extends Controller {
         $user->is_admin = $u->is_admin; // lazy load details from admin
         $user->id = $u->id; // override ID to match User table instead of Employee Details
 
-        return view('users.edit', compact('user'));
-
+        return view('users.edit', compact('user', 'activeMenu', 'companies'));
     }
 
     /**
@@ -201,7 +215,8 @@ class UserController extends Controller {
      *
      * @return JsonResponse|RedirectResponse
      */
-    public function destroy ($id) {
+    public function destroy($id)
+    {
         //Find a user with a given id and delete
         $user = User::find($id);
         $success = $user->exists ? true : false;
@@ -210,7 +225,8 @@ class UserController extends Controller {
         return response()->json(['success' => $success]);
     }
 
-    public function forceLogin (User $user) {
+    public function forceLogin(User $user)
+    {
         // only allow forced login when user is an admin
         if (Auth::user()->is_admin === 1 && !request()->input('return')) {
             session(['was-admin-id' => Auth::user()->id, 'was-admin' => Auth::user()->remember_token]);
@@ -227,7 +243,8 @@ class UserController extends Controller {
         return redirect()->route('home');
     }
 
-    public function changeUserPassword (Request $request, $id) {
+    public function changeUserPassword(Request $request, $id)
+    {
         try {
             $user = User::find($id);
             $pass = '';
@@ -289,7 +306,8 @@ class UserController extends Controller {
         }
     }
 
-    public function changeStuffPassword (Request $request, $id) {
+    public function changeStuffPassword(Request $request, $id)
+    {
         try {
             $user = User::findOrFail($id);
             $pass = '';
@@ -358,13 +376,15 @@ class UserController extends Controller {
      *
      * @return JsonResponse
      */
-    public function search (Request $request) {
+    public function search(Request $request)
+    {
         try {
             $data = User::with('employee_details')->where('is_admin', '!=', 1)->orderBy('name')->where(function ($q) use ($request) {
                     if (isset($request->search)) {
                         $q->where('name', 'like', '%' . $request->search . '%')->orWhere('email', 'like', '%' . $request->search . '%');
                     }
                 })->get();
+
             return response()->json(['status' => 200, 'data' => $data]);
         } catch (\Exception $e) {
             return response()->json(['status' => 500, 'message' => $e->getMessage()]);
