@@ -17,6 +17,7 @@
             </div>
             <div class="col-sm-12">
             @if($plan)
+                @if(auth()->user()->is_admin == 1)
                 <form action="{{ route('plans.update', $plan->id) }}" method="post" enctype="multipart/form-data">
                     @method('put')
                     @csrf
@@ -30,6 +31,7 @@
                         <button type="submit" class="btn-dark contact_btn">Save</button>
                     </div>
                 </form>
+                @endif
                 <iframe src="{{ fileUrl($plan->file) }}" style="width: 100%;"></iframe>
             @else
             <h3>No file has been uploaded yet.</h3>
