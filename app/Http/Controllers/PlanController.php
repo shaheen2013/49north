@@ -16,9 +16,9 @@ class PlanController extends Controller
     {
         // Get all resources
         $activeMenu = 'benefits';
-        $plans = Plan::Latest()->get();
+        $plan = Plan::Latest()->where('status', 1)->first();
 
-        return view('plan.index', compact('plans', 'activeMenu'));
+        return view('plan.index', compact('activeMenu', 'plan'));
     }
 
     /**
@@ -35,11 +35,21 @@ class PlanController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request)
     {
-        //
+        // Validate form data
+        $request->validate([
+            'file' => 'required|file|mimes:pdf'
+        ]);
+
+        // Create new model instance
+        $plan = new Plan();
+        $plan->file = fileUpload('file');
+        $plan->save();
+
+        return redirect()->back()->with('success', 'File uploaded successfully.');
     }
 
     /**
@@ -69,21 +79,34 @@ class PlanController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Plan  $plan
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function update(Request $request, Plan $plan)
     {
-        //
+        // Validate form data
+        $request->validate([
+            'file' => 'required|file|mimes:pdf'
+        ]);
+
+        Plan::where('status', 1)
+            ->update(['status' => 0]);
+
+        // Create new model instance
+        $plan = new Plan();
+        $plan->file = fileUpload('file');
+        $plan->save();
+
+        return redirect()->back()->with('success', 'File uploaded successfully.');
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param  \App\Plan  $plan
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy(Plan $plan)
     {
-        //
+
     }
 }
