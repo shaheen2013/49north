@@ -90,7 +90,7 @@ Route::group(['middleware' => ['auth']], function () {
     });
     // Journal
     Route::group(['prefix' => 'journal', 'as' => 'journal.'], function () {
-        Route::get('/', 'JournalController@index');
+        Route::get('/', 'JournalController@index')->name('index');
         Route::post('/store', 'JournalController@store')->name('store');
         Route::post('/search', 'JournalController@searchJournal')->name('search-journal');
         Route::get('/edit/{id}', 'JournalController@edit')->name('edit-single-journal');
@@ -119,7 +119,9 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('users/search', 'UserController@search')->name('users.search');
 
     // Plan routes go here
-    Route::resource('plans', 'PlanController');
+    Route::get('plans', 'PlanController@index')->name('plans.index');
+    Route::post('plans/store', 'PlanController@store')->name('plans.store');
+    Route::put('plans/{plan}', 'PlanController@update')->name('plans.update');
 });
 
 Route::resource('posts', 'PostController');

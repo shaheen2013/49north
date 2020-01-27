@@ -10,14 +10,15 @@ class JournalController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index()
     {
         $data= Journal::get();
+        $activeMenu = 'classroom';
         // return $data;
         // return response()->json(['status'=>'success', 'data'=>$data]);
-        return view('journal.index')->with('data', $data);
+        return view('journal.index', compact('activeMenu'))->with('data', $data);
     }
 
     private function _searchJournal ($searchField) {
@@ -56,7 +57,7 @@ class JournalController extends Controller
             'date' => 'required',
             'title' => 'required|string|max:191',
             'details' => 'required|string|max:491',
-            
+
         ];
 
         $validator = validator($request->all(), $rules, []);
@@ -67,7 +68,7 @@ class JournalController extends Controller
 
         try {
             $data = $request->all();
-            
+
             $check = Journal::create($data);
 
             if ($check) {

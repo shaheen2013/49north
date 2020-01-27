@@ -40,8 +40,7 @@
                         <a class="nav-link {{ $activeMenu == 'benefits' ? 'active' : '' }}" href="{{ route('plans.index') }}" role="tab">Benefits</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" id="classroom-tab" data-toggle="tab" href="#classroom" role="tab"
-                           aria-controls="classroom" aria-selected="true">Classroom</a>
+                        <a class="nav-link {{ $activeMenu == 'classroom' ? 'active' : '' }}" href="{{ route('journal.index') }}" role="tab">Classroom</a>
                     </li>
                 </ul>
                 <div class="pull-right">
@@ -99,9 +98,16 @@
             @endif
 
             @if($activeMenu == 'benefits')
-                <a class="nav-item nav-link {{ (request()->is('plans')) ? 'active' : '' }}" id="agreement_list" href="{{ route('plans.index') }}">Plan Overview</a>
-                <a class="nav-item nav-link {{ (request()->is('company')) ? 'active' : '' }}" id="agreement_list" href="{{ route('plans.index') }}">Additional Benefits Spending</a>
-                <a class="nav-item nav-link {{ (request()->is('company')) ? 'active' : '' }}" id="agreement_list" href="{{ route('plans.index') }}">Meals</a>
+                <a class="nav-item nav-link {{ (request()->is('plans')) ? 'active' : '' }}" href="{{ route('plans.index') }}">Plan Overview</a>
+                <a class="nav-item nav-link" href="#">Additional Benefits Spending</a>
+                <a class="nav-item nav-link" href="#">Meals</a>
+            @endif
+
+            @if($activeMenu == 'classroom')
+                <a class="nav-item nav-link" href="#">49 North Mission</a>
+                <a class="nav-item nav-link" href="#">Personal Development Plan</a>
+                <a class="nav-item nav-link" href="#">Courses</a>
+                <a class="nav-item nav-link {{ (request()->is('journal')) ? 'active' : '' }}" href="{{ route('journal.index') }}">Journal</a>
             @endif
 
         </div>
