@@ -37,8 +37,7 @@
                     </li>
                     @endadmin
                     <li class="nav-item">
-                        <a class="nav-link" id="benefits-tab" data-toggle="tab" href="#benefits" role="tab"
-                           aria-controls="benefits" aria-selected="true">Benefits</a>
+                        <a class="nav-link {{ $activeMenu == 'benefits' ? 'active' : '' }}" href="{{ route('plans.index') }}" role="tab">Benefits</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" id="classroom-tab" data-toggle="tab" href="#classroom" role="tab"
@@ -74,29 +73,35 @@
             {{--<a class="nav-item nav-link  {{ (request()->is('home')) ? 'active' : '' }}" id="nav-employee-tab"  href="{{ url('home') }}" aria-controls="nav-employee" aria-selected="true">Employee Information</a>--}}
 
             @if($activeMenu == 'profile')
-            <a class="nav-item nav-link  {{ (request()->is('edit-profile')) ? 'active' : '' }}" id="agreement_list" href="{{ url('edit-profile') }}">Employee Information</a>
+            <a class="nav-item nav-link {{ (request()->is('edit-profile')) ? 'active' : '' }}" id="agreement_list" href="{{ url('edit-profile') }}">Employee Information</a>
 
-            <a class="nav-item nav-link  {{ (request()->is('agreementlist')) ? 'active' : '' }}" id="agreement_list" href="{{ url('agreementlist') }}">Agreements</a>
+            <a class="nav-item nav-link {{ (request()->is('agreementlist')) ? 'active' : '' }}" id="agreement_list" href="{{ url('agreementlist') }}">Agreements</a>
 
             <a class="nav-item nav-link {{request()->is('paystatement/list') ? 'active' : '' }}" id="nav-statements-tab" href="{{url('paystatement/list')}}">Pay Statements</a>
             @endif
 
             @if($activeMenu == 'company')
-                <a class="nav-item nav-link  {{ (request()->is('company')) ? 'active' : '' }}" id="agreement_list" href="{{ url('company') }}">Company List</a>
+                <a class="nav-item nav-link {{ (request()->is('company')) ? 'active' : '' }}" id="agreement_list" href="{{ url('company') }}">Company List</a>
             @endif
 
             @if($activeMenu == 'admin')
-            <a class="nav-item nav-link  {{ (request()->is('users')) ? 'active' : '' }}" id="agreement_list" href="{{ route('users.index') }}">Employee List</a>
+            <a class="nav-item nav-link {{ (request()->is('users')) ? 'active' : '' }}" id="agreement_list" href="{{ route('users.index') }}">Employee List</a>
 
-            <a class="nav-item nav-link  {{ (request()->is('expense/list')) ? 'active' : '' }}" id="agreement_list" href="{{ url('expense/list') }}">Expense Report</a>
+            <a class="nav-item nav-link {{ (request()->is('expense/list')) ? 'active' : '' }}" id="agreement_list" href="{{ url('expense/list') }}">Expense Report</a>
 
-            <a class="nav-item nav-link  {{ (request()->is('mileage/*')) ? 'active' : '' }}" id="agreement_list" href="{{ route('mileage.mileage-list') }}">Mileage Book</a>
+            <a class="nav-item nav-link {{ (request()->is('mileage/*')) ? 'active' : '' }}" id="agreement_list" href="{{ route('mileage.mileage-list') }}">Mileage Book</a>
 
-            <a class="nav-item nav-link  {{ (request()->is('maintenance/list')) ? 'active' : '' }}" id="maintenance_list" href="{{ url('maintenance/list') }}">Tech Maintenance</a>
+            <a class="nav-item nav-link {{ (request()->is('maintenance/list')) ? 'active' : '' }}" id="maintenance_list" href="{{ url('maintenance/list') }}">Tech Maintenance</a>
 
-            <a class="nav-item nav-link  {{ (request()->is('timeoff/list')) ? 'active' : '' }}" id="timeoff_list" href="{{ url('timeoff/list') }}">Time Off</a>
+            <a class="nav-item nav-link {{ (request()->is('timeoff/list')) ? 'active' : '' }}" id="timeoff_list" href="{{ url('timeoff/list') }}">Time Off</a>
 
             <a class="nav-item nav-link" id="timeoff_list" href="javascript:void(0)">Report a Concern</a>
+            @endif
+
+            @if($activeMenu == 'benefits')
+                <a class="nav-item nav-link {{ (request()->is('plans')) ? 'active' : '' }}" id="agreement_list" href="{{ route('plans.index') }}">Plan Overview</a>
+                <a class="nav-item nav-link {{ (request()->is('company')) ? 'active' : '' }}" id="agreement_list" href="{{ route('plans.index') }}">Additional Benefits Spending</a>
+                <a class="nav-item nav-link {{ (request()->is('company')) ? 'active' : '' }}" id="agreement_list" href="{{ route('plans.index') }}">Meals</a>
             @endif
 
         </div>

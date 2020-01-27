@@ -32,7 +32,7 @@
                             <div class="col-sm-1">
                                 <div id="wait"></div>
                             </div>
-                            <div class="@admin col-sm-7 @else col-sm-8 @endadmin ">
+                            <div class="@admin col-sm-7 @else col-sm-8 @endadmin">
                                 <a href="javascript:void(0)" onclick="$('#mileage-modaledit input').val(''); $('#update').attr('onclick', 'update_mileage(0);');" class="_new_icon_button_1" data-toggle="modal" data-target="#mileage-modaledit">
                                     <i class="fa fa-plus"></i> </a>
                             </div>
@@ -355,15 +355,15 @@
                                         <td> ${data[index].employee.firstname + ' ' + data[index].employee.lastname} </td>
                                         <td> ${data[index].reasonmileage} </td>
                                         <td> ${data[index].kilometers} </td>`;
-                                   
+
                                         html += `
 
                                         <td class="text-center">
                                             <a href="javascript:void(0)" onclick="mileage_approve('${data[index].id}')"><i class="fa fa-check-circle" title="Approved"></i></a>
-                                            
+
                                             ${action}
                                         </td>`;
-                                  
+
                                     html += `
                                         <td class="text-right">
                                             <a href="javascript:void(0);" onclick="OpenEditMileageModel('${data[index].id}')">EDIT</a>
@@ -429,7 +429,7 @@
                                         <td> ${data[index].employee.firstname + ' ' + data[index].employee.lastname} </td>
                                         <td> ${data[index].reasonmileage} </td>
                                         <td> ${data[index].kilometers} </td>
-                                        
+
                                         <td class="text-center">
                                             <a href="javascript:void(0)" onclick="mileage_pending('${data[index].id}')"><i class="fa fa-check-circle" title="Pending"></i></a>
                                         </td>
