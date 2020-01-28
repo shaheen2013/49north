@@ -83,7 +83,7 @@
                         <div class="row margin-top-30">
                             <div class="form-group" style="width:100%;">
                                 <div class="col-md-12 col-sm-12">
-                                    <button type="button" onclick="create_journal(event)" class="btn-dark contact_btn" data-form="expences">Save
+                                    <button type="button" onclick="create_journal(event)" class="btn-dark contact_btn" data-form="expences" id="create">Save
                                     </button>
                                     <span class="close close-span" data-dismiss="modal" aria-label="Close"><i class="fa fa-arrow-left"></i>  Return to journal Reports</span>
                                 </div>

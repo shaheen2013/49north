@@ -50,6 +50,29 @@ Route::group(['middleware' => ['auth']], function () {
 
     });
 
+    // Additional Benefits Spending
+    Route::group(['prefix' => 'additional-benefits'], function () {
+        // Route::get('/list', 'ExpenseController@expenselist');
+        // Route::post('/addexpense', 'ExpenseController@addexpense');
+
+        Route::get('/', 'AdditionlBenifitsSpendingController@index')->name('additional-benefits.index');
+        Route::post('/store', 'AdditionlBenifitsSpendingController@store')->name('additional-benefits.store');
+
+        Route::get('/edit/{id}', 'AdditionlBenifitsSpendingController@edit');
+        Route::POST('/update/{id}', 'AdditionlBenifitsSpendingController@update');
+
+        Route::post('/approve/{id}', 'AdditionlBenifitsSpendingController@approve');
+        Route::post('/reject/{id}', 'AdditionlBenifitsSpendingController@reject');
+
+        Route::post('/paid/{id}', 'AdditionlBenifitsSpendingController@paid');
+        Route::post('/non-paid/{id}', 'AdditionlBenifitsSpendingController@nonPaid');
+
+        Route::post('/history', 'AdditionlBenifitsSpendingController@searchHistory')->name('additional-benefits.history');
+        Route::POST('/pending', 'AdditionlBenifitsSpendingController@searchPending')->name('additional-benefits.pending');
+        Route::POST('/destroy/{id}', 'AdditionlBenifitsSpendingController@destroy');
+
+    });
+
     Route::group(['prefix' => 'company'], function () {
         Route::get('', 'CompanyController@index')->name('company.index');
         Route::POST('/search', 'CompanyController@searchCompanyPage');
@@ -123,7 +146,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('plans/store', 'PlanController@store')->name('plans.store');
     Route::put('plans/{plan}', 'PlanController@update')->name('plans.update');
 
-    // update routes go here
+    // Missions routes go here
     Route::get('missions', 'MissionController@index')->name('missions.index');
     Route::post('missions/store', 'MissionController@store')->name('missions.store');
     Route::put('missions/{plan}', 'MissionController@update')->name('missions.update');

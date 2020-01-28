@@ -99,7 +99,7 @@
 
             @if($activeMenu == 'benefits')
                 <a class="nav-item nav-link {{ (request()->is('plans')) ? 'active' : '' }}" href="{{ route('plans.index') }}">Plan Overview</a>
-                <a class="nav-item nav-link" href="#">Additional Benefits Spending</a>
+                <a class="nav-item nav-link {{ (request()->is('additional-benefits')) ? 'active' : '' }}" href="{{ route('additional-benefits.index') }}">Additional Benefits Spending</a>
                 <a class="nav-item nav-link" href="#">Meals</a>
             @endif
 

@@ -18,7 +18,9 @@ class CreateAdditionlBenifitsSpendingsTable extends Migration
             $table->text('date')->nullable();
             $table->text('description')->nullable();
             $table->text('total')->nullable();
+            $table->boolean('pay_status')->nullable();
             $table->text('status')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }
