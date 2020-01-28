@@ -17,30 +17,32 @@
                 <i class="fa fa-bars"></i>
             </button>
             <div class="collapse navbar-collapse" id="navbarResponsive">
-                <ul id="myTab" role="tablist" class="navbar-nav text-uppercase nav nav-tabs">
+                <div id="myTabMain">
+                    <ul id="myTab" role="tablist" class="navbar-nav text-uppercase nav nav-tabs">
 
-                    <li class="nav-item">
-                        <a class="nav-link {{ $activeMenu == 'profile' ? 'active' : '' }}" href="{{ route('edit-profile') }}">My Profile </a>
-                    </li>
+                        <li class="nav-item">
+                            <a class="nav-link {{ $activeMenu == 'profile' ? 'active' : '' }}" href="{{ route('edit-profile') }}">My Profile </a>
+                        </li>
 
-                    @admin
-                    <li class="nav-item">
-                        <a class="nav-link {{ $activeMenu == 'company' ? 'active' : '' }}" href="{{ route('company.index') }}" role="tab">Company</a>
-                    </li>
-                    @endadmin
+                        @admin
+                        <li class="nav-item">
+                            <a class="nav-link {{ $activeMenu == 'company' ? 'active' : '' }}" href="{{ route('company.index') }}" role="tab">Company</a>
+                        </li>
+                        @endadmin
 
-                    @admin
-                    <li class="nav-item">
-                        <a class="nav-link {{ $activeMenu == 'admin' ? 'active' : '' }}" href="{{ route('users.index') }}" role="tab">Admin</a>
-                    </li>
-                    @endadmin
-                    <li class="nav-item">
-                        <a class="nav-link {{ $activeMenu == 'benefits' ? 'active' : '' }}" href="{{ route('plans.index') }}" role="tab">Benefits</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ $activeMenu == 'classroom' ? 'active' : '' }}" href="{{ route('journal.index') }}" role="tab">Classroom</a>
-                    </li>
-                </ul>
+                        @admin
+                        <li class="nav-item">
+                            <a class="nav-link {{ $activeMenu == 'admin' ? 'active' : '' }}" href="{{ route('users.index') }}" role="tab">Admin</a>
+                        </li>
+                        @endadmin
+                        <li class="nav-item">
+                            <a class="nav-link {{ $activeMenu == 'benefits' ? 'active' : '' }}" href="{{ route('plans.index') }}" role="tab">Benefits</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {{ $activeMenu == 'classroom' ? 'active' : '' }}" href="{{ route('missions.index') }}" role="tab">Classroom</a>
+                        </li>
+                    </ul>
+                </div>
                 <div class="pull-right">
                     <ul class="navbar-nav text-uppercase">
                         <li class="nav-item">
