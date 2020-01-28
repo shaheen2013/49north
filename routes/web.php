@@ -122,6 +122,11 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('plans', 'PlanController@index')->name('plans.index');
     Route::post('plans/store', 'PlanController@store')->name('plans.store');
     Route::put('plans/{plan}', 'PlanController@update')->name('plans.update');
+
+    // update routes go here
+    Route::get('missions', 'MissionController@index')->name('missions.index');
+    Route::post('missions/store', 'MissionController@store')->name('missions.store');
+    Route::put('missions/{plan}', 'MissionController@update')->name('missions.update');
 });
 
 Route::resource('posts', 'PostController');

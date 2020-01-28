@@ -9,9 +9,7 @@
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark" id="mainNav">
         <div class="container-fluid">
-            <a class="navbar-brand js-scroll-trigger logo_se" href="{{ route('home') }}"><img width="150"
-                                                                                              src="{{asset('img/logo.jpg')}}"
-                                                                                              alt=""></a>
+            <a class="navbar-brand js-scroll-trigger logo_se" href="{{ route('home') }}"><img width="150" src="{{asset('img/logo.jpg')}}" alt=""></a>
             <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
                     data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false"
                     aria-label="Toggle navigation">
@@ -104,7 +102,7 @@
             @endif
 
             @if($activeMenu == 'classroom')
-                <a class="nav-item nav-link" href="#">49 North Mission</a>
+                <a class="nav-item nav-link {{ (request()->is('missions')) ? 'active' : '' }}" href="{{ route('missions.index') }}">49 North Mission</a>
                 <a class="nav-item nav-link" href="#">Personal Development Plan</a>
                 <a class="nav-item nav-link" href="#">Courses</a>
                 <a class="nav-item nav-link {{ (request()->is('journal')) ? 'active' : '' }}" href="{{ route('journal.index') }}">Journal</a>
