@@ -124,7 +124,7 @@
                                     <div class="col-md-12 col-sm-12">
                                         <button type="button" onclick="create_additional_benefits(event)" class="btn-dark contact_btn" data-form="expences" id="create">Save
                                         </button>
-                                        <span class="close close-span" data-dismiss="modal" aria-label="Close"><i class="fa fa-arrow-left"></i>  Return to journal Reports</span>
+                                        <span class="close close-span" data-dismiss="modal" aria-label="Close"><i class="fa fa-arrow-left"></i>  Return to Additional Benefits Spending Reports</span>
                                     </div>
                                 </div>
                             </div>
@@ -176,7 +176,7 @@
                                     <div class="col-md-12 col-sm-12">
                                         <button type="button" onclick="update_additional_benefits(id)" id="update" class="btn-dark contact_btn" data-form="expences">Save
                                         </button>
-                                        <span class="close close-span" data-dismiss="modal" aria-label="Close"><i class="fa fa-arrow-left"></i>  Return to journal Reports</span>
+                                        <span class="close close-span" data-dismiss="modal" aria-label="Close"><i class="fa fa-arrow-left"></i>  Return to Additional Benefits Spending Reports</span>
                                     </div>
                                 </div>
                             </div>
