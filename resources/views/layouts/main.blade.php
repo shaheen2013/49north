@@ -72,29 +72,33 @@
             {{--<a class="nav-item nav-link  {{ (request()->is('home')) ? 'active' : '' }}" id="nav-employee-tab"  href="{{ url('home') }}" aria-controls="nav-employee" aria-selected="true">Employee Information</a>--}}
 
             @if($activeMenu == 'profile')
-            <a class="nav-item nav-link {{ (request()->is('edit-profile')) ? 'active' : '' }}" id="agreement_list" href="{{ url('edit-profile') }}">Employee Information</a>
+            <a class="nav-item nav-link {{ (request()->is('edit-profile')) ? 'active' : '' }}" href="{{ url('edit-profile') }}">Employee Information</a>
 
-            <a class="nav-item nav-link {{ (request()->is('agreementlist')) ? 'active' : '' }}" id="agreement_list" href="{{ url('agreementlist') }}">Agreements</a>
+            <a class="nav-item nav-link {{ (request()->is('agreementlist')) ? 'active' : '' }}" href="{{ url('agreementlist') }}">Agreements</a>
 
-            <a class="nav-item nav-link {{request()->is('paystatement/list') ? 'active' : '' }}" id="nav-statements-tab" href="{{url('paystatement/list')}}">Pay Statements</a>
+            <a class="nav-item nav-link {{request()->is('paystatement/list') ? 'active' : '' }}" href="{{url('paystatement/list')}}">Pay Statements</a>
+
+            @if(auth()->user()->is_admin == 0)
+            <a class="nav-item nav-link {{ (request()->is('messages')) ? 'active' : '' }}" href="{{ route('messages.index') }}">Report a Concern</a>
+            @endif
             @endif
 
             @if($activeMenu == 'company')
-                <a class="nav-item nav-link {{ (request()->is('company')) ? 'active' : '' }}" id="agreement_list" href="{{ url('company') }}">Company List</a>
+                <a class="nav-item nav-link {{ (request()->is('company')) ? 'active' : '' }}" href="{{ url('company') }}">Company List</a>
             @endif
 
             @if($activeMenu == 'admin')
-            <a class="nav-item nav-link {{ (request()->is('users')) ? 'active' : '' }}" id="agreement_list" href="{{ route('users.index') }}">Employee List</a>
+            <a class="nav-item nav-link {{ (request()->is('users')) ? 'active' : '' }}" href="{{ route('users.index') }}">Employee List</a>
 
-            <a class="nav-item nav-link {{ (request()->is('expense/list')) ? 'active' : '' }}" id="agreement_list" href="{{ url('expense/list') }}">Expense Report</a>
+            <a class="nav-item nav-link {{ (request()->is('expense/list')) ? 'active' : '' }}"href="{{ url('expense/list') }}">Expense Report</a>
 
-            <a class="nav-item nav-link {{ (request()->is('mileage/*')) ? 'active' : '' }}" id="agreement_list" href="{{ route('mileage.mileage-list') }}">Mileage Book</a>
+            <a class="nav-item nav-link {{ (request()->is('mileage/*')) ? 'active' : '' }}" href="{{ route('mileage.mileage-list') }}">Mileage Book</a>
 
-            <a class="nav-item nav-link {{ (request()->is('maintenance/list')) ? 'active' : '' }}" id="maintenance_list" href="{{ url('maintenance/list') }}">Tech Maintenance</a>
+            <a class="nav-item nav-link {{ (request()->is('maintenance/list')) ? 'active' : '' }}" href="{{ url('maintenance/list') }}">Tech Maintenance</a>
 
-            <a class="nav-item nav-link {{ (request()->is('timeoff/list')) ? 'active' : '' }}" id="timeoff_list" href="{{ url('timeoff/list') }}">Time Off</a>
+            <a class="nav-item nav-link {{ (request()->is('timeoff/list')) ? 'active' : '' }}" href="{{ url('timeoff/list') }}">Time Off</a>
 
-            <a class="nav-item nav-link" id="timeoff_list" href="javascript:void(0)">Report a Concern</a>
+            <a class="nav-item nav-link {{ (request()->is('messages')) ? 'active' : '' }}" href="{{ route('messages.index') }}">Report a Concern</a>
             @endif
 
             @if($activeMenu == 'benefits')

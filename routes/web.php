@@ -22,7 +22,6 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::group(['middleware' => ['auth']], function () {
-
     Route::get('home', 'HomeController@home')->name('home');
     Route::get('edit-profile', 'HomeController@editProfile')->name('edit-profile');
     Route::post('edit_employee', 'HomeController@edit_employee');
@@ -47,7 +46,6 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/new/history', 'ExpenseController@searchHistory');
         Route::POST('/pending', 'ExpenseController@searchPending');
         Route::POST('/destroy/{id}', 'ExpenseController@destroy');
-
     });
 
     Route::group(['prefix' => 'company'], function () {
@@ -63,7 +61,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/reset_apssword', 'RegisterController@reset_password')->name('reset_apssword');
     Route::post('/registration', 'RegisterController@store')->name('registration');
 
-    ///// Maintenance
+    // Maintenance
     Route::group(['prefix' => 'maintenance', 'as' => 'maintenance.'], function () {
         Route::get('/list', 'MaintenanceController@Maintenance_list')->name('list');
         Route::post('/add', 'MaintenanceController@addmaintenance')->name('add');
@@ -88,6 +86,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/search/pending', 'MileageController@searchPendingMileage')->name('search-pending-mileage');
         Route::post('/search/history', 'MileageController@searchHistoryMileage')->name('search-history-mileage');
     });
+
     // Journal
     Route::group(['prefix' => 'journal', 'as' => 'journal.'], function () {
         Route::get('/', 'JournalController@index')->name('index');
@@ -98,14 +97,12 @@ Route::group(['middleware' => ['auth']], function () {
         Route::POST('/destroy/{id}', 'JournalController@destroy');
     });
 
-    ///// timeoff route
+    // timeoff route
     Route::group(['prefix' => 'timeoff', 'as' => 'timeoff.'], function () {
         Route::get('/list', 'TimeoffController@timeofflist')->name('list');
     });
 
-
-
-    //// Paystatement route
+    // Paystatement route
     Route::group(['prefix' => 'paystatement', 'as' => 'paystatement.'], function () {
         Route::get('/list', 'PaystatementController@paylist');
         Route::post('/add', 'PaystatementController@addpaystatement')->name('add');
@@ -127,6 +124,18 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('missions', 'MissionController@index')->name('missions.index');
     Route::post('missions/store', 'MissionController@store')->name('missions.store');
     Route::put('missions/{plan}', 'MissionController@update')->name('missions.update');
+
+    // Messages routes go here
+    Route::group(['prefix' => 'messages', 'as' => 'messages.'], function () {
+        Route::get('/', 'MessageController@index')->name('index');
+        Route::post('/store', 'MessageController@store')->name('store');
+        Route::get('show/{message}', 'MessageController@show')->name('show');
+        Route::get('/{message}/edit', 'MessageController@edit')->name('edit');
+        Route::put('/{message}', 'MessageController@update')->name('update');
+        Route::delete('/{message}', 'MessageController@destroy')->name('destroy');
+        Route::get('/search', 'MessageController@search')->name('search');
+        Route::put('/status/{message}', 'MessageController@statusUpdate')->name('status.update');
+    });
 });
 
 Route::resource('posts', 'PostController');
