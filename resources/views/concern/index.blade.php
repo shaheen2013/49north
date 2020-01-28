@@ -107,22 +107,22 @@
                                 <div class="col-md-12">
                                     <div class="text_outer">
                                         <label for="total">Description</label>
-                                        <textarea name="description" class="form-control" rows="5" placeholder="Insert text here"></textarea>
+                                        <textarea style="min-height: 100px" name="description" class="form-control" placeholder="Insert text here"></textarea>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="clearfix"></div>
-
-                            <div class="row">
-                                <div class="col-md-12 col-sm-12">
-                                    <label class="form-check-label">
-                                        <input class="form-check-input" type="checkbox" name="is_anonymous"> I want to remain anonymous from my co-workers
-                                    </label>
-                                </div>
-                                <div class="col-md-12" style="display:inline-flex;">
-                                    <label class="form-check-label">
-                                        <input class="form-check-input" type="checkbox" name="is_contact"> I do not want to be contacted about this
-                                    </label>
+                                <div class="col-md-12">
+                                    <div class="col-md-12">
+                                        <div class="col-md-12">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input" type="checkbox" name="is_anonymous"> I want to remain anonymous from my co-workers
+                                            </label>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input" type="checkbox" name="is_contact"> I do not want to be contacted about this
+                                            </label>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <hr>
@@ -161,22 +161,22 @@
                                 <div class="col-md-12">
                                     <div class="text_outer">
                                         <label for="total">Description</label>
-                                        <textarea name="description" class="form-control" rows="5" placeholder="Insert text here"></textarea>
+                                        <textarea style="min-height: 100px" name="description" class="form-control" placeholder="Insert text here"></textarea>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="clearfix"></div>
-
-                            <div class="row">
-                                <div class="col-md-12 col-sm-12">
-                                    <label class="form-check-label">
-                                        <input class="form-check-input" type="checkbox" name="is_anonymous"> I want to remain anonymous from my co-workers
-                                    </label>
-                                </div>
-                                <div class="col-md-12" style="display:inline-flex;">
-                                    <label class="form-check-label">
-                                        <input class="form-check-input" type="checkbox" name="is_contact"> I do not want to be contacted about this
-                                    </label>
+                                <div class="col-md-12">
+                                    <div class="col-md-12">
+                                        <div class="col-md-12">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input" type="checkbox" name="is_anonymous"> I want to remain anonymous from my co-workers
+                                            </label>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input" type="checkbox" name="is_contact"> I do not want to be contacted about this
+                                            </label>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <hr>

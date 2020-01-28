@@ -1550,7 +1550,9 @@ input {
   /*font-family: Raleway;*/
   border: 1px solid #aaaaaa;
 }
-
+.form-check-input{
+    width: auto!important;
+}
 /* Mark input boxes that gets an error on validation: */
 input.invalid {
   background-color: #ffdddd;
