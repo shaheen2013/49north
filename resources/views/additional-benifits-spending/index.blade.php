@@ -320,7 +320,7 @@
                             pageSize: 10,
                             totalNumber: results.data.length,
                             callback: function (data, pagination) {
-                                let html = date = adminOption = action = '';
+                                let html = date = action = '';
 
                                 for (let index = 0; index < data.length; index++) {
                                     if (data[index].date != null && data[index].date != '') {
@@ -342,7 +342,7 @@
                                     html += `<tr>
                                     <td> ${date} </td>
                                     <td> ${data[index].description} </td>
-                                    <td> ${data[index].total} </td>
+                                    <td>$${data[index].total} </td>
                                     <td class="text-center">
                                         
                                         ${ action }
@@ -391,7 +391,7 @@
                             totalNumber: results.data.length,
                             callback: function (data, pagination) {
                                
-                                let html = date = adminOption = action = '';
+                                let html = date = action = '';
 
                                 for (let index = 0; index < data.length; index++) {
                                     if (data[index].date != null && data[index].date != '') {
@@ -410,7 +410,7 @@
                                     html += `<tr>
                                    <td> ${date} </td>
                                    <td> ${data[index].description} </td>
-                                   <td> ${data[index].total} </td>
+                                   <td>$${data[index].total} </td>
                                    <td class="text-center">
                                         ${ action }
                                     </td>
