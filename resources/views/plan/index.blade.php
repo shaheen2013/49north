@@ -34,7 +34,9 @@
                 @endif
                 <iframe src="{{ fileUrl($plan->file) }}" style="width: 100%;"></iframe>
             @else
+           
             <h3>No file has been uploaded yet.</h3>
+            @if(auth()->user()->is_admin == 1)
             <form action="{{ route('plans.store') }}" method="post" enctype="multipart/form-data">
                 @csrf
                 <div class="form-group">
@@ -47,6 +49,7 @@
                     <button type="submit" class="btn-dark contact_btn">Save</button>
                 </div>
             </form>
+            @endif
             @endif
             </div>
         </div>
