@@ -14,7 +14,7 @@ class MissionController extends Controller
      */
     public function index()
     {
-        $activeMenu = 'benefits';
+        $activeMenu = 'classroom';
         $mission = Mission::Latest()->where('status', 1)->first();
 
         return view('mission.index', compact('activeMenu', 'mission'));
