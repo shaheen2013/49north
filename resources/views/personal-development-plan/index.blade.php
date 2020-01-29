@@ -7,10 +7,7 @@
         <div class="tab-pane" id="nav-expense" role="tabpanel" aria-labelledby="nav-employee-tab">
             <div class="expense inner-tab-box">
                 <div class="col-sm-12">
-                    <h3>
-                        <span class="active-span" id="pending_span" onclick="benifits_pending_new()">Current </span> |
-                        <span id="historical_span" onclick="personal_development_archive_search()"> Archived</span>
-                    </h3>
+
                     <br>
                 </div>
                 <div class="col-sm-12" id="pending_div">
@@ -18,47 +15,16 @@
 
                         <div class="col-sm-2">
                             <div class="form-group">
-                                <input type="date" name="pending_date" id="date" placeholder="Select Date"  class="form-control-new" onChange="benifits_pending_new()">
-                            </div>
-                        </div>
-                        <div class="col-sm-1">
-                            <div id="wait"></div>
-                        </div>
-                        {{-- <div class="col-sm-9">
-                            <a href="javascript:void(0)" class="_new_icon_button_1" data-toggle="modal" data-target="#personal_development_modal"> <i class="fa fa-plus"></i> </a>
-                        </div> --}}
-                        <div class="col-sm-12">
-                            <table class="table _table _table-bordered">
-                                <thead>
-                                <tr>
-                                    <th>Date</th>
-                                    <th>Description</th>
-                                    <th>Action</th>
-
-                                    <th></th>
-                                </tr>
-                                </thead>
-                                <tbody class="return_expence_ajax" id="benefits_pending">
-
-                                </tbody>
-                            </table>
-                            <div id="paginate"></div>
-                        </div>
-                    </div>
-                </div>
-                <div id="historical_div" class="col-sm-12" style="display:none;">
-                    <div class="row">
-
-                        <div class="col-sm-2">
-                            <div class="form-group">
-                                <input type="date" name="archive_date" id="archive_date" placeholder="Select Date" class="form-control-new" onChange="personal_development_archive_search()">
+                                <input type="date" name="archive_date" id="archive_date" placeholder="Select Date"
+                                       class="form-control-new" onChange="personal_development_archive_search()">
                             </div>
                         </div>
                         <div class="col-sm-1">
                             <div id="wait-his"></div>
                         </div>
                         <div class="col-sm-9">
-                            <a href="javascript:void(0)" class="_new_icon_button_1" data-toggle="modal" data-target="#personal_development_modal"> <i class="fa fa-plus"></i> </a>
+                            <a href="javascript:void(0)" class="_new_icon_button_1" data-toggle="modal"
+                               data-target="#personal_development_modal"> <i class="fa fa-plus"></i> </a>
                         </div>
                         <div class="col-sm-12">
                             <table class="table _table _table-bordered">
@@ -84,71 +50,78 @@
         </div><!-------------end--------->
     </div>
 
-    <div id="personal_development_modal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div id="personal_development_modal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog"
+         aria-labelledby="myLargeModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <!-- body modal -->
                 <div class="modal-body">
                     <div class="col-md-12" style="margin-top:40px;margin-bottom:20px;">
-                            <div class="row">
-                                <div class="col-md-6 col-sm-6">
-                                    <div class="text_outer">
-                                        <label for="create_title" class="">Title</label>
-                                        <input type="text" id="create_title" name="title" class="form-control" placeholder="Insert text here">
-                                    </div>
-                                </div>
-                                <div class="col-md-6 col-sm-6">
-                                    <div class="text_outer">
-                                        <label for="create_description" class="">Description</label>
-                                        <input type="text" id="create_description" name="description" class="form-control" placeholder="Insert text here">
-                                    </div>
+                        <div class="row">
+                            <div class="col-md-6 col-sm-6">
+                                <div class="text_outer">
+                                    <label for="create_title" class="">Title</label>
+                                    <input type="text" id="create_title" name="title" class="form-control"
+                                           placeholder="Insert text here">
                                 </div>
                             </div>
-                            <div class="clearfix"></div>
-
-                            <div class="row">
-
-                                <div class="col-md-6 col-sm-6">
-                                    <div class="text_outer">
-                                        <label for="create_start_date" class="">Start Date</label>
-                                        <input type="date" placeholder="Select Date" class="flatpickr form-control" name="start_date" id="create_start_date">
-                                    </div>
-                                </div>
-                                <div class="col-md-6 col-sm-6">
-                                    <div class="text_outer">
-                                        <label for="create_end_date" class="">End Date</label>
-                                        <input type="date" placeholder="Select Date" class="flatpickr form-control" name="end_date" id="create_end_date">
-                                    </div>
+                            <div class="col-md-6 col-sm-6">
+                                <div class="text_outer">
+                                    <label for="create_description" class="">Description</label>
+                                    <input type="text" id="create_description" name="description" class="form-control"
+                                           placeholder="Insert text here">
                                 </div>
                             </div>
-                            <div class="clearfix"></div>
+                        </div>
+                        <div class="clearfix"></div>
 
-                            <div class="row">
+                        <div class="row">
 
-                                <div class="col-md-6 col-sm-6">
-                                    <div class="text_outer">
-                                        <label for="company" class="">Mentor</label>
-                                        <select class="select_status form-control" name="emp_id" id="create_emp_id">
-                                            <option value="">Select</option>
-                                            @foreach($user as $usr)
-                                                <option value="{{ $usr->id }}">{{ $usr->name}}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-
-                            </div>
-
-                            <hr>
-                            <div class="row margin-top-30">
-                                <div class="form-group" style="width:100%;">
-                                    <div class="col-md-12 col-sm-12">
-                                        <button type="button" onclick="create_personal_development(event)" class="btn-dark contact_btn" data-form="expences" id="create">Save
-                                        </button>
-                                        <span class="close close-span" data-dismiss="modal" aria-label="Close"><i class="fa fa-arrow-left"></i>  Return to Personal Development Plan Reports</span>
-                                    </div>
+                            <div class="col-md-6 col-sm-6">
+                                <div class="text_outer">
+                                    <label for="create_start_date" class="">Start Date</label>
+                                    <input type="date" placeholder="Select Date" class="flatpickr form-control"
+                                           name="start_date" id="create_start_date">
                                 </div>
                             </div>
+                            <div class="col-md-6 col-sm-6">
+                                <div class="text_outer">
+                                    <label for="create_end_date" class="">End Date</label>
+                                    <input type="date" placeholder="Select Date" class="flatpickr form-control"
+                                           name="end_date" id="create_end_date">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+
+                        <div class="row">
+
+                            <div class="col-md-6 col-sm-6">
+                                <div class="text_outer">
+                                    <label for="company" class="">Mentor</label>
+                                    <select class="select_status form-control" name="emp_id" id="create_emp_id">
+                                        <option value="">Select</option>
+                                        @foreach($user as $usr)
+                                            <option value="{{ $usr->id }}">{{ $usr->name}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <hr>
+                        <div class="row margin-top-30">
+                            <div class="form-group" style="width:100%;">
+                                <div class="col-md-12 col-sm-12">
+                                    <button type="button" onclick="create_personal_development(event)"
+                                            class="btn-dark contact_btn" data-form="expences" id="create">Save
+                                    </button>
+                                    <span class="close close-span" data-dismiss="modal" aria-label="Close"><i
+                                            class="fa fa-arrow-left"></i>  Return to Personal Development Plan Reports</span>
+                                </div>
+                            </div>
+                        </div>
 
                     </div>
 
@@ -158,7 +131,8 @@
         </div>
     </div>
 
-    <div id="personal_development_edit_modal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div id="personal_development_edit_modal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog"
+         aria-labelledby="myLargeModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <!-- body modal -->
@@ -170,13 +144,15 @@
                                 <div class="col-md-6 col-sm-6">
                                     <div class="text_outer">
                                         <label for="edit_title" class="">Title</label>
-                                        <input type="text" id="edit_title" name="title" class="form-control" placeholder="Insert text here">
+                                        <input type="text" id="edit_title" name="title" class="form-control"
+                                               placeholder="Insert text here">
                                     </div>
                                 </div>
                                 <div class="col-md-6 col-sm-6">
                                     <div class="text_outer">
                                         <label for="edit_description" class="">Description</label>
-                                        <input type="text" id="edit_description" name="description" class="form-control" placeholder="Insert text here">
+                                        <input type="text" id="edit_description" name="description" class="form-control"
+                                               placeholder="Insert text here">
                                     </div>
                                 </div>
                             </div>
@@ -187,13 +163,15 @@
                                 <div class="col-md-6 col-sm-6">
                                     <div class="text_outer">
                                         <label for="edit_start_date" class="">Start Date</label>
-                                        <input type="date" placeholder="Select Date" class="flatpickr form-control" name="start_date" id="edit_start_date">
+                                        <input type="date" placeholder="Select Date" class="flatpickr form-control"
+                                               name="start_date" id="edit_start_date">
                                     </div>
                                 </div>
                                 <div class="col-md-6 col-sm-6">
                                     <div class="text_outer">
                                         <label for="edit_end_date" class="">End Date</label>
-                                        <input type="date" placeholder="Select Date" class="flatpickr form-control" name="end_date" id="edit_end_date">
+                                        <input type="date" placeholder="Select Date" class="flatpickr form-control"
+                                               name="end_date" id="edit_end_date">
                                     </div>
                                 </div>
                             </div>
@@ -219,14 +197,16 @@
                             <div class="row margin-top-30">
                                 <div class="form-group" style="width:100%;">
                                     <div class="col-md-12 col-sm-12">
-                                        <button type="button" onclick="update_personal_development()" class="btn-dark contact_btn" data-form="expences" id="create">Save
+                                        <button type="button" onclick="update_personal_development()"
+                                                class="btn-dark contact_btn" data-form="expences" id="create">Save
                                         </button>
-                                        <span class="close close-span" data-dismiss="modal" aria-label="Close"><i class="fa fa-arrow-left"></i>  Return to Personal Development Plan Reports</span>
+                                        <span class="close close-span" data-dismiss="modal" aria-label="Close"><i
+                                                class="fa fa-arrow-left"></i>  Return to Personal Development Plan Reports</span>
                                     </div>
                                 </div>
                             </div>
                         </form>
-                </div>
+                    </div>
 
                 </div>
 
@@ -244,14 +224,7 @@
             const date = new Date(), y = date.getFullYear(), m = date.getMonth();
             from = formatDate(new Date(y, m, 1));
             to = formatDate(new Date(y, m + 1, 0));
-            // benifits_pending_new();
-
-            $("#historical_span").click(function () {
-                $("#historical_span").addClass("active-span");
-                $("#pending_span").removeClass("active-span");
-                $("#pending_div").hide();
-                $("#historical_div").show();
-            });
+            personal_development_archive_search();
 
             $("#pending_span").click(function () {
                 $("#pending_span").addClass("active-span");
@@ -259,25 +232,6 @@
                 $("#pending_div").show();
                 $("#historical_div").hide();
 
-            });
-
-            $('#date').flatpickr({
-                mode: "range",
-                altInput: true,
-                altFormat: 'j M, Y',
-                defaultDate: [from, to],
-                onChange: function (selectedDates, dateStr, instance) {
-                    from = formatDate(selectedDates[0]);
-                    to = formatDate(selectedDates[1]);
-
-                    if (selectedDates[0] === undefined || (selectedDates[0] !== undefined && selectedDates[1] !== undefined)) {
-                        if (selectedDates[0] === undefined) {
-                            from = to = null;
-                        }
-
-                        // benifits_pending_new();
-                    }
-                },
             });
 
             $('#archive_date').flatpickr({
@@ -300,9 +254,9 @@
             });
         });
 
-        function create_personal_development(event){
+        function create_personal_development(event) {
             event.preventDefault();
-            $('#create').attr('disabled','disabled');
+            $('#create').attr('disabled', 'disabled');
             var title = $('#create_title').val();
             var description = $('#create_description').val();
             var start_date = $('#create_start_date').val();
@@ -310,16 +264,16 @@
             var emp_id = $('#create_emp_id').val();
 
             var data = {
-                title:title,
-                description:description,
-                start_date:start_date,
-                end_date:end_date,
-                emp_id:emp_id,
+                title: title,
+                description: description,
+                start_date: start_date,
+                end_date: end_date,
+                emp_id: emp_id,
 
             }
             // console.log(data)
-            if(title == '' || description == ''|| start_date == '' || end_date == '' || emp_id == '' ){
-                $.toaster({ message : 'Field is required!', title : 'Required', priority : 'danger' });
+            if (title == '' || description == '' || start_date == '' || end_date == '' || emp_id == '') {
+                $.toaster({message: 'Field is required!', title: 'Required', priority: 'danger'});
                 $('#create').removeAttr('disabled');
                 return false;
             }
@@ -335,8 +289,8 @@
                 url: "{{ route('personal-development-plan.store') }}",
                 data: data,
                 dataType: 'JSON',
-                success: function( response ) {
-                    $.toaster({ message : 'Created successfully', title : 'Success', priority : 'success' });
+                success: function (response) {
+                    $.toaster({message: 'Created successfully', title: 'Success', priority: 'success'});
                     $('#journal-modal').modal('hide');
                     // benifits_pending_new();
                     personal_development_archive_search();
@@ -345,75 +299,6 @@
             });
         }
 
-        // function benifits_pending_new() {
-        //     let data = {
-        //         from: from,
-        //         to: to,
-        //     };
-
-        //     $('#wait').css('display', 'inline-block'); // wait for loader
-        //     $('#wait-his').css('display', 'inline-block'); // wait for loader
-
-        //     $.ajax({
-        //         type: 'post',
-        //         // url: "/expense/pending",
-        //         url: "{{ route('additional-benefits.pending') }}",
-        //         data: data,
-        //         dataType: 'JSON',
-        //         success: function (results) {
-        //             if (results.status === 'success') {
-        //                 $('#wait').css('display', 'none');
-        //                 $('#wait-his').css('display', 'none');
-        //                 $('#paginate').pagination({
-        //                     dataSource: results.data,
-        //                     pageSize: 10,
-        //                     totalNumber: results.data.length,
-        //                     callback: function (data, pagination) {
-        //                         let html = date = action = '';
-
-        //                         for (let index = 0; index < data.length; index++) {
-        //                             if (data[index].date != null && data[index].date != '') {
-        //                                 time = data[index].date.split(' ')[0];
-        //                                 date = new Date(time);
-        //                                 date = date.toDateString().split(' ')[2] + " " + date.toDateString().split(' ')[1] + ", " + date.toDateString().split(' ')[3]
-        //                             } else {
-        //                                 date = '-';
-        //                             }
-
-        //                             if(data[index].pay_status == 1){
-
-        //                                 action = `<a href="javascript:void(0)" onclick="benefit_non_paid('${data[index].id}')"><i class="fa fa-usd" title="Non-Paid"></i></a>`;
-        //                             }
-        //                             else{
-        //                                 action = `<a href="javascript:void(0)" onclick="benefit_paid('${data[index].id}')"><i class="fa fa-usd" title="Paid"></i></a>`;
-        //                             }
-
-        //                             html += `<tr>
-        //                             <td> ${date} </td>
-        //                             <td> ${data[index].description} </td>
-        //                             <td>$${data[index].total} </td>
-        //                             <td class="text-center">
-
-        //                                 ${ action }
-        //                                 <a href="javascript:void(0)" onclick="benefit_approve('${data[index].id}')"><i class="fa fa-check-circle" title="Approved"></i></a>
-        //                                 <a href="javascript:void(0)" title="Reject!" onclick="benefit_reject('${data[index].id}')"><i class="fa fa-ban"></i></a>
-        //                             </td>
-        //                             <td class="action-box">
-        //                                 <a href="javascript:void(0);" onclick="OpenEditBenifitsModel('${data[index].id}') ">EDIT</a>
-        //                                 <a href="javascript:void(0);" class="down" onclick="deleteconfirm('${data[index].id}')">DELETE</a>
-        //                             </td>
-        //                         </tr>
-        //                         <tr class="spacer"></tr>`;
-        //                         }
-        //                         $('#benefits_pending').html(html);
-        //                     }
-        //                 });
-        //             } else {
-        //                 swal("Error!", results.message, "error");
-        //             }
-        //         }
-        //     });
-        // }
 
         function personal_development_archive_search() {
 
@@ -458,6 +343,7 @@
 
                                     </td>
                                     <td class="action-box">
+                                        <a href="/personal-development-plan/show/${data[index].id}"> View</a>
                                         <a href="javascript:void(0);" onclick="OpenEditDevelopmentModel('${data[index].id}') ">EDIT</a>
                                         <a href="javascript:void(0);" class="down" onclick="deleteconfirm('${data[index].id}')">DELETE</a>
                                     </td>
@@ -479,7 +365,7 @@
             $('#personal_development_edit_modal').modal();
             $.ajax({
                 type: 'GET',
-                url: "/personal-development-plan/edit/"+id,
+                url: "/personal-development-plan/edit/" + id,
                 dataType: 'JSON',
                 success: function (results) {
 
@@ -506,7 +392,7 @@
 
             $.ajax({
                 method: "POST",
-                url: "/personal-development-plan/update/"+id,
+                url: "/personal-development-plan/update/" + id,
                 data: new FormData(document.getElementById('personal_development_update_form')),
                 dataType: 'JSON',
                 processData: false,  // Important!
@@ -521,6 +407,7 @@
 
             });
         }
+
 
         function deleteconfirm(id) {
             swal({

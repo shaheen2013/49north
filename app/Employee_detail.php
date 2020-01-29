@@ -56,6 +56,10 @@ class Employee_detail extends Model {
         return $this->hasOne(Agreement::class,'emp_id')->where('status','A')->whereNull('parent_id');
     }
 
+    public function personalPlan(){
+        return $this->hasMany('App\PersonalDevelopmentPlan', 'emp_id', 'id');
+    }
+    
     /**
      * @return HasOne
      */
