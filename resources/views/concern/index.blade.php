@@ -480,9 +480,9 @@
                 success: function (response) {
                     if (response.status === 200) {
                         if (response.errors === undefined) {
-                            swal("Done!", response.message, "success").then(function () {
-                                searchMessages();
-                            });
+                            $('#message-modal').modal('hide');
+                            $.toaster({message: 'Updated successfully', title: 'Success', priority: 'success'});
+                            searchMessages();
                         } else {
                             let errors = '';
                             for (let [key, value] of Object.entries(response.errors)) {
@@ -513,7 +513,7 @@
                         }
 
                         if (is_admin == 1 && htmlId === '#message_pending') {
-                            adminOption = `<td class="text-right">
+                            adminOption = `<td>
                                 <a href="javascript:void(0)" onclick="statusProgress(${value.id})"><i class="fa fa-check-circle" title="status change"></i></a>
                             </td>`;
                         }
