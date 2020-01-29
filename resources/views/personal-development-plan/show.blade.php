@@ -10,7 +10,7 @@
                 <div class="col-sm-12">
                     <div class="text-center" style="width: 400px; margin: auto; ">
                         <h5 class="mb-3">
-                            <span class="active-span" id="pending_span">Personal Development Plan</span>
+                            <span class="active-span" id="pending_span">{{$show->employee->firstname}} {{$show->employee->lastname}} Personal Development Plan</span>
                         </h5>
                         <div style="width: 100%; display: table; font-weight:500; font-size: 13px" class="mb-4">
 
@@ -52,7 +52,7 @@
                 <div class="col-sm-12">
                     <div class="text-center" style="width: 400px; margin: auto; ">
                         <h5 class="mb-3">
-                            <span class="active-span" id="pending_span">Personal Development Plan</span>
+                        <span class="active-span" id="pending_span">{{$show->employee->firstname}} {{$show->employee->lastname}} Personal Development Plan</span>
                          
                            
                         </h5>
