@@ -222,8 +222,8 @@
 
         $(document).ready(function () {
             const date = new Date(), y = date.getFullYear(), m = date.getMonth();
-            from = formatDate(new Date(y, m, 1));
-            to = formatDate(new Date(y, m + 1, 0));
+            from = formatDate(new Date(y, m - 1, 0));
+            to = formatDate(new Date());
             personal_development_archive_search();
 
             $("#pending_span").click(function () {
@@ -391,6 +391,39 @@
 
                         $('#update').attr('onclick', 'update_personal_development(' + id + ')');
                         $('#update').attr('data-id', id);
+
+                        $('#edit_start_date').flatpickr({
+                            mode: "range",
+                            altInput: true,
+                            altFormat: 'j M, Y',
+                            defaultDate: results.data.start_date,
+                            onChange: function (selectedDates, dateStr, instance) {
+                                from = formatDate(selectedDates[0]);
+                                to = formatDate(selectedDates[1]);
+                                if (selectedDates[0] === undefined || (selectedDates[0] !== undefined && selectedDates[1] !== undefined)) {
+                                    if (selectedDates[0] === undefined) {
+                                        from = to = null;
+                                    }
+                                }
+                            },
+                        });
+
+                        $('#edit_end_date').flatpickr({
+                            mode: "range",
+                            altInput: true,
+                            altFormat: 'j M, Y',
+                            defaultDate: results.data.end_date,
+                            onChange: function (selectedDates, dateStr, instance) {
+                                from = formatDate(selectedDates[0]);
+                                to = formatDate(selectedDates[1]);
+                                if (selectedDates[0] === undefined || (selectedDates[0] !== undefined && selectedDates[1] !== undefined)) {
+                                    if (selectedDates[0] === undefined) {
+                                        from = to = null;
+                                    }
+                                }
+                            },
+                        });
+
                     } else {
                         swal("Error!", results.message, "error");
                     }

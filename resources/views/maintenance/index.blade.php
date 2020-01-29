@@ -197,6 +197,13 @@
         let from = to = fromCompleted = toCompleted = null;
 
         $(document).ready(function () {
+
+            const date = new Date(), y = date.getFullYear(), m = date.getMonth(); 
+            from = formatDate(new Date(y, m - 1, 0));
+            to = formatDate(new Date());
+            searchMaintenance();
+           
+
             $("#active_ticket_span").click(function () {
                 $("#active_ticket_span").addClass("active-span");
                 $("#complited_ticket_span").removeClass("active-span");
@@ -212,10 +219,7 @@
                 $("#complited_ticket_div").show();
             });
 
-            var date = new Date(), y = date.getFullYear(), m = date.getMonth();
-            from = fromCompleted = formatDate(new Date(y, m, 1));
-            to = toCompleted = formatDate(new Date(y, m + 1, 0));
-            searchMaintenance();
+            
 
             $('#date').flatpickr({
                 mode: "range",
@@ -238,7 +242,7 @@
                 mode: "range",
                 altInput: true,
                 altFormat: 'j M, Y',
-                defaultDate: [fromCompleted, toCompleted],
+                defaultDate: [from, to],
                 onChange: function(selectedDates, dateStr, instance) {
                     fromCompleted = formatDate(selectedDates[0]);
                     toCompleted = formatDate(selectedDates[1]);

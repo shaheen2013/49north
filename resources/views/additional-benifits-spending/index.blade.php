@@ -197,8 +197,8 @@
 
         $(document).ready(function () {
             const date = new Date(), y = date.getFullYear(), m = date.getMonth();
-            from = formatDate(new Date(y, m, 1));
-            to = formatDate(new Date(y, m + 1, 0));
+            from = formatDate(new Date(y, m - 1, 0));
+            to = formatDate(new Date());
             benifits_pending_new();
 
             $("#historical_span").click(function () {

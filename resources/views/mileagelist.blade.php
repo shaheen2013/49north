@@ -176,8 +176,10 @@
 
         $(document).ready(function () {
             const date = new Date(), y = date.getFullYear(), m = date.getMonth();
-            from = formatDate(new Date(y, m, 1));
-            to = formatDate(new Date(y, m + 1, 0));
+
+            from = formatDate(new Date(y, m - 1, 0));
+            to = formatDate(new Date());
+            
             searchPendingMileagePage();
 
             $("#historical_span").click(function () {
@@ -259,8 +261,23 @@
                         $('#edit_vehicle').val(results.data.mileage.vehicle);
                         $('#edit_kilometers').val(results.data.mileage.kilometers);
                         $('#edit_reasonformileage').val(results.data.mileage.reasonmileage);
-
                         $('#update').attr('onclick', 'update_mileage(' + id + ')');
+
+                        $('#edit_date').flatpickr({
+                            mode: "range",
+                            altInput: true,
+                            altFormat: 'j M, Y',
+                            defaultDate: results.data.mileage.date,
+                            onChange: function (selectedDates, dateStr, instance) {
+                                from = formatDate(selectedDates[0]);
+                                to = formatDate(selectedDates[1]);
+                                if (selectedDates[0] === undefined || (selectedDates[0] !== undefined && selectedDates[1] !== undefined)) {
+                                    if (selectedDates[0] === undefined) {
+                                        from = to = null;
+                                    }
+                                }
+                            },
+                        });
                     } else {
                         swal("Error!", results.message, "error");
                     }
