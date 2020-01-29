@@ -21,10 +21,11 @@
                 <form action="{{ route('missions.update', $mission->id) }}" method="post" enctype="multipart/form-data">
                     @method('put')
                     @csrf
-                    <div class="form-group">
+                    <div class="form-group image-chooser">
+                        <div class="image-chooser-preview"></div>
                         <div class="text_outer">
                             <label for="agreement_file"><i class="fa fa-fw fa-photo"></i> Upload File</label>
-                            <input type="file" name="file" class="form-control _input_choose_file">
+                            <input type="file" onchange="renderChoosedFile(this)" name="file" class="form-control _input_choose_file">
                         </div>
                     </div>
                     <div class="form-group">
@@ -34,15 +35,16 @@
                 @endif
                 <iframe src="{{ fileUrl($mission->file) }}" style="width: 100%;"></iframe>
             @else
-            
+
             <h3>No file has been uploaded yet.</h3>
             @if(auth()->user()->is_admin == 1)
             <form action="{{ route('missions.store') }}" method="post" enctype="multipart/form-data">
                 @csrf
-                <div class="form-group">
+                <div class="form-group image-chooser">
+                    <div class="image-chooser-preview"></div>
                     <div class="text_outer">
                         <label for="agreement_file"><i class="fa fa-fw fa-photo"></i> Upload File</label>
-                        <input type="file" name="file" class="form-control _input_choose_file">
+                        <input type="file" onchange="renderChoosedFile(this)" name="file" class="form-control _input_choose_file">
                     </div>
                 </div>
                 <div class="form-group">

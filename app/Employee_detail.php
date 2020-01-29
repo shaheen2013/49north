@@ -21,7 +21,7 @@ class Employee_detail extends Model {
         'marital_status',
         'no_ofchildren',
         'family_inarea',
-        'spcifamilycircumstace',
+        'familycircumstance',
         'prsnl_belief',
         'known_medical_conditions',
         'allergies',

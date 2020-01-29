@@ -1823,3 +1823,20 @@ span.fc-title {
     cursor: pointer;
     color: #7e7e7e;
 }
+
+.image-preview {
+    width: 200px;
+    padding: 10px;
+    border-radius: 15px;
+}
+
+.file-preview {
+    padding: 10px 20px;
+    color: #2368d0;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.custom-checkbox {
+    margin-left: 10px!important;
+}

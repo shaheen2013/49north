@@ -173,10 +173,11 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-md-6 col-sm-6">
+                                <div class="col-md-6 col-sm-6 image-chooser">
+                                    <div class="image-chooser-preview"></div>
                                     <div class="text_outer">
                                         <label for="name"><i class="fa fa-fw fa-photo"></i> Select Receipt</label>
-                                        <input type="file" name="receipt" class="form-control _input_choose_file">
+                                        <input type="file" onchange="renderChoosedFile(this)" name="receipt" class="form-control _input_choose_file">
                                     </div>
                                 </div>
                             </div>
@@ -192,14 +193,14 @@
                                 <div class="col-md-6 col-sm-6">
                                     <div class="col-md-12 col-sm-12">
                                         <label class="form-check-label">
-                                            <input class="form-check-input" type="checkbox" name="billable" style="margin-left: -12.01rem;"> Billable
+                                            <input class="form-check-input" type="checkbox" name="billable"> Billable
                                         </label>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-12" style="display:inline-flex;">
                                             <div class="col-md-7 col-sm-7">
                                                 <label class="form-check-label">
-                                                    <input class="form-check-input" type="checkbox" id="authorization" style="margin-left: -7.25rem;"> Received authorization
+                                                    <input class="form-check-input" type="checkbox" id="authorization"> Received authorization
                                                 </label>
                                             </div>
                                             <div class="col-md-5 col-sm-5">
@@ -330,11 +331,12 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-md-6 col-sm-6">
+                                <div class="col-md-6 col-sm-6 image-chooser">
+                                    <div class="image-chooser-preview"></div>
                                     <div class="text_outer">
                                         <label for="name"><i class="fa fa-fw fa-photo"></i> Select Receipt</label>
                                         <img src="" id="edit_receipt_show" alt="" width="50" height="50">
-                                        <input type="file" name="receipt" class="form-control _input_choose_file">
+                                        <input type="file" onchange="renderChoosedFile(this)" name="receipt" class="form-control _input_choose_file">
                                     </div>
                                 </div>
                             </div>
@@ -350,14 +352,14 @@
                                 <div class="col-md-6 col-sm-6">
                                     <div class="col-md-12 col-sm-12">
                                         <label class="form-check-label">
-                                            <input class="form-check-input" type="checkbox" name="billable" id="edit_billable" style="margin-left: -12.01rem;"> Billable
+                                            <input class="form-check-input" type="checkbox" name="billable" id="edit_billable"> Billable
                                         </label>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-12" style="display:inline-flex;">
                                             <div class="col-md-7 col-sm-7">
                                                 <label class="form-check-label">
-                                                    <input class="form-check-input" type="checkbox" id="authorization-edit" style="margin-left: -7.25rem;"> Received authorization
+                                                    <input class="form-check-input" type="checkbox" id="authorization-edit"> Received authorization
                                                 </label>
                                             </div>
                                             <div class="col-md-5 col-sm-5">
