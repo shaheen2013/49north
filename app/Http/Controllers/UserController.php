@@ -10,6 +10,7 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\{Rule, ValidationException};
 use Illuminate\Http\{JsonResponse, RedirectResponse, Request};
 use Illuminate\Routing\Redirector;
@@ -96,16 +97,6 @@ class UserController extends Controller {
         // check for admin details
         $input['is_admin'] = $request->input('is_admin', 0);
 
-        //profile pic  code
-        $profilepicname = '';
-        if ($request->hasFile('profile_pic')) {
-
-            $file = $request->file('profile_pic');
-            $profilepicname = rand(11111, 99999) . '.' . $file->getClientOriginalExtension();
-            $request->file('profile_pic')->move("public/profile");
-        }
-        /// end profile pic
-
         // employee details array start
         $user_array = $request->only([
             'firstname',
@@ -119,7 +110,7 @@ class UserController extends Controller {
             'marital_status',
             'no_ofchildren',
             'family_inarea',
-            'spcifamilycircumstace',
+            'familycircumstance',
             'prsnl_belief',
             'known_medical_conditions',
             'allergies',
@@ -131,7 +122,6 @@ class UserController extends Controller {
             'emergency_contact_phone',
             'emergency_contact_email'
         ]);
-        $user_array['profile_pic'] = $profilepicname;
 
         if (isset($request->company_id)) {
             $user_array['company_id'] = $request->company_id;
@@ -150,6 +140,17 @@ class UserController extends Controller {
 
             $msg = 'User successfully Added';
         }
+
+        //profile pic  code
+        if ($request->hasFile('profile_pic')) {
+            if (isset($emp_id) && $profile_pic = Employee_detail::find($id)->profile_pic) {
+                Storage::delete($profile_pic);
+            }
+
+            $profilepicname = fileUpload('profile_pic');
+            $user_array['profile_pic'] = $profilepicname;
+        }
+        // end profile pic
 
         if (isset($emp_id)) {
             //$user->employee_details()->update($user_array);

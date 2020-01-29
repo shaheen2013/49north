@@ -66,10 +66,11 @@
                                         <input type="email" placeholder="" class="form-control" name="email" id="email">
                                     </div>
                                 </div>
-                                <div class="col-md-12 col-sm-12">
+                                <div class="col-md-12 col-sm-12 image-chooser">
+                                    <div class="image-chooser-preview"></div>
                                     <div class="text_outer">
                                         <label for="name" class=""><i class="fa fa-fw fa-photo"></i> Click to Choose Logo</label>
-                                        <input type="file" name="logo" id="logo" class="form-control _input_choose_file">
+                                        <input type="file" onchange="renderChoosedFile(this)" name="logo" id="logo" class="form-control _input_choose_file">
                                     </div>
                                 </div>
                                 <div class="col-md-12 col-sm-12">
@@ -109,11 +110,12 @@
                                                id="edit_email">
                                     </div>
                                 </div>
-                                <div class="col-md-12 col-sm-12">
+                                <div class="col-md-12 col-sm-12 image-chooser">
+                                    <div class="image-chooser-preview"></div>
                                     <div class="text_outer">
                                         <label for="name" class=""><i class="fa fa-fw fa-photo"></i> Click to Choose Logo</label>
                                         <img src="" id="edit_logo_show" alt="" width="50" height="50">
-                                        <input type="file" name="logo" id="edit_logo" class="form-control _input_choose_file">
+                                        <input type="file" onchange="renderChoosedFile(this)" name="logo" id="edit_logo" class="form-control _input_choose_file">
                                     </div>
                                 </div>
                                 <div class="col-md-12 col-sm-12">

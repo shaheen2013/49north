@@ -7,6 +7,8 @@ use App\User;
 use App\{Company, Expenses, Employee_detail};
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Contracts\View\Factory;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\{RedirectResponse,Request};
 use Illuminate\Validation\{Rule,ValidationException};
 use Illuminate\Support\Facades\DB;
@@ -175,7 +177,8 @@ class HomeController extends Controller {
      * @return RedirectResponse
      * @throws ValidationException
      */
-    public function edit_employee (Request $request) {
+    public function edit_employee(Request $request)
+    {
         /**
          * @todo There are about 40 lines of duplicate code in here that is also in UserController@store ... this should be cleaned up
          */
@@ -205,16 +208,6 @@ class HomeController extends Controller {
         // check for admin details
         $input['is_admin'] = $request->input('is_admin', 0);
 
-        //profile pic  code
-        $profilepicname = '';
-        if ($request->hasFile('profile_pic')) {
-
-            $file = $request->file('profile_pic');
-            $profilepicname = rand(11111, 99999) . '.' . $file->getClientOriginalExtension();
-            $request->file('profile_pic')->move("public/profile");
-        }
-        /// end profile pic
-
         // employee details array start
         $user_array = $request->only([
             'firstname',
@@ -228,7 +221,7 @@ class HomeController extends Controller {
             'marital_status',
             'no_ofchildren',
             'family_inarea',
-            'spcifamilycircumstace',
+            'familycircumstance',
             'prsnl_belief',
             'known_medical_conditions',
             'allergies',
@@ -240,7 +233,6 @@ class HomeController extends Controller {
             'emergency_contact_phone',
             'emergency_contact_email'
         ]);
-        $user_array['profile_pic'] = $profilepicname;
 
         if (isset($request->company_id)) {
             $user_array['company_id'] = $request->company_id;
@@ -260,13 +252,23 @@ class HomeController extends Controller {
             $msg = 'User successfully Added';
         }
 
+        //profile pic  code
+        if ($request->hasFile('profile_pic')) {
+            if (isset($emp_id) && $profile_pic = Employee_detail::find($id)->profile_pic) {
+                Storage::delete($profile_pic);
+            }
+
+            $profilepicname = fileUpload('profile_pic');
+            $user_array['profile_pic'] = $profilepicname;
+        }
+        // end profile pic
+
         if (isset($emp_id)) {
             //$user->employee_details()->update($user_array);
             Employee_detail::where('id', '=', $emp_id)->update($user_array);
         }
         else {
             $user->employee_details()->create($user_array);
-
         }
 
         //Redirect to the users.index view and display message

@@ -201,6 +201,23 @@
         return [year, month, day].join('-');
     }
 
+    // File preview
+    function renderChoosedFile(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            var fileName = input.files[0].name;
+
+            reader.onload = function(e) {
+                if (input.files[0]['type'].split('/')[0] === 'image') {
+                    $(input).closest('.image-chooser').find('.image-chooser-preview').html('<img class="image-preview" src="'+e.target.result+'" />');
+                } else {
+                    $(input).closest('.image-chooser').find('.image-chooser-preview').html('<a class="file-preview" href="' + e.target.result + '">' + fileName + '</a>');
+                }
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
     const is_admin = parseInt({{ auth()->user()->is_admin }});
     const auth_id = parseInt({{ auth()->id() }});
 </script>

@@ -8,7 +8,7 @@
 
     <div class="tab-pane fade show active" id="nav-employee" role="tabpanel" aria-labelledby="nav-employee-tab">
 
-        {{ Form::model($user, ['url' => route('users.store')]) }}
+        {{ Form::model($user, ['url' => route('users.store'), 'enctype' => 'multipart/form-data']) }}
         {!! Form::hidden('id') !!}
 
         <div class="personal">
@@ -82,13 +82,16 @@
 
             <div class="row">
 
-                <div class="col-md-6">
+                <div class="col-md-6 image-chooser">
+                    <div class="image-chooser-preview"></div>
                     <div class="text_outer">
                         <label for="profile_pic" class=""><i class="fa fa-fw fa-photo"></i> Profile photo</label>
-                        <input type="file" name="profile_pic" id="profile_pic" class="form-control _input_choose_file">
+                        @if($user->profile_pic)
+                            <img src="{{ fileUrl($user->profile_pic) }}" alt="" width="50" height="50">
+                        @endif
+                        <input type="file" onchange="renderChoosedFile(this)" name="profile_pic" id="profile_pic" class="form-control _input_choose_file">
                     </div>
                 </div>
-
 
                 <div class="col-md-3">
                     <div class="text_outer">
@@ -118,8 +121,10 @@
                         <label for="name" class="">Marital status</label>
                         <select class="select_status form-control" name="marital_status">
                             <option value="">Select</option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
+                            <option value="Single" {{ $user->marital_status == 'Single' ? 'selected' : '' }}>Single</option>
+                            <option value="Married" {{ $user->marital_status == 'Married' ? 'selected' : '' }}>Married</option>
+                            <option value="Common Law" {{ $user->marital_status == 'Common Law' ? 'selected' : '' }}>Common Law</option>
+                            <option value="Rather Not Say" {{ $user->marital_status == 'Rather Not Say' ? 'selected' : '' }}>Rather Not Say</option>
                         </select>
                     </div>
                 </div>
@@ -193,8 +198,8 @@
                 <div class="col-md-3">
                     <div class="text_outer">
 
-                        {{ Form::label('dietiary_restrictions', 'Dietary Restrictions') }}
-                        {{ Form::text('dietiary_restrictions', null, array('class' => 'form-control','placeholder'=>'Insert text here')) }}
+                        {{ Form::label('dietary_restrictions', 'Dietary Restrictions') }}
+                        {{ Form::text('dietary_restrictions', null, array('class' => 'form-control','placeholder'=>'Insert text here')) }}
                     </div>
                 </div>
 
@@ -275,8 +280,9 @@
             <div class="row">
                 <div class='col-md-3'>
                     <div class="text_outer">
-                        {!! Form::checkbox('is_admin',1,null,['class' => 'form-check-input','id' => 'is-admin']) !!}
-                        {!! Form::label('is-admin','Is Admin') !!}
+                        <label class="custom-checkbox form-check-label">
+                            <input class="form-check-input" name="is_admin" type="checkbox" value="1" @if($user->is_admin) checked @endif>Is Admin
+                        </label>
                     </div>
                 </div>
             </div>

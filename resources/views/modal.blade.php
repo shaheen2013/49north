@@ -53,10 +53,11 @@
                                  </label>
                              </div>
                          </div>-->
-                        <div class="col-md-12">
+                        <div class="col-md-12 image-chooser">
+                            <div class="image-chooser-preview"></div>
                             <div class="text_outer">
                                 <label for="agreement_file"><i class="fa fa-fw fa-photo"></i> Upload Agreement</label>
-                                <input type="file" name="agreement_file" id="agreement_file" class="form-control _input_choose_file">
+                                <input type="file" onchange="renderChoosedFile(this)" name="agreement_file" id="agreement_file" class="form-control _input_choose_file">
                             </div>
                         </div>
                     </div>

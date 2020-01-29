@@ -87,10 +87,11 @@
                                             <input type="date" id="date" name="date" class="flatpickr form-control" placeholder="Insert text here">
                                         </div>
                                     </div>
-                                    <div class="col-md-6">
+                                    <div class="col-md-6 image-chooser">
+                                        <div class="image-chooser-preview"></div>
                                         <div class="text_outer">
                                             <label for="name" class=""><i class="fa fa-fw fa-photo"></i> Upload PDF</label>
-                                            <input type="file" name="pdfname" id="pdfname" class="form-control _input_choose_file">
+                                            <input type="file" onchange="renderChoosedFile(this)" name="pdfname" id="pdfname" class="form-control _input_choose_file">
                                         </div>
                                     </div>
                                 </div>
