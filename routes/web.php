@@ -74,14 +74,17 @@ Route::group(['middleware' => ['auth']], function () {
     Route::group(['prefix' => 'personal-development-plan'], function () {
        
         Route::get('/', 'PersonalDevelopmentPlanController@index')->name('personal-development-plan.index');
+        Route::post('/comment/store/{id}', 'PersonalDevelopmentPlanController@commentStore');
+        Route::post('/comment/update/{id}', 'PersonalDevelopmentPlanController@commentUpdate');
+        
         Route::post('/store', 'PersonalDevelopmentPlanController@store')->name('personal-development-plan.store');
 
         Route::get('/edit/{id}', 'PersonalDevelopmentPlanController@edit');
         Route::POST('/update/{id}', 'PersonalDevelopmentPlanController@update');
 
+        Route::get('/show/{id}', 'PersonalDevelopmentPlanController@show');
+
         Route::post('/archive', 'PersonalDevelopmentPlanController@searchArchive')->name('personal-development-plan.archive');
-        Route::POST('/current', 'PersonalDevelopmentPlanController@searchCurrent')->name('personal-development-plan.current');
-        
         Route::POST('/destroy/{id}', 'PersonalDevelopmentPlanController@destroy');
 
     });
