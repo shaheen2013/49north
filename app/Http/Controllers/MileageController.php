@@ -83,7 +83,7 @@ class MileageController extends Controller {
         }
 
         $query->dateSearch('date');
-        // $query->isEmployee();
+         $query->isEmployee();
 
         // pending has not status
         if ($isPending) {
