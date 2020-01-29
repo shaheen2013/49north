@@ -158,7 +158,7 @@ class PersonalDevelopmentPlanController extends Controller
         $activeMenu = 'classroom';
         // $user = PersonalDevelopmentPlan::with('employee')->first();
        
-        $show = PersonalDevelopmentPlan::find($id);
+        $show = PersonalDevelopmentPlan::with('employee')->find($id);
         return view('personal-development-plan.show', compact('show', 'user', 'activeMenu'));
     }
 
@@ -170,7 +170,7 @@ class PersonalDevelopmentPlanController extends Controller
      */
     public function edit($id)
     {
-        $data = PersonalDevelopmentPlan::findOrFail($id)->first();
+        $data = PersonalDevelopmentPlan::findOrFail($id);
         $data['user'] = User::get();
         if ($data) {
             return response()->json(['status' => 'success', 'data' => $data]);

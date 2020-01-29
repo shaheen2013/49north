@@ -370,13 +370,25 @@
                 success: function (results) {
 
                     if (results.status === 'success') {
+                        let mentor = '';
+                        let selecteds = '';
+                        for (let i = 0; i < results.data.user.length; i++) {
+                            if (results.data.user[i].id === results.data.emp_id) {
+                                selecteds = 'selected';
+                            }
+                            mentor += ` <option value="${results.data.user[i].id}" ${selecteds}>${results.data.user[i].name}</option>`;
+                            selecteds = '';
+                        }
 
                         $('#edit_title').val(results.data.title);
                         console.log(results.data.title);
                         $('#edit_description').val(results.data.description);
                         $('#edit_start_date').val(results.data.start_date.split(' ')[0]);
                         $('#edit_end_date').val(results.data.end_date.split(' ')[0]);
+
+                        $('#edit_emp_id').html(mentor);
                         $('#edit_emp_id').val(results.data.emp_id);
+
                         $('#update').attr('onclick', 'update_personal_development(' + id + ')');
                         $('#update').attr('data-id', id);
                     } else {
