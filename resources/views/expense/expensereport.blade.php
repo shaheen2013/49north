@@ -529,8 +529,8 @@
                                     }
 
                                     if (is_admin == 1) {
-                                        adminOption = `<a href="javascript:void(0)" onclick="expence_approve_new('${data[index].id}')"><i class="fa fa-check-circle" title="Approved"></i></a>
-                                        <a href="javascript:void(0)" title="Reject!" onclick="expence_reject_new('${data[index].id}')"><i class="fa fa-ban"></i></a>`;
+                                        adminOption = `<a href="javascript:void(0)" data-toggle="tooltip" title="Approved!"  onclick="expence_approve_new('${data[index].id}')"><i class="fa fa-check-circle"></i></a>
+                                        <a href="javascript:void(0)" data-toggle="tooltip"  title="Reject!" onclick="expence_reject_new('${data[index].id}')"><i class="fa fa-ban"></i></a>`;
                                     }
 
                                     html += `<tr>
@@ -549,6 +549,9 @@
                                 <tr class="spacer"></tr>`;
                                 }
                                 $('#expence_pending').html(html);
+                                setTimeout(function(){
+                                    $('[data-toggle="tooltip"]').tooltip()
+                                },400);
                             }
                         });
                     } else {

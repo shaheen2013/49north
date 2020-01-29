@@ -12,7 +12,7 @@
                         <h5 class="mb-3">
                             <span class="active-span" id="pending_span">{{$show->employee->firstname}} {{$show->employee->lastname}} Personal Development Plan</span>
                         </h5>
-                        <div style="width: 100%; display: table; font-weight:500; font-size: 13px" class="mb-4">
+                        <div style="width: 100%; display: table; font-weight:500; font-size: 14px" class="mb-4">
 
                             <span class="float-left">Start Date : {{ date("j F, Y", strtotime($show->start_date)) }}</span>
                             <span class="float-right">End Date : {{date("j F, Y", strtotime($show->end_date)) }}</span>
@@ -37,8 +37,8 @@
                             </form>
 
                         @else
-                            <div style="width: 100%; display: table; font-weight:500; font-size: 13px" class="mb-4">
-                                <span class="float-centre">{{$show->description}}</span>
+                            <div style="width: 100%; display: table; font-weight:500; font-size: 14px" class="mb-4">
+                                <span class="float-centre">Description : {{$show->description}}</span>
                             </div>
                         @endif
 
@@ -56,7 +56,7 @@
                          
                            
                         </h5>
-                        <div style="width: 100%; display: table; font-weight:500; font-size: 13px" class="mb-4">
+                        <div style="width: 100%; display: table; font-weight:400; font-size: 14px" class="mb-4">
 
                             <span class="float-left">Start Date : {{ date("j F, Y", strtotime($show->start_date)) }}</span>
                             <span class="float-right">End Date : {{date("j F, Y", strtotime($show->end_date)) }}</span>
@@ -82,8 +82,8 @@
                             </form>
 
                         @else
-                            <div style="width: 100%; display: table; font-weight:500; font-size: 13px" class="mb-4">
-                                <span class="float-centre">{{$show->description}}</span>
+                            <div style="width: 100%; display: table; font-weight:400; font-size: 14px" class="mb-4">
+                                <span class="float-centre">Description : {{$show->description}}</span>
                             </div>
                         @endif
 
