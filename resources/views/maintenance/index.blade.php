@@ -198,11 +198,13 @@
 
         $(document).ready(function () {
 
-            const date = new Date(), y = date.getFullYear(), m = date.getMonth(); 
-            from = formatDate(new Date(y, m - 1, 0));
-            to = formatDate(new Date());
+            const date = new Date(), y = date.getFullYear(), m = date.getMonth();
+
+            var today = new Date();
+            to = formatDate(today);
+            from = formatDate(today.setDate(today.getDate()-30));
             searchMaintenance();
-           
+
 
             $("#active_ticket_span").click(function () {
                 $("#active_ticket_span").addClass("active-span");
@@ -219,7 +221,7 @@
                 $("#complited_ticket_div").show();
             });
 
-            
+
 
             $('#date').flatpickr({
                 mode: "range",

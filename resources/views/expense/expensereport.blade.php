@@ -435,8 +435,9 @@
 
         $(document).ready(function () {
             const date = new Date(), y = date.getFullYear(), m = date.getMonth();
-            from = history_from = formatDate(new Date(y, m, 1));
-            to = history_to = formatDate(new Date(y, m + 1, 0));
+            var today = new Date();
+            to = history_to = formatDate(today);
+            from = history_from = formatDate(today.setDate(today.getDate()-30));
             expences_pending_new();
 
             $("#historical_span").click(function () {
@@ -558,6 +559,7 @@
                                 setTimeout(function(){
                                     $('[data-toggle="tooltip"]').tooltip()
                                 },400);
+
                             }
                         });
                     } else {
@@ -746,6 +748,24 @@
                         $('#edit_total').val(results.data.expense.total);
 
                         $('#update').attr('onclick', 'update_expense(' + id + ')');
+
+                        $('#edit_date').flatpickr({
+                            altInput: true,
+                            altFormat: 'j M, Y',
+                            defaultDate: results.data.expense.date,
+                            onChange: function (selectedDates, dateStr, instance) {
+                                from = formatDate(selectedDates[0]);
+                                to = formatDate(selectedDates[1]);
+
+                                if (selectedDates[0] === undefined || (selectedDates[0] !== undefined && selectedDates[1] !== undefined)) {
+                                    if (selectedDates[0] === undefined) {
+                                        from = to = null;
+                                    }
+
+                                    expences_pending_new();
+                                }
+                            },
+                        });
                     } else {
                         swal("Error!", results.message, "error");
                     }

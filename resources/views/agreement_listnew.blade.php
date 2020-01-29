@@ -44,8 +44,10 @@
 
         $(document).ready(function () {
             var date = new Date(), y = date.getFullYear(), m = date.getMonth();
-            from = formatDate(new Date(y, m, 1));
-            to = formatDate(new Date(y, m + 1, 0));
+
+            var today = new Date();
+            to = formatDate(today);
+            from = formatDate(today.setDate(today.getDate()-30));
             searchAgreement();
 
             $('#date').flatpickr({

@@ -149,8 +149,10 @@
 
         $(document).ready(function () {
             const date = new Date(), y = date.getFullYear(), m = date.getMonth();
-            from = formatDate(new Date(y, m - 1, 0));
-            to = formatDate(new Date());
+
+            var today = new Date();
+            to = formatDate(today);
+            from = formatDate(today.setDate(today.getDate()-30));
             searchJournalPage();
 
             $("#pending_span").click(function () {
@@ -253,7 +255,7 @@
                                 }
                             },
                         });
-                        
+
                     } else {
                         swal("Error!", results.message, "error");
                     }

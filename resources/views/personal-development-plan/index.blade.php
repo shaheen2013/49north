@@ -222,8 +222,10 @@
 
         $(document).ready(function () {
             const date = new Date(), y = date.getFullYear(), m = date.getMonth();
-            from = formatDate(new Date(y, m - 1, 0));
-            to = formatDate(new Date());
+
+            var today = new Date();
+            to = formatDate(today);
+            from = formatDate(today.setDate(today.getDate()-30));
             personal_development_archive_search();
 
             $("#pending_span").click(function () {
@@ -379,7 +381,7 @@
                             mentor += ` <option value="${results.data.user[i].id}" ${selecteds}>${results.data.user[i].name}</option>`;
                             selecteds = '';
                         }
-                        
+
                         $('#edit_title').val(results.data.title);
                         console.log(results.data.title);
                         $('#edit_description').val(results.data.description);

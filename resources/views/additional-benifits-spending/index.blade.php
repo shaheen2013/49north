@@ -15,7 +15,7 @@
                 </div>
                 <div class="col-sm-12" id="pending_div">
                     <div class="row">
-                        
+
                         <div class="col-sm-2">
                             <div class="form-group">
                                 <input type="date" name="pending_date" id="date" placeholder="Select Date"  class="form-control-new" onChange="benifits_pending_new()">
@@ -35,7 +35,7 @@
                                     <th>Description</th>
                                     <th>Total</th>
                                     <th>Action</th>
-                                   
+
                                     <th></th>
                                 </tr>
                                 </thead>
@@ -49,7 +49,7 @@
                 </div>
                 <div id="historical_div" class="col-sm-12" style="display:none;">
                     <div class="row">
-                        
+
                         <div class="col-sm-2">
                             <div class="form-group">
                                 <input type="date" name="history_date" id="history_date" placeholder="Select Date"
@@ -107,10 +107,10 @@
                             </div>
                             <div class="clearfix"></div>
 
-                            
+
 
                             <div class="row">
-                                
+
                                 <div class="col-md-6 col-sm-6">
                                     <div class="text_outer">
                                         <label for="create_total" class="">Total</label>
@@ -128,7 +128,7 @@
                                     </div>
                                 </div>
                             </div>
-                        
+
                     </div>
 
                 </div>
@@ -159,10 +159,10 @@
                             </div>
                             <div class="clearfix"></div>
 
-                            
+
 
                             <div class="row">
-                                
+
                                 <div class="col-md-6 col-sm-6">
                                     <div class="text_outer">
                                         <label for="edit_total" class="">Total</label>
@@ -180,7 +180,7 @@
                                     </div>
                                 </div>
                             </div>
-                        
+
                     </div>
 
                 </div>
@@ -197,8 +197,10 @@
 
         $(document).ready(function () {
             const date = new Date(), y = date.getFullYear(), m = date.getMonth();
-            from = formatDate(new Date(y, m - 1, 0));
-            to = formatDate(new Date());
+
+            var today = new Date();
+            to = formatDate(today);
+            from = formatDate(today.setDate(today.getDate()-30));
             benifits_pending_new();
 
             $("#historical_span").click(function () {
@@ -338,13 +340,13 @@
                                     else{
                                         action = `<a href="javascript:void(0)" data-toggle="tooltip" title="Paid" onclick="benefit_paid('${data[index].id}')"><i class="fa fa-usd"></i></a>`;
                                     }
-                                    
+
                                     html += `<tr>
                                     <td> ${date} </td>
                                     <td> ${data[index].description} </td>
                                     <td>$${data[index].total} </td>
                                     <td class="text-center">
-                                        
+
                                         ${ action }
                                         <a href="javascript:void(0)" data-toggle="tooltip" title="Approved" onclick="benefit_approve('${data[index].id}')"><i class="fa fa-check-circle"></i></a>
                                         <a href="javascript:void(0)" data-toggle="tooltip" title="Reject!" onclick="benefit_reject('${data[index].id}')"><i class="fa fa-ban"></i></a>
@@ -370,7 +372,7 @@
         }
 
         function benifits_history_new() {
-           
+
             let data = {
                 from: history_from,
                 to: history_to,
@@ -393,7 +395,7 @@
                             pageSize: 10,
                             totalNumber: results.data.length,
                             callback: function (data, pagination) {
-                               
+
                                 let html = date = action = '';
 
                                 for (let index = 0; index < data.length; index++) {

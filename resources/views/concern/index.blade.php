@@ -219,8 +219,10 @@
 
         $(document).ready(function () {
             const date = new Date(), y = date.getFullYear(), m = date.getMonth();
-            from = history_from = formatDate(new Date(y, m, 1));
-            to = history_to = formatDate(new Date(y, m + 1, 0));
+
+            var today = new Date();
+            to = history_to = formatDate(today);
+            from = history_from = formatDate(today.setDate(today.getDate()-30));
             searchMessages();
 
             $("#historical_span").click(function () {
