@@ -333,10 +333,10 @@
 
                                     if(data[index].pay_status == 1){
 
-                                        action = `<a href="javascript:void(0)" onclick="benefit_non_paid('${data[index].id}')"><i class="fa fa-usd" title="Non-Paid"></i></a>`;
+                                        action = `<a href="javascript:void(0)" data-toggle="tooltip" title="Non-Paid" onclick="benefit_non_paid('${data[index].id}')"><i class="fa fa-usd"></i></a>`;
                                     }
                                     else{
-                                        action = `<a href="javascript:void(0)" onclick="benefit_paid('${data[index].id}')"><i class="fa fa-usd" title="Paid"></i></a>`;
+                                        action = `<a href="javascript:void(0)" data-toggle="tooltip" title="Paid" onclick="benefit_paid('${data[index].id}')"><i class="fa fa-usd"></i></a>`;
                                     }
                                     
                                     html += `<tr>
@@ -346,8 +346,8 @@
                                     <td class="text-center">
                                         
                                         ${ action }
-                                        <a href="javascript:void(0)" onclick="benefit_approve('${data[index].id}')"><i class="fa fa-check-circle" title="Approved"></i></a>
-                                        <a href="javascript:void(0)" title="Reject!" onclick="benefit_reject('${data[index].id}')"><i class="fa fa-ban"></i></a>
+                                        <a href="javascript:void(0)" data-toggle="tooltip" title="Approved" onclick="benefit_approve('${data[index].id}')"><i class="fa fa-check-circle"></i></a>
+                                        <a href="javascript:void(0)" data-toggle="tooltip" title="Reject!" onclick="benefit_reject('${data[index].id}')"><i class="fa fa-ban"></i></a>
                                     </td>
                                     <td class="action-box">
                                         <a href="javascript:void(0);" onclick="OpenEditBenifitsModel('${data[index].id}') ">EDIT</a>
@@ -357,6 +357,9 @@
                                 <tr class="spacer"></tr>`;
                                 }
                                 $('#benefits_pending').html(html);
+                                setTimeout(function(){
+                                    $('[data-toggle="tooltip"]').tooltip()
+                                },400);
                             }
                         });
                     } else {
@@ -403,9 +406,9 @@
                                     }
                                     if(data[index].pay_status == 1){
 
-                                        action = `<a href="javascript:void(0)" onclick="benefit_non_paid('${data[index].id}')"><i class="fa fa-usd" title="Non-Paid"></i></a>`;
+                                        action = `<a href="javascript:void(0)" data-toggle="tooltip" title="Non-Paid" onclick="benefit_non_paid('${data[index].id}')"><i class="fa fa-usd"></i></a>`;
                                     } else{
-                                        action = `<a href="javascript:void(0)" onclick="benefit_paid('${data[index].id}')"><i class="fa fa-usd" title="Paid"></i></a>`;
+                                        action = `<a href="javascript:void(0)" data-toggle="tooltip" title="Paid" onclick="benefit_paid('${data[index].id}')"><i class="fa fa-usd"></i></a>`;
                                     }
                                     html += `<tr>
                                    <td> ${date} </td>
@@ -422,6 +425,9 @@
                                <tr class="spacer"></tr>`;
                                 }
                                 $('#benefits_history').html(html);
+                                setTimeout(function(){
+                                    $('[data-toggle="tooltip"]').tooltip()
+                                },400);
                             }
                         });
                     } else {

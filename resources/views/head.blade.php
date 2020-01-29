@@ -18,7 +18,8 @@
     <script src="{{asset('js/jquery.min.js')}}"></script>
     <!-- Bootstrap core JavaScript -->
 
-    <script src="{{asset('js/bootstrap.min.js')}}"></script>
+{{--    <script src="{{asset('js/bootstrap.min.js')}}"></script>--}}
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
     <!-- Plugin JavaScript -->
     <script src="{{asset('js/jquery.easing.min.js')}}"></script>
     <!-- Custom scripts for this template -->

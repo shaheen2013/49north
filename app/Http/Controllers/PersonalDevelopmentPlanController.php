@@ -156,8 +156,6 @@ class PersonalDevelopmentPlanController extends Controller
     public function show($id)
     {
         $activeMenu = 'classroom';
-        // $user = PersonalDevelopmentPlan::with('employee')->first();
-       
         $show = PersonalDevelopmentPlan::with('employee')->find($id);
         return view('personal-development-plan.show', compact('show', 'user', 'activeMenu'));
     }

@@ -379,7 +379,7 @@
                             mentor += ` <option value="${results.data.user[i].id}" ${selecteds}>${results.data.user[i].name}</option>`;
                             selecteds = '';
                         }
-
+                        
                         $('#edit_title').val(results.data.title);
                         console.log(results.data.title);
                         $('#edit_description').val(results.data.description);

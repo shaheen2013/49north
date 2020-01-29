@@ -307,8 +307,8 @@
 
                         if (is_admin == 1 && htmlId === '#maintanance') {
                             adminOption = `<td class="text-right">
-                                <a href="javascript:void(0)" onclick="ticket_inprogress(${value.id})"><i class="fa fa-check-circle" title="In Progress"></i></a>
-                                <a href="javascript:void(0)" title="Cancel!" onclick="ticket_cancel(${value.id})"><i class="fa fa-ban"></i></a>
+                                <a href="javascript:void(0)" data-toggle="tooltip" title="In Progress" onclick="ticket_inprogress(${value.id})"><i class="fa fa-check-circle"></i></a>
+                                <a href="javascript:void(0)" data-toggle="tooltip" title="Cancel!" onclick="ticket_cancel(${value.id})"><i class="fa fa-ban"></i></a>
                             </td>`;
                         }
 
@@ -332,6 +332,9 @@
                     </tr><tr class="spacer"></tr>`;
                     });
                     $(htmlId).html(html);
+                    setTimeout(function(){
+                        $('[data-toggle="tooltip"]').tooltip()
+                    },400);
                 }
             });
         }

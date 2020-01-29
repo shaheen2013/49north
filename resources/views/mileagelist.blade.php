@@ -345,7 +345,7 @@
                                     // console.log(admin_user);
 
                                     if (admin_user == 1) {
-                                        action = `<a href="javascript:void(0)" title="Reject!" onclick="mileage_reject('${data[index].id}')"><i class="fa fa-ban"></i></a>`;
+                                        action = `<a href="javascript:void(0)" data-toggle="tooltip" title="Reject!" onclick="mileage_reject('${data[index].id}')"><i class="fa fa-ban"></i></a>`;
                                     } else {
                                         action = '';
                                     }
@@ -359,7 +359,7 @@
                                         html += `
 
                                         <td class="text-center">
-                                            <a href="javascript:void(0)" onclick="mileage_approve('${data[index].id}')"><i class="fa fa-check-circle" title="Approved"></i></a>
+                                            <a href="javascript:void(0)" data-toggle="tooltip" title="Approved" onclick="mileage_approve('${data[index].id}')"><i class="fa fa-check-circle"></i></a>
 
                                             ${action}
                                         </td>`;
@@ -373,6 +373,9 @@
 
                                 }
                                 $('#mileage_pending').html(html);
+                                setTimeout(function(){
+                                    $('[data-toggle="tooltip"]').tooltip()
+                                },400);
                             }
                         })
                     } else {
@@ -431,7 +434,7 @@
                                         <td> ${data[index].kilometers} </td>
 
                                         <td class="text-center">
-                                            <a href="javascript:void(0)" onclick="mileage_pending('${data[index].id}')"><i class="fa fa-check-circle" title="Pending"></i></a>
+                                            <a href="javascript:void(0)"  data-toggle="tooltip" title="Pending" onclick="mileage_pending('${data[index].id}')"><i class="fa fa-check-circle"></i></a>
                                         </td>
 
                                         <td class="text-right">
@@ -440,6 +443,9 @@
                                     </tr><tr class="spacer"></tr>`;
                                 }
                                 $('#mileage_history').html(html);
+                                setTimeout(function(){
+                                    $('[data-toggle="tooltip"]').tooltip()
+                                },400);
                             }
                         })
                     } else {
