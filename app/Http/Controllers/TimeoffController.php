@@ -8,7 +8,11 @@ class TimeoffController extends Controller
 {
     function timeofflist()
     {
-        $activeMenu = 'admin';
+        if (auth()->user()->is_admin) {
+            $activeMenu = 'admin';
+        } else {
+            $activeMenu = 'submit';
+        }
 
     	return view('timeoff.index', compact('activeMenu'));
     }

@@ -19,25 +19,30 @@
             <div class="collapse navbar-collapse" id="navbarResponsive">
                 <div id="myTabMain">
                     <ul id="myTab" role="tablist" class="navbar-nav text-uppercase nav nav-tabs">
-
                         <li class="nav-item">
                             <a class="nav-link {{ $activeMenu == 'profile' ? 'active' : '' }}" href="{{ route('edit-profile') }}">My Profile </a>
                         </li>
+
+                        @if(!auth()->user()->is_admin)
+                        <li class="nav-item">
+                            <a class="nav-link {{ $activeMenu == 'submit' ? 'active' : '' }}" href="{{ url('expense/list') }}">Submit </a>
+                        </li>
+                        @endif
 
                         @admin
                         <li class="nav-item">
                             <a class="nav-link {{ $activeMenu == 'company' ? 'active' : '' }}" href="{{ route('company.index') }}" role="tab">Company</a>
                         </li>
-                        @endadmin
 
-                        @admin
                         <li class="nav-item">
                             <a class="nav-link {{ $activeMenu == 'admin' ? 'active' : '' }}" href="{{ route('users.index') }}" role="tab">Admin</a>
                         </li>
                         @endadmin
+
                         <li class="nav-item">
                             <a class="nav-link {{ $activeMenu == 'benefits' ? 'active' : '' }}" href="{{ route('plans.index') }}" role="tab">Benefits</a>
                         </li>
+
                         <li class="nav-item">
                             <a class="nav-link {{ $activeMenu == 'classroom' ? 'active' : '' }}" href="{{ route('missions.index') }}" role="tab">Classroom</a>
                         </li>
@@ -77,18 +82,16 @@
             <a class="nav-item nav-link {{ (request()->is('agreementlist')) ? 'active' : '' }}" href="{{ url('agreementlist') }}">Agreements</a>
 
             <a class="nav-item nav-link {{request()->is('paystatement/list') ? 'active' : '' }}" href="{{url('paystatement/list')}}">Pay Statements</a>
-
-            @if(auth()->user()->is_admin == 0)
-            <a class="nav-item nav-link {{ (request()->is('messages')) ? 'active' : '' }}" href="{{ route('messages.index') }}">Report a Concern</a>
-            @endif
             @endif
 
             @if($activeMenu == 'company')
                 <a class="nav-item nav-link {{ (request()->is('company')) ? 'active' : '' }}" href="{{ url('company') }}">Company List</a>
             @endif
 
-            @if($activeMenu == 'admin')
-            <a class="nav-item nav-link {{ (request()->is('users')) ? 'active' : '' }}" href="{{ route('users.index') }}">Employee List</a>
+            @if($activeMenu == 'admin' || $activeMenu == 'submit')
+                @if(auth()->user()->is_admin)
+                <a class="nav-item nav-link {{ (request()->is('users')) ? 'active' : '' }}" href="{{ route('users.index') }}">Employee List</a>
+                @endif
 
             <a class="nav-item nav-link {{ (request()->is('expense/list')) ? 'active' : '' }}"href="{{ url('expense/list') }}">Expense Report</a>
 

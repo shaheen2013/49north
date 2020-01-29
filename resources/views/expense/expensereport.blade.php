@@ -1,8 +1,6 @@
 @extends('layouts.main')
 @include('modal')
 @section('content1')
-
-
     <div class="well-default-trans">
         <div class="tab-pane" id="nav-expense" role="tabpanel" aria-labelledby="nav-employee-tab">
             <div class="expense inner-tab-box">
@@ -108,17 +106,22 @@
                 <!-- body modal -->
                 <div class="modal-body">
                     <div class="col-md-12" style="margin-top:40px;margin-bottom:20px;">
-                        <form class="expences" action="{{url('expense/addexpense')}}" method="POST" id="addexpense-form" onsubmit="storeExpense()" enctype="multipart/form-data">
+                        <form class="expences" action="{{url('expense/addexpense')}}" method="POST" id="addexpense-form" enctype="multipart/form-data" novalidate>
                             <div class="row">
                                 <div class="col-md-6 col-sm-6">
                                     <div class="text_outer">
                                         <label for="company" class="">Company</label>
                                         <select class="select_status form-control" name="company" id="company">
                                             <option value="">Select</option>
-                                            @foreach($companies as $company_ex_report)
-                                                <option
-                                                    value="{{ $company_ex_report->id }}">{{ $company_ex_report->companyname }}</option>
-                                            @endforeach
+                                            @if(auth()->user()->is_admin)
+                                                @foreach($companies as $company_ex_report)
+                                                    <option value="{{ $company_ex_report->id }}">{{ $company_ex_report->companyname }}</option>
+                                                @endforeach
+                                            @else
+                                                @if(auth()->user()->employee_details && auth()->user()->employee_details->company_id)
+                                                <option value="{{ auth()->user()->employee_details->company_id }}" selected>{{ auth()->user()->employee_details->company->companyname }}</option>
+                                                @endif
+                                            @endif
                                         </select>
                                     </div>
                                 </div>
@@ -204,7 +207,7 @@
                                                 </label>
                                             </div>
                                             <div class="col-md-5 col-sm-5">
-                                                <input type="text" id="ireceived_auth" name="received_auth" class="form-control" placeholder="" style="border:0px; border-bottom:1px solid;padding: 0px;background-color: #fff !important;">
+                                                <input type="text" id="ireceived_auth" onkeyup="checkAuthorization('#authorization')" name="received_auth" class="form-control" placeholder="" style="border:0px; border-bottom:1px solid;padding: 0px;background-color: #fff !important;">
                                             </div>
                                         </div>
                                     </div>
@@ -248,7 +251,7 @@
                                     <div class="col-md-12 col-sm-12">
                                         {{ csrf_field() }}
                                         <input type="hidden" name="emp_id" value="{{ auth()->user()->id }}">
-                                        <button type="submit" class="btn-dark contact_btn" data-form="expences">Save</button>
+                                        <button type="button" onclick="storeExpense()" class="btn-dark contact_btn" data-form="expences">Save</button>
                                         <span class="close close-span" data-dismiss="modal" aria-label="Close"><i class="fa fa-arrow-left"></i> Return to Expense Reports</span>
                                     </div>
                                 </div>
@@ -267,17 +270,22 @@
             <div class="modal-content">
                 <div class="modal-body">
                     <div class="col-md-12" style="margin-top:40px;margin-bottom:20px;">
-                        <form id="editExpenseForm">
+                        <form id="editExpenseForm" enctype="multipart/form-data" novalidate>
                             <div class="row">
                                 <div class="col-md-6 col-sm-6">
                                     <div class="text_outer">
                                         <label for="edit_company" class="">Company</label>
                                         <select class="select_status form-control" name="company" id="edit_company">
                                             <option value="">Select</option>
-                                            @foreach($companies as $company_ex_report)
-                                                <option
-                                                    value="{{ $company_ex_report->id }}">{{ $company_ex_report->companyname }}</option>
-                                            @endforeach
+                                            @if(auth()->user()->is_admin)
+                                                @foreach($companies as $company_ex_report)
+                                                    <option value="{{ $company_ex_report->id }}">{{ $company_ex_report->companyname }}</option>
+                                                @endforeach
+                                            @else
+                                                @if(auth()->user()->employee_details && auth()->user()->employee_details->company_id)
+                                                    <option value="{{ auth()->user()->employee_details->company_id }}" selected>{{ auth()->user()->employee_details->company->companyname }}</option>
+                                                @endif
+                                            @endif
                                         </select>
                                     </div>
                                 </div>
@@ -335,7 +343,7 @@
                                     <div class="image-chooser-preview"></div>
                                     <div class="text_outer">
                                         <label for="name"><i class="fa fa-fw fa-photo"></i> Select Receipt</label>
-                                        <img src="" id="edit_receipt_show" alt="" width="50" height="50">
+                                        <span id="edit_receipt_show" style="position: relative;z-index: 5"></span>
                                         <input type="file" onchange="renderChoosedFile(this)" name="receipt" class="form-control _input_choose_file">
                                     </div>
                                 </div>
@@ -363,7 +371,7 @@
                                                 </label>
                                             </div>
                                             <div class="col-md-5 col-sm-5">
-                                                <input type="text" name="received_auth" id="received_auth" class="form-control" placeholder="" style="border:0px; border-bottom:1px solid;padding: 0px;background-color: #fff !important;">
+                                                <input type="text" name="received_auth" onkeyup="checkAuthorization('#authorization-edit')" id="received_auth" class="form-control" placeholder="" style="border:0px; border-bottom:1px solid;padding: 0px;background-color: #fff !important;">
                                             </div>
                                         </div>
                                     </div>
@@ -422,15 +430,13 @@
     </div>
     <!--ajax come modal-->
 
-
     <script type="text/javascript">
-
         let id = from = to = history_from = history_to = null;
 
         $(document).ready(function () {
             const date = new Date(), y = date.getFullYear(), m = date.getMonth();
-            from = formatDate(new Date(y, m, 1));
-            to = formatDate(new Date(y, m + 1, 0));
+            from = history_from = formatDate(new Date(y, m, 1));
+            to = history_to = formatDate(new Date(y, m + 1, 0));
             expences_pending_new();
 
             $("#historical_span").click(function () {
@@ -535,10 +541,10 @@
 
                                     html += `<tr>
                                     <td> ${date} </td>
-                                    <td> ${data[index].employee.firstname + ' ' + data[index].employee.lastname} </td>
-                                    <td> ${data[index].description} </td>
-                                    <td> ${data[index].total} </td>
-                                    <td class="text-center">
+                                    <td> ${data[index].employee.firstname == null ? '' : data[index].employee.firstname} ${data[index].employee.lastname == null ? '' : data[index].employee.lastname}</td>
+                                    <td> ${data[index].description == null ? '' : data[index].description} </td>
+                                    <td> ${data[index].total == null ? '' : data[index].total} </td>
+                                    <td>
                                         ${adminOption}
                                     </td>
                                     <td class="text-center">
@@ -599,16 +605,15 @@
                                         date = '-';
                                     }
                                     html += `<tr>
-                                   <td> ${date} </td>
-                                   <td> ${data[index].employee.firstname + ' ' + data[index].employee.lastname} </td>
-                                   <td> ${data[index].description} </td>
-                                   <td> ${data[index].total} </td>
-
-                                   <td class="action-box">
-                                       <a href="javascript:void(0);" class="down" onclick="deleteconfirm('${data[index].id}')">DELETE</a>
-                                   </td>
-                               </tr>
-                               <tr class="spacer"></tr>`;
+                                           <td> ${date} </td>
+                                           <td> ${data[index].employee.firstname == null ? '' : data[index].employee.firstname} ${data[index].employee.lastname == null ? '' : data[index].employee.lastname}</td>
+                                           <td> ${data[index].description == null ? '' : data[index].description} </td>
+                                           <td> ${data[index].total == null ? '' : data[index].total} </td>
+                                           <td class="action-box">
+                                               <a href="javascript:void(0);" class="down" onclick="deleteconfirm('${data[index].id}')">DELETE</a>
+                                           </td>
+                                       </tr>
+                                       <tr class="spacer"></tr>`;
                                 }
                                 $('#expense_history').html(html);
                             }
@@ -659,6 +664,7 @@
 
         function OpenEditExpenseModel(id) {
             $('#expense-modal-edit2').modal();
+
             $.ajax({
                 type: 'GET',
                 url: "/expense/edit/" + id,
@@ -726,7 +732,9 @@
                         $('#edit_project').html(project);
                         $('#edit_project').val(results.data.expense.project);
                         $('#edit_description').val(results.data.expense.description);
-                        $('#edit_receipt_show').attr('src', '{{ fileUrl() }}' + results.data.expense.receipt);
+                        if (results.data.expense.receipt != null) {
+                            $('#edit_receipt_show').html('<a href="{{ fileUrl() }}' + results.data.expense.receipt + '" target="_blank"><i class="fa fa-file-pdf-o"></i><a>');
+                        }
                         $('#edit_billable').val(check);
                         $('#received_auth').val(results.data.expense.received_auth);
                         $('#edit_subtotal').val(results.data.expense.subtotal);
@@ -769,18 +777,6 @@
 
         function submitUpdateForm(id) {
             $('#update').attr('disabled', 'disabled');
-            var company = $('#edit_company').val();
-            var date = $('#edit_date').val();
-            var category = $('#edit_category').val();
-            var purchase = $('#edit_purchase').val();
-            var project = $('#edit_project').val();
-            var description = $('#edit_description').val();
-            var billable = $('#edit_billable').val();
-            var received_auth = $('#received_auth').val();
-            var subtotal = $('#edit_subtotal').val();
-            var gst = $('#edit_gst').val();
-            var pst = $('#edit_pst').val();
-            var total = $('#edit_total').val();
             var data = new FormData(document.getElementById('editExpenseForm'));
 
             $.ajax({
@@ -792,11 +788,23 @@
                 contentType: false,
                 cache: false,
                 success: function (response) {
-                    $.toaster({message: 'Updated successfully', title: 'Success', priority: 'success'});
-                    expences_pending_new();
-                    expences_history_new();
-                    $('#expense-modal-edit2').modal('hide');
-                    $('#update').removeAttr('disabled');
+                    if (response.status == 'success') {
+                        $.toaster({message: 'Updated successfully', title: 'Success', priority: 'success'});
+                        expences_pending_new();
+                        expences_history_new();
+                        $('#expense-modal-edit2').modal('hide');
+                        $('#update').removeAttr('disabled');
+                    } else {
+                        if (response.errors === undefined) {
+                            swal("Error!", response.msg, "error");
+                        } else {
+                            let errors = '';
+                            for (let [key, value] of Object.entries(response.errors)) {
+                                errors += value[0] + '<br>';
+                            }
+                            swal("Error!", errors, "error");
+                        }
+                    }
                 }
             });
         }
@@ -862,7 +870,7 @@
             event.preventDefault();
 
             if ($('#authorization').prop('checked')) {
-                event.target.submit();
+                $('#addexpense-form').submit();
             } else {
                 swal({
                     title: "Confirm",
@@ -885,6 +893,12 @@
             }
         }
 
+        function checkAuthorization(id) {
+            if (event.target.value === '') {
+                $(id).prop('checked', false);
+            } else {
+                $(id).prop('checked', true);
+            }
+        }
     </script>
-
 @endsection
