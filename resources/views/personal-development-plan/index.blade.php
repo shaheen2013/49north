@@ -395,7 +395,6 @@
                         $('#update').attr('data-id', id);
 
                         $('#edit_start_date').flatpickr({
-                            mode: "range",
                             altInput: true,
                             altFormat: 'j M, Y',
                             defaultDate: results.data.start_date,
@@ -411,7 +410,6 @@
                         });
 
                         $('#edit_end_date').flatpickr({
-                            mode: "range",
                             altInput: true,
                             altFormat: 'j M, Y',
                             defaultDate: results.data.end_date,

@@ -241,7 +241,6 @@
                         $('#update').attr('data-id', id);
 
                         $('#edit_date').flatpickr({
-                            mode: "range",
                             altInput: true,
                             altFormat: 'j M, Y',
                             defaultDate: results.data.date,

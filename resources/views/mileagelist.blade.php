@@ -265,7 +265,6 @@
                         $('#update').attr('onclick', 'update_mileage(' + id + ')');
 
                         $('#edit_date').flatpickr({
-                            mode: "range",
                             altInput: true,
                             altFormat: 'j M, Y',
                             defaultDate: results.data.mileage.date,
