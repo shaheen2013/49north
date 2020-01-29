@@ -50,8 +50,7 @@ Route::group(['middleware' => ['auth']], function () {
 
     // Additional Benefits Spending
     Route::group(['prefix' => 'additional-benefits'], function () {
-        // Route::get('/list', 'ExpenseController@expenselist');
-        // Route::post('/addexpense', 'ExpenseController@addexpense');
+        
 
         Route::get('/', 'AdditionlBenifitsSpendingController@index')->name('additional-benefits.index');
         Route::post('/store', 'AdditionlBenifitsSpendingController@store')->name('additional-benefits.store');
@@ -70,6 +69,23 @@ Route::group(['middleware' => ['auth']], function () {
         Route::POST('/destroy/{id}', 'AdditionlBenifitsSpendingController@destroy');
 
     });
+
+    // Personal development plan
+    Route::group(['prefix' => 'personal-development-plan'], function () {
+       
+        Route::get('/', 'PersonalDevelopmentPlanController@index')->name('personal-development-plan.index');
+        Route::post('/store', 'PersonalDevelopmentPlanController@store')->name('personal-development-plan.store');
+
+        Route::get('/edit/{id}', 'PersonalDevelopmentPlanController@edit');
+        Route::POST('/update/{id}', 'PersonalDevelopmentPlanController@update');
+
+        Route::post('/archive', 'PersonalDevelopmentPlanController@searchArchive')->name('personal-development-plan.archive');
+        Route::POST('/current', 'PersonalDevelopmentPlanController@searchCurrent')->name('personal-development-plan.current');
+        
+        Route::POST('/destroy/{id}', 'PersonalDevelopmentPlanController@destroy');
+
+    });
+
 
     Route::group(['prefix' => 'company'], function () {
         Route::get('', 'CompanyController@index')->name('company.index');

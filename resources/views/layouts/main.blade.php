@@ -109,7 +109,8 @@
 
             @if($activeMenu == 'classroom')
                 <a class="nav-item nav-link {{ (request()->is('missions')) ? 'active' : '' }}" href="{{ route('missions.index') }}">49 North Mission</a>
-                <a class="nav-item nav-link" href="#">Personal Development Plan</a>
+                <a class="nav-item nav-link {{ (request()->is('personal-development-plan')) ? 'active' : '' }}" href="{{ route('personal-development-plan.index') }}">Personal Development Plan</a>
+                {{-- <a class="nav-item nav-link" href="#">Personal Development Plan</a> --}}
                 <a class="nav-item nav-link" href="#">Courses</a>
                 <a class="nav-item nav-link {{ (request()->is('journal')) ? 'active' : '' }}" href="{{ route('journal.index') }}">Journal</a>
             @endif
