@@ -280,7 +280,7 @@
                                     <option value="{{ $company->id }}" {{ auth()->user()->employee_details && auth()->user()->employee_details->company_id && auth()->user()->employee_details->company_id == $company->id ? 'selected' : '' }}>{{ $company->companyname }}</option>
                                     @endforeach
                                 @else
-                                    <option value="{{ auth()->user()->employee_details->company_id }}" selected disabled>{{ auth()->user()->employee_details->company->companyname }}</option>
+                                    <option value="{{ auth()->user()->employee_details->company_id }}" selected>{{ auth()->user()->employee_details->company->companyname }}</option>
                                 @endif
                             </select>
                         </div>

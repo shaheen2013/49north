@@ -27,8 +27,13 @@ class MileageController extends Controller {
      */
     public function mileagelist(Request $request)
     {
-        $activeMenu = 'admin';
         $type = auth()->user()->is_admin;
+        if ($type) {
+            $activeMenu = 'admin';
+        } else {
+            $activeMenu = 'submit';
+        }
+
         if ($type == '1') {
             $data['mileage_list'] = Mileage::where('status', '<>', 'D')->orderByDesc('date')->with('employee:id,firstname,lastname')->get();
         }

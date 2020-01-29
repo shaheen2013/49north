@@ -12,7 +12,12 @@ class ExpenseController extends Controller {
     ///   Add Expenselist
     function expenselist ()
     {
-        $activeMenu = 'admin';
+        if (auth()->user()->is_admin) {
+            $activeMenu = 'admin';
+        } else {
+            $activeMenu = 'submit';
+        }
+
         $data['companies'] = Company::all();
         $data['project'] = Project::all();
         $data['purchases'] = Purchases::all();
@@ -29,15 +34,15 @@ class ExpenseController extends Controller {
         ->where(function ($q) use($request){
             if(isset($request->history_search)){
                 $q->whereHas('employee', function($sql) use($request){
-                    $sql->where('firstname', 'LIKE', '%'.$request->history_search.'%');
-                    $sql->orWhere('lastname', 'LIKE', '%'.$request->history_search.'%');
-
+                    $sql->where(\DB::raw("CONCAT(firstname, ' ', lastname)"), 'like', '%' . $request->history_search . '%');
+                    $sql->orWhere('description', 'LIKE', '%'.$request->history_search.'%');
                 });
-
             }
         });
+
         $data = $data->dateSearch('date');
         $data = $data->isEmployee()->get();
+
         return response()->json(['status'=>'success', 'data' => $data]);
     }
 
@@ -48,13 +53,12 @@ class ExpenseController extends Controller {
         ->where(function ($q) use($request){
             if(isset($request->pending_search)){
                 $q->whereHas('employee', function($sql) use($request){
-                    $sql->where('firstname', 'LIKE', '%'.$request->pending_search.'%');
-                    $sql->orWhere('lastname', 'LIKE', '%'.$request->pending_search.'%');
-
+                    $sql->where(\DB::raw("CONCAT(firstname, ' ', lastname)"), 'like', '%' . $request->pending_search . '%');
+                    $sql->orWhere('description', 'LIKE', '%'.$request->pending_search.'%');
                 });
-
             }
         });
+
         $data = $data->dateSearch('date');
         $data = $data->isEmployee()->get();
 
@@ -81,7 +85,11 @@ class ExpenseController extends Controller {
     {
         // Validate form data
         $rules = [
-            'receipt' => 'nullable|image',
+            'receipt' => 'nullable|file|mimes:pdf,doc,docx',
+            'company' => 'required|integer',
+            'date' => 'required|date',
+            'description' => 'required|string',
+            'total' => 'required|regex:/^\d+(\.\d{1,5})?$/',
         ];
 
         $validator = validator($request->all(), $rules, []);
@@ -148,6 +156,14 @@ class ExpenseController extends Controller {
     ///////  Add Expense
     function addexpense (Request $request)
     {
+        $request->validate([
+            'receipt' => 'nullable|file|mimes:pdf,doc,docx',
+            'company' => 'required|integer',
+            'date' => 'required|date',
+            'description' => 'required|string',
+            'total' => 'required|regex:/^\d+(\.\d{1,5})?$/',
+        ]);
+
         $data = $request->all();
 
         if ($request->hasFile('receipt')) {

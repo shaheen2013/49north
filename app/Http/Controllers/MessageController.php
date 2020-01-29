@@ -20,7 +20,7 @@ class MessageController extends Controller
         if (auth()->user()->is_admin) {
             $activeMenu = 'admin';
         } else {
-            $activeMenu = 'profile';
+            $activeMenu = 'submit';
         }
 
         return view('concern.index', compact('activeMenu'));
