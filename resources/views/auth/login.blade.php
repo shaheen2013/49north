@@ -38,11 +38,11 @@
                 </div>
                 <div class="form-group form-check">
                     <label class="form-check-label">
-                        <input class="form-check-input" type="checkbox"> {{ __('Remember Me') }}
+                        <input class="form-check-input" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}> Remember Me
                     </label>
                 </div>
                 <button type="submit" class="btn btn-primary">{{ __('Login') }}</button>
-                <a>{{ __('Forgot Your Password?') }}</a>
+                <a href="{{ route('password.request') }}">{{ __('Forgot Your Password?') }}</a>
             </form>
         </div>
     </div>

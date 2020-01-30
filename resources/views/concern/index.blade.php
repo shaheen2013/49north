@@ -516,7 +516,7 @@
 
                         if (is_admin == 1 && htmlId === '#message_pending') {
                             adminOption = `<td>
-                                <a href="javascript:void(0)" onclick="statusProgress(${value.id})"><i class="fa fa-check-circle" title="status change"></i></a>
+                                <a href="javascript:void(0)" data-toggle="tooltip" title="status change" onclick="statusProgress(${value.id})"><i class="fa fa-check-circle"></i></a>
                             </td>`;
                         }
 
@@ -537,6 +537,9 @@
                                 </tr><tr class="spacer"></tr>`;
                     });
                     $(htmlId).html(html);
+                    setTimeout(function(){
+                        $('[data-toggle="tooltip"]').tooltip()
+                    },400);
                 }
             });
 
