@@ -1,20 +1,17 @@
 @extends('layouts.main')
 @include('modal')
 @section('content1')
-
-
     <div class="well-default-trans">
         <div class="tab-pane" id="nav-mileage" role="tabpanel" aria-labelledby="nav-mileage-tab">
             <div class="mileage inner-tab-box">
                 <div class="col-md-12">
                     <div class="col-sm-12">
                         <h3>
-                            <span class="active-span" id="pending_span" onclick="searchPendingMileagePage()">Pending </span> |
-                            <span id="historical_span" onclick="searchHistoryMileagePage()"> Historical</span>
+                            <span class="active-span clickable" id="pending_span" onclick="searchPendingMileagePage()">Pending </span> |
+                            <span class="clickable" id="historical_span" onclick="searchHistoryMileagePage()"> Historical</span>
                         </h3>
                         <br>
                     </div>
-
                     <div class="col-sm-12" id="pending_div">
                         <div class="row">
                             @admin
@@ -83,6 +80,7 @@
                                         <th>Employee</th>
                                         <th>Reason for mileage</th>
                                         <th>Total Km</th>
+                                        <th>Status</th>
                                         <th class="text-center">Action</th>
                                         <th></th>
                                     </tr>
@@ -99,7 +97,6 @@
             </div>
         </div>
     </div>
-
 
     <!----- Mileage Modal edit ---->
     <div id="mileage-modaledit" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog"
@@ -168,8 +165,6 @@
 @endsection
 
 @push('scripts')
-    <!--- Mileage edit modal end -->
-
     <script type="text/javascript">
 
         let id = from = to = history_from = history_to = null;
@@ -435,7 +430,7 @@
                             pageSize: 10,
                             totalNumber: results.data.length,
                             callback: function (data, pagination) {
-                                let html = '';
+                                let html = admin = '';
                                 for (let index = 0; index < data.length; index++) {
                                     if (data[index].date !== null && data[index].date !== '') {
                                         var time = data[index].date.split(' ')[0];
@@ -444,20 +439,27 @@
                                     } else {
                                         date = '-';
                                     }
-                                    html += `<tr>
-                                        <td> ${date} </td>
-                                        <td> ${data[index].employee.firstname + ' ' + data[index].employee.lastname} </td>
-                                        <td> ${data[index].reasonmileage} </td>
-                                        <td> ${data[index].kilometers} </td>
 
-                                        <td class="text-center">
+                                    if (is_admin == 1) {
+                                        admin = `<td class="text-center">
                                             <a href="javascript:void(0)"  data-toggle="tooltip" title="Pending" onclick="mileage_pending('${data[index].id}')"><i class="fa fa-check-circle"></i></a>
                                         </td>
 
                                         <td class="text-right">
                                             <a href="javascript:void(0);" class="down" onclick="deleteconfirm('${data[index].id}')">DELETE</a></td>
-                                        </td>
-                                    </tr><tr class="spacer"></tr>`;
+                                        </td>`;
+                                    } else {
+                                        admin = `<td class="text-center">N/A</td><td></td>`;
+                                    }
+
+                                    html += `<tr>
+                                                <td> ${date} </td>
+                                                <td> ${data[index].employee.firstname + ' ' + data[index].employee.lastname} </td>
+                                                <td> ${data[index].reasonmileage} </td>
+                                                <td> ${data[index].kilometers} </td>
+                                                <td> ${data[index].status == 'A' ? 'Approved' : 'Rejected'} </td>
+                                                ${admin}
+                                            </tr><tr class="spacer"></tr>`;
                                 }
                                 $('#mileage_history').html(html);
                                 setTimeout(function(){
