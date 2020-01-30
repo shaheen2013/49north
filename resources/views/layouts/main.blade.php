@@ -5,6 +5,7 @@
 
 
 <body id="page-top">
+
 <div id="app">
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark" id="mainNav">
@@ -16,53 +17,55 @@
                 Menu
                 <i class="fa fa-bars"></i>
             </button>
-            <div class="collapse navbar-collapse" id="navbarResponsive">
-                <div id="myTabMain">
-                    <ul id="myTab" role="tablist" class="navbar-nav text-uppercase nav nav-tabs">
-                        <li class="nav-item">
-                            <a class="nav-link {{ $activeMenu == 'profile' ? 'active' : '' }}" href="{{ route('edit-profile') }}">My Profile </a>
-                        </li>
+            @if (auth()->check())
+                <div class="collapse navbar-collapse" id="navbarResponsive">
+                    <div id="myTabMain">
+                        <ul id="myTab" role="tablist" class="navbar-nav text-uppercase nav nav-tabs">
+                            <li class="nav-item">
+                                <a class="nav-link {{ $activeMenu == 'profile' ? 'active' : '' }}" href="{{ route('edit-profile') }}">My Profile </a>
+                            </li>
 
-                        @if(!auth()->user()->is_admin)
-                        <li class="nav-item">
-                            <a class="nav-link {{ $activeMenu == 'submit' ? 'active' : '' }}" href="{{ url('expense/list') }}">Admin </a>
-                        </li>
-                        @endif
+                            @if(!auth()->user()->is_admin)
+                                <li class="nav-item">
+                                    <a class="nav-link {{ $activeMenu == 'submit' ? 'active' : '' }}" href="{{ url('expense/list') }}">Admin </a>
+                                </li>
+                            @endif
 
-                        @admin
-                        <li class="nav-item">
-                            <a class="nav-link {{ $activeMenu == 'company' ? 'active' : '' }}" href="{{ route('company.index') }}" role="tab">Company</a>
-                        </li>
+                            @admin
+                            <li class="nav-item">
+                                <a class="nav-link {{ $activeMenu == 'company' ? 'active' : '' }}" href="{{ route('company.index') }}" role="tab">Company</a>
+                            </li>
 
-                        <li class="nav-item">
-                            <a class="nav-link {{ $activeMenu == 'admin' ? 'active' : '' }}" href="{{ route('users.index') }}" role="tab">Admin</a>
-                        </li>
-                        @endadmin
+                            <li class="nav-item">
+                                <a class="nav-link {{ $activeMenu == 'admin' ? 'active' : '' }}" href="{{ route('users.index') }}" role="tab">Admin</a>
+                            </li>
+                            @endadmin
 
-                        <li class="nav-item">
-                            <a class="nav-link {{ $activeMenu == 'benefits' ? 'active' : '' }}" href="{{ route('plans.index') }}" role="tab">Benefits</a>
-                        </li>
+                            <li class="nav-item">
+                                <a class="nav-link {{ $activeMenu == 'benefits' ? 'active' : '' }}" href="{{ route('plans.index') }}" role="tab">Benefits</a>
+                            </li>
 
-                        <li class="nav-item">
-                            <a class="nav-link {{ $activeMenu == 'classroom' ? 'active' : '' }}" href="{{ route('missions.index') }}" role="tab">Classroom</a>
-                        </li>
-                    </ul>
+                            <li class="nav-item">
+                                <a class="nav-link {{ $activeMenu == 'classroom' ? 'active' : '' }}" href="{{ route('missions.index') }}" role="tab">Classroom</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="pull-right">
+                        <ul class="navbar-nav text-uppercase">
+                            <li class="nav-item">
+                                <a class="nav-link js-scroll-trigger" href="javascript:void(0)"
+                                   onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                    <img src="{{asset('img/sign.jpg')}}" alt="" width="24p">
+                                </a>
+                                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                    @csrf
+                                </form>
+                            </li>
+
+                        </ul>
+                    </div>
                 </div>
-                <div class="pull-right">
-                    <ul class="navbar-nav text-uppercase">
-                        <li class="nav-item">
-                            <a class="nav-link js-scroll-trigger" href="javascript:void(0)"
-                               onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                <img src="{{asset('img/sign.jpg')}}" alt="" width="24p" >
-                            </a>
-                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                                @csrf
-                            </form>
-                        </li>
-
-                    </ul>
-                </div>
-            </div>
+            @endif
         </div>
     </nav>
 </div>
@@ -71,59 +74,63 @@
 @if (isset($subnav))
     @include($subnav)
 @endif  --}}
-<nav class="top_tab_details">
-    <div class="container-fluid">
-        <div class="nav nav-tabs" id="nav-tab" role="tablist">
-            {{--<a class="nav-item nav-link  {{ (request()->is('home')) ? 'active' : '' }}" id="nav-employee-tab"  href="{{ url('home') }}" aria-controls="nav-employee" aria-selected="true">Employee Information</a>--}}
+@if (auth()->check())
+    <nav class="top_tab_details">
+        <div class="container-fluid">
+            <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                {{--<a class="nav-item nav-link  {{ (request()->is('home')) ? 'active' : '' }}" id="nav-employee-tab"  href="{{ url('home') }}" aria-controls="nav-employee" aria-selected="true">Employee Information</a>--}}
 
-            @if($activeMenu == 'profile')
-            <a class="nav-item nav-link {{ (request()->is('edit-profile')) ? 'active' : '' }}" href="{{ url('edit-profile') }}">Employee Information</a>
+                @if($activeMenu == 'profile')
+                    <a class="nav-item nav-link {{ (request()->is('edit-profile')) ? 'active' : '' }}" href="{{ url('edit-profile') }}">Employee Information</a>
 
-            <a class="nav-item nav-link {{ (request()->is('agreementlist')) ? 'active' : '' }}" href="{{ url('agreementlist') }}">Agreements</a>
+                    <a class="nav-item nav-link {{ (request()->is('agreementlist')) ? 'active' : '' }}" href="{{ url('agreementlist') }}">Agreements</a>
 
-            <a class="nav-item nav-link {{request()->is('paystatement/list') ? 'active' : '' }}" href="{{url('paystatement/list')}}">Pay Statements</a>
-            @endif
-
-            @if($activeMenu == 'company')
-                <a class="nav-item nav-link {{ (request()->is('company')) ? 'active' : '' }}" href="{{ url('company') }}">Company List</a>
-            @endif
-
-            @if($activeMenu == 'admin' || $activeMenu == 'submit')
-                @if(auth()->user()->is_admin)
-                <a class="nav-item nav-link {{ (request()->is('users')) ? 'active' : '' }}" href="{{ route('users.index') }}">Employee List</a>
+                    <a class="nav-item nav-link {{request()->is('paystatement/list') ? 'active' : '' }}" href="{{url('paystatement/list')}}">Pay Statements</a>
                 @endif
 
-            <a class="nav-item nav-link {{ (request()->is('expense/list')) ? 'active' : '' }}"href="{{ url('expense/list') }}">Expense Report</a>
+                @if($activeMenu == 'company')
+                    <a class="nav-item nav-link {{ (request()->is('company')) ? 'active' : '' }}" href="{{ url('company') }}">Company List</a>
+                @endif
 
-            <a class="nav-item nav-link {{ (request()->is('mileage/*')) ? 'active' : '' }}" href="{{ route('mileage.mileage-list') }}">Mileage Book</a>
+                @if($activeMenu == 'admin' || $activeMenu == 'submit')
+                    @if(auth()->user()->is_admin)
+                        <a class="nav-item nav-link {{ (request()->is('users')) ? 'active' : '' }}" href="{{ route('users.index') }}">Employee List</a>
+                    @endif
 
-            <a class="nav-item nav-link {{ (request()->is('maintenance/list')) ? 'active' : '' }}" href="{{ url('maintenance/list') }}">Tech Maintenance</a>
+                    <a class="nav-item nav-link {{ (request()->is('expense/list')) ? 'active' : '' }}" href="{{ url('expense/list') }}">Expense Report</a>
 
-            <a class="nav-item nav-link {{ (request()->is('timeoff/list')) ? 'active' : '' }}" href="{{ url('timeoff/list') }}">Time Off</a>
+                    <a class="nav-item nav-link {{ (request()->is('mileage/*')) ? 'active' : '' }}" href="{{ route('mileage.mileage-list') }}">Mileage Book</a>
 
-            <a class="nav-item nav-link {{ (request()->is('messages')) ? 'active' : '' }}" href="{{ route('messages.index') }}">Report a Concern</a>
-            @if(auth()->user()->is_admin)
-            <a class="nav-item nav-link {{ (request()->is('efficiency')) ? 'active' : '' }}" href="{{ route('efficiency.index') }}">Efficiency</a>
-            @endif
-            @endif
+                    <a class="nav-item nav-link {{ (request()->is('maintenance/list')) ? 'active' : '' }}" href="{{ url('maintenance/list') }}">Tech Maintenance</a>
 
-            @if($activeMenu == 'benefits')
-                <a class="nav-item nav-link {{ (request()->is('plans')) ? 'active' : '' }}" href="{{ route('plans.index') }}">Plan Overview</a>
-                <a class="nav-item nav-link {{ (request()->is('additional-benefits')) ? 'active' : '' }}" href="{{ route('additional-benefits.index') }}">Additional Benefits Spending</a>
-                <a class="nav-item nav-link" href="#">Meals</a>
-            @endif
+                    <a class="nav-item nav-link {{ (request()->is('timeoff/list')) ? 'active' : '' }}" href="{{ url('timeoff/list') }}">Time Off</a>
 
-            @if($activeMenu == 'classroom')
-                <a class="nav-item nav-link {{ (request()->is('missions')) ? 'active' : '' }}" href="{{ route('missions.index') }}">49 North Mission</a>
-                <a class="nav-item nav-link {{ (request()->is('personal-development-plan')) ? 'active' : '' }}" href="{{ route('personal-development-plan.index') }}">Personal Development Plan</a>
-                {{-- <a class="nav-item nav-link" href="#">Personal Development Plan</a> --}}
-                <a class="nav-item nav-link" href="#">Courses</a>
-                <a class="nav-item nav-link {{ (request()->is('journal')) ? 'active' : '' }}" href="{{ route('journal.index') }}">Journal</a>
-            @endif
+                    <a class="nav-item nav-link {{ (request()->is('messages')) ? 'active' : '' }}" href="{{ route('messages.index') }}">Report a Concern</a>
+                    @if(auth()->user()->is_admin)
+                        <a class="nav-item nav-link {{ (request()->is('efficiency')) ? 'active' : '' }}" href="{{ route('efficiency.index') }}">Efficiency</a>
+                    @endif
+                @endif
 
-        </div>
-    </div><!--------------container--------------->
-</nav>
+                @if($activeMenu == 'benefits')
+                    <a class="nav-item nav-link {{ (request()->is('plans')) ? 'active' : '' }}" href="{{ route('plans.index') }}">Plan Overview</a>
+                    <a class="nav-item nav-link {{ (request()->is('additional-benefits')) ? 'active' : '' }}" href="{{ route('additional-benefits.index') }}">Additional Benefits
+                        Spending</a>
+                    <a class="nav-item nav-link" href="#">Meals</a>
+                @endif
+
+                @if($activeMenu == 'classroom')
+                    <a class="nav-item nav-link {{ (request()->is('missions')) ? 'active' : '' }}" href="{{ route('missions.index') }}">49 North Mission</a>
+                    <a class="nav-item nav-link {{ (request()->is('personal-development-plan')) ? 'active' : '' }}" href="{{ route('personal-development-plan.index') }}">Personal
+                        Development Plan</a>
+                    {{-- <a class="nav-item nav-link" href="#">Personal Development Plan</a> --}}
+                    <a class="nav-item nav-link" href="#">Courses</a>
+                    <a class="nav-item nav-link {{ (request()->is('journal')) ? 'active' : '' }}" href="{{ route('journal.index') }}">Journal</a>
+                @endif
+
+            </div>
+        </div><!--------------container--------------->
+    </nav>
+@endif
 
 <div class="container-fluid">
 
@@ -165,9 +172,9 @@
                     <small>Return To Admin</small>
                 </a>
             @endif
-      {{--      <a class="btn btn-primary btn-charcoal" href="{{ route('admin.logout') }}">
-                <small>Logout</small>
-            </a>--}}
+            {{--      <a class="btn btn-primary btn-charcoal" href="{{ route('admin.logout') }}">
+                      <small>Logout</small>
+                  </a>--}}
         </div>
     @endif
 </div>
@@ -214,9 +221,9 @@
             var reader = new FileReader();
             var fileName = input.files[0].name;
 
-            reader.onload = function(e) {
+            reader.onload = function (e) {
                 if (input.files[0]['type'].split('/')[0] === 'image') {
-                    $(input).closest('.image-chooser').find('.image-chooser-preview').html('<img class="image-preview" src="'+e.target.result+'" />');
+                    $(input).closest('.image-chooser').find('.image-chooser-preview').html('<img class="image-preview" src="' + e.target.result + '" />');
                 } else {
                     $(input).closest('.image-chooser').find('.image-chooser-preview').html('<a class="file-preview" href="' + e.target.result + '">' + fileName + '</a>');
                 }
