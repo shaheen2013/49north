@@ -27,10 +27,14 @@ class AdminRolesController extends Controller {
      * @return Factory|View
      */
     public function create () {
-        $activeMenu = 'admin';
-        $role = new Role();
+        if(auth()->user()->is_admin == 1){
+            $activeMenu = 'admin';
+            $role = new Role();
 
-        return view('admin.permission.admin-permission-role-edit', compact('role', 'activeMenu'));
+            return view('admin.permission.admin-permission-role-edit', compact('role', 'activeMenu'));
+        }else{
+            abort(401);
+        }
     }
 
     /**
@@ -41,19 +45,23 @@ class AdminRolesController extends Controller {
      * @return \Illuminate\Http\RedirectResponse
      */
     public function store (Request $request) {
-        $input = $request->except(['_token']);
-        // Log::debug('Role input',$input);
-        if ($id = $request->input('id')) {
-            $role = Role::find($id);
-            $role->update($input);
-            session()->flash('alert-success','Role Updated');
-        }
-        else {
-            $role = Role::create($input);
-            session()->flash('alert-success','Role Created');
-        }
+        if(auth()->user()->is_admin == 1){
+            $input = $request->except(['_token']);
+            // Log::debug('Role input',$input);
+            if ($id = $request->input('id')) {
+                $role = Role::find($id);
+                $role->update($input);
+                session()->flash('alert-success','Role Updated');
+            }
+            else {
+                $role = Role::create($input);
+                session()->flash('alert-success','Role Created');
+            }
 
-        return redirect()->route('admin.permissions.index');
+            return redirect()->route('admin.permissions.index');
+        }else{
+            abort(401);
+        }
     }
 
     /**
@@ -75,8 +83,12 @@ class AdminRolesController extends Controller {
      * @return Factory|View
      */
     public function edit (Role $role) {
-        $activeMenu = 'admin';
-        return view('admin.permission.admin-permission-role-edit', compact('role', 'activeMenu'));
+        if(auth()->user()->is_admin == 1){
+            $activeMenu = 'admin';
+            return view('admin.permission.admin-permission-role-edit', compact('role', 'activeMenu'));
+        }else{
+            abort(401);
+        }
     }
 
     /**

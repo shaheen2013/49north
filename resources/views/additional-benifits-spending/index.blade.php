@@ -1,6 +1,8 @@
 @extends('layouts.main')
 @include('modal')
 @section('content1')
+
+
     <div class="well-default-trans">
         <div class="tab-pane" id="nav-expense" role="tabpanel" aria-labelledby="nav-employee-tab">
             <div class="expense inner-tab-box">
@@ -32,7 +34,9 @@
                                     <th>Date</th>
                                     <th>Description</th>
                                     <th>Total</th>
+                                    @admin
                                     <th>Action</th>
+                                    @endadmin
 
                                     <th></th>
                                 </tr>
@@ -66,7 +70,10 @@
                                     <th>Description</th>
                                     <th>Total</th>
                                     <th>Status</th>
+                                    @admin
                                     <th>Action</th>
+                                    @endadmin
+
                                     <th></th>
                                 </tr>
                                 </thead>

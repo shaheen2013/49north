@@ -89,6 +89,8 @@ Route::group(['middleware' => ['auth']], function () {
 
     });
 
+    //Company
+
 
     Route::group(['prefix' => 'company'], function () {
         Route::get('', 'CompanyController@index')->name('company.index');
@@ -98,6 +100,14 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/edit/{id}', 'CompanyController@edit');
         Route::POST('/update/{id}', 'CompanyController@update');
         Route::POST('/destroy/{id}', 'CompanyController@destroy');
+    });
+
+      // Efficiency
+
+    Route::group(['prefix' => 'efficiency'], function () {
+
+        Route::get('', 'EfficiencyController@index')->name('efficiency.index');
+
     });
 
     Route::post('/reset_apssword', 'RegisterController@reset_password')->name('reset_apssword');

@@ -41,9 +41,9 @@
                                         <th>Employee</th>
                                         <th>Reason for mileage</th>
                                         <th>Total Km</th>
-                                        {{-- @admin --}}
+                                        @admin
                                         <th class="text-center">Action</th>
-                                        {{-- @endadmin --}}
+                                        @endadmin
                                         <th></th>
                                     </tr>
                                     </thead>
@@ -81,7 +81,9 @@
                                         <th>Reason for mileage</th>
                                         <th>Total Km</th>
                                         <th>Status</th>
+                                        @admin
                                         <th class="text-center">Action</th>
+                                        @endadmin
                                         <th></th>
                                     </tr>
                                     </thead>
@@ -357,7 +359,7 @@
                                     // console.log(admin_user);
 
                                     if (admin_user == 1) {
-                                        action = `<a href="javascript:void(0)" data-toggle="tooltip" title="Reject!" onclick="mileage_reject('${data[index].id}')"><i class="fa fa-ban"></i></a>`;
+                                        action = `<a href="javascript:void(0)" data-toggle="tooltip" title="Approved" onclick="mileage_approve('${data[index].id}')"><i class="fa fa-check-circle"></i></a> <a href="javascript:void(0)" data-toggle="tooltip" title="Reject!" onclick="mileage_reject('${data[index].id}')"><i class="fa fa-ban"></i></a>`;
                                     } else {
                                         action = '';
                                     }
@@ -371,15 +373,13 @@
                                         html += `
 
                                         <td class="text-center">
-                                            <a href="javascript:void(0)" data-toggle="tooltip" title="Approved" onclick="mileage_approve('${data[index].id}')"><i class="fa fa-check-circle"></i></a>
-
                                             ${action}
                                         </td>`;
 
                                     html += `
                                         <td class="text-right">
                                             <a href="javascript:void(0);" onclick="OpenEditMileageModel('${data[index].id}')">EDIT</a>
-                                            <a href="javascript:void(0);" class="down" onclick="deleteconfirm('${data[index].id}')">DELETE</a></td>
+                                            <a href="javascript:void(0);" class="down" onclick="deleteconfirm('${data[index].id}')">DELETE</a>
                                         </td>
                                     </tr><tr class="spacer"></tr>`;
 
