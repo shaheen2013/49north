@@ -274,7 +274,8 @@
                 </div>
             </div>
         </div>
-
+        
+        @if(auth()->user()->is_admin == 1)
         <div class="emergency">
             <h2 class="form_title">Admin</h2>
             <div class="row">
@@ -287,6 +288,7 @@
                 </div>
             </div>
         </div>
+        @endif
 
         {{ Form::button($user->exists ? 'Edit' : 'Add', array('class' => 'btn-dark contact_btn','type'=>'submit')) }}
 

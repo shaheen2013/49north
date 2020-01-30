@@ -19,9 +19,14 @@ class PermissionController extends Controller {
      * @return Factory|View
      */
     public function index () {
-        $permissions = Permission::all(); //Get all permissions
+        if(auth()->user()->is_admin == 1){
+            $permissions = Permission::all(); //Get all permissions
 
-        return view('permissions.index')->with('permissions', $permissions);
+            return view('permissions.index')->with('permissions', $permissions);
+        }
+        else{
+            abort(401);
+        }
     }
 
     /**
@@ -30,9 +35,14 @@ class PermissionController extends Controller {
      * @return Factory|View
      */
     public function create () {
-        $roles = Role::get(); //Get all roles
+        if(auth()->user()->is_admin == 1){
+            $roles = Role::get(); //Get all roles
 
-        return view('permissions.create')->with('roles', $roles);
+            return view('permissions.create')->with('roles', $roles);
+        }
+        else{
+            abort(401);
+        }
     }
 
     /**
@@ -44,28 +54,34 @@ class PermissionController extends Controller {
      * @throws ValidationException
      */
     public function store (Request $request) {
-        $this->validate($request, [
-            'name' => 'required|max:40',
-        ]);
+        if(auth()->user()->is_admin == 1){
+            $this->validate($request, [
+                'name' => 'required|max:40',
+            ]);
 
-        $name = $request['name'];
-        $permission = new Permission();
-        $permission->name = $name;
+            $name = $request['name'];
+            $permission = new Permission();
+            $permission->name = $name;
 
-        $roles = $request['roles'];
+            $roles = $request['roles'];
 
-        $permission->save();
+            $permission->save();
 
-        if (!empty($request['roles'])) { //If one or more role is selected
-            foreach ($roles as $role) {
-                $r = Role::where('id', '=', $role)->firstOrFail(); //Match input role to db record
+            if (!empty($request['roles'])) { //If one or more role is selected
+                foreach ($roles as $role) {
+                    $r = Role::where('id', '=', $role)->firstOrFail(); //Match input role to db record
 
-                $permission = Permission::where('name', '=', $name)->first(); //Match input //permission to db record
-                $r->givePermissionTo($permission);
+                    $permission = Permission::where('name', '=', $name)->first(); //Match input //permission to db record
+                    $r->givePermissionTo($permission);
+                }
             }
-        }
 
-        return redirect()->route('permissions.index')->with('alert-info', 'Permission' . $permission->name . ' added!');
+            return redirect()->route('permissions.index')->with('alert-info', 'Permission' . $permission->name . ' added!');
+        }
+        else{
+            abort(401);
+        }
+            
 
     }
 
@@ -77,7 +93,12 @@ class PermissionController extends Controller {
      * @return RedirectResponse|Redirector
      */
     public function show ($id) {
-        return redirect('permissions');
+        if(auth()->user()->is_admin == 1){
+            return redirect('permissions');
+        }
+        else{
+            abort(401);
+        }
     }
 
     /**
@@ -88,9 +109,14 @@ class PermissionController extends Controller {
      * @return Factory|View
      */
     public function edit ($id) {
-        $permission = Permission::findOrFail($id);
+        if(auth()->user()->is_admin == 1){
+            $permission = Permission::findOrFail($id);
 
-        return view('permissions.edit', compact('permission'));
+            return view('permissions.edit', compact('permission'));
+        }
+        else{
+            abort(401);
+        }
     }
 
     /**
@@ -103,14 +129,19 @@ class PermissionController extends Controller {
      * @throws ValidationException
      */
     public function update (Request $request, $id) {
-        $permission = Permission::findOrFail($id);
-        $this->validate($request, [
-            'name' => 'required|max:40',
-        ]);
-        $input = $request->all();
-        $permission->fill($input)->save();
+        if(auth()->user()->is_admin == 1){
+            $permission = Permission::findOrFail($id);
+            $this->validate($request, [
+                'name' => 'required|max:40',
+            ]);
+            $input = $request->all();
+            $permission->fill($input)->save();
 
-        return redirect()->route('permissions.index')->with('alert-info', 'Permission' . $permission->name . ' updated!');
+            return redirect()->route('permissions.index')->with('alert-info', 'Permission' . $permission->name . ' updated!');
+        }
+        else{
+            abort(401);
+        }
 
     }
 

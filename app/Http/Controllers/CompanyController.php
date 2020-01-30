@@ -15,9 +15,14 @@ class CompanyController extends Controller
      */
     public function index()
     {
+        if(auth()->user()->is_admin == 1){
         $activeMenu = 'company';
 
         return view('company.companyreport', compact('activeMenu'));
+        }
+        else{
+            abort(401);
+        }
     }
 
     /**
@@ -27,11 +32,17 @@ class CompanyController extends Controller
      */
     public function create()
     {
-        $data = null;
-        if($data){
-            return response()->json(['status'=>'success', 'data'=>$data]);
+        if(auth()->user()->is_admin == 1){
+            $data = null;
+            if($data){
+                return response()->json(['status'=>'success', 'data'=>$data]);
+            }
+            return response()->json(['status'=>'fail']);
         }
-        return response()->json(['status'=>'fail']);
+        else{
+            abort(401);
+        }
+
     }
 
     /**
@@ -42,38 +53,40 @@ class CompanyController extends Controller
      */
     public function store(Request $request)
     {
-        // Validate form data
-        $rules = [
-            'companyname' => 'required|string|max:191',
-            'email' => 'nullable|email',
-            'logo' => 'nullable|image',
-        ];
+       
+            // Validate form data
+            $rules = [
+                'companyname' => 'required|string|max:191',
+                'email' => 'nullable|email',
+                'logo' => 'nullable|image',
+            ];
 
-        $validator = validator($request->all(), $rules, []);
+            $validator = validator($request->all(), $rules, []);
 
-        if ($validator->fails()) {
-            return response()->json(['status' => 'fail', 'errors' => $validator->getMessageBag()->toarray()]);
-        }
-
-        try {
-            $data = $request->all();
-            $logo = null;
-
-            if ($request->hasFile('logo')) {
-                $logo = fileUpload('logo');
-                $data['logo'] = $logo;
+            if ($validator->fails()) {
+                return response()->json(['status' => 'fail', 'errors' => $validator->getMessageBag()->toarray()]);
             }
 
-            $check = Company::create($data);
+            try {
+                $data = $request->all();
+                $logo = null;
 
-            if ($check) {
-                return response()->json(['status' => 'success']);
+                if ($request->hasFile('logo')) {
+                    $logo = fileUpload('logo');
+                    $data['logo'] = $logo;
+                }
+
+                $check = Company::create($data);
+
+                if ($check) {
+                    return response()->json(['status' => 'success']);
+                }
+
+                return response()->json(['status' => 'fail']);
+            } catch (\Exception $e) {
+                return response()->json(['status' => 'fail', 'msg' => $e->getMessage()]);
             }
-
-            return response()->json(['status' => 'fail']);
-        } catch (\Exception $e) {
-            return response()->json(['status' => 'fail', 'msg' => $e->getMessage()]);
-        }
+        
     }
 
     /**
@@ -95,11 +108,16 @@ class CompanyController extends Controller
      */
     public function edit($id)
     {
-        $data = Company::findOrFail($id);
-        if($data){
-            return response()->json(['status'=>'success', 'data'=>$data]);
+        if(auth()->user()->is_admin == 1){
+            $data = Company::findOrFail($id);
+            if($data){
+                return response()->json(['status'=>'success', 'data'=>$data]);
+            }
+            return response()->json(['status'=>'fail']);
         }
-        return response()->json(['status'=>'fail']);
+        else{
+            abort(401);
+        }
     }
 
     /**
@@ -111,50 +129,55 @@ class CompanyController extends Controller
      */
     public function update(Request $request, $id)
     {
-        // Validate form data
-        $rules = [
-            'companyname' => 'required|string|max:191',
-            'email' => 'nullable|email',
-            'logo' => 'nullable|image',
-        ];
+       
+            // Validate form data
+            $rules = [
+                'companyname' => 'required|string|max:191',
+                'email' => 'nullable|email',
+                'logo' => 'nullable|image',
+            ];
 
-        $validator = validator($request->all(), $rules, []);
+            $validator = validator($request->all(), $rules, []);
 
-        if ($validator->fails()) {
-            return response()->json(['status' => 'fail', 'errors' => $validator->getMessageBag()->toarray()]);
-        }
-
-        try {// return $request->all();
-            $data = Company::findOrFail($id);
-            $logo = null;
-
-            if ($request->hasFile('logo')) {
-                Storage::delete($data->logo);
-                $data->logo = fileUpload('logo');
+            if ($validator->fails()) {
+                return response()->json(['status' => 'fail', 'errors' => $validator->getMessageBag()->toarray()]);
             }
 
-            $data->companyname = $request->companyname;
-            $data->email = $request->email;
+            try {// return $request->all();
+                $data = Company::findOrFail($id);
+                $logo = null;
 
-            if ($data->update()) {
-                return response()->json(['status' => 'success']);
+                if ($request->hasFile('logo')) {
+                    Storage::delete($data->logo);
+                    $data->logo = fileUpload('logo');
+                }
+
+                $data->companyname = $request->companyname;
+                $data->email = $request->email;
+
+                if ($data->update()) {
+                    return response()->json(['status' => 'success']);
+                }
+
+                return response()->json(['status' => 'fail']);
+            } catch (\Exception $e) {
+                return response()->json(['status' => 'fail', 'msg' => $e->getMessage()]);
             }
-
-            return response()->json(['status' => 'fail']);
-        } catch (\Exception $e) {
-            return response()->json(['status' => 'fail', 'msg' => $e->getMessage()]);
-        }
+        
     }
 
     public function searchCompanyPage(Request $request){
 
-        $data = Company::where(function ($q) use($request){
-                if(isset($request->search)){
-                    $q->where('companyname', 'LIKE', '%'.$request->search.'%');
-                }
-            });
-            $data= $data->orderBy('companyname', 'asc')->get();
-        return response()->json(['status'=>'success', 'data' => $data]);
+      
+
+            $data = Company::where(function ($q) use($request){
+                    if(isset($request->search)){
+                        $q->where('companyname', 'LIKE', '%'.$request->search.'%');
+                    }
+                });
+                $data= $data->orderBy('companyname', 'asc')->get();
+            return response()->json(['status'=>'success', 'data' => $data]);
+        
     }
 
     /**
@@ -165,24 +188,27 @@ class CompanyController extends Controller
      */
     public function destroy($id)
     {
-        try {
-            $company = Company::findOrFail($id);
-            Storage::delete($company->logo);
+        
+            try {
+                $company = Company::findOrFail($id);
+                Storage::delete($company->logo);
 
-            if ($company->delete() == 1) {
-                $success = true;
-                $message = "Company deleted successfully";
-            } else {
-                $success = false;
-                $message = "Company not found";
+                if ($company->delete() == 1) {
+                    $success = true;
+                    $message = "Company deleted successfully";
+                } else {
+                    $success = false;
+                    $message = "Company not found";
+                }
+
+                return response()->json([
+                    'success' => $success,
+                    'message' => $message,
+                ]);
+            } catch (\Exception $e) {
+                return response()->json(['status' => 'fail', 'msg' => $e->getMessage()]);
             }
+           
 
-            return response()->json([
-                'success' => $success,
-                'message' => $message,
-            ]);
-        } catch (\Exception $e) {
-            return response()->json(['status' => 'fail', 'msg' => $e->getMessage()]);
-        }
     }
 }

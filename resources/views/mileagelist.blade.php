@@ -44,9 +44,9 @@
                                         <th>Employee</th>
                                         <th>Reason for mileage</th>
                                         <th>Total Km</th>
-                                        {{-- @admin --}}
+                                        @admin
                                         <th class="text-center">Action</th>
-                                        {{-- @endadmin --}}
+                                        @endadmin
                                         <th></th>
                                     </tr>
                                     </thead>
@@ -83,7 +83,9 @@
                                         <th>Employee</th>
                                         <th>Reason for mileage</th>
                                         <th>Total Km</th>
+                                        @admin
                                         <th class="text-center">Action</th>
+                                        @endadmin
                                         <th></th>
                                     </tr>
                                     </thead>
@@ -362,7 +364,8 @@
                                     // console.log(admin_user);
 
                                     if (admin_user == 1) {
-                                        action = `<a href="javascript:void(0)" data-toggle="tooltip" title="Reject!" onclick="mileage_reject('${data[index].id}')"><i class="fa fa-ban"></i></a>`;
+                                        action = `<a href="javascript:void(0)" data-toggle="tooltip" title="Reject!" onclick="mileage_reject('${data[index].id}')"><i class="fa fa-ban"></i></a>
+                                        <a href="javascript:void(0)" data-toggle="tooltip" title="Approved" onclick="mileage_approve('${data[index].id}')"><i class="fa fa-check-circle"></i></a>`;
                                     } else {
                                         action = '';
                                     }
@@ -376,7 +379,7 @@
                                         html += `
 
                                         <td class="text-center">
-                                            <a href="javascript:void(0)" data-toggle="tooltip" title="Approved" onclick="mileage_approve('${data[index].id}')"><i class="fa fa-check-circle"></i></a>
+                                            
 
                                             ${action}
                                         </td>`;
@@ -384,7 +387,7 @@
                                     html += `
                                         <td class="text-right">
                                             <a href="javascript:void(0);" onclick="OpenEditMileageModel('${data[index].id}')">EDIT</a>
-                                            <a href="javascript:void(0);" class="down" onclick="deleteconfirm('${data[index].id}')">DELETE</a></td>
+                                            <a href="javascript:void(0);" class="down" onclick="deleteconfirm('${data[index].id}')">DELETE</a>
                                         </td>
                                     </tr><tr class="spacer"></tr>`;
 
@@ -435,14 +438,28 @@
                             pageSize: 10,
                             totalNumber: results.data.length,
                             callback: function (data, pagination) {
-                                let html = '';
+
+                                let html = action = deleteAction = '';
+
                                 for (let index = 0; index < data.length; index++) {
+
                                     if (data[index].date !== null && data[index].date !== '') {
                                         var time = data[index].date.split(' ')[0];
                                         date = new Date(time);
                                         date = date.toDateString().split(' ')[2] + " " + date.toDateString().split(' ')[1] + ", " + date.toDateString().split(' ')[3]
                                     } else {
                                         date = '-';
+                                    }
+
+                                    let admin_user = '{{ auth()->user()->is_admin }}';
+                                    if (admin_user == 1) {
+                                        action = `<a href="javascript:void(0)"  data-toggle="tooltip" title="Pending" onclick="mileage_pending('${data[index].id}')"><i class="fa fa-check-circle"></i></a>`;
+                                        deleteAction = `<a href="javascript:void(0);" class="down" onclick="deleteconfirm('${data[index].id}')">DELETE</a>`;
+                                       
+                                    } else {
+                                        action = '';
+                                        deleteAction = '';
+                                       
                                     }
                                     html += `<tr>
                                         <td> ${date} </td>
@@ -451,11 +468,11 @@
                                         <td> ${data[index].kilometers} </td>
 
                                         <td class="text-center">
-                                            <a href="javascript:void(0)"  data-toggle="tooltip" title="Pending" onclick="mileage_pending('${data[index].id}')"><i class="fa fa-check-circle"></i></a>
+                                            ${action}
                                         </td>
 
                                         <td class="text-right">
-                                            <a href="javascript:void(0);" class="down" onclick="deleteconfirm('${data[index].id}')">DELETE</a></td>
+                                            ${deleteAction}
                                         </td>
                                     </tr><tr class="spacer"></tr>`;
                                 }

@@ -25,7 +25,7 @@
 
                         @if(!auth()->user()->is_admin)
                         <li class="nav-item">
-                            <a class="nav-link {{ $activeMenu == 'submit' ? 'active' : '' }}" href="{{ url('expense/list') }}">Submit </a>
+                            <a class="nav-link {{ $activeMenu == 'submit' ? 'active' : '' }}" href="{{ url('expense/list') }}">Admin </a>
                         </li>
                         @endif
 
@@ -102,6 +102,9 @@
             <a class="nav-item nav-link {{ (request()->is('timeoff/list')) ? 'active' : '' }}" href="{{ url('timeoff/list') }}">Time Off</a>
 
             <a class="nav-item nav-link {{ (request()->is('messages')) ? 'active' : '' }}" href="{{ route('messages.index') }}">Report a Concern</a>
+            @if(auth()->user()->is_admin)
+            <a class="nav-item nav-link {{ (request()->is('efficiency')) ? 'active' : '' }}" href="{{ route('efficiency.index') }}">Efficiency</a>
+            @endif
             @endif
 
             @if($activeMenu == 'benefits')

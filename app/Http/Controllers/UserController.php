@@ -27,11 +27,16 @@ class UserController extends Controller {
      */
     public function index()
     {
+        if(auth()->user()->is_admin == 1){
         //Get all users and pass it to the view
-        $activeMenu = 'admin';
-        $users = User::with('employee_details')->orderBy('name')->get();
+            $activeMenu = 'admin';
+            $users = User::with('employee_details')->orderBy('name')->get();
 
-        return view('users.index', compact('activeMenu'))->with('users', $users);
+            return view('users.index', compact('activeMenu'))->with('users', $users);
+        }
+        else{
+            abort(401);
+        }
     }
 
     /**
@@ -41,12 +46,17 @@ class UserController extends Controller {
      */
     public function create()
     {
-        //Get all roles and pass it to the view
-        $companies = Company::Latest()->get();
-        $activeMenu = 'admin';
-        $user = new User();
+        if(auth()->user()->is_admin == 1){
+            //Get all roles and pass it to the view
+            $companies = Company::Latest()->get();
+            $activeMenu = 'admin';
+            $user = new User();
 
-        return view('users.edit', compact('user', 'activeMenu', 'companies'));
+            return view('users.edit', compact('user', 'activeMenu', 'companies'));
+        }
+        else{
+            abort(401);
+        }
     }
 
     /**
@@ -185,28 +195,33 @@ class UserController extends Controller {
      */
     public function edit($id)
     {
-        $activeMenu = 'admin';
-        $companies = Company::Latest()->get();
-        $u = User::findOrFail($id); //Get user with specified id
-        //DB::enableQueryLog();
-        $user = Employee_detail::find($u->id);
-        /* $query = DB::getQueryLog();
-         print_r($query);
-         die;*/
-        if (!$user) {
-            $user = new Employee_detail();
-            // separate first / last name from user table
-            [$user->firstname, $user->lastname] = explode(' ', $u->name);
-            $user->workemail = $u->email;
-        }
+        if(auth()->user()->is_admin == 1){
+            $activeMenu = 'admin';
+            $companies = Company::Latest()->get();
+            $u = User::findOrFail($id); //Get user with specified id
+            //DB::enableQueryLog();
+            $user = Employee_detail::find($u->id);
+            /* $query = DB::getQueryLog();
+            print_r($query);
+            die;*/
+            if (!$user) {
+                $user = new Employee_detail();
+                // separate first / last name from user table
+                [$user->firstname, $user->lastname] = explode(' ', $u->name);
+                $user->workemail = $u->email;
+            }
 
-        if (!$user->workemail) {
-            $user->workemail = $u->email;
-        }
-        $user->is_admin = $u->is_admin; // lazy load details from admin
-        $user->id = $u->id; // override ID to match User table instead of Employee Details
+            if (!$user->workemail) {
+                $user->workemail = $u->email;
+            }
+            $user->is_admin = $u->is_admin; // lazy load details from admin
+            $user->id = $u->id; // override ID to match User table instead of Employee Details
 
-        return view('users.edit', compact('user', 'activeMenu', 'companies'));
+            return view('users.edit', compact('user', 'activeMenu', 'companies'));
+        }
+        else{
+            abort(401);
+        }
     }
 
     /**
