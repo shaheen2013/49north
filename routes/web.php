@@ -39,7 +39,7 @@ Route::group(['middleware' => ['auth']], function () {
     // Expenses
     Route::group(['prefix' => 'expense', 'as' => 'expense.', 'middleware' => 'can:expenses-enabled'], function () {
         Route::get('/list', 'ExpenseController@expenselist')->name('expense-list');
-        Route::post('/addexpense', 'ExpenseController@addexpense');
+        Route::post('/addexpense', 'ExpenseController@addexpense')->name('expense-add');
 
         Route::get('/edit/{id}', 'ExpenseController@edit');
         Route::POST('/update/{id}', 'ExpenseController@update');
