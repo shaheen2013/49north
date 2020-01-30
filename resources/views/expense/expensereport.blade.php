@@ -6,8 +6,8 @@
             <div class="expense inner-tab-box">
                 <div class="col-sm-12">
                     <h3>
-                        <span class="active-span" id="pending_span" onclick="expences_pending_new()">Pending </span> |
-                        <span id="historical_span" onclick="expences_history_new()"> Historical</span>
+                        <span class="active-span clickable" id="pending_span" onclick="expences_pending_new()">Pending </span> |
+                        <span class="clickable" id="historical_span" onclick="expences_history_new()"> Historical</span>
                     </h3>
                     <br>
                 </div>
@@ -83,7 +83,7 @@
                                     @endadmin
                                     <th>Description</th>
                                     <th>Total</th>
-
+                                    <th>Status</th>
                                     <th></th>
                                 </tr>
                                 </thead>
@@ -598,8 +598,7 @@
                             pageSize: 10,
                             totalNumber: results.data.length,
                             callback: function (data, pagination) {
-                                let html = '';
-                                let date = '';
+                                let html = admin = date = '';
 
                                 for (let index = 0; index < data.length; index++) {
                                     if (data[index].date != null && data[index].date != '') {
@@ -609,13 +608,19 @@
                                     } else {
                                         date = '-';
                                     }
+
+                                    if (is_admin == 1) {
+                                        admin = `<a href="javascript:void(0);" class="down" onclick="deleteconfirm('${data[index].id}')">DELETE</a>`;
+                                    }
+
                                     html += `<tr>
                                            <td> ${date} </td>
                                            <td> ${data[index].employee.firstname == null ? '' : data[index].employee.firstname} ${data[index].employee.lastname == null ? '' : data[index].employee.lastname}</td>
                                            <td> ${data[index].description == null ? '' : data[index].description} </td>
                                            <td> ${data[index].total == null ? '' : data[index].total} </td>
+                                           <td> ${data[index].status == 1 ? 'Approved' : 'Rejected'} </td>
                                            <td class="action-box">
-                                               <a href="javascript:void(0);" class="down" onclick="deleteconfirm('${data[index].id}')">DELETE</a>
+                                               ${admin}
                                            </td>
                                        </tr>
                                        <tr class="spacer"></tr>`;

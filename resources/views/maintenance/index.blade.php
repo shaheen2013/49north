@@ -8,8 +8,8 @@
             <div class="maintenance inner-tab-box">
                 <div class="col-sm-12">
                     <h3>
-                        <span class="active-span" id="active_ticket_span" onclick="searchMaintenance()">Active Tickets</span> |
-                        <span id="complited_ticket_span" onclick="searchComplitedTicket()">Completed Tickets</span>
+                        <span class="active-span clickable" id="active_ticket_span" onclick="searchMaintenance()">Active Tickets</span> |
+                        <span class="clickable" id="complited_ticket_span" onclick="searchComplitedTicket()">Completed Tickets</span>
                     </h3>
                     <br>
                 </div>
@@ -193,7 +193,6 @@
 
 @section('js')
     <script type="text/javascript">
-
         let from = to = fromCompleted = toCompleted = null;
 
         $(document).ready(function () {
