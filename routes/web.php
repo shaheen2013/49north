@@ -17,6 +17,10 @@ Route::get('/', function () {
     return view('index');
 });
 
+    Auth::routes([
+        'register' => false,
+    ]);
+
 //Route::get('/login','LoginController@index')->name('login');
 
 Auth::routes();
