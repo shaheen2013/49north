@@ -37,7 +37,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('agreement/search', 'AgreementController@search')->name('agreement.search');
 
     // Expenses
-    Route::group(['prefix' => 'expense', 'as' => 'expense.'], function () {
+    Route::group(['prefix' => 'expense', 'as' => 'expense.','middleware' => 'can:expense-enabled'], function () {
         Route::get('/list', 'ExpenseController@expenselist');
         Route::post('/addexpense', 'ExpenseController@addexpense');
 
@@ -54,7 +54,7 @@ Route::group(['middleware' => ['auth']], function () {
 
     // Additional Benefits Spending
     Route::group(['prefix' => 'additional-benefits'], function () {
-        
+
 
         Route::get('/', 'AdditionlBenifitsSpendingController@index')->name('additional-benefits.index');
         Route::post('/store', 'AdditionlBenifitsSpendingController@store')->name('additional-benefits.store');
@@ -76,11 +76,11 @@ Route::group(['middleware' => ['auth']], function () {
 
     // Personal development plan
     Route::group(['prefix' => 'personal-development-plan'], function () {
-       
+
         Route::get('/', 'PersonalDevelopmentPlanController@index')->name('personal-development-plan.index');
         Route::post('/comment/store/{id}', 'PersonalDevelopmentPlanController@commentStore');
         Route::post('/comment/update/{id}', 'PersonalDevelopmentPlanController@commentUpdate');
-        
+
         Route::post('/store', 'PersonalDevelopmentPlanController@store')->name('personal-development-plan.store');
 
         Route::get('/edit/{id}', 'PersonalDevelopmentPlanController@edit');
