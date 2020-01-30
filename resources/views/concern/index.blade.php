@@ -5,8 +5,8 @@
             <div class="expense inner-tab-box">
                 <div class="col-sm-12">
                     <h3>
-                        <span class="active-span" id="pending_span" onclick="searchMessages()">Pending </span> |
-                        <span id="historical_span" onclick="searchHistoryMessages()"> Historical</span>
+                        <span class="active-span clickable" id="pending_span" onclick="searchMessages()">Pending </span> |
+                        <span class="clickable" id="historical_span" onclick="searchHistoryMessages()"> Historical</span>
                     </h3>
                     <br>
                 </div>

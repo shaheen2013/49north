@@ -1840,3 +1840,7 @@ span.fc-title {
 .custom-checkbox {
     margin-left: 10px!important;
 }
+
+.clickable {
+    cursor: pointer;
+}

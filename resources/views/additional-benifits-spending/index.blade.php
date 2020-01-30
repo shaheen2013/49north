@@ -8,8 +8,8 @@
             <div class="expense inner-tab-box">
                 <div class="col-sm-12">
                     <h3>
-                        <span class="active-span" id="pending_span" onclick="benifits_pending_new()">Pending </span> |
-                        <span id="historical_span" onclick="benifits_history_new()"> Historical</span>
+                        <span class="active-span clickable" id="pending_span" onclick="benifits_pending_new()">Pending </span> |
+                        <span class="clickable" id="historical_span" onclick="benifits_history_new()"> Historical</span>
                     </h3>
                     <br>
                 </div>
@@ -69,6 +69,7 @@
                                     <th>Date</th>
                                     <th>Description</th>
                                     <th>Total</th>
+                                    <th>Status</th>
                                     @admin
                                     <th>Action</th>
                                     @endadmin
@@ -193,7 +194,6 @@
         </div>
     </div>
     <!--ajax come modal-->
-
 
     <script type="text/javascript">
 
@@ -326,7 +326,7 @@
                             pageSize: 10,
                             totalNumber: results.data.length,
                             callback: function (data, pagination) {
-                                let html = date = action = adminAction = '';
+                                let html = date = admin = action = '';
 
                                 for (let index = 0; index < data.length; index++) {
                                     if (data[index].date != null && data[index].date != '') {
@@ -336,31 +336,26 @@
                                     } else {
                                         date = '-';
                                     }
-                                    let admin_user = '{{ auth()->user()->is_admin }}';
-                                    if (admin_user == 1) {
 
-                                        adminAction = `<a href="javascript:void(0)" data-toggle="tooltip" title="Approved" onclick="benefit_approve('${data[index].id}')"><i class="fa fa-check-circle"></i></a>
+                                    if (is_admin == 1) {
+                                        if (data[index].pay_status == 1) {
+                                            action = `<a href="javascript:void(0)" data-toggle="tooltip" title="Non-Paid" onclick="benefit_non_paid('${data[index].id}')"><i class="fa fa-usd"></i></a>`;
+                                        }
+                                        else{
+                                            action = `<a href="javascript:void(0)" data-toggle="tooltip" title="Paid" onclick="benefit_paid('${data[index].id}')"><i class="fa fa-usd"></i></a>`;
+                                        }
+
+                                        admin = `<a href="javascript:void(0)" data-toggle="tooltip" title="Approved" onclick="benefit_approve('${data[index].id}')"><i class="fa fa-check-circle"></i></a>
                                         <a href="javascript:void(0)" data-toggle="tooltip" title="Reject!" onclick="benefit_reject('${data[index].id}')"><i class="fa fa-ban"></i></a>`;
-
-                                    if(data[index].pay_status == 1){
-
-                                        action = `<a href="javascript:void(0)" data-toggle="tooltip" title="Non-Paid" onclick="benefit_non_paid('${data[index].id}')"><i class="fa fa-usd"></i></a>`;
-                                    }
-                                    else{
-                                        action = `<a href="javascript:void(0)" data-toggle="tooltip" title="Paid" onclick="benefit_paid('${data[index].id}')"><i class="fa fa-usd"></i></a>`;
-                                    }
-                                } else {
-                                    adminAction = '';
                                     }
 
                                     html += `<tr>
                                     <td> ${date} </td>
                                     <td> ${data[index].description} </td>
                                     <td>$${data[index].total} </td>
-                                    <td class="text-center">
-
+                                    <td>
                                         ${ action }
-                                        ${ adminAction }
+                                        ${admin}
                                     </td>
                                     <td class="action-box">
                                         <a href="javascript:void(0);" onclick="OpenEditBenifitsModel('${data[index].id}') ">EDIT</a>
@@ -406,8 +401,7 @@
                             pageSize: 10,
                             totalNumber: results.data.length,
                             callback: function (data, pagination) {
-
-                                let html = date = action = adminAction = '';
+                                let html = date = admin = action = '';
 
                                 for (let index = 0; index < data.length; index++) {
                                     if (data[index].date != null && data[index].date != '') {
@@ -417,31 +411,28 @@
                                     } else {
                                         date = '-';
                                     }
-                                    let admin_user = '{{ auth()->user()->is_admin }}';
-                                    if (admin_user == 1) {
 
-                                        adminAction = `<a href="javascript:void(0);" class="down" onclick="deleteconfirm('${data[index].id}')">DELETE</a>`;
+                                    if (is_admin == 1) {
+                                        if (data[index].pay_status == 1) {
+                                            action = `<a href="javascript:void(0)" data-toggle="tooltip" title="Non-Paid" onclick="benefit_non_paid('${data[index].id}')"><i class="fa fa-usd"></i></a>`;
+                                        } else{
+                                            action = `<a href="javascript:void(0)" data-toggle="tooltip" title="Paid" onclick="benefit_paid('${data[index].id}')"><i class="fa fa-usd"></i></a>`;
+                                        }
 
-                                    if(data[index].pay_status == 1){
-
-                                        action = `<a href="javascript:void(0)" data-toggle="tooltip" title="Non-Paid" onclick="benefit_non_paid('${data[index].id}')"><i class="fa fa-usd"></i></a>`;
-                                    } else{
-                                        action = `<a href="javascript:void(0)" data-toggle="tooltip" title="Paid" onclick="benefit_paid('${data[index].id}')"><i class="fa fa-usd"></i></a>`;
+                                        admin = `<a href="javascript:void(0);" class="down" onclick="deleteconfirm('${data[index].id}')">DELETE</a>`;
                                     }
-                                } else {
-                                    adminAction = '';
-                                    }
-                                    
+
+
                                     html += `<tr>
                                    <td> ${date} </td>
                                    <td> ${data[index].description} </td>
-                                   <td>$${data[index].total} </td>
-                                   <td class="text-center">
+                                   <td> $${data[index].total} </td>
+                                   <td >${data[index].status == 1 ? 'Approved' : 'Rejected'} </td>
+                                   <td>
                                         ${ action }
                                     </td>
-
                                    <td class="action-box">
-                                    ${ adminAction }
+                                       ${admin}
                                    </td>
                                </tr>
                                <tr class="spacer"></tr>`;
@@ -590,6 +581,7 @@
                 }
             });
         }
+
         function deleteconfirm(id) {
             swal({
                 title: "Delete?",
@@ -626,6 +618,7 @@
                 return false;
             })
         }
+
         // Format date
         function formatDate(date) {
             var d = new Date(date),
@@ -642,5 +635,4 @@
         }
 
     </script>
-
 @endsection
