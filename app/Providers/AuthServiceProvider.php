@@ -25,6 +25,13 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        //
+        // spatie-permissions
+        Gate::before(function ($user, $ability) {
+
+            // super admin has auto permissions without setting
+            if ($user->is_admin) return true;
+
+            return null;
+        });
     }
 }
