@@ -17,9 +17,9 @@ Route::get('/', function () {
     return view('index');
 });
 
-    Auth::routes([
-        'register' => false,
-    ]);
+Auth::routes([
+    'register' => false,
+]);
 
 //Route::get('/login','LoginController@index')->name('login');
 
@@ -37,8 +37,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('agreement/search', 'AgreementController@search')->name('agreement.search');
 
     // Expenses
-    Route::group(['prefix' => 'expense', 'as' => 'expense.','middleware' => 'can:expense-enabled'], function () {
-        Route::get('/list', 'ExpenseController@expenselist');
+    Route::group(['prefix' => 'expense', 'as' => 'expense.', 'middleware' => 'can:expenses-enabled'], function () {
+        Route::get('/list', 'ExpenseController@expenselist')->name('expense-list');
         Route::post('/addexpense', 'ExpenseController@addexpense');
 
         Route::get('/edit/{id}', 'ExpenseController@edit');
@@ -54,7 +54,6 @@ Route::group(['middleware' => ['auth']], function () {
 
     // Additional Benefits Spending
     Route::group(['prefix' => 'additional-benefits'], function () {
-
 
         Route::get('/', 'AdditionlBenifitsSpendingController@index')->name('additional-benefits.index');
         Route::post('/store', 'AdditionlBenifitsSpendingController@store')->name('additional-benefits.store');
@@ -95,7 +94,6 @@ Route::group(['middleware' => ['auth']], function () {
 
     //Company
 
-
     Route::group(['prefix' => 'company'], function () {
         Route::get('', 'CompanyController@index')->name('company.index');
         Route::POST('/search', 'CompanyController@searchCompanyPage');
@@ -106,7 +104,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::POST('/destroy/{id}', 'CompanyController@destroy');
     });
 
-      // Efficiency
+    // Efficiency
 
     Route::group(['prefix' => 'efficiency'], function () {
 

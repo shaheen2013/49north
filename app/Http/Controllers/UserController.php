@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\{Company,User,Employee_detail};
+use App\{Company, User, Employee_detail};
 use App\Mail\PasswordReset;
 use Illuminate\Contracts\View\Factory;
-use Illuminate\Support\Facades\{Auth,Hash,Mail,Storage};
+use Illuminate\Support\Facades\{Auth, Hash, Mail, Storage};
 use Illuminate\Validation\{Rule, ValidationException};
 use Illuminate\Http\{JsonResponse, RedirectResponse, Request};
 use Illuminate\Routing\Redirector;
 use Illuminate\View\View;
 use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
+use Spatie\Permission\Models\{Permission, Role};
 
 class UserController extends Controller {
     use SendsPasswordResetEmails;
@@ -72,6 +73,9 @@ class UserController extends Controller {
      * @throws ValidationException
      */
     public function store (Request $request) {
+
+        $isAdmin = auth()->user()->is_admin;
+
         $id = $request->input('id');
 
         //Validate name, email and password fields
@@ -142,7 +146,7 @@ class UserController extends Controller {
             $msg = 'User successfully Added';
         }
 
-        //profile pic  code
+        // profile pic code
         if ($request->hasFile('profile_pic')) {
             if (isset($emp_id) && $profile_pic = Employee_detail::find($id)->profile_pic) {
                 Storage::delete($profile_pic);
@@ -159,6 +163,11 @@ class UserController extends Controller {
         }
         else {
             $user->employee_details()->create($user_array);
+        }
+
+        // permissions actions.  Use initial "is Admin" status, in case this user is the one being edited
+        if ($isAdmin) {
+            $user->syncPermissions($request->input('permission', []));
         }
 
         //Redirect to the users.index view and display message
@@ -185,28 +194,35 @@ class UserController extends Controller {
      */
     public function edit ($id) {
 
-            $activeMenu = 'admin';
-            $companies = Company::Latest()->get();
-            $u = User::findOrFail($id); //Get user with specified id
-            //DB::enableQueryLog();
-            $user = Employee_detail::find($u->id);
-            /* $query = DB::getQueryLog();
-            print_r($query);
-            die;*/
-            if (!$user) {
-                $user = new Employee_detail();
-                // separate first / last name from user table
-                [$user->firstname, $user->lastname] = explode(' ', $u->name);
-                $user->workemail = $u->email;
-            }
+        $activeMenu = 'admin';
+        $companies = Company::Latest()->get();
+        $u = User::findOrFail($id); //Get user with specified id
+        //DB::enableQueryLog();
+        $user = Employee_detail::find($u->id);
+        /* $query = DB::getQueryLog();
+        print_r($query);
+        die;*/
+        if (!$user) {
+            $user = new Employee_detail();
+            // separate first / last name from user table
+            [$user->firstname, $user->lastname] = explode(' ', $u->name);
+            $user->workemail = $u->email;
+        }
 
-            if (!$user->workemail) {
-                $user->workemail = $u->email;
-            }
-            $user->is_admin = $u->is_admin; // lazy load details from admin
-            $user->id = $u->id; // override ID to match User table instead of Employee Details
+        if (!$user->workemail) {
+            $user->workemail = $u->email;
+        }
+        $user->is_admin = $u->is_admin; // lazy load details from admin
+        $user->id = $u->id; // override ID to match User table instead of Employee Details
 
-            return view('users.edit', compact('user', 'activeMenu', 'companies'));
+        $roles = Role::with([
+            'permissions' => function ($q) {
+                $q->orderBy('orderval')->orderBy('name');
+            }
+        ])->has('permissions')->orderBy('orderval')->get();
+        $permissions = Permission::pluck('name', 'id');
+
+        return view('users.edit', compact('user', 'activeMenu', 'companies', 'roles', 'permissions'));
 
     }
 

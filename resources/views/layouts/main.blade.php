@@ -27,7 +27,7 @@
 
                             @if(!auth()->user()->is_admin)
                                 <li class="nav-item">
-                                    <a class="nav-link {{ $activeMenu == 'submit' ? 'active' : '' }}" href="{{ url('expense/list') }}">Admin </a>
+                                    <a class="nav-link {{ $activeMenu == 'submit' ? 'active' : '' }}" href="{{ route('expense.expense-list') }}">Admin </a>
                                 </li>
                             @endif
 
@@ -97,13 +97,17 @@
                         <a class="nav-item nav-link {{ (request()->is('users')) ? 'active' : '' }}" href="{{ route('users.index') }}">Employee List</a>
                     @endif
 
-                    <a class="nav-item nav-link {{ (request()->is('expense/list')) ? 'active' : '' }}" href="{{ url('expense/list') }}">Expense Report</a>
+                    @can('expenses-enabled')
+                        <a class="nav-item nav-link {{ (request()->is('expense/*')) ? 'active' : '' }}" href="{{ route('expense.expense-list') }}">Expense Report</a>
+                    @endcan
 
-                    <a class="nav-item nav-link {{ (request()->is('mileage/*')) ? 'active' : '' }}" href="{{ route('mileage.mileage-list') }}">Mileage Book</a>
+                    @can('mileage-enabled')
+                        <a class="nav-item nav-link {{ (request()->is('mileage/*')) ? 'active' : '' }}" href="{{ route('mileage.mileage-list') }}">Mileage Book</a>
+                    @endcan
 
-                    <a class="nav-item nav-link {{ (request()->is('maintenance/list')) ? 'active' : '' }}" href="{{ url('maintenance/list') }}">Tech Maintenance</a>
+                    <a class="nav-item nav-link {{ (request()->is('maintenance/*')) ? 'active' : '' }}" href="{{ url('maintenance/list') }}">Tech Maintenance</a>
 
-                    <a class="nav-item nav-link {{ (request()->is('timeoff/list')) ? 'active' : '' }}" href="{{ url('timeoff/list') }}">Time Off</a>
+                    <a class="nav-item nav-link {{ (request()->is('timeoff/*')) ? 'active' : '' }}" href="{{ url('timeoff/list') }}">Time Off</a>
 
                     <a class="nav-item nav-link {{ (request()->is('messages')) ? 'active' : '' }}" href="{{ route('messages.index') }}">Report a Concern</a>
                     @if(auth()->user()->is_admin)
