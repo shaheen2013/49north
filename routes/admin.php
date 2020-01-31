@@ -22,7 +22,9 @@ Route::group(['namespace' => 'Admin', 'middleware' => ['auth', 'isAdmin'], 'pref
     Route::get('timeoff', 'AdminController@timeoff')->name('timeoff');
     Route::get('reportconcern', 'AdminController@reportconcern')->name('report-concern');
     Route::post('add_registration', 'AdminController@add_registration')->name('add-registration');
+});
 
+Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'as' => 'admin.','middleware' => ['auth', 'isAdmin']], function () {
     // permissions
     Route::resource('permissions', 'AdminPermissionsController');
     Route::resource('roles', 'AdminRolesController');

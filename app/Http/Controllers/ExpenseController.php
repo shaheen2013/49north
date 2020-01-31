@@ -2,19 +2,25 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\{Company, Mail\ExpenseCreated, Project, Purchases, Categorys, Expenses};
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Storage;
+use Exception;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Http\{JsonResponse,RedirectResponse,Request};
+use Illuminate\Support\Facades\{Mail,Storage};
+use Illuminate\View\View;
 
 class ExpenseController extends Controller {
-    // Add Expenselist
-    function expenselist()
-    {
+
+    /**
+     * Add Expenselist
+     *
+     * @return Factory|View
+     */
+    function expenselist () {
         if (auth()->user()->is_admin) {
             $activeMenu = 'admin';
-        } else {
+        }
+        else {
             $activeMenu = 'submit';
         }
 

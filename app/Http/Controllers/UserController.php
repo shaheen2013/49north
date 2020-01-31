@@ -2,20 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Company;
+use App\{Company, User, Employee_detail};
 use App\Mail\PasswordReset;
-use App\User;
-use App\Employee_detail;
 use Illuminate\Contracts\View\Factory;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\{Auth, Hash, Mail, Storage};
 use Illuminate\Validation\{Rule, ValidationException};
 use Illuminate\Http\{JsonResponse, RedirectResponse, Request};
 use Illuminate\Routing\Redirector;
 use Illuminate\View\View;
 use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
+use Spatie\Permission\Models\{Permission, Role};
 
 class UserController extends Controller {
     use SendsPasswordResetEmails;
@@ -25,16 +21,15 @@ class UserController extends Controller {
      *
      * @return Factory|View
      */
-    public function index()
-    {
-        if(auth()->user()->is_admin == 1){
-        //Get all users and pass it to the view
+    public function index () {
+        if (auth()->user()->is_admin == 1) {
+            //Get all users and pass it to the view
             $activeMenu = 'admin';
             $users = User::with('employee_details')->orderBy('name')->get();
 
             return view('users.index', compact('activeMenu'))->with('users', $users);
         }
-        else{
+        else {
             abort(401);
         }
     }
@@ -44,9 +39,8 @@ class UserController extends Controller {
      *
      * @return Factory|View
      */
-    public function create()
-    {
-        if(auth()->user()->is_admin == 1){
+    public function create () {
+        if (auth()->user()->is_admin == 1) {
             //Get all roles and pass it to the view
             $companies = Company::Latest()->get();
             $activeMenu = 'admin';
@@ -54,7 +48,7 @@ class UserController extends Controller {
 
             return view('users.edit', compact('user', 'activeMenu', 'companies'));
         }
-        else{
+        else {
             abort(401);
         }
     }
@@ -64,8 +58,7 @@ class UserController extends Controller {
      *
      * @return array
      */
-    public function attributes()
-    {
+    public function attributes () {
         return [
             'password' => 'Password must contain a lower case, uppercase, number and special character',
         ];
@@ -79,16 +72,18 @@ class UserController extends Controller {
      * @return RedirectResponse
      * @throws ValidationException
      */
-    public function store(Request $request)
-    {
+    public function store (Request $request) {
+
+        $isAdmin = auth()->user()->is_admin;
+
         $id = $request->input('id');
 
         //Validate name, email and password fields
         $rules = [
-            'firstname' => 'required|max:120',
-            'lastname'  => 'required|max:120',
-            'company_id'  => 'nullable|integer',
-            'email'     => Rule::unique('users')->ignore($id) // require unique email address
+            'firstname'  => 'required|max:120',
+            'lastname'   => 'required|max:120',
+            'company_id' => 'nullable|integer',
+            'email'      => Rule::unique('users')->ignore($id) // require unique email address
         ];
 
         // morph input fields to match user table
@@ -151,7 +146,7 @@ class UserController extends Controller {
             $msg = 'User successfully Added';
         }
 
-        //profile pic  code
+        // profile pic code
         if ($request->hasFile('profile_pic')) {
             if (isset($emp_id) && $profile_pic = Employee_detail::find($id)->profile_pic) {
                 Storage::delete($profile_pic);
@@ -170,6 +165,11 @@ class UserController extends Controller {
             $user->employee_details()->create($user_array);
         }
 
+        // permissions actions.  Use initial "is Admin" status, in case this user is the one being edited
+        if ($isAdmin) {
+            $user->syncPermissions($request->input('permission', []));
+        }
+
         //Redirect to the users.index view and display message
         return redirect()->route('users.index')->with('alert-info', $msg);
     }
@@ -181,8 +181,7 @@ class UserController extends Controller {
      *
      * @return RedirectResponse|Redirector
      */
-    public function show($id)
-    {
+    public function show ($id) {
         return redirect('users');
     }
 
@@ -193,35 +192,38 @@ class UserController extends Controller {
      *
      * @return Factory|View
      */
-    public function edit($id)
-    {
-        if(auth()->user()->is_admin == 1){
-            $activeMenu = 'admin';
-            $companies = Company::Latest()->get();
-            $u = User::findOrFail($id); //Get user with specified id
-            //DB::enableQueryLog();
-            $user = Employee_detail::find($u->id);
-            /* $query = DB::getQueryLog();
-            print_r($query);
-            die;*/
-            if (!$user) {
-                $user = new Employee_detail();
-                // separate first / last name from user table
-                [$user->firstname, $user->lastname] = explode(' ', $u->name);
-                $user->workemail = $u->email;
-            }
+    public function edit ($id) {
 
-            if (!$user->workemail) {
-                $user->workemail = $u->email;
-            }
-            $user->is_admin = $u->is_admin; // lazy load details from admin
-            $user->id = $u->id; // override ID to match User table instead of Employee Details
+        $activeMenu = 'admin';
+        $companies = Company::Latest()->get();
+        $u = User::findOrFail($id); //Get user with specified id
+        //DB::enableQueryLog();
+        $user = Employee_detail::find($u->id);
+        /* $query = DB::getQueryLog();
+        print_r($query);
+        die;*/
+        if (!$user) {
+            $user = new Employee_detail();
+            // separate first / last name from user table
+            [$user->firstname, $user->lastname] = explode(' ', $u->name);
+            $user->workemail = $u->email;
+        }
 
-            return view('users.edit', compact('user', 'activeMenu', 'companies'));
+        if (!$user->workemail) {
+            $user->workemail = $u->email;
         }
-        else{
-            abort(401);
-        }
+        $user->is_admin = $u->is_admin; // lazy load details from admin
+        $user->id = $u->id; // override ID to match User table instead of Employee Details
+
+        $roles = Role::with([
+            'permissions' => function ($q) {
+                $q->orderBy('orderval')->orderBy('name');
+            }
+        ])->has('permissions')->orderBy('orderval')->get();
+        $permissions = Permission::pluck('name', 'id');
+
+        return view('users.edit', compact('user', 'activeMenu', 'companies', 'roles', 'permissions'));
+
     }
 
     /**
@@ -231,8 +233,7 @@ class UserController extends Controller {
      *
      * @return JsonResponse|RedirectResponse
      */
-    public function destroy($id)
-    {
+    public function destroy ($id) {
         //Find a user with a given id and delete
         $user = User::find($id);
         $success = $user->exists ? true : false;
@@ -241,8 +242,12 @@ class UserController extends Controller {
         return response()->json(['success' => $success]);
     }
 
-    public function forceLogin(User $user)
-    {
+    /**
+     * @param User $user
+     *
+     * @return RedirectResponse
+     */
+    public function forceLogin (User $user) {
         // only allow forced login when user is an admin
         if (Auth::user()->is_admin === 1 && !request()->input('return')) {
             session(['was-admin-id' => Auth::user()->id, 'was-admin' => Auth::user()->remember_token]);
@@ -259,8 +264,13 @@ class UserController extends Controller {
         return redirect()->route('home');
     }
 
-    public function changeUserPassword(Request $request, $id)
-    {
+    /**
+     * @param Request $request
+     * @param         $id
+     *
+     * @return JsonResponse
+     */
+    public function changeUserPassword (Request $request, $id) {
         try {
             $user = User::find($id);
             $pass = '';
@@ -322,8 +332,13 @@ class UserController extends Controller {
         }
     }
 
-    public function changeStuffPassword(Request $request, $id)
-    {
+    /**
+     * @param Request $request
+     * @param         $id
+     *
+     * @return JsonResponse
+     */
+    public function changeStuffPassword (Request $request, $id) {
         try {
             $user = User::findOrFail($id);
             $pass = '';
@@ -392,14 +407,13 @@ class UserController extends Controller {
      *
      * @return JsonResponse
      */
-    public function search(Request $request)
-    {
+    public function search (Request $request) {
         try {
             $data = User::with('employee_details')->where('is_admin', '!=', 1)->orderBy('name')->where(function ($q) use ($request) {
-                    if (isset($request->search)) {
-                        $q->where('name', 'like', '%' . $request->search . '%')->orWhere('email', 'like', '%' . $request->search . '%');
-                    }
-                })->get();
+                if (isset($request->search)) {
+                    $q->where('name', 'like', '%' . $request->search . '%')->orWhere('email', 'like', '%' . $request->search . '%');
+                }
+            })->get();
 
             return response()->json(['status' => 200, 'data' => $data]);
         } catch (\Exception $e) {

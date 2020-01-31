@@ -37,9 +37,9 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('agreement/search', 'AgreementController@search')->name('agreement.search');
 
     // Expenses
-    Route::group(['prefix' => 'expense', 'as' => 'expense.'], function () {
-        Route::get('/list', 'ExpenseController@expenselist')->name('list');
-        Route::post('/addexpense', 'ExpenseController@addexpense')->name('add');
+    Route::group(['prefix' => 'expense', 'as' => 'expense.', 'middleware' => 'can:expenses-enabled'], function () {
+        Route::get('/list', 'ExpenseController@expenselist')->name('expense-list');
+        Route::post('/addexpense', 'ExpenseController@addexpense')->name('expense-add');
 
         Route::get('/edit/{id}', 'ExpenseController@edit')->name('edit');
         Route::POST('/update/{id}', 'ExpenseController@update')->name('update');
@@ -54,6 +54,7 @@ Route::group(['middleware' => ['auth']], function () {
 
     // Additional Benefits Spending
     Route::group(['prefix' => 'additional-benefits'], function () {
+
         Route::get('/', 'AdditionlBenifitsSpendingController@index')->name('additional-benefits.index');
         Route::post('/store', 'AdditionlBenifitsSpendingController@store')->name('additional-benefits.store');
 
@@ -73,9 +74,10 @@ Route::group(['middleware' => ['auth']], function () {
 
     // Personal development plan
     Route::group(['prefix' => 'personal-development-plan'], function () {
+
         Route::get('/', 'PersonalDevelopmentPlanController@index')->name('personal-development-plan.index');
-        Route::post('/comment/store/{id}', 'PersonalDevelopmentPlanController@commentStore')->name('personal-development-plan.comment.store');
-        Route::post('/comment/update/{id}', 'PersonalDevelopmentPlanController@commentUpdate')->name('personal-development-plan.comment.update');
+        Route::post('/comment/store/{id}', 'PersonalDevelopmentPlanController@commentStore');
+        Route::post('/comment/update/{id}', 'PersonalDevelopmentPlanController@commentUpdate');
 
         Route::post('/store', 'PersonalDevelopmentPlanController@store')->name('personal-development-plan.store');
 

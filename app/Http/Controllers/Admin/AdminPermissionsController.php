@@ -6,7 +6,7 @@ use Exception;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\{JsonResponse, RedirectResponse, Request, Response};
 use Illuminate\View\View;
-use Spatie\Permission\Models\{Permission,Role};
+use Spatie\Permission\Models\{Permission, Role};
 use App\Http\Controllers\Controller;
 
 class AdminPermissionsController extends Controller {
@@ -16,29 +16,26 @@ class AdminPermissionsController extends Controller {
      * @return Factory|View
      */
     public function index () {
-        if(auth()->user()->is_admin == 1){
-            $activeMenu = 'admin';
-            $roles = Role::with('permissions')->orderBy('orderval')->get();
-            $permissions = Permission::pluck('name','id');
 
-            return view('admin.permission.admin-permission-index', compact('roles', 'permissions', 'activeMenu'));
-        }else{
-            abort(401);
-        }
+        $activeMenu = 'admin';
+        $roles = Role::with('permissions')->orderBy('orderval')->get();
+        $permissions = Permission::pluck('name', 'id');
+
+        return view('admin.permission.admin-permission-index', compact('roles', 'permissions', 'activeMenu'));
+
     }
 
     /**
      * @return Factory|View
      */
     public function create () {
-        if(auth()->user()->is_admin == 1){
-            $activeMenu = 'admin';
-            $permission = new Permission();
-            $roles = Role::orderBy('orderval')->pluck('name','id');
-            return view('admin.permission.admin-permission-edit', compact('permission','roles', 'activeMenu'));
-        }else{
-            abort(401);
-        }
+
+        $activeMenu = 'admin';
+        $permission = new Permission();
+        $roles = Role::orderBy('orderval')->pluck('name', 'id');
+
+        return view('admin.permission.admin-permission-edit', compact('permission', 'roles', 'activeMenu'));
+
     }
 
     /**
@@ -49,27 +46,25 @@ class AdminPermissionsController extends Controller {
      * @return RedirectResponse
      */
     public function store (Request $request) {
-        if(auth()->user()->is_admin == 1){
-            $input = $request->except(['_token','role']);
-            $roles = $request->input('role',[]);
 
-            if ($id = $request->input('id')) {
-                $permission = Permission::find($id);
-                $permission->update($input);
-                session()->flash('alert-success','Permission Updated');
-            }
-            else {
-                $permission = Permission::create($input);
-                session()->flash('alert-success','Permission Created');
-            }
+        $input = $request->except(['_token', 'role']);
+        $roles = $request->input('role', []);
 
-            // removes old roles and replaces with this
-            $permission->syncRoles($roles);
-
-            return redirect()->route('admin.permissions.index');
-        }else{
-            abort(401);
+        if ($id = $request->input('id')) {
+            $permission = Permission::find($id);
+            $permission->update($input);
+            session()->flash('alert-success', 'Permission Updated');
         }
+        else {
+            $permission = Permission::create($input);
+            session()->flash('alert-success', 'Permission Created');
+        }
+
+        // removes old roles and replaces with this
+        $permission->syncRoles($roles);
+
+        return redirect()->route('admin.permissions.index');
+
     }
 
     /**
@@ -89,15 +84,13 @@ class AdminPermissionsController extends Controller {
      * @return Factory|View
      */
     public function edit (Permission $permission) {
-        if(auth()->user()->is_admin == 1){
-            $activeMenu = 'admin';
-            $roles = Role::orderBy('orderval')->pluck('name','id');
-            $rolePermissions = $permission->roles()->pluck('id','id')->first();
 
-            return view('admin.permission.admin-permission-edit',compact('permission','roles','rolePermissions', 'activeMenu'));
-        }else{
-            abort(401);
-        }
+        $activeMenu = 'admin';
+        $roles = Role::orderBy('orderval')->pluck('name', 'id');
+        $rolePermissions = $permission->roles()->pluck('id', 'id')->first();
+
+        return view('admin.permission.admin-permission-edit', compact('permission', 'roles', 'rolePermissions', 'activeMenu'));
+
     }
 
     /**
@@ -122,6 +115,7 @@ class AdminPermissionsController extends Controller {
      */
     public function destroy (Permission $permission) {
         $permission->delete();
+
         return response()->json(['success' => true]);
     }
 }

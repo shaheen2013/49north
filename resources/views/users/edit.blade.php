@@ -97,7 +97,7 @@
                     <div class="text_outer">
                         <label for="name" class="">Password*</label>
                         <input type="password" id="password" name="password" class="form-control" placeholder="xxxxxxxx"
-                               {{ $user->id ? '' : 'required' }} {{-- password is only required if it's a new user --}}>
+                            {{ $user->id ? '' : 'required' }} {{-- password is only required if it's a new user --}}>
                     </div>
                 </div>
 
@@ -274,20 +274,42 @@
                 </div>
             </div>
         </div>
-        
+
         @if(auth()->user()->is_admin == 1)
-        <div class="emergency">
-            <h2 class="form_title">Admin</h2>
-            <div class="row">
-                <div class='col-md-3'>
-                    <div class="text_outer">
-                        <label class="custom-checkbox form-check-label">
-                            <input class="form-check-input" name="is_admin" type="checkbox" value="1" @if($user->is_admin) checked @endif>Is Admin
-                        </label>
+            <div class="emergency">
+                <h2 class="form_title">Admin</h2>
+                <div class="row">
+                    <div class='col-md-3'>
+                        <div class="text_outer">
+                            <label class="custom-checkbox form-check-label">
+                                <input class="form-check-input" name="is_admin" type="checkbox" value="1" @if($user->is_admin) checked @endif>Is Admin
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-9">
+
+                        <div class="card">
+                            <div class="card-header">Permissions (Admins Edit permissions required)</div>
+                            <div class="card-body">
+                                <div class="row">
+                                    @foreach ($roles AS $role)
+                                        <div class="form-group col-6 col-md-4 col-lg-3">
+                                            {!! Form::label('role-' . $role->id,$role->name,['class' => 'font-weight-bold']) !!}
+                                            @foreach ($role->permissions AS $permission)
+                                                <div class="form-check">
+                                                    {!! Form::checkbox('permission[' . $permission->id .']',$permission->id,$user->user->hasPermissionTo($permission->name),['class' => 'form-check-input','id' => 'permission-' . $permission->id]) !!}
+                                                    {!! Form::label('permission-' . $permission->id,$permission->name,['class' => 'form-check-label']) !!}
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>
-        </div>
         @endif
 
         {{ Form::button($user->exists ? 'Edit' : 'Add', array('class' => 'btn-dark contact_btn','type'=>'submit')) }}
@@ -297,31 +319,32 @@
 
     <script type="text/javascript">
 
-    var user_id = null
-    function resetStuffPassword(id){
-        user_id = id;
+        var user_id = null
 
-        console.log(user_id)
+        function resetStuffPassword(id) {
+            user_id = id;
 
-        $.ajax({
-            method: "POST",
-            url: "/reset/stuff/password/"+id,
-            dataType: 'JSON',
-            success: function( results ) {
-                // $.toaster({ message : 'Password Updated successfully', title : 'Success', priority : 'success' });
-                // window.location.reload();
+            console.log(user_id)
 
-                if (results.success === true) {
-                    swal("Done!", results.message, "success").then(function () {
+            $.ajax({
+                method: "POST",
+                url: "/reset/stuff/password/" + id,
+                dataType: 'JSON',
+                success: function (results) {
+                    // $.toaster({ message : 'Password Updated successfully', title : 'Success', priority : 'success' });
+                    // window.location.reload();
 
-                        // window.location.reload()
-                    })
-                } else {
-                    swal("Error!", results.message, "error");
+                    if (results.success === true) {
+                        swal("Done!", results.message, "success").then(function () {
+
+                            // window.location.reload()
+                        })
+                    } else {
+                        swal("Error!", results.message, "error");
+                    }
                 }
-            }
-        });
-    }
+            });
+        }
 
     </script>
 
