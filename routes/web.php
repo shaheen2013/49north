@@ -127,7 +127,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/ticket_inprogress', 'MaintenanceController@ticket_inprogress')->name('ticket_inprogress');
         Route::post('/ticket_cancel', 'MaintenanceController@ticket_cancel')->name('ticket_cancel');
         Route::get('search', 'MaintenanceController@search')->name('search');
-        /* Route::post('/complited_ticket', 'Maintenance_ticket_controller@complited_ticket')->name('complited_ticket');*/
+       
     });
 
     // mileage
