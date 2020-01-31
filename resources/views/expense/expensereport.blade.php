@@ -15,7 +15,7 @@
                     <div class="row">
                         <div class="col-sm-2">
                             <div class="form-group">
-                                <input type="text" placeholder="Search expense" class="form-control-new" name="pending_search" id="pending_search" onkeyup="expences_pending_new()">
+                                <input type="text" placeholder="Search employee" class="form-control-new" name="pending_search" id="pending_search" onkeyup="expences_pending_new()">
                                 <span class="remove-button" onclick="document.getElementById('pending_search').value = '';expences_pending_new()"><i class="fa fa-times" aria-hidden="true"></i></span>
                             </div>
                         </div>
@@ -59,7 +59,7 @@
                     <div class="row">
                         <div class="col-sm-2">
                             <div class="form-group">
-                                <input type="text" placeholder="Search expense" class="form-control-new" name="history_search" id="history_search" onkeyup="expences_history_new()">
+                                <input type="text" placeholder="Search employee" class="form-control-new" name="history_search" id="history_search" onkeyup="expences_history_new()">
                                 <span class="remove-button" onclick="document.getElementById('history_search').value = '';expences_history_new()"><i class="fa fa-times" aria-hidden="true"></i></span>
                             </div>
                         </div>
@@ -512,7 +512,7 @@
 
             $.ajax({
                 type: 'post',
-                url: "/expense/pending",
+                url: "{{ route('expense.pending') }}",
                 data: data,
                 dataType: 'JSON',
                 success: function (results) {
@@ -586,7 +586,7 @@
             $('#wait-his').css('display', 'inline-block'); // wait for loader
             $.ajax({
                 type: 'post',
-                url: "/expense/new/history",
+                url: "{{ route('expense.history') }}",
                 data: data,
                 dataType: 'JSON',
                 success: function (results) {

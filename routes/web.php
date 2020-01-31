@@ -31,7 +31,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('edit_employee', 'HomeController@edit_employee');
 
     // agreements
-    Route::get('agreementlist', 'AgreementController@agreementlist');
+    Route::get('agreementlist', 'AgreementController@agreementlist')->name('agreement-list');
     Route::post('addagreement', 'AgreementController@addagreement')->name('add-agreement');
     Route::delete('delete_agreement/{id}/{type}', 'AgreementController@destroy')->name('delete_agreement');
     Route::get('agreement/search', 'AgreementController@search')->name('agreement.search');
@@ -39,7 +39,7 @@ Route::group(['middleware' => ['auth']], function () {
     // Expenses
     Route::group(['prefix' => 'expense', 'as' => 'expense.'], function () {
         Route::get('/list', 'ExpenseController@expenselist');
-        Route::post('/addexpense', 'ExpenseController@addexpense');
+        Route::post('/addexpense', 'ExpenseController@addexpense')->name('add');
 
         Route::get('/edit/{id}', 'ExpenseController@edit');
         Route::POST('/update/{id}', 'ExpenseController@update');
@@ -47,8 +47,8 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/new/approve/{id}', 'ExpenseController@approve');
         Route::post('/new/reject/{id}', 'ExpenseController@reject');
 
-        Route::post('/new/history', 'ExpenseController@searchHistory');
-        Route::POST('/pending', 'ExpenseController@searchPending');
+        Route::post('/new/history', 'ExpenseController@searchHistory')->name('history');
+        Route::POST('/pending', 'ExpenseController@searchPending')->name('pending');
         Route::POST('/destroy/{id}', 'ExpenseController@destroy');
     });
 
@@ -98,9 +98,9 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::group(['prefix' => 'company'], function () {
         Route::get('', 'CompanyController@index')->name('company.index');
-        Route::POST('/search', 'CompanyController@searchCompanyPage');
-        Route::get('/create', 'CompanyController@create');
-        Route::post('/store', 'CompanyController@store');
+        Route::POST('/search', 'CompanyController@searchCompanyPage')->name('company.search');
+        Route::get('/create', 'CompanyController@create')->name('company.create');
+        Route::post('/store', 'CompanyController@store')->name('company.store');
         Route::get('/edit/{id}', 'CompanyController@edit');
         Route::POST('/update/{id}', 'CompanyController@update');
         Route::POST('/destroy/{id}', 'CompanyController@destroy');
@@ -139,8 +139,8 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/pending/{id}', 'MileageController@mileagePending');
         Route::post('/approve/{id}', 'MileageController@mileageApprove');
         Route::post('/reject/{id}', 'MileageController@mileageReject');
-        Route::post('/search/pending', 'MileageController@searchPendingMileage')->name('search-pending-mileage');
-        Route::post('/search/history', 'MileageController@searchHistoryMileage')->name('search-history-mileage');
+        Route::post('/search/pending', 'MileageController@searchPendingMileage')->name('pending');
+        Route::post('/search/history', 'MileageController@searchHistoryMileage')->name('history');
     });
 
     // Journal
@@ -160,10 +160,9 @@ Route::group(['middleware' => ['auth']], function () {
 
     // Paystatement route
     Route::group(['prefix' => 'paystatement', 'as' => 'paystatement.'], function () {
-        Route::get('/list', 'PaystatementController@paylist');
-        Route::post('/add', 'PaystatementController@addpaystatement')->name('add');
-        Route::POST('/search', 'PaystatementController@searchPaymentPage');
-        Route::post('/store', 'PaystatementController@store');
+        Route::get('/list', 'PaystatementController@paylist')->name('list');
+        Route::POST('/search', 'PaystatementController@searchPaymentPage')->name('search');
+        Route::post('/store', 'PaystatementController@store')->name('store');
         Route::POST('/destroy/{id}', 'PaystatementController@destroy');
 
     });

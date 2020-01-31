@@ -177,7 +177,7 @@
             }
             $.ajax({
                 method: "POST",
-                url: "/company/store", //resource route
+                url: "{{ route('company.store') }}",
                 data: data,
                 enctype: 'multipart/form-data',
                 processData: false,  // Important!
@@ -254,7 +254,7 @@
             $('#wait').css('display', 'inline-block'); // wait for loader
             $.ajax({
                 type: 'post',
-                url: "/company/search",
+                url: "{{ route('company.search') }}",
                 data: data,
                 dataType: 'JSON',
                 success: function (results) {

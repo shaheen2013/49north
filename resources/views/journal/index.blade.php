@@ -209,7 +209,6 @@
             });
             $.ajax({
                 method: "POST",
-                // url: "/mileage/journal/store",
                 url: "{{ route('journal.store') }}",
                 data: data,
                 dataType: 'JSON',
@@ -228,6 +227,7 @@
             $('#journal-edit-modal').modal();
             $.ajax({
                 type: 'GET',
+                // url: "{{ route('journal.edit') }}",
                 url: "/journal/edit/"+id,
                 dataType: 'JSON',
                 success: function (results) {

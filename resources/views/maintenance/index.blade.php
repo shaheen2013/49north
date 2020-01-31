@@ -385,7 +385,7 @@
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
             $.ajax({
                 type:'POST',
-                url:"./ticket_inprogress",
+                url: "{{ route('maintenance.ticket_inprogress') }}",
                 dataType:'html',
                 data: {_token: CSRF_TOKEN ,
                     id: id},
