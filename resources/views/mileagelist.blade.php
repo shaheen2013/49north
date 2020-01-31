@@ -330,7 +330,7 @@
             $('#wait-his').css('display', 'inline-block'); // wait for loader
             $.ajax({
                 type: 'post',
-                url: "{{ route('mileage.search-pending-mileage') }}",
+                url: "{{ route('mileage.pending') }}",
                 data: data,
                 dataType: 'JSON',
                 success: function (results) {
@@ -417,7 +417,7 @@
             $('#wait-his').css('display', 'inline-block'); // wait for loader
             $.ajax({
                 type: 'post',
-                url: "{{ route('mileage.search-history-mileage') }}",
+                url: "{{ route('mileage.history') }}",
                 data: data,
                 dataType: 'JSON',
                 success: function (results) {

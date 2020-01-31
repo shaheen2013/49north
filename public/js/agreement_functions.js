@@ -3,7 +3,8 @@ function get_agreementlist() {
 
     $.ajax({
         type: 'POST',
-        url: "./agreementlist",
+        // url: "./agreementlist",
+        url: "{{ route('agreement-list') }}",
         dataType: 'html',
         data: {_token: CSRF_TOKEN},
         success: function (response) {
@@ -28,7 +29,8 @@ $('#upload_agreement').submit(function (e) {
     var form_data = new FormData($("#upload_agreement")[0]);
     $.ajax({
         type: 'post',
-        url: './addagreement',
+        url: "{{ route('add-agreement') }}",
+        // url: './addagreement',
         data: form_data,
         processData: false,
         contentType: false,

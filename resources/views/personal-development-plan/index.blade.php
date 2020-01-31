@@ -287,7 +287,6 @@
             });
             $.ajax({
                 method: "POST",
-                // url: "/mileage/journal/store",
                 url: "{{ route('personal-development-plan.store') }}",
                 data: data,
                 dataType: 'JSON',

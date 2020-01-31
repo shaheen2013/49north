@@ -54,8 +54,7 @@
 
                         <div class="col-sm-2">
                             <div class="form-group">
-                                <input type="date" name="history_date" id="history_date" placeholder="Select Date"
-                                       class="form-control-new">
+                                <input type="date" name="history_date" id="history_date" placeholder="Select Date" class="form-control-new" onChange="benifits_history_new()">
                             </div>
                         </div>
                         <div class="col-sm-1">
@@ -288,7 +287,6 @@
             });
             $.ajax({
                 method: "POST",
-                // url: "/mileage/journal/store",
                 url: "{{ route('additional-benefits.store') }}",
                 data: data,
                 dataType: 'JSON',
@@ -313,7 +311,6 @@
 
             $.ajax({
                 type: 'post',
-                // url: "/expense/pending",
                 url: "{{ route('additional-benefits.pending') }}",
                 data: data,
                 dataType: 'JSON',
@@ -388,7 +385,6 @@
             $('#wait-his').css('display', 'inline-block'); // wait for loader
             $.ajax({
                 type: 'post',
-                // url: "/expense/new/history",
                 url: "{{ route('additional-benefits.history') }}",
                 data: data,
                 dataType: 'JSON',

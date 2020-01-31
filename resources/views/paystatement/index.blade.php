@@ -154,7 +154,8 @@
 
             $.ajax({
                 method: "POST",
-                url: "/paystatement/store", //resource route
+                // url: "/paystatement/store", //resource route
+                url: "{{ route('paystatement.store') }}",
                 data: data,
                 enctype: 'multipart/form-data',
                 processData: false,  // Important!
@@ -191,7 +192,8 @@
             $('#wait').css('display', 'inline-block'); // wait for loader
             $.ajax({
                 type: 'post',
-                url: "/paystatement/search",
+                // url: "/paystatement/search",
+                url: "{{ route('paystatement.search') }}",
                 data: data,
                 dataType: 'JSON',
                 success: function (results) {
