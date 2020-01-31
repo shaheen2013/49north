@@ -25,7 +25,7 @@
 
                         @if(!auth()->user()->is_admin)
                         <li class="nav-item">
-                            <a class="nav-link {{ $activeMenu == 'submit' ? 'active' : '' }}" href="{{ url('expense/list') }}">Admin </a>
+                            <a class="nav-link {{ $activeMenu == 'submit' ? 'active' : '' }}" href="{{ route('expense.list') }}">Admin </a>
                         </li>
                         @endif
 
@@ -77,15 +77,17 @@
             {{--<a class="nav-item nav-link  {{ (request()->is('home')) ? 'active' : '' }}" id="nav-employee-tab"  href="{{ url('home') }}" aria-controls="nav-employee" aria-selected="true">Employee Information</a>--}}
 
             @if($activeMenu == 'profile')
-            <a class="nav-item nav-link {{ (request()->is('edit-profile')) ? 'active' : '' }}" href="{{ url('edit-profile') }}">Employee Information</a>
 
-            <a class="nav-item nav-link {{ (request()->is('agreementlist')) ? 'active' : '' }}" href="{{ url('agreementlist') }}">Agreements</a>
+            <a class="nav-item nav-link {{ (request()->is('edit-profile')) ? 'active' : '' }}" href="{{ route('edit-profile') }}">Employee Information</a>
 
-            <a class="nav-item nav-link {{request()->is('paystatement/list') ? 'active' : '' }}" href="{{url('paystatement/list')}}">Pay Statements</a>
+            <a class="nav-item nav-link {{ (request()->is('agreementlist')) ? 'active' : '' }}" href="{{ route('agreement-list') }}">Agreements</a>
+
+            <a class="nav-item nav-link {{request()->is('paystatement/list') ? 'active' : '' }}" href="{{ route('paystatement.list') }}">Pay Statements</a>
+            
             @endif
 
             @if($activeMenu == 'company')
-                <a class="nav-item nav-link {{ (request()->is('company')) ? 'active' : '' }}" href="{{ url('company') }}">Company List</a>
+                <a class="nav-item nav-link {{ (request()->is('company')) ? 'active' : '' }}" href="{{ route('company.index') }}">Company List</a>
             @endif
 
             @if($activeMenu == 'admin' || $activeMenu == 'submit')
@@ -93,13 +95,13 @@
                 <a class="nav-item nav-link {{ (request()->is('users')) ? 'active' : '' }}" href="{{ route('users.index') }}">Employee List</a>
                 @endif
 
-            <a class="nav-item nav-link {{ (request()->is('expense/list')) ? 'active' : '' }}"href="{{ url('expense/list') }}">Expense Report</a>
+            <a class="nav-item nav-link {{ (request()->is('expense/list')) ? 'active' : '' }}"href="{{ route('expense.list') }}">Expense Report</a>
 
             <a class="nav-item nav-link {{ (request()->is('mileage/*')) ? 'active' : '' }}" href="{{ route('mileage.mileage-list') }}">Mileage Book</a>
 
-            <a class="nav-item nav-link {{ (request()->is('maintenance/list')) ? 'active' : '' }}" href="{{ url('maintenance/list') }}">Tech Maintenance</a>
+            <a class="nav-item nav-link {{ (request()->is('maintenance/list')) ? 'active' : '' }}" href="{{ route('maintenance.list') }}">Tech Maintenance</a>
 
-            <a class="nav-item nav-link {{ (request()->is('timeoff/list')) ? 'active' : '' }}" href="{{ url('timeoff/list') }}">Time Off</a>
+            <a class="nav-item nav-link {{ (request()->is('timeoff/list')) ? 'active' : '' }}" href="{{ route('timeoff.list') }}">Time Off</a>
 
             <a class="nav-item nav-link {{ (request()->is('messages')) ? 'active' : '' }}" href="{{ route('messages.index') }}">Report a Concern</a>
             @if(auth()->user()->is_admin)
@@ -147,8 +149,7 @@
             @if(session()->has('alert-' . $msg))
                 <br>
                 <p class="alert alert-{{ $msg }}">
-                    {!! nl2br(session()->get('alert-' . $msg)) !!} <a href="#" class="close" data-dismiss="alert"
-                                                                      aria-label="close">&times;</a>
+                    {!! nl2br(session()->get('alert-' . $msg)) !!} <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
                 </p>
             @endif
         @endforeach

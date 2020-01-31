@@ -28,7 +28,7 @@ Auth::routes();
 Route::group(['middleware' => ['auth']], function () {
     Route::get('home', 'HomeController@home')->name('home');
     Route::get('edit-profile', 'HomeController@editProfile')->name('edit-profile');
-    Route::post('edit_employee', 'HomeController@edit_employee');
+    Route::post('edit_employee', 'HomeController@edit_employee')->name('edit_employee');
 
     // agreements
     Route::get('agreementlist', 'AgreementController@agreementlist')->name('agreement-list');
@@ -38,7 +38,7 @@ Route::group(['middleware' => ['auth']], function () {
 
     // Expenses
     Route::group(['prefix' => 'expense', 'as' => 'expense.'], function () {
-        Route::get('/list', 'ExpenseController@expenselist');
+        Route::get('/list', 'ExpenseController@expenselist')->name('list');
         Route::post('/addexpense', 'ExpenseController@addexpense')->name('add');
 
         Route::get('/edit/{id}', 'ExpenseController@edit');
@@ -166,6 +166,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::POST('/destroy/{id}', 'PaystatementController@destroy');
 
     });
+
 
     Route::get('force-login/{user}', 'UserController@forceLogin')->name('force-login');
     Route::get('users/search', 'UserController@search')->name('users.search');

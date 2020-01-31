@@ -33,10 +33,12 @@ class HomeController extends Controller {
     {
         $emp_id = auth()->user()->id;
         $activeMenu = 'profile';
+        $findUser = User::where('id','!=', auth()->user()->id)->with('employee_details')->orderBy('name')->get(); 
+        // return $findUser;
         $companies = Company::Latest()->get();
         $data['user'] = DB::table('users as u')->join('employee_details as ed', 'u.id', '=', 'ed.id')->select('ed.*')->where('u.id', '=', $emp_id)->first();
 
-        return view('home', $data, compact('activeMenu', 'companies'));
+        return view('home', $data, compact('activeMenu', 'companies', 'findUser'));
     }
 
     /**
@@ -189,6 +191,7 @@ class HomeController extends Controller {
             'firstname' => 'required|max:120',
             'lastname'  => 'required|max:120',
             'company_id'  => 'nullable|integer',
+            'report_to'  => 'nullable|integer',
             'email'     => Rule::unique('users')->ignore($id) // require unique email address
         ];
 
@@ -212,6 +215,11 @@ class HomeController extends Controller {
         $user_array = $request->only([
             'firstname',
             'lastname',
+            'compensation_details',
+            'benefits_opt_in',
+            'report_to',
+            'base_salary',
+            'position',
             'dob',
             'personalemail',
             'phone_no',
