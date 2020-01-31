@@ -26,7 +26,7 @@
 
                         @if(!auth()->user()->is_admin)
                         <li class="nav-item">
-                            <a class="nav-link {{ $activeMenu == 'submit' ? 'active' : '' }}" href="{{ route('expense.list') }}">Admin </a>
+                            <a class="nav-link {{ $activeMenu == 'submit' ? 'active' : '' }}" href="{{ route('expense.expense-list') }}">Admin </a>
                         </li>
                         @endif
 
