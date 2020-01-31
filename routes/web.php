@@ -57,35 +57,35 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/', 'AdditionlBenifitsSpendingController@index')->name('additional-benefits.index');
         Route::post('/store', 'AdditionlBenifitsSpendingController@store')->name('additional-benefits.store');
 
-        Route::get('/edit/{id}', 'AdditionlBenifitsSpendingController@edit')->name('edit');
-        Route::POST('/update/{id}', 'AdditionlBenifitsSpendingController@update')->name('update');
+        Route::get('/edit/{id}', 'AdditionlBenifitsSpendingController@edit')->name('additional-benefits.edit');
+        Route::POST('/update/{id}', 'AdditionlBenifitsSpendingController@update')->name('additional-benefits.update');
 
-        Route::post('/approve/{id}', 'AdditionlBenifitsSpendingController@approve')->name('approve');
-        Route::post('/reject/{id}', 'AdditionlBenifitsSpendingController@reject')->name('reject');
+        Route::post('/approve/{id}', 'AdditionlBenifitsSpendingController@approve')->name('additional-benefits.approve');
+        Route::post('/reject/{id}', 'AdditionlBenifitsSpendingController@reject')->name('additional-benefits.reject');
 
-        Route::post('/paid/{id}', 'AdditionlBenifitsSpendingController@paid')->name('paid');
-        Route::post('/non-paid/{id}', 'AdditionlBenifitsSpendingController@nonPaid')->name('non-paid');
+        Route::post('/paid/{id}', 'AdditionlBenifitsSpendingController@paid')->name('additional-benefits.paid');
+        Route::post('/non-paid/{id}', 'AdditionlBenifitsSpendingController@nonPaid')->name('additional-benefits.non-paid');
 
         Route::post('/history', 'AdditionlBenifitsSpendingController@searchHistory')->name('additional-benefits.history');
         Route::POST('/pending', 'AdditionlBenifitsSpendingController@searchPending')->name('additional-benefits.pending');
-        Route::POST('/destroy/{id}', 'AdditionlBenifitsSpendingController@destroy')->name('destroy');
+        Route::POST('/destroy/{id}', 'AdditionlBenifitsSpendingController@destroy')->name('additional-benefits.destroy');
     });
 
     // Personal development plan
     Route::group(['prefix' => 'personal-development-plan'], function () {
         Route::get('/', 'PersonalDevelopmentPlanController@index')->name('personal-development-plan.index');
-        Route::post('/comment/store/{id}', 'PersonalDevelopmentPlanController@commentStore')->name('comment.store');
-        Route::post('/comment/update/{id}', 'PersonalDevelopmentPlanController@commentUpdate')->name('comment.update');
+        Route::post('/comment/store/{id}', 'PersonalDevelopmentPlanController@commentStore')->name('personal-development-plan.comment.store');
+        Route::post('/comment/update/{id}', 'PersonalDevelopmentPlanController@commentUpdate')->name('personal-development-plan.comment.update');
 
         Route::post('/store', 'PersonalDevelopmentPlanController@store')->name('personal-development-plan.store');
 
-        Route::get('/edit/{id}', 'PersonalDevelopmentPlanController@edit')->name('edit');
-        Route::POST('/update/{id}', 'PersonalDevelopmentPlanController@update')->name('update');
+        Route::get('/edit/{id}', 'PersonalDevelopmentPlanController@edit')->name('personal-development-plan.edit');
+        Route::POST('/update/{id}', 'PersonalDevelopmentPlanController@update')->name('personal-development-plan.update');
 
-        Route::get('/show/{id}', 'PersonalDevelopmentPlanController@show')->name('show');
+        Route::get('/show/{id}', 'PersonalDevelopmentPlanController@show')->name('personal-development-plan.show');
 
         Route::post('/archive', 'PersonalDevelopmentPlanController@searchArchive')->name('personal-development-plan.archive');
-        Route::POST('/destroy/{id}', 'PersonalDevelopmentPlanController@destroy')->name('destroy');
+        Route::POST('/destroy/{id}', 'PersonalDevelopmentPlanController@destroy')->name('personal-development-plan.destroy');
     });
 
     // Company
