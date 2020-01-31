@@ -431,7 +431,7 @@
     <!--ajax come modal-->
 
     <script type="text/javascript">
-        let id = from = to = history_from = history_to = null;
+        let id = from = to = history_from = history_to = updateRoute = null;
 
         $(document).ready(function () {
             const date = new Date(), y = date.getFullYear(), m = date.getMonth();
@@ -536,8 +536,8 @@
                                     }
 
                                     if (is_admin == 1) {
-                                        adminOption = `<a href="javascript:void(0)" data-toggle="tooltip" title="Approved!"  onclick="expence_approve_new('${data[index].id}')"><i class="fa fa-check-circle"></i></a>
-                                        <a href="javascript:void(0)" data-toggle="tooltip"  title="Reject!" onclick="expence_reject_new('${data[index].id}')"><i class="fa fa-ban"></i></a>`;
+                                        adminOption = `<a href="javascript:void(0)" data-toggle="tooltip" title="Approved!"  onclick="expence_approve_new('${data[index].id}', '${data[index].routes.approve}')"><i class="fa fa-check-circle"></i></a>
+                                        <a href="javascript:void(0)" data-toggle="tooltip"  title="Reject!" onclick="expence_reject_new('${data[index].id}', '${data[index].routes.reject}')"><i class="fa fa-ban"></i></a>`;
                                     }
 
                                     html += `<tr>
@@ -549,8 +549,8 @@
                                         ${adminOption}
                                     </td>
                                     <td class="text-center">
-                                        <a href="javascript:void(0);" onclick="OpenEditExpenseModel('${data[index].id}') ">EDIT</a>
-                                        <a href="javascript:void(0);" class="down" onclick="deleteconfirm('${data[index].id}')">DELETE</a>
+                                        <a href="javascript:void(0);" onclick="OpenEditExpenseModel('${data[index].id}', '${data[index].routes.edit}', '${data[index].routes.update}') ">EDIT</a>
+                                        <a href="javascript:void(0);" class="down" onclick="deleteconfirm('${data[index].id}', '${data[index].routes.destroy}')">DELETE</a>
                                     </td>
                                 </tr>
                                 <tr class="spacer"></tr>`;
@@ -610,7 +610,7 @@
                                     }
 
                                     if (is_admin == 1) {
-                                        admin = `<a href="javascript:void(0);" class="down" onclick="deleteconfirm('${data[index].id}')">DELETE</a>`;
+                                        admin = `<a href="javascript:void(0);" class="down" onclick="deleteconfirm('${data[index].id}', '${data[index].routes.destroy}')">DELETE</a>`;
                                     }
 
                                     html += `<tr>
@@ -635,7 +635,7 @@
             });
         }
 
-        function deleteconfirm(id) {
+        function deleteconfirm(id, route) {
             swal({
                 title: "Delete?",
                 text: "Please ensure and then confirm!",
@@ -648,7 +648,7 @@
                 if (e.value === true) {
                     $.ajax({
                         type: 'post',
-                        url: "/expense/destroy/" + id,
+                        url: route,
                         dataType: 'JSON',
                         success: function (results) {
 
@@ -672,12 +672,13 @@
             })
         }
 
-        function OpenEditExpenseModel(id) {
+        function OpenEditExpenseModel(id, route, update) {
+            updateRoute = update;
             $('#expense-modal-edit2').modal();
 
             $.ajax({
                 type: 'GET',
-                url: "/expense/edit/" + id,
+                url: route,
                 dataType: 'JSON',
                 success: function (results) {
                     if (results.status === 'success') {
@@ -809,7 +810,7 @@
 
             $.ajax({
                 method: "POST",
-                url: "/expense/update/" + id,
+                url: updateRoute,
                 data: data,
                 enctype: 'multipart/form-data',
                 processData: false,  // Important!
@@ -852,8 +853,7 @@
             return [year, month, day].join('-');
         }
 
-        function expence_approve_new(id) {
-
+        function expence_approve_new(id, route) {
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-Token': "{{csrf_token()}}"
@@ -862,9 +862,8 @@
             let data = {id: id};
 
             $.ajax({
-
                 method: "POST",
-                url: "/expense/new/approve/" + id,
+                url: route,
                 data: data,
                 success: function (response) {
                     $.toaster({message: 'Enabled', title: 'Success', priority: 'success'});
@@ -873,18 +872,15 @@
                     }, 1000);
                 }
             });
-
         }
 
-        function expence_reject_new(id) {
-
+        function expence_reject_new(id, route) {
             let data = {id: id};
+
             $.ajax({
-
                 method: "POST",
-                url: "/expense/new/reject/" + id,
+                url: route,
                 data: data,
-
                 success: function (response) {
                     $.toaster({message: 'Disabled', title: 'Success', priority: 'success'});
                     setTimeout(function () {

@@ -83,7 +83,7 @@ class MileageController extends Controller {
         }
 
         $query->dateSearch('date');
-         $query->isEmployee();
+        $query->isEmployee();
 
         // pending has not status
         if ($isPending) {
@@ -199,7 +199,8 @@ class MileageController extends Controller {
     }
 
     /// Pending mileage
-    public function mileagePending ($id) {
+    public function mileagePending($id)
+    {
         $data = Mileage::find($id);
         $data->status = null;
         $data->save();
@@ -212,7 +213,8 @@ class MileageController extends Controller {
     }
 
     /// approved mileage
-    public function mileageApprove ($id) {
+    public function mileageApprove($id)
+    {
         $data = Mileage::find($id);
         $data->status = 'A';
         $data->save();
