@@ -101,7 +101,8 @@
             <div class="modal-content">
                 <div class="modal-body">
                     <div class="col-md-12" style="margin-top:40px;margin-bottom:20px;">
-                        <form class="maintenance1_edit" action="{{url('maintenance/edit')}}" method="POST">
+                        <form class="maintenance1_edit" action="{{ route('maintenance.edit') }}" method="POST">
+                           
 
 
                         </form>
@@ -116,7 +117,8 @@
             <div class="modal-content">
                 <div class="modal-body">
                     <div class="col-md-12" style="margin-top:40px;margin-bottom:20px;">
-                        <form class="maintenance1" action="{{url('maintenance/add')}}" method="POST">
+                       
+                        <form class="maintenance1" action="{{ route('maintenance.add') }}" method="POST">
                             <div class="row">
                                 <div class="col-md-6 col-sm-6">
                                     <div class="text_outer">
