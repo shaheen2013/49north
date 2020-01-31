@@ -227,8 +227,8 @@
             $('#journal-edit-modal').modal();
             $.ajax({
                 type: 'GET',
-                // url: "{{ route('journal.edit') }}",
-                url: "/journal/edit/"+id,
+               
+                url: "journal/edit/"+id,
                 dataType: 'JSON',
                 success: function (results) {
 

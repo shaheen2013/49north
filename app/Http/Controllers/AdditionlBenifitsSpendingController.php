@@ -31,6 +31,20 @@ class AdditionlBenifitsSpendingController extends Controller
 
         $data = $this->_searchPending('search');
 
+        if (count($data)) {
+            foreach ($data as $datum) {
+                $routes = [];
+                $routes['edit'] = route('additional-benefits.edit', $datum->id);
+                $routes['update'] = route('additional-benefits.update', $datum->id);
+                $routes['approve'] = route('additional-benefits.approve', $datum->id);
+                $routes['reject'] = route('additional-benefits.reject', $datum->id);
+                $routes['paid'] = route('additional-benefits.paid', $datum->id);
+                $routes['non-paid'] = route('additional-benefits.non-paid', $datum->id);
+                $routes['destroy'] = route('additional-benefits.destroy', $datum->id);
+                $datum->routes = $routes;
+            }
+        }
+
         return response()->json(['status' => 'success', 'data' => $data]);
     }
 
@@ -44,6 +58,20 @@ class AdditionlBenifitsSpendingController extends Controller
     public function searchHistory (Request $request) {
 
         $data = $this->_searchHistory('search');
+
+        if (count($data)) {
+            foreach ($data as $datum) {
+                $routes = [];
+                $routes['edit'] = route('additional-benefits.edit', $datum->id);
+                $routes['update'] = route('additional-benefits.update', $datum->id);
+                $routes['approve'] = route('additional-benefits.approve', $datum->id);
+                $routes['reject'] = route('additional-benefits.reject', $datum->id);
+                $routes['paid'] = route('additional-benefits.paid', $datum->id);
+                $routes['nonPaid'] = route('additional-benefits.non-paid', $datum->id);
+                $routes['destroy'] = route('additional-benefits.destroy', $datum->id);
+                $datum->routes = $routes;
+            }
+        }
 
         return response()->json(['status' => 'success', 'data' => $data]);
     }
