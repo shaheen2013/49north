@@ -196,7 +196,7 @@
 
     <script type="text/javascript">
 
-        let id = from = to = history_from = history_to = null;
+        let id = from = to = history_from = history_to = updateRoute = null;
 
         $(document).ready(function () {
             const date = new Date(), y = date.getFullYear(), m = date.getMonth();
@@ -336,14 +336,14 @@
 
                                     if (is_admin == 1) {
                                         if (data[index].pay_status == 1) {
-                                            action = `<a href="javascript:void(0)" data-toggle="tooltip" title="Non-Paid" onclick="benefit_non_paid('${data[index].id}')"><i class="fa fa-usd"></i></a>`;
+                                            action = `<a href="javascript:void(0)" data-toggle="tooltip" title="Non-Paid" onclick="benefit_non_paid('${data[index].id}', '${data[index].routes.nonPaid}')"><i class="fa fa-usd"></i></a>`;
                                         }
                                         else{
-                                            action = `<a href="javascript:void(0)" data-toggle="tooltip" title="Paid" onclick="benefit_paid('${data[index].id}')"><i class="fa fa-usd"></i></a>`;
+                                            action = `<a href="javascript:void(0)" data-toggle="tooltip" title="Paid" onclick="benefit_paid('${data[index].id}', '${data[index].routes.paid}')"><i class="fa fa-usd"></i></a>`;
                                         }
 
-                                        admin = `<a href="javascript:void(0)" data-toggle="tooltip" title="Approved" onclick="benefit_approve('${data[index].id}')"><i class="fa fa-check-circle"></i></a>
-                                        <a href="javascript:void(0)" data-toggle="tooltip" title="Reject!" onclick="benefit_reject('${data[index].id}')"><i class="fa fa-ban"></i></a>`;
+                                        admin = `<a href="javascript:void(0)" data-toggle="tooltip" title="Approved" onclick="benefit_approve('${data[index].id}', '${data[index].routes.approve}')"><i class="fa fa-check-circle"></i></a>
+                                        <a href="javascript:void(0)" data-toggle="tooltip" title="Reject!" onclick="benefit_reject('${data[index].id}', '${data[index].routes.approve}')"><i class="fa fa-ban"></i></a>`;
                                     }
 
                                     html += `<tr>
@@ -355,8 +355,8 @@
                                         ${admin}
                                     </td>
                                     <td class="action-box">
-                                        <a href="javascript:void(0);" onclick="OpenEditBenifitsModel('${data[index].id}') ">EDIT</a>
-                                        <a href="javascript:void(0);" class="down" onclick="deleteconfirm('${data[index].id}')">DELETE</a>
+                                        <a href="javascript:void(0);" onclick="OpenEditBenifitsModel('${data[index].id}', '${data[index].routes.edit}', '${data[index].routes.update}') ">EDIT</a>
+                                        <a href="javascript:void(0);" class="down" onclick="deleteconfirm('${data[index].id}', '${data[index].routes.destroy}')">DELETE</a>
                                     </td>
                                 </tr>
                                 <tr class="spacer"></tr>`;
@@ -410,12 +410,12 @@
 
                                     if (is_admin == 1) {
                                         if (data[index].pay_status == 1) {
-                                            action = `<a href="javascript:void(0)" data-toggle="tooltip" title="Non-Paid" onclick="benefit_non_paid('${data[index].id}')"><i class="fa fa-usd"></i></a>`;
+                                            action = `<a href="javascript:void(0)" data-toggle="tooltip" title="Non-Paid" onclick="benefit_non_paid('${data[index].id}', '${data[index].routes.nonPaid}')"><i class="fa fa-usd"></i></a>`;
                                         } else{
-                                            action = `<a href="javascript:void(0)" data-toggle="tooltip" title="Paid" onclick="benefit_paid('${data[index].id}')"><i class="fa fa-usd"></i></a>`;
+                                            action = `<a href="javascript:void(0)" data-toggle="tooltip" title="Paid" onclick="benefit_paid('${data[index].id}', '${data[index].routes.paid}')"><i class="fa fa-usd"></i></a>`;
                                         }
 
-                                        admin = `<a href="javascript:void(0);" class="down" onclick="deleteconfirm('${data[index].id}')">DELETE</a>`;
+                                        admin = `<a href="javascript:void(0);" class="down" onclick="deleteconfirm('${data[index].id}', '${data[index].routes.destroy}')">DELETE</a>`;
                                     }
 
 
@@ -446,12 +446,13 @@
             });
         }
 
-        function OpenEditBenifitsModel(id) {
-            console.log(id);
+        function OpenEditBenifitsModel(id, route, update) {
+            // console.log(id);
+            updateRoute = update;
             $('#additional_benefits_edit_modal').modal();
             $.ajax({
                 type: 'GET',
-                url: "/additional-benefits/edit/"+id,
+                url: route,
                 dataType: 'JSON',
                 success: function (results) {
 
@@ -481,7 +482,7 @@
 
             $.ajax({
                 method: "POST",
-                url: "/additional-benefits/update/"+id,
+                url: updateRoute,
                 data: data,
                 dataType: 'JSON',
                 success: function (response) {
@@ -494,7 +495,7 @@
             });
         }
 
-        function benefit_approve(id) {
+        function benefit_approve(id, route) {
 
             $.ajaxSetup({
             headers: {
@@ -506,7 +507,7 @@
             $.ajax({
 
             method: "POST",
-            url: "/additional-benefits/approve/" + id,
+            url: route,
             data: data,
             success: function (response) {
                 $.toaster({message: 'Approved', title: 'Success', priority: 'success'});
@@ -518,13 +519,13 @@
 
         }
 
-        function benefit_reject(id) {
+        function benefit_reject(id, route) {
 
             let data = {id: id};
             $.ajax({
 
                 method: "POST",
-                url: "/additional-benefits/reject/" + id,
+                url: route,
                 data: data,
 
                 success: function (response) {
@@ -536,7 +537,7 @@
             });
         }
 
-        function benefit_paid(id) {
+        function benefit_paid(id, route) {
 
             $.ajaxSetup({
             headers: {
@@ -548,7 +549,7 @@
             $.ajax({
 
             method: "POST",
-            url: "/additional-benefits/paid/" + id,
+            url: route,
             data: data,
             success: function (response) {
                 $.toaster({message: 'Paid', title: 'Success', priority: 'success'});
@@ -560,13 +561,13 @@
 
         }
 
-        function benefit_non_paid(id) {
+        function benefit_non_paid(id, route) {
 
             let data = {id: id};
             $.ajax({
 
                 method: "POST",
-                url: "/additional-benefits/non-paid/" + id,
+                url: route,
                 data: data,
 
                 success: function (response) {
@@ -578,7 +579,7 @@
             });
         }
 
-        function deleteconfirm(id) {
+        function deleteconfirm(id, route) {
             swal({
                 title: "Delete?",
                 text: "Please ensure and then confirm!",
@@ -591,7 +592,7 @@
                 if (e.value === true) {
                     $.ajax({
                         type: 'post',
-                        url: "/additional-benefits/destroy/" + id,
+                        url: route,
                         dataType: 'JSON',
                         success: function (results) {
 

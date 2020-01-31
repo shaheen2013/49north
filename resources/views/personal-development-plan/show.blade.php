@@ -93,16 +93,17 @@
         </div>
     @endif
     <script type="text/javascript">
-
-        function create_comment() {
+        let updateRoute = null;
+        function create_comment(route, update) {
             event.preventDefault();
+            updateRoute = update;
             let id = $('#personal_development_comment_id').val();
             console.log(id);
             $('#create').attr('disabled', 'disabled');
 
             $.ajax({
                 method: "POST",
-                url: "/personal-development-plan/comment/store/" + id,
+                url: route,
                 data: new FormData(document.getElementById('personal_development_create_form')),
                 dataType: 'JSON',
                 processData: false,  // Important!
@@ -126,7 +127,7 @@
 
             $.ajax({
                 method: "POST",
-                url: "/personal-development-plan/comment/update/" + id,
+                url: updateRoute,
                 data: new FormData(document.getElementById('personal_development_update_form')),
                 dataType: 'JSON',
                 processData: false,  // Important!

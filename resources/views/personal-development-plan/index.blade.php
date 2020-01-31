@@ -218,7 +218,7 @@
 
     <script type="text/javascript">
 
-        let id = from = to = archive_from = archive_to = null;
+        let id = from = to = archive_from = archive_to = updateRoute = null;
 
         $(document).ready(function () {
             const date = new Date(), y = date.getFullYear(), m = date.getMonth();
@@ -345,8 +345,8 @@
                                     </td>
                                     <td class="action-box">
                                         <a href="/personal-development-plan/show/${data[index].id}"> View</a>
-                                        <a href="javascript:void(0);" onclick="OpenEditDevelopmentModel('${data[index].id}') ">EDIT</a>
-                                        <a href="javascript:void(0);" class="down" onclick="deleteconfirm('${data[index].id}')">DELETE</a>
+                                        <a href="javascript:void(0);" onclick="OpenEditDevelopmentModel('${data[index].id}', '${data[index].routes.edit}', '${data[index].routes.update}') ">EDIT</a>
+                                        <a href="javascript:void(0);" class="down" onclick="deleteconfirm('${data[index].id}', '${data[index].routes.destroy}')">DELETE</a>
                                     </td>
                                </tr>
                                <tr class="spacer"></tr>`;
@@ -361,12 +361,13 @@
             });
         }
 
-        function OpenEditDevelopmentModel(id) {
+        function OpenEditDevelopmentModel(id, route, update) {
+            updateRoute = update;
             $('#personal_development_update_id').val(id);
             $('#personal_development_edit_modal').modal();
             $.ajax({
                 type: 'GET',
-                url: "/personal-development-plan/edit/" + id,
+                url: route,
                 dataType: 'JSON',
                 success: function (results) {
 
@@ -436,7 +437,7 @@
 
             $.ajax({
                 method: "POST",
-                url: "/personal-development-plan/update/" + id,
+                url: updateRoute,
                 data: new FormData(document.getElementById('personal_development_update_form')),
                 dataType: 'JSON',
                 processData: false,  // Important!
@@ -453,7 +454,7 @@
         }
 
 
-        function deleteconfirm(id) {
+        function deleteconfirm(id, route) {
             swal({
                 title: "Delete?",
                 text: "Please ensure and then confirm!",
@@ -466,7 +467,7 @@
                 if (e.value === true) {
                     $.ajax({
                         type: 'post',
-                        url: "/personal-development-plan/destroy/" + id,
+                        url: route,
                         dataType: 'JSON',
                         success: function (results) {
 

@@ -34,6 +34,19 @@ class PersonalDevelopmentPlanController extends Controller
 
         $data = $this->_searchArchive('search');
 
+        if (count($data)) {
+            foreach ($data as $datum) {
+                $routes = [];
+                $routes['commentStore'] = route('personal-development-plan.comment.store', $datum->id);
+                $routes['commentUpdate'] = route('personal-development-plan.comment.update', $datum->id);
+                $routes['edit'] = route('personal-development-plan.edit', $datum->id);
+                $routes['update'] = route('personal-development-plan.update', $datum->id);
+                $routes['show'] = route('personal-development-plan.show', $datum->id);
+                $routes['destroy'] = route('expense.destroy', $datum->id);
+                $datum->routes = $routes;
+            }
+        }
+
         return response()->json(['status' => 'success', 'data' => $data]);
     }
 

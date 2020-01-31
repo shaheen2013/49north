@@ -57,35 +57,35 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/', 'AdditionlBenifitsSpendingController@index')->name('additional-benefits.index');
         Route::post('/store', 'AdditionlBenifitsSpendingController@store')->name('additional-benefits.store');
 
-        Route::get('/edit/{id}', 'AdditionlBenifitsSpendingController@edit')->name('edit');
-        Route::POST('/update/{id}', 'AdditionlBenifitsSpendingController@update')->name('update');
+        Route::get('/edit/{id}', 'AdditionlBenifitsSpendingController@edit')->name('additional-benefits.edit');
+        Route::POST('/update/{id}', 'AdditionlBenifitsSpendingController@update')->name('additional-benefits.update');
 
-        Route::post('/approve/{id}', 'AdditionlBenifitsSpendingController@approve')->name('approve')->middleware('isAdmin');
-        Route::post('/reject/{id}', 'AdditionlBenifitsSpendingController@reject')->name('reject')->middleware('isAdmin');
+        Route::post('/approve/{id}', 'AdditionlBenifitsSpendingController@approve')->name('additional-benefits.approve')->middleware('isAdmin');
+        Route::post('/reject/{id}', 'AdditionlBenifitsSpendingController@reject')->name('additional-benefits.reject')->middleware('isAdmin');
 
-        Route::post('/paid/{id}', 'AdditionlBenifitsSpendingController@paid')->name('paid');
-        Route::post('/non-paid/{id}', 'AdditionlBenifitsSpendingController@nonPaid')->name('non-paid');
+        Route::post('/paid/{id}', 'AdditionlBenifitsSpendingController@paid')->name('additional-benefits.paid');
+        Route::post('/non-paid/{id}', 'AdditionlBenifitsSpendingController@nonPaid')->name('additional-benefits.non-paid');
 
         Route::post('/history', 'AdditionlBenifitsSpendingController@searchHistory')->name('additional-benefits.history');
         Route::POST('/pending', 'AdditionlBenifitsSpendingController@searchPending')->name('additional-benefits.pending');
-        Route::POST('/destroy/{id}', 'AdditionlBenifitsSpendingController@destroy')->name('destroy');
+        Route::POST('/destroy/{id}', 'AdditionlBenifitsSpendingController@destroy')->name('additional-benefits.destroy');
     });
 
     // Personal development plan
     Route::group(['prefix' => 'personal-development-plan'], function () {
         Route::get('/', 'PersonalDevelopmentPlanController@index')->name('personal-development-plan.index');
-        Route::post('/comment/store/{id}', 'PersonalDevelopmentPlanController@commentStore')->name('comment.store');
-        Route::post('/comment/update/{id}', 'PersonalDevelopmentPlanController@commentUpdate')->name('comment.update');
+        Route::post('/comment/store/{id}', 'PersonalDevelopmentPlanController@commentStore')->name('personal-development-plan.comment.store');
+        Route::post('/comment/update/{id}', 'PersonalDevelopmentPlanController@commentUpdate')->name('personal-development-plan.comment.update');
 
         Route::post('/store', 'PersonalDevelopmentPlanController@store')->name('personal-development-plan.store');
 
-        Route::get('/edit/{id}', 'PersonalDevelopmentPlanController@edit')->name('edit');
-        Route::POST('/update/{id}', 'PersonalDevelopmentPlanController@update')->name('update');
+        Route::get('/edit/{id}', 'PersonalDevelopmentPlanController@edit')->name('personal-development-plan.edit');
+        Route::POST('/update/{id}', 'PersonalDevelopmentPlanController@update')->name('personal-development-plan.update');
 
-        Route::get('/show/{id}', 'PersonalDevelopmentPlanController@show')->name('show');
+        Route::get('/show/{id}', 'PersonalDevelopmentPlanController@show')->name('personal-development-plan.show');
 
         Route::post('/archive', 'PersonalDevelopmentPlanController@searchArchive')->name('personal-development-plan.archive');
-        Route::POST('/destroy/{id}', 'PersonalDevelopmentPlanController@destroy')->name('destroy');
+        Route::POST('/destroy/{id}', 'PersonalDevelopmentPlanController@destroy')->name('personal-development-plan.destroy');
     });
 
     // Company
@@ -117,7 +117,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/ticket_inprogress', 'MaintenanceController@ticket_inprogress')->name('ticket_inprogress')->middleware('isAdmin');
         Route::post('/ticket_cancel', 'MaintenanceController@ticket_cancel')->name('ticket_cancel')->middleware('isAdmin');
         Route::get('search', 'MaintenanceController@search')->name('search');
-        /* Route::post('/complited_ticket', 'Maintenance_ticket_controller@complited_ticket')->name('complited_ticket');*/
+
     });
 
     // Mileage
@@ -152,22 +152,22 @@ Route::group(['middleware' => ['auth']], function () {
     Route::group(['prefix' => 'paystatement', 'as' => 'paystatement.'], function () {
         Route::get('/list', 'PaystatementController@paylist')->name('list');
         Route::POST('/search', 'PaystatementController@searchPaymentPage')->name('search');
-        Route::post('/store', 'PaystatementController@store')->name('store')->middleware('isAdmin');
-        Route::POST('/destroy/{id}', 'PaystatementController@destroy')->name('destroy')->middleware('isAdmin');
+        Route::post('/store', 'PaystatementController@store')->name('store');
+        Route::POST('/destroy/{id}', 'PaystatementController@destroy')->name('destroy');
     });
 
     Route::get('force-login/{user}', 'UserController@forceLogin')->name('force-login');
-    Route::get('users/search', 'UserController@search')->name('users.search')->middleware('isAdmin');
+    Route::get('users/search', 'UserController@search')->name('users.search');
 
     // Plan routes go here
     Route::get('plans', 'PlanController@index')->name('plans.index');
-    Route::post('plans/store', 'PlanController@store')->name('plans.store')->middleware('isAdmin');
-    Route::put('plans/{plan}', 'PlanController@update')->name('plans.update')->middleware('isAdmin');
+    Route::post('plans/store', 'PlanController@store')->name('plans.store');
+    Route::put('plans/{plan}', 'PlanController@update')->name('plans.update');
 
     // Missions routes go here
     Route::get('missions', 'MissionController@index')->name('missions.index');
-    Route::post('missions/store', 'MissionController@store')->name('missions.store')->middleware('isAdmin');
-    Route::put('missions/{plan}', 'MissionController@update')->name('missions.update')->middleware('isAdmin');
+    Route::post('missions/store', 'MissionController@store')->name('missions.store');
+    Route::put('missions/{plan}', 'MissionController@update')->name('missions.update');
 
     // Messages routes go here
     Route::group(['prefix' => 'messages', 'as' => 'messages.'], function () {
@@ -178,7 +178,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::put('/{message}', 'MessageController@update')->name('update');
         Route::delete('/{message}', 'MessageController@destroy')->name('destroy');
         Route::get('/search', 'MessageController@search')->name('search');
-        Route::put('/status/{message}', 'MessageController@statusUpdate')->name('status.update')->middleware('isAdmin');
+        Route::put('/status/{message}', 'MessageController@statusUpdate')->name('status.update');
     });
 });
 
