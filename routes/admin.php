@@ -10,7 +10,7 @@ Route::group(['middleware' => ['auth', 'isAdmin']], function () {
 });
 
 
-Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'as' => 'admin.'], function () {
+Route::group(['namespace' => 'Admin', 'middleware' => ['auth', 'isAdmin'], 'prefix' => 'admin', 'as' => 'admin.'], function () {
     Route::get('pay-statements', 'AdminPaystatementController@paystatement')->name('pay-statements');
 
     Route::get('agreement', 'AdminAgreementController@agreementlist')->name('agreement-list');

@@ -33,7 +33,7 @@ Route::group(['middleware' => ['auth']], function () {
     // Agreements
     Route::get('agreementlist', 'AgreementController@agreementlist')->name('agreement-list');
     Route::post('addagreement', 'AgreementController@addagreement')->name('add-agreement');
-    Route::delete('delete_agreement/{id}/{type}', 'AgreementController@destroy')->name('delete_agreement');
+    Route::delete('delete_agreement/{id}/{type}', 'AgreementController@destroy')->name('delete_agreement')->middleware('isAdmin');
     Route::get('agreement/search', 'AgreementController@search')->name('agreement.search');
 
     // Expenses
@@ -44,8 +44,8 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/edit/{id}', 'ExpenseController@edit')->name('edit');
         Route::POST('/update/{id}', 'ExpenseController@update')->name('update');
 
-        Route::post('/new/approve/{id}', 'ExpenseController@approve')->name('approve');
-        Route::post('/new/reject/{id}', 'ExpenseController@reject')->name('reject');
+        Route::post('/new/approve/{id}', 'ExpenseController@approve')->name('approve')->middleware('isAdmin');
+        Route::post('/new/reject/{id}', 'ExpenseController@reject')->name('reject')->middleware('isAdmin');
 
         Route::post('/new/history', 'ExpenseController@searchHistory')->name('history');
         Route::POST('/pending', 'ExpenseController@searchPending')->name('pending');
@@ -60,8 +60,8 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/edit/{id}', 'AdditionlBenifitsSpendingController@edit')->name('edit');
         Route::POST('/update/{id}', 'AdditionlBenifitsSpendingController@update')->name('update');
 
-        Route::post('/approve/{id}', 'AdditionlBenifitsSpendingController@approve')->name('approve');
-        Route::post('/reject/{id}', 'AdditionlBenifitsSpendingController@reject')->name('reject');
+        Route::post('/approve/{id}', 'AdditionlBenifitsSpendingController@approve')->name('approve')->middleware('isAdmin');
+        Route::post('/reject/{id}', 'AdditionlBenifitsSpendingController@reject')->name('reject')->middleware('isAdmin');
 
         Route::post('/paid/{id}', 'AdditionlBenifitsSpendingController@paid')->name('paid');
         Route::post('/non-paid/{id}', 'AdditionlBenifitsSpendingController@nonPaid')->name('non-paid');
@@ -89,7 +89,7 @@ Route::group(['middleware' => ['auth']], function () {
     });
 
     // Company
-    Route::group(['prefix' => 'company'], function () {
+    Route::group(['prefix' => 'company', 'middleware' => 'isAdmin'], function () {
         Route::get('', 'CompanyController@index')->name('company.index');
         Route::POST('/search', 'CompanyController@searchCompanyPage')->name('company.search');
         Route::get('/create', 'CompanyController@create')->name('company.create');
@@ -100,7 +100,7 @@ Route::group(['middleware' => ['auth']], function () {
     });
 
     // Efficiency
-    Route::group(['prefix' => 'efficiency'], function () {
+    Route::group(['prefix' => 'efficiency', 'middleware' => 'isAdmin'], function () {
         Route::get('', 'EfficiencyController@index')->name('efficiency.index');
     });
 
@@ -114,8 +114,8 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/editview', 'MaintenanceController@edit_maintenanceview')->name('editview');
         Route::post('/edit', 'MaintenanceController@edit')->name('edit');
         Route::post('/delete', 'MaintenanceController@delete')->name('delete');
-        Route::post('/ticket_inprogress', 'MaintenanceController@ticket_inprogress')->name('ticket_inprogress');
-        Route::post('/ticket_cancel', 'MaintenanceController@ticket_cancel')->name('ticket_cancel');
+        Route::post('/ticket_inprogress', 'MaintenanceController@ticket_inprogress')->name('ticket_inprogress')->middleware('isAdmin');
+        Route::post('/ticket_cancel', 'MaintenanceController@ticket_cancel')->name('ticket_cancel')->middleware('isAdmin');
         Route::get('search', 'MaintenanceController@search')->name('search');
         /* Route::post('/complited_ticket', 'Maintenance_ticket_controller@complited_ticket')->name('complited_ticket');*/
     });
@@ -126,9 +126,9 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('edit', 'MileageController@edit')->name('edit');
         Route::post('update', 'MileageController@update')->name('update');
         Route::post('destroy', 'MileageController@destroy')->name('destroy');
-        Route::post('/pending/{id}', 'MileageController@mileagePending')->name('pending');
-        Route::post('/approve/{id}', 'MileageController@mileageApprove')->name('pending');
-        Route::post('/reject/{id}', 'MileageController@mileageReject')->name('reject');
+        Route::post('/pending/{id}', 'MileageController@mileagePending')->name('pending')->middleware('isAdmin');
+        Route::post('/approve/{id}', 'MileageController@mileageApprove')->name('pending')->middleware('isAdmin');
+        Route::post('/reject/{id}', 'MileageController@mileageReject')->name('reject')->middleware('isAdmin');
         Route::post('/search/pending', 'MileageController@searchPendingMileage')->name('pending');
         Route::post('/search/history', 'MileageController@searchHistoryMileage')->name('history');
     });
@@ -152,22 +152,22 @@ Route::group(['middleware' => ['auth']], function () {
     Route::group(['prefix' => 'paystatement', 'as' => 'paystatement.'], function () {
         Route::get('/list', 'PaystatementController@paylist')->name('list');
         Route::POST('/search', 'PaystatementController@searchPaymentPage')->name('search');
-        Route::post('/store', 'PaystatementController@store')->name('store');
-        Route::POST('/destroy/{id}', 'PaystatementController@destroy')->name('destroy');
+        Route::post('/store', 'PaystatementController@store')->name('store')->middleware('isAdmin');
+        Route::POST('/destroy/{id}', 'PaystatementController@destroy')->name('destroy')->middleware('isAdmin');
     });
 
     Route::get('force-login/{user}', 'UserController@forceLogin')->name('force-login');
-    Route::get('users/search', 'UserController@search')->name('users.search');
+    Route::get('users/search', 'UserController@search')->name('users.search')->middleware('isAdmin');
 
     // Plan routes go here
     Route::get('plans', 'PlanController@index')->name('plans.index');
-    Route::post('plans/store', 'PlanController@store')->name('plans.store');
-    Route::put('plans/{plan}', 'PlanController@update')->name('plans.update');
+    Route::post('plans/store', 'PlanController@store')->name('plans.store')->middleware('isAdmin');
+    Route::put('plans/{plan}', 'PlanController@update')->name('plans.update')->middleware('isAdmin');
 
     // Missions routes go here
     Route::get('missions', 'MissionController@index')->name('missions.index');
-    Route::post('missions/store', 'MissionController@store')->name('missions.store');
-    Route::put('missions/{plan}', 'MissionController@update')->name('missions.update');
+    Route::post('missions/store', 'MissionController@store')->name('missions.store')->middleware('isAdmin');
+    Route::put('missions/{plan}', 'MissionController@update')->name('missions.update')->middleware('isAdmin');
 
     // Messages routes go here
     Route::group(['prefix' => 'messages', 'as' => 'messages.'], function () {
@@ -178,7 +178,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::put('/{message}', 'MessageController@update')->name('update');
         Route::delete('/{message}', 'MessageController@destroy')->name('destroy');
         Route::get('/search', 'MessageController@search')->name('search');
-        Route::put('/status/{message}', 'MessageController@statusUpdate')->name('status.update');
+        Route::put('/status/{message}', 'MessageController@statusUpdate')->name('status.update')->middleware('isAdmin');
     });
 });
 
