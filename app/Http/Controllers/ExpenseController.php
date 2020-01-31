@@ -9,8 +9,8 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 
 class ExpenseController extends Controller {
-    ///   Add Expenselist
-    function expenselist ()
+    // Add Expenselist
+    function expenselist()
     {
         if (auth()->user()->is_admin) {
             $activeMenu = 'admin';
@@ -27,7 +27,7 @@ class ExpenseController extends Controller {
         return view('expense.expensereport', $data, compact('activeMenu'));
     }
 
-   //search history
+   // Search history
     public function searchHistory(Request $request)
     {
         $data = Expenses::orderByDesc('created_at')->with('employee:id,firstname,lastname')->where('status', '!=', null)
@@ -43,10 +43,22 @@ class ExpenseController extends Controller {
         $data = $data->dateSearch('date');
         $data = $data->isEmployee()->get();
 
+        if (count($data)) {
+            foreach ($data as $datum) {
+                $routes = [];
+                $routes['edit'] = route('expense.edit', $datum->id);
+                $routes['update'] = route('expense.update', $datum->id);
+                $routes['approve'] = route('expense.approve', $datum->id);
+                $routes['reject'] = route('expense.reject', $datum->id);
+                $routes['destroy'] = route('expense.destroy', $datum->id);
+                $datum->routes = $routes;
+            }
+        }
+
         return response()->json(['status'=>'success', 'data' => $data]);
     }
 
-    //search pending
+    // Search pending
     public function searchPending(Request $request)
     {
         $data = Expenses::orderByDesc('created_at')->with('employee:id,firstname,lastname')->where('status', null)
@@ -62,10 +74,22 @@ class ExpenseController extends Controller {
         $data = $data->dateSearch('date');
         $data = $data->isEmployee()->get();
 
+        if (count($data)) {
+            foreach ($data as $datum) {
+                $routes = [];
+                $routes['edit'] = route('expense.edit', $datum->id);
+                $routes['update'] = route('expense.update', $datum->id);
+                $routes['approve'] = route('expense.approve', $datum->id);
+                $routes['reject'] = route('expense.reject', $datum->id);
+                $routes['destroy'] = route('expense.destroy', $datum->id);
+                $datum->routes = $routes;
+            }
+        }
+
         return response()->json(['status'=>'success', 'data' => $data]);
     }
 
-    //expense edit page with value
+    // Expense edit page with value
     public function edit(Request $request)
     {
         // $emp_id = auth()->user()->id;
@@ -136,7 +160,7 @@ class ExpenseController extends Controller {
         }
     }
 
-    //expense destroy
+    // Expense destroy
     public function destroy($id)
     {
         $expense = Expenses::findOrFail($id);
@@ -153,7 +177,7 @@ class ExpenseController extends Controller {
         ]);
     }
 
-    ///////  Add Expense
+    // Add Expense
     function addexpense (Request $request)
     {
         $request->validate([
@@ -181,7 +205,7 @@ class ExpenseController extends Controller {
         return redirect()->back()->with('alert-info', $msg);
     }
 
-    /// approved expense
+    // Approved expense
     public function approve($id)
     {
         $data = Expenses::find($id);
@@ -194,7 +218,7 @@ class ExpenseController extends Controller {
 
     }
 
-    /// expense reject
+    // Expense reject
     public function reject($id)
     {
         $data = Expenses::find($id);

@@ -406,11 +406,10 @@
                 $('.remove-button').hide();
             }
 
-            // console.log(date);
             let data = {
                 history_search: history_search,
-                history_from: history_from,
-                history_to: history_to,
+                from: history_from,
+                to: history_to,
             };
 
             $('#wait').css('display', 'inline-block'); // wait for loader
