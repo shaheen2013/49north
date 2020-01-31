@@ -10,10 +10,11 @@
         <div class="tab-pane fade show active" id="nav-employee" role="tabpanel" aria-labelledby="nav-employee-tab">
 
             {{ Form::model($user, ['url' => url('edit_employee'), 'enctype' => 'multipart/form-data']) }}
+            {{-- {{ route('edit-profile') }} --}}
             {!! Form::hidden('id') !!}
 
             <div class="personal">
-                <h2 class="form_title">Personal Information</h2>
+                <h2 class="form_title">Professional Profile</h2>
                 <div class="row">
 
                     <div class="col-md-3">
@@ -36,6 +37,73 @@
 
                     <div class="col-md-3">
                         <div class="text_outer">
+    
+                            {{ Form::label('workemail', 'Work email') }}
+                            {{ Form::email('workemail', null, array('class' => 'form-control','Placeholder'=>"Work email",'required'=>'required')) }}
+    
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="text_outer">
+                            {{ Form::label('position', 'Position') }}
+                            {{ Form::text('position', null, array('class' => 'form-control','Placeholder'=>"Position")) }}
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row">
+
+                    <div class="col-md-3">
+                        <div class="text_outer">
+    
+                            {{ Form::label('base_salary', 'Base Salary') }}
+                            {{ Form::text('base_salary', null, array('class' => 'form-control','Placeholder'=>"Base Salary",'required'=>'required')) }}
+    
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="text_outer">
+                            <label for="report_to" class="">Reports To</label>
+                            <select class="select_status form-control" name="report_to">
+                                <option selected disabled>Select user</option>
+                                @foreach($findUser as $user)
+                                    <option value="{{ $user->id }}">{{ $user->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class='col-md-3'>
+                        <div class="text_outer">
+                            <label class="custom-checkbox form-check-label">
+                                <input class="form-check-input" name="benefits_opt_in" type="checkbox" value="1">Benefits Opt-In
+                            </label>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row">
+
+                    <div class="col-md-3">
+                        <div class="text_outer">
+                            {{ Form::textarea('compensation_details', null, array('class' => 'form-control','Placeholder'=>"Additional Compensation Details",'required'=>'required', 'style'=>'height: 100px')) }}
+    
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="margin-10"></div>
+            <div class="margin-10"></div>
+
+            <div class="personal">
+                <h2 class="form_title">Personal Information</h2>
+                <div class="row">
+
+                    <div class="col-md-3">
+                        <div class="text_outer">
                             {{ Form::label('dob', 'Date of birth') }}
                             {{ Form::date('dob', null, array('class' => 'flatpickr form-control', 'Placeholder' => 'Select Date of birth')) }}
                         </div>
@@ -48,10 +116,7 @@
                         </div>
                     </div>
 
-                </div>
-                <div class="row">
-
-                    <div class="col-md-6">
+                    <div class="col-md-3">
                         <div class="text_outer">
 
                             {{ Form::label('address', 'Address') }}
@@ -60,7 +125,6 @@
 
                         </div>
                     </div>
-
                     <div class="col-md-3">
                         <div class="text_outer">
 
@@ -69,16 +133,8 @@
                         </div>
                     </div>
 
-                    <div class="col-md-3">
-                        <div class="text_outer">
-
-                            {{ Form::label('workemail', 'Work email') }}
-                            {{ Form::email('workemail', null, array('class' => 'form-control','Placeholder'=>"Work email",'required'=>'required')) }}
-
-                        </div>
-                    </div>
-
                 </div>
+              
                 <div class="row">
 
                     <div class="col-md-6 image-chooser">
