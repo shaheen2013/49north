@@ -193,3 +193,5 @@ Route::resource('posts', 'PostController');
 Route::post('/reset/password/{id}', 'UserController@changeUserPassword')->name('reset.password');
 Route::post('/reset/stuff/password/{id}', 'UserController@changeStuffPassword')->name('reset.stuff.password');
 
+Route::get('/employee/module', 'HomeController@employeeModule')->name('employee.module');
+

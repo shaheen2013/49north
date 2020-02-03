@@ -24,6 +24,11 @@ class HomeController extends Controller {
         return view('dashboard', compact('activeMenu'));
     }
 
+    public function employeeModule () {
+        $activeMenu = 'submit';
+        return view('employee-module', compact('activeMenu'));
+    }
+
     /**
      * Show the application dashboard.
      *

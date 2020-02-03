@@ -26,7 +26,7 @@
 
                         @if(!auth()->user()->is_admin)
                         <li class="nav-item">
-                            <a class="nav-link {{ $activeMenu == 'submit' ? 'active' : '' }}" href="{{ route('expense.expense-list') }}">Admin </a>
+                            <a class="nav-link {{ $activeMenu == 'submit' ? 'active' : '' }}" href="{{ route('employee.module') }}">Admin </a>
                         </li>
                         @endif
 
@@ -101,6 +101,7 @@
                     @can('expenses-enabled')
                         <a class="nav-item nav-link {{ (request()->is('expense/*')) ? 'active' : '' }}" href="{{ route('expense.expense-list') }}">Expense Report</a>
                     @endcan
+
 
                     @can('mileage-enabled')
                         <a class="nav-item nav-link {{ (request()->is('mileage/*')) ? 'active' : '' }}" href="{{ route('mileage.mileage-list') }}">Mileage Book</a>
