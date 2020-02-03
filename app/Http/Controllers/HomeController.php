@@ -99,9 +99,7 @@ class HomeController extends Controller {
                     <td><?php echo $expense_list->date ?></td>
                     <td><?php echo $expense_list->description ?></td>
                     <td><?php echo $expense_list->total ?></td>
-                    <td class="action-box"><a href="javascript:void(0);"
-                                              onclick="edit_view_ajax(<?= $expense_list->id ?>)">EDIT</a><a
-                            href="javascript:void(0);" class="down" onclick="delete_expense(<?= $expense_list->id ?>)">DELETE</a>
+                    <td class="action-box"><a href="javascript:void(0);" onclick="edit_view_ajax(<?= $expense_list->id ?>)">EDIT</a><a href="javascript:void(0);" class="down" onclick="delete_expense(<?= $expense_list->id ?>)">DELETE</a>
                     </td>
                 </tr>
                 <tr class="spacer"></tr>
