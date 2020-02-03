@@ -18,8 +18,24 @@ class Maintenance_ticket extends Authenticatable {
      */
     protected $guard = [];
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = ['subject', 'website', 'description', 'priority', 'category', 'user', '_token', 'emp_id'];
+
     /* public function setPasswordAttribute($password)
      {
          $this->attributes['password'] = bcrypt($password);
      }*/
+
+    /**
+     * Users records associated with ticket
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function users() {
+        return $this->belongsToMany(User::class);
+    }
 }

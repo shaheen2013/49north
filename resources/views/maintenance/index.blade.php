@@ -102,8 +102,6 @@
                 <div class="modal-body">
                     <div class="col-md-12" style="margin-top:40px;margin-bottom:20px;">
                         <form class="maintenance1_edit" action="{{ route('maintenance.edit') }}" method="POST">
-                           
-
 
                         </form>
                     </div>
@@ -117,7 +115,7 @@
             <div class="modal-content">
                 <div class="modal-body">
                     <div class="col-md-12" style="margin-top:40px;margin-bottom:20px;">
-                       
+
                         <form class="maintenance1" action="{{ route('maintenance.add') }}" method="POST">
                             <div class="row">
                                 <div class="col-md-6 col-sm-6">
@@ -131,8 +129,8 @@
                                         <label for="name" class="">Website</label>
                                         <select class="select_status form-control" name="website">
                                             <option>Select</option>
-                                            <option>Website1</option>
-                                            <option>Website2</option>
+                                            <option value="Website1">Website1</option>
+                                            <option value="Website2">Website2</option>
                                         </select>
                                     </div>
                                 </div>
@@ -152,9 +150,10 @@
                                     <div class="text_outer">
                                         <label for="name" class="">Priority</label>
                                         <select class="select_status form-control" name="priority">
-                                            <option>Select</option>
-                                            <option>1</option>
-                                            <option>2</option>
+                                            <option selected disabled>Select</option>
+                                            <option value="1">Low</option>
+                                            <option value="2">Normal</option>
+                                            <option value="3">Critical</option>
                                         </select>
                                     </div>
                                 </div>
@@ -170,13 +169,24 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="row">
+                                <div class="col-md-12 col-sm-12">
+                                    <div class="text_outer">
+                                        <label for="name" class="">Employee</label>
+                                        <select class="select2 select_status form-control" name="user[]" multiple>
+                                            @foreach($users as $user)
+                                                <option value="{{ $user->id }}">{{ $user->employee_details->firstname }} {{ $user->employee_details->lastname }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
                             <hr>
                             <div class="row margin-top-30">
                                 <div class="form-group" style="width:100%;">
                                     <div class="col-md-12 col-sm-12">
                                         {{ csrf_field() }}
                                         <input type="hidden" name="emp_id" value="{{ auth()->user()->id }}">
-                                        <input type="hidden" name="updated_at" value="{{ now() }}">
                                         <button type="submit" class="btn-dark contact_btn">Save</button>
                                         <span class="close close-span" data-dismiss="modal" aria-label="Close"><i class="fa fa-arrow-left"></i> Return to Maintenance</span>
                                     </div>
@@ -312,7 +322,7 @@
                             status = "Close";
                         }
 
-                        if (is_admin == 1 && htmlId === '#maintanance') {
+                        if (is_ticket_admin == 1 && htmlId === '#maintanance') {
                             adminOption = `<td class="text-right">
                                 <a href="javascript:void(0)" data-toggle="tooltip" title="In Progress" onclick="ticket_inprogress(${value.id})"><i class="fa fa-check-circle"></i></a>
                                 <a href="javascript:void(0)" data-toggle="tooltip" title="Cancel!" onclick="ticket_cancel(${value.id})"><i class="fa fa-ban"></i></a>

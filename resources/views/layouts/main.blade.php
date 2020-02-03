@@ -203,6 +203,8 @@
             altFormat: "F j, Y",
             dateFormat: "Y-m-d",
         });
+
+        $('.select2').select2();
     });
 
     // Format date
@@ -238,6 +240,7 @@
     }
 
     const is_admin = parseInt({{ auth()->user()->is_admin }});
+    const is_ticket_admin = parseInt({{ auth()->user()->is_ticket_admin }});
     const auth_id = parseInt({{ auth()->id() }});
 </script>
 
@@ -249,6 +252,7 @@
 <script src="{{ URL::asset('assets/jquery-spinner/js/jquery.spinner.js') }}"></script>
 <script src="{{asset('flatpicker/js/flatpicker.min.js')}}"></script>
 <script src="{{asset('js/pagination.min.js')}}"></script>
+<script src="{{ asset('js/select2.min.js') }}"></script>
 @stack('scripts')
 @yield('js')
 
