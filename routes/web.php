@@ -53,7 +53,7 @@ Route::group(['middleware' => ['auth']], function () {
     });
 
     // Additional Benefits Spending
-    Route::group(['prefix' => 'additional-benefits', 'as' => 'additional-benefits.'], function () {
+    Route::group(['prefix' => 'additional-benefits', 'as' => 'additional-benefits.', 'middleware' => 'can:additional-spending-enabled'], function () {
 
         Route::get('/', 'AdditionlBenifitsSpendingController@index')->name('index');
         Route::post('/store', 'AdditionlBenifitsSpendingController@store')->name('store');
@@ -73,7 +73,7 @@ Route::group(['middleware' => ['auth']], function () {
     });
 
     // Personal development plan
-    Route::group(['prefix' => 'personal-development-plan', 'as' => 'personal-development-plan.'], function () {
+    Route::group(['prefix' => 'personal-development-plan', 'as' => 'personal-development-plan.', 'middleware' => 'can:classroom-enabled'], function () {
 
         Route::get('/', 'PersonalDevelopmentPlanController@index')->name('index');
         Route::post('/comment/store/{id}', 'PersonalDevelopmentPlanController@commentStore')->name('comment.store');
@@ -110,7 +110,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/registration', 'RegisterController@store')->name('registration');
 
     // Maintenance
-    Route::group(['prefix' => 'maintenance', 'as' => 'maintenance.'], function () {
+    Route::group(['prefix' => 'maintenance', 'as' => 'maintenance.', 'middleware' => 'can:maintenance-enabled'], function () {
         Route::get('/list', 'MaintenanceController@Maintenance_list')->name('list');
         Route::post('/add', 'MaintenanceController@addmaintenance')->name('add');
         Route::post('/editview', 'MaintenanceController@edit_maintenanceview')->name('editview');
@@ -123,7 +123,7 @@ Route::group(['middleware' => ['auth']], function () {
     });
 
     // Mileage
-    Route::group(['prefix' => 'mileage', 'as' => 'mileage.'], function () {
+    Route::group(['prefix' => 'mileage', 'as' => 'mileage.', 'middleware' => 'can:mileage-enabled'], function () {
         Route::get('mileagelist', 'MileageController@mileagelist')->name('mileage-list');
         Route::post('edit', 'MileageController@edit')->name('edit');
         Route::post('update', 'MileageController@update')->name('update');
@@ -136,7 +136,7 @@ Route::group(['middleware' => ['auth']], function () {
     });
 
     // Journal
-    Route::group(['prefix' => 'journal', 'as' => 'journal.'], function () {
+    Route::group(['prefix' => 'journal', 'as' => 'journal.', 'middleware' => 'can:classroom-enabled'], function () {
         Route::get('/', 'JournalController@index')->name('index');
         Route::post('/store', 'JournalController@store')->name('store');
         Route::post('/search', 'JournalController@searchJournal')->name('search-journal');
@@ -151,7 +151,7 @@ Route::group(['middleware' => ['auth']], function () {
     });
 
     // Paystatement route
-    Route::group(['prefix' => 'paystatement', 'as' => 'paystatement.'], function () {
+    Route::group(['prefix' => 'paystatement', 'as' => 'paystatement.', 'middleware' => 'can:pay-statement-enabled'], function () {
         Route::get('/list', 'PaystatementController@paylist')->name('list');
         Route::POST('/search', 'PaystatementController@searchPaymentPage')->name('search');
         Route::post('/store', 'PaystatementController@store')->name('store');
@@ -162,14 +162,18 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('users/search', 'UserController@search')->name('users.search');
 
     // Plan routes go here
-    Route::get('plans', 'PlanController@index')->name('plans.index');
-    Route::post('plans/store', 'PlanController@store')->name('plans.store');
-    Route::put('plans/{plan}', 'PlanController@update')->name('plans.update');
+    Route::group(['prefix' => 'plans', 'as' => 'plans.', 'middleware' => 'can:plan-overview-enabled'], function () {
+    Route::get('/', 'PlanController@index')->name('index');
+    Route::post('/store', 'PlanController@store')->name('store');
+    Route::put('/{plan}', 'PlanController@update')->name('update');
+    });
 
+    Route::group(['prefix' => 'missions', 'as' => 'missions.', 'middleware' => 'can:classroom-enabled'], function () {
     // Missions routes go here
-    Route::get('missions', 'MissionController@index')->name('missions.index');
-    Route::post('missions/store', 'MissionController@store')->name('missions.store');
-    Route::put('missions/{plan}', 'MissionController@update')->name('missions.update');
+    Route::get('/', 'MissionController@index')->name('index');
+    Route::post('/store', 'MissionController@store')->name('store');
+    Route::put('/{plan}', 'MissionController@update')->name('update');
+    });
 
     // Messages routes go here
     Route::group(['prefix' => 'messages', 'as' => 'messages.'], function () {
