@@ -312,6 +312,7 @@
             </div>
         @endif
 
+        @admin
         <div class="emergency">
             <h2 class="form_title">Ticket Admin</h2>
             <div class="row">
@@ -325,6 +326,7 @@
                 
             </div>
         </div>
+        @endadmin
 
         {{ Form::button($user->exists ? 'Edit' : 'Add', array('class' => 'btn-dark contact_btn','type'=>'submit')) }}
 

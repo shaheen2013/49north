@@ -229,7 +229,7 @@ class UserController extends Controller {
         ])->has('permissions')->orderBy('orderval')->get();
         $permissions = Permission::pluck('name', 'id');
 
-        $route = route('reset.stuff.password', $u->id);
+        $route = route('reset.stuff.password', $user->id);
 
         return view('users.edit', compact('user', 'activeMenu', 'companies', 'roles', 'permissions', 'route'));
 
