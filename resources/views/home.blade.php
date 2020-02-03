@@ -361,7 +361,7 @@
                     </div>
                 </div>
             @endadmin
-
+            
             {{ Form::button(auth()->user()->id ? 'Save Changes' : 'Add', array('class' => 'btn btn-lg btn-dark contact_btn','type'=>'submit')) }}
 
             {{ Form::close() }}

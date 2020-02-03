@@ -23,7 +23,8 @@ class User extends Authenticatable {
         'email',
         'password',
         'user_type',
-        'is_admin'
+        'is_admin',
+        'is_ticket_admin'
     ];
 
     /**

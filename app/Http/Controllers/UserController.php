@@ -27,7 +27,7 @@ class UserController extends Controller {
             $activeMenu = 'admin';
             $users = User::with('employee_details')->orderBy('name')->get();
 
-            return view('users.index', compact('activeMenu'))->with('users', $users);
+            return view('users.index', compact('activeMenu', 'users'));
         }
         else {
             abort(401);
@@ -170,6 +170,13 @@ class UserController extends Controller {
             $user->syncPermissions($request->input('permission', []));
         }
 
+        // Ticket Admin check
+        if (isset($request->is_ticket_admin)) {
+            User::where('is_ticket_admin', 1)->update(['is_ticket_admin' => 0]);
+            $user->is_ticket_admin = 1;
+            $user->save();
+        }
+
         //Redirect to the users.index view and display message
         return redirect()->route('users.index')->with('alert-info', $msg);
     }
@@ -222,7 +229,9 @@ class UserController extends Controller {
         ])->has('permissions')->orderBy('orderval')->get();
         $permissions = Permission::pluck('name', 'id');
 
-        return view('users.edit', compact('user', 'activeMenu', 'companies', 'roles', 'permissions'));
+        $route = route('reset.stuff.password', $u->id);
+
+        return view('users.edit', compact('user', 'activeMenu', 'companies', 'roles', 'permissions', 'route'));
 
     }
 
@@ -409,7 +418,10 @@ class UserController extends Controller {
      */
     public function search (Request $request) {
         try {
-            $data = User::with('employee_details')->where('is_admin', '!=', 1)->orderBy('name')->where(function ($q) use ($request) {
+            $data = User::with('employee_details')->orderBy('name')->where(function ($q) use ($request) {
+
+                // ->where('is_admin', '!=', 1)
+
                 if (isset($request->search)) {
                     $q->where('name', 'like', '%' . $request->search . '%')->orWhere('email', 'like', '%' . $request->search . '%');
                 }
