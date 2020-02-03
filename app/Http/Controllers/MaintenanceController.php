@@ -3,11 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\{User,Expenses,Company,Project,Purchases,Categorys,Maintenance_ticket};
+use Illuminate\Support\Facades\Mail;
+use App\{Mail\MaintenanceNotify, User, Expenses, Company, Project, Purchases, Categorys, Maintenance_ticket};
 use DB;
 class MaintenanceController extends Controller
 {
-	/// Maintennace List
+	// Maintennace List
     function Maintenance_list()
     {
         if (auth()->user()->is_admin) {
@@ -19,41 +20,66 @@ class MaintenanceController extends Controller
     	$data['maintanance'] = Maintenance_ticket::where(['delete_status' => NULL, 'status' => NULL])->with('employee:id,firstname,lastname')->get();
         $data['maintanance1'] = Maintenance_ticket::where(['delete_status' => NULL, 'status' => 1])->orWhere(['status' => 2])->with('employee:id,firstname,lastname')->get();
         $data['category'] = Categorys::all();
+        $data['users'] = User::where('is_admin', 0)->get();
 
     	return view('maintenance.index', $data, compact('activeMenu'));
     }
 
-
-    /// Add maintenance
+    // Add maintenance
     function addmaintenance(Request $request)
     {
-    	$data = $request->all();
-        Maintenance_ticket::insert($data);
+        $request->validate([
+            'user' => 'nullable|array'
+        ]);
+
+        $data = $request->all();
+        unset($data['user']);
+
+        $maintenance = Maintenance_ticket::create($data);
+
+        if (count($request->user)) {
+            $maintenance->users()->attach($request->user);
+        }
+
+        Mail::to(User::find($request->user)->pluck('email'))->send(new MaintenanceNotify($request));
+
         $msg = 'Ticket Added successfully';
+
         return redirect()->back()->with('alert-info', $msg);
     }
 
-   ///// edit view
+    // edit view
     function edit_maintenanceview(Request $request)
     {
-    	$data['maintanance'] = DB::table('maintenance_tickets')->where('id', $request->id)->first();
+    	$data['maintanance'] = Maintenance_ticket::find($request->id)->first();
         $data['category'] = Categorys::all();
         $data['categorya1'] = Categorys::where('id', $data['maintanance']->category)->first();
+        $data['users'] = User::where('is_admin', 0)->get();
 
-     	return view('ajaxview.editmaintenance',$data);
+     	return view('ajaxview.editmaintenance', $data);
     }
 
-    /// update maintenance
+    // update maintenance
     function edit(Request $request)
     {
     	$id = $request->id;
         $data = $request->all();
+        unset($data['user']);
         $try = Maintenance_ticket::where(['id' => $id])->update($data);
+        $maintenance = Maintenance_ticket::find($id);
         $msg = 'Updated a ticket';
+
+        $maintenance->users()->detach();
+        if (count($request->user)) {
+            $maintenance->users()->attach($request->user);
+        }
+
+        Mail::to(User::find($request->user)->pluck('email'))->send(new MaintenanceNotify($request));
+
         return redirect()->back()->with('alert-info', $msg);
     }
 
-    /// delete tickets
+    // delete tickets
     function delete(Request $request)
     {
         Maintenance_ticket::destroy($request->id);
@@ -81,7 +107,8 @@ class MaintenanceController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function search(Request $request){
+    public function search(Request $request)
+    {
         try {
             $data = Maintenance_ticket::select('maintenance_tickets.*')->with('employee')
                 ->leftjoin('employee_details AS emp','emp.id','=','maintenance_tickets.emp_id')

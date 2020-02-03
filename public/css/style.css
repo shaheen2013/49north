@@ -1844,3 +1844,7 @@ span.fc-title {
 .clickable {
     cursor: pointer;
 }
+
+.select2-container {
+    width: 100%!important;
+}

@@ -2,9 +2,6 @@
 
 namespace App;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -48,20 +45,29 @@ class User extends Authenticatable {
     /**
      * Get Employee Details
      *
-     * @return HasOne
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
-    public function employee_details () {
+    public function employee_details() {
         return $this->hasOne(Employee_detail::class, 'id', 'id');
     }
 
     /**
-     * @return HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function mileage () {
+    public function mileage() {
         return $this->hasMany(Mileage::class,'emp_id');
     }
     /* public function setPasswordAttribute($password)
      {
          $this->attributes['password'] = bcrypt($password);
      }*/
+
+    /**
+     * Ticket records associated with users
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function tickets() {
+        return $this->belongsToMany(Maintenance_ticket::class);
+    }
 }
