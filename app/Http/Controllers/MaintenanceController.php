@@ -39,9 +39,8 @@ class MaintenanceController extends Controller
 
         if (count($request->user)) {
             $maintenance->users()->attach($request->user);
+            Mail::to(User::find($request->user)->pluck('email'))->send(new MaintenanceNotify($request));
         }
-
-        Mail::to(User::find($request->user)->pluck('email'))->send(new MaintenanceNotify($request));
 
         $msg = 'Ticket Added successfully';
 
@@ -72,9 +71,8 @@ class MaintenanceController extends Controller
         $maintenance->users()->detach();
         if (count($request->user)) {
             $maintenance->users()->attach($request->user);
+            Mail::to(User::find($request->user)->pluck('email'))->send(new MaintenanceNotify($request));
         }
-
-        Mail::to(User::find($request->user)->pluck('email'))->send(new MaintenanceNotify($request));
 
         return redirect()->back()->with('alert-info', $msg);
     }
@@ -110,9 +108,14 @@ class MaintenanceController extends Controller
     public function search(Request $request)
     {
         try {
+            $tagged = [];
+            if (!auth()->user()->is_admin) {
+                $tagged = array_unique(auth()->user()->tickets->pluck('id'));
+            }
+
             $data = Maintenance_ticket::select('maintenance_tickets.*')->with('employee')
                 ->leftjoin('employee_details AS emp','emp.id','=','maintenance_tickets.emp_id')
-                ->where(function ($q) use ($request) {
+                ->where(function ($q) use ($request, $tagged) {
                     if (isset($request->search)) {
                         $q->where(function ($query) use ($request) {
                             $query->where('maintenance_tickets.subject', 'like', '%' . $request->search . '%')
@@ -128,6 +131,9 @@ class MaintenanceController extends Controller
                         $q->where('maintenance_tickets.status', '>', 0);
                     } else {
                         $q->whereNull('maintenance_tickets.status');
+                    }
+                    if (!auth()->user()->is_admin && count($tagged)) {
+                        $q->whereIn('id', $tagged);
                     }
                 })->isEmployee()->get();
 
