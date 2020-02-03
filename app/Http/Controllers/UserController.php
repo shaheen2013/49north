@@ -102,8 +102,7 @@ class UserController extends Controller {
         // if password is entered or it's a new user
         if ($request->input('password') || !$id) {
             //$rules['password'] = 'required|min:6|confirmed';
-            $rules['password'] = ['required', 'string', 'min:8', 'regex:/^.*(?=.{3,})(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[\d\X])(?=.*[!$#%]).*$/'];
-            // $rules['password'] = ['required', 'string'];
+            $rules['password'] = ['required', 'string', 'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/'];
             $input['password'] = Hash::make($request->input('password'));
         }
 
