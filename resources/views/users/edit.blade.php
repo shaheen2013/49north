@@ -105,7 +105,7 @@
                     <p>**Only required if you are changing your password. Your password must
                         be more than 8 characters long, should contain at least 1 uppercase, 1
                         lowercase, 1 numeric and 1 special character.
-                        <a href="javascript:void(0)" data-toggle="modal" data-target="#upload-modal1" onclick="resetStuffPassword({{ $user->id }})">Click Reset</a>
+                        <a href="javascript:void(0)"  onclick="resetStuffPassword()">Click Reset</a>
                     </p>
                 </div>
 
@@ -297,7 +297,7 @@
                                             {!! Form::label('role-' . $role->id,$role->name,['class' => 'font-weight-bold']) !!}
                                             @foreach ($role->permissions AS $permission)
                                                 <div class="form-check">
-                                                    {!! Form::checkbox('permission[' . $permission->id .']',$permission->id,$user->user->hasPermissionTo($permission->name),['class' => 'form-check-input','id' => 'permission-' . $permission->id]) !!}
+                                                    {!! Form::checkbox('permission[' . $permission->id .']',$permission->id, false,['class' => 'form-check-input','id' => 'permission-' . $permission->id]) !!}
                                                     {!! Form::label('permission-' . $permission->id,$permission->name,['class' => 'form-check-label']) !!}
                                                 </div>
                                             @endforeach
@@ -312,6 +312,7 @@
             </div>
         @endif
 
+        @admin
         <div class="emergency">
             <h2 class="form_title">Ticket Admin</h2>
             <div class="row">
@@ -322,9 +323,10 @@
                         </label>
                     </div>
                 </div>
-                
+
             </div>
         </div>
+        @endadmin
 
         {{ Form::button($user->exists ? 'Edit' : 'Add', array('class' => 'btn-dark contact_btn','type'=>'submit')) }}
 
@@ -334,26 +336,16 @@
     <script type="text/javascript">
 
         var user_id = null
-        let route = '@php echo $route; @endphp';
+        let route = '{{$route}}';
 
-        function resetStuffPassword(id, route) {
-            user_id = id;
-
-            console.log(user_id)
-
+        function resetStuffPassword() {
             $.ajax({
                 method: "POST",
-                url: route,
-                // url: "/reset/stuff/password/" + id,
+                url: '{{$route}}',
                 dataType: 'JSON',
                 success: function (results) {
-                    // $.toaster({ message : 'Password Updated successfully', title : 'Success', priority : 'success' });
-                    // window.location.reload();
-
                     if (results.success === true) {
                         swal("Done!", results.message, "success").then(function () {
-
-                            // window.location.reload()
                         })
                     } else {
                         swal("Error!", results.message, "error");

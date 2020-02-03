@@ -46,7 +46,16 @@ class UserController extends Controller {
             $activeMenu = 'admin';
             $user = new User();
 
-            return view('users.edit', compact('user', 'activeMenu', 'companies'));
+            $roles = Role::with([
+                'permissions' => function ($q) {
+                    $q->orderBy('orderval')->orderBy('name');
+                }
+            ])->has('permissions')->orderBy('orderval')->get();
+            $permissions = Permission::pluck('name', 'id');
+
+
+            $route = '#';
+            return view('users.edit', compact('user', 'activeMenu', 'companies', 'roles', 'permissions', 'route'));
         }
         else {
             abort(401);
@@ -93,7 +102,7 @@ class UserController extends Controller {
         // if password is entered or it's a new user
         if ($request->input('password') || !$id) {
             //$rules['password'] = 'required|min:6|confirmed';
-            $rules['password'] = ['required', 'string', 'min:8', 'regex:/^.*(?=.{3,})(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[\d\X])(?=.*[!$#%]).*$/'];
+            $rules['password'] = ['required', 'string', 'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/'];
             $input['password'] = Hash::make($request->input('password'));
         }
 
