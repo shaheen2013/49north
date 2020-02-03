@@ -42,7 +42,7 @@ class PersonalDevelopmentPlanController extends Controller
                 $routes['edit'] = route('personal-development-plan.edit', $datum->id);
                 $routes['update'] = route('personal-development-plan.update', $datum->id);
                 $routes['show'] = route('personal-development-plan.show', $datum->id);
-                $routes['destroy'] = route('expense.destroy', $datum->id);
+                $routes['destroy'] = route('personal-development-plan.destroy', $datum->id);
                 $datum->routes = $routes;
             }
         }
@@ -170,7 +170,15 @@ class PersonalDevelopmentPlanController extends Controller
     {
         $activeMenu = 'classroom';
         $show = PersonalDevelopmentPlan::with('employee')->find($id);
-        return view('personal-development-plan.show', compact('show', 'user', 'activeMenu'));
+
+        if ($show->comment)
+        {
+            $route = route('personal-development-plan.comment.update', $show->id);
+        } else {
+            $route = route('personal-development-plan.comment.store', $show->id);
+        }
+
+        return view('personal-development-plan.show', compact('show', 'user', 'activeMenu', 'route'));
     }
 
     /**

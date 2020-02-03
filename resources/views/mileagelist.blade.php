@@ -235,7 +235,7 @@
         });
 
         function OpenEditMileageModel(id) {
-            console.log(id);
+           
             $('#mileage-modaledit').modal();
             $.ajax({
                 type: 'POST',
@@ -330,7 +330,7 @@
             $('#wait-his').css('display', 'inline-block'); // wait for loader
             $.ajax({
                 type: 'post',
-                url: "{{ route('mileage.pending') }}",
+                url: "{{ route('mileage.searchPending') }}",
                 data: data,
                 dataType: 'JSON',
                 success: function (results) {
@@ -359,7 +359,7 @@
                                     // console.log(admin_user);
 
                                     if (admin_user == 1) {
-                                        action = `<a href="javascript:void(0)" data-toggle="tooltip" title="Approved" onclick="mileage_approve('${data[index].id}')"><i class="fa fa-check-circle"></i></a> <a href="javascript:void(0)" data-toggle="tooltip" title="Reject!" onclick="mileage_reject('${data[index].id}')"><i class="fa fa-ban"></i></a>`;
+                                        action = `<a href="javascript:void(0)" data-toggle="tooltip" title="Approved" onclick="mileage_approve('${data[index].id}', '${data[index].routes.approve}')"><i class="fa fa-check-circle"></i></a> <a href="javascript:void(0)" data-toggle="tooltip" title="Reject!" onclick="mileage_reject('${data[index].id}', '${data[index].routes.reject}')"><i class="fa fa-ban"></i></a>`;
                                     } else {
                                         action = '';
                                     }
@@ -416,7 +416,7 @@
             $('#wait-his').css('display', 'inline-block'); // wait for loader
             $.ajax({
                 type: 'post',
-                url: "{{ route('mileage.history') }}",
+                url: "{{ route('mileage.searchHistory') }}",
                 data: data,
                 dataType: 'JSON',
                 success: function (results) {
@@ -441,7 +441,7 @@
 
                                     if (is_admin == 1) {
                                         admin = `<td class="text-center">
-                                            <a href="javascript:void(0)"  data-toggle="tooltip" title="Pending" onclick="mileage_pending('${data[index].id}')"><i class="fa fa-check-circle"></i></a>
+                                            <a href="javascript:void(0)"  data-toggle="tooltip" title="Pending" onclick="mileage_pending('${data[index].id}', '${data[index].routes.pending}')"><i class="fa fa-check-circle"></i></a>
                                         </td>
 
                                         <td class="text-right">
@@ -511,7 +511,7 @@
             })
         }
 
-        function mileage_pending(id) {
+        function mileage_pending(id, route) {
 
             $.ajaxSetup({
                 headers: {
@@ -523,7 +523,7 @@
             $.ajax({
 
                 method: "POST",
-                url: "/mileage/pending/" + id,
+                url: route,
                 data: data,
                 success: function (response) {
                     $.toaster({message: 'Pending', title: 'Success', priority: 'success'});
@@ -534,7 +534,7 @@
 
         }
 
-        function mileage_approve(id) {
+        function mileage_approve(id, route) {
 
             $.ajaxSetup({
                 headers: {
@@ -546,7 +546,7 @@
             $.ajax({
 
                 method: "POST",
-                url: "/mileage/approve/" + id,
+                url: route,
                 data: data,
                 success: function (response) {
                     $.toaster({message: 'Enabled', title: 'Success', priority: 'success'});
@@ -557,13 +557,13 @@
 
         }
 
-        function mileage_reject(id) {
+        function mileage_reject(id, route) {
 
             let data = {id: id};
             $.ajax({
 
                 method: "POST",
-                url: "/mileage/reject/" + id,
+                url: route,
                 data: data,
 
                 success: function (response) {

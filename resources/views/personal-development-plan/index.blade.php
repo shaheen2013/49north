@@ -344,7 +344,7 @@
 
                                     </td>
                                     <td class="action-box">
-                                        <a href="/personal-development-plan/show/${data[index].id}"> View</a>
+                                        <a href="${data[index].routes.show}"> View</a>
                                         <a href="javascript:void(0);" onclick="OpenEditDevelopmentModel('${data[index].id}', '${data[index].routes.edit}', '${data[index].routes.update}') ">EDIT</a>
                                         <a href="javascript:void(0);" class="down" onclick="deleteconfirm('${data[index].id}', '${data[index].routes.destroy}')">DELETE</a>
                                     </td>

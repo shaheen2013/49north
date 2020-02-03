@@ -171,11 +171,21 @@ class CompanyController extends Controller
       
 
             $data = Company::where(function ($q) use($request){
-                    if(isset($request->search)){
+                    if (isset($request->search)){
                         $q->where('companyname', 'LIKE', '%'.$request->search.'%');
                     }
                 });
                 $data= $data->orderBy('companyname', 'asc')->get();
+
+                if (count($data)) {
+                    foreach ($data as $datum) {
+                        $routes = [];
+                        $routes['edit'] = route('company.edit', $datum->id);
+                        $routes['update'] = route('company.update', $datum->id);
+                        $routes['destroy'] = route('company.destroy', $datum->id);
+                        $datum->routes = $routes;
+                    }
+                }
             return response()->json(['status'=>'success', 'data' => $data]);
         
     }

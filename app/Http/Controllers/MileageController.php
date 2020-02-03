@@ -63,6 +63,16 @@ class MileageController extends Controller {
 
         $data = $this->_searchMileage('search', true);
 
+        if (count($data)) {
+            foreach ($data as $datum) {
+                $routes = [];
+                $routes['pending'] = route('mileage.pending', $datum->id);
+                $routes['approve'] = route('mileage.approve', $datum->id);
+                $routes['reject'] = route('mileage.reject', $datum->id);
+                $datum->routes = $routes;
+            }
+        }
+
         return response()->json(['status' => 'success', 'data' => $data]);
     }
 
@@ -104,6 +114,14 @@ class MileageController extends Controller {
     public function searchHistoryMileage (Request $request) {
 
         $data = $this->_searchMileage('history_search', false);
+        if (count($data)) {
+            foreach ($data as $datum) {
+                $routes = [];
+                $routes['pending'] = route('mileage.pending', $datum->id);
+                $routes['destroy'] = route('mileage.destroy', $datum->id);
+                $datum->routes = $routes;
+            }
+        }
 
         return response()->json(['status' => 'success', 'data' => $data]);
 

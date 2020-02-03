@@ -320,15 +320,17 @@
     <script type="text/javascript">
 
         var user_id = null
+        let route1 = '@php echo $route1; @endphp';
 
-        function resetStuffPassword(id) {
+        function resetStuffPassword(id, route) {
             user_id = id;
 
             console.log(user_id)
 
             $.ajax({
                 method: "POST",
-                url: "/reset/stuff/password/" + id,
+                url: route1,
+                // url: "/reset/stuff/password/" + id,
                 dataType: 'JSON',
                 success: function (results) {
                     // $.toaster({ message : 'Password Updated successfully', title : 'Success', priority : 'success' });

@@ -145,7 +145,7 @@
 
     <script type="text/javascript">
 
-        let id = from = to = null;
+        let id = from = to = updateRoute = null;
 
         $(document).ready(function () {
             const date = new Date(), y = date.getFullYear(), m = date.getMonth();
@@ -222,13 +222,14 @@
         }
 
 
-        function OpenEditJournalModel(id) {
+        function OpenEditJournalModel(id, route, update) {
+            updateRoute = update;
             console.log(id);
             $('#journal-edit-modal').modal();
             $.ajax({
                 type: 'GET',
                
-                url: "journal/edit/"+id,
+                url: route,
                 dataType: 'JSON',
                 success: function (results) {
 
@@ -274,7 +275,7 @@
 
             $.ajax({
                 method: "POST",
-                url: "/journal/update/"+id,
+                url: updateRoute,
                 data: data,
                 dataType: 'JSON',
                 success: function (response) {
@@ -330,8 +331,8 @@
 
                                     html += `
                                         <td class="text-right">
-                                            <a href="javascript:void(0);" onclick="OpenEditJournalModel('${data[index].id}')">EDIT</a>
-                                            <a href="javascript:void(0);" class="down" onclick="deleteconfirm('${data[index].id}')">DELETE</a></td>
+                                            <a href="javascript:void(0);" onclick="OpenEditJournalModel('${data[index].id}', '${data[index].routes.edit}', '${data[index].routes.update}')">EDIT</a>
+                                            <a href="javascript:void(0);" class="down" onclick="deleteconfirm('${data[index].id}', '${data[index].routes.destroy}')">DELETE</a></td>
                                         </td>
                                     </tr><tr class="spacer"></tr>`;
 
@@ -345,7 +346,7 @@
                 }
             });
         }
-        function deleteconfirm(id) {
+        function deleteconfirm(id, route) {
             swal({
                 title: "Delete?",
                 text: "Please ensure and then confirm!",
@@ -358,7 +359,7 @@
                 if (e.value === true) {
                     $.ajax({
                         type: 'post',
-                        url: "/journal/destroy/" + id,
+                        url: route,
                         dataType: 'JSON',
                         success: function (results) {
 
