@@ -312,6 +312,20 @@
             </div>
         @endif
 
+        <div class="emergency">
+            <h2 class="form_title">Ticket Admin</h2>
+            <div class="row">
+                <div class='col-md-3'>
+                    <div class="text_outer">
+                        <label class="custom-checkbox form-check-label">
+                            <input class="form-check-input" name="is_ticket_admin" type="checkbox" value="1">Is Ticket Admin
+                        </label>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+
         {{ Form::button($user->exists ? 'Edit' : 'Add', array('class' => 'btn-dark contact_btn','type'=>'submit')) }}
 
         {{ Form::close() }}
@@ -320,7 +334,7 @@
     <script type="text/javascript">
 
         var user_id = null
-        let route1 = '@php echo $route1; @endphp';
+        let route = '@php echo $route; @endphp';
 
         function resetStuffPassword(id, route) {
             user_id = id;
@@ -329,7 +343,7 @@
 
             $.ajax({
                 method: "POST",
-                url: route1,
+                url: route,
                 // url: "/reset/stuff/password/" + id,
                 dataType: 'JSON',
                 success: function (results) {

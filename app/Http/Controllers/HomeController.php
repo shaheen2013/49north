@@ -43,8 +43,8 @@ class HomeController extends Controller {
         $companies = Company::Latest()->get();
         $data['user'] = DB::table('users as u')->join('employee_details as ed', 'u.id', '=', 'ed.id')->select('ed.*')->where('u.id', '=', $emp_id)->first();
         $route = route('reset.password', $emp_id);
-        $route1 = route('reset.stuff.password', $emp_id);
-        return view('home', $data, compact('activeMenu', 'companies', 'findUser', 'route', 'route1'));
+       
+        return view('home', $data, compact('activeMenu', 'companies', 'findUser', 'route'));
     }
 
     /**
@@ -245,7 +245,8 @@ class HomeController extends Controller {
             'emergency_contact_name',
             'reltn_emergency_contact',
             'emergency_contact_phone',
-            'emergency_contact_email'
+            'emergency_contact_email',
+            'is_ticket_admin'
         ]);
 
         if (isset($request->company_id)) {
