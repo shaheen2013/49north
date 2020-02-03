@@ -228,7 +228,7 @@
                                     // console.log(admin_user);
 
                                     if (admin_user == 1) {
-                                        action = `<a href="javascript:void(0);" class="down" onclick="deleteconfirm('${data[index].id}')">DELETE</a>`;
+                                        action = `<a href="javascript:void(0);" class="down" onclick="deleteconfirm('${data[index].id}', '${data[index].routes.destroy}')">DELETE</a>`;
                                     } else {
                                         action = '';
                                     }
@@ -254,7 +254,7 @@
             });
         }
 
-        function deleteconfirm(id) {
+        function deleteconfirm(id, route) {
             swal({
                 title: "Delete?",
                 text: "Please ensure and then confirm!",
@@ -267,7 +267,7 @@
                 if (e.value === true) {
                     $.ajax({
                         type: 'post',
-                        url: "/paystatement/destroy/" + id,
+                        url: route,
                         dataType: 'JSON',
                         success: function (results) {
 

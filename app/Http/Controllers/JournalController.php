@@ -31,6 +31,15 @@ class JournalController extends Controller
     public function searchJournal (Request $request) {
 
         $data = $this->_searchJournal('search');
+        if (count($data)) {
+            foreach ($data as $datum) {
+                $routes = [];
+                $routes['edit'] = route('journal.edit', $datum->id);
+                $routes['update'] = route('journal.update', $datum->id);
+                $routes['destroy'] = route('journal.destroy', $datum->id);
+                $datum->routes = $routes;
+            }
+        }
 
         return response()->json(['status' => 'success', 'data' => $data]);
     }

@@ -3,7 +3,7 @@
 
 
 @section('content1')
-    
+
     @if($show->comment)
         <div class="well-default-trans">
             <div class="row">
@@ -53,8 +53,8 @@
                     <div class="text-center" style="width: 400px; margin: auto; ">
                         <h5 class="mb-3">
                         <span class="active-span" id="pending_span">{{$show->employee->firstname}} {{$show->employee->lastname}} Personal Development Plan</span>
-                         
-                           
+
+
                         </h5>
                         <div style="width: 100%; display: table; font-weight:400; font-size: 14px" class="mb-4">
 
@@ -68,7 +68,7 @@
                                 <div class="text_outer">
                                     <textarea style="height: 100px" class="form-control" placeholder="write here....." name="comment" id="create_comments"></textarea>
                                 </div>
-                                
+
 
                                 <div class="row margin-top-30">
                                     <div class="form-group" style="width:100%;">
@@ -94,9 +94,10 @@
     @endif
     <script type="text/javascript">
         let updateRoute = null;
-        function create_comment(route, update) {
+        let route = '@php echo $route; @endphp';
+        function create_comment() {
             event.preventDefault();
-            updateRoute = update;
+
             let id = $('#personal_development_comment_id').val();
             console.log(id);
             $('#create').attr('disabled', 'disabled');
@@ -112,7 +113,7 @@
                 success: function (response) {
                     $.toaster({message: 'Created successfully', title: 'Success', priority: 'success'});
 
-                   
+
                     $('#create').removeAttr('disabled');
                 }
 
@@ -127,7 +128,7 @@
 
             $.ajax({
                 method: "POST",
-                url: updateRoute,
+                url: route,
                 data: new FormData(document.getElementById('personal_development_update_form')),
                 dataType: 'JSON',
                 processData: false,  // Important!
@@ -136,7 +137,7 @@
                 success: function (response) {
                     $.toaster({message: 'Created successfully', title: 'Success', priority: 'success'});
 
-                  
+
                     $('#update').removeAttr('disabled');
                 }
 

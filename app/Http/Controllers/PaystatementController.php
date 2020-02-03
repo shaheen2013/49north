@@ -93,6 +93,13 @@ class PaystatementController extends Controller
             });
         $data = $data->dateSearch('date');
         $data = $data->isEmployee()->get();
+        if (count($data)) {
+            foreach ($data as $datum) {
+                $routes = [];
+                $routes['destroy'] = route('paystatement.destroy', $datum->id);
+                $datum->routes = $routes;
+            }
+        }
 
         foreach ($data as &$datum) {
             $datum->pdfname = fileUrl($datum->pdfname, true);

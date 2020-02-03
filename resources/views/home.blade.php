@@ -37,10 +37,10 @@
 
                     <div class="col-md-3">
                         <div class="text_outer">
-    
+
                             {{ Form::label('workemail', 'Work email') }}
                             {{ Form::email('workemail', null, array('class' => 'form-control','Placeholder'=>"Work email",'required'=>'required')) }}
-    
+
                         </div>
                     </div>
 
@@ -56,10 +56,10 @@
 
                     <div class="col-md-3">
                         <div class="text_outer">
-    
+
                             {{ Form::label('base_salary', 'Base Salary') }}
                             {{ Form::text('base_salary', null, array('class' => 'form-control','Placeholder'=>"Base Salary",'required'=>'required')) }}
-    
+
                         </div>
                     </div>
 
@@ -89,7 +89,7 @@
                     <div class="col-md-3">
                         <div class="text_outer">
                             {{ Form::textarea('compensation_details', null, array('class' => 'form-control','Placeholder'=>"Additional Compensation Details",'required'=>'required', 'style'=>'height: 100px')) }}
-    
+
                         </div>
                     </div>
 
@@ -134,7 +134,7 @@
                     </div>
 
                 </div>
-              
+
                 <div class="row">
 
                     <div class="col-md-6 image-chooser">
@@ -371,11 +371,12 @@
 
 <script type="text/javascript">
     var id = null;
+    let route = '@php echo $route; @endphp';
 
     function resetPassword(id){
         $.ajax({
             method: "POST",
-            url: "/reset/password/"+id,
+            url: route,
             dataType: 'JSON',
             success: function( results ) {
                 // $.toaster({ message : 'Password Updated successfully', title : 'Success', priority : 'success' });

@@ -215,7 +215,7 @@
 
 @section('js')
     <script type="text/javascript">
-        let id = from = to = history_from = history_to = null;
+        let id = from = to = history_from = history_to = updateRoute = null;
 
         $(document).ready(function () {
             const date = new Date(), y = date.getFullYear(), m = date.getMonth();
@@ -340,7 +340,7 @@
             });
         }
 
-        function deleteConfirm(id) {
+        function deleteConfirm(id, route) {
             let data = {
                 _token: '{{ csrf_token() }}',
                 _method: 'delete',
@@ -358,7 +358,7 @@
                 if (e.value === true) {
                     $.ajax({
                         type: 'post',
-                        url: "/messages/" + id,
+                        url: route,
                         data: data,
                         success: function (response) {
                             if (response.status === 200) {
@@ -378,12 +378,14 @@
             })
         }
 
-        function openEditMessageModel(id) {
+        function openEditMessageModel(id, route, update) {
+            updateRoute = update;
             $('#message-modal-edit').modal('show');
 
             $.ajax({
                 type: 'GET',
-                url: "/messages/" + id + '/edit',
+                url: route,
+                // url: "/messages/" + id + '/edit',
                 dataType: 'JSON',
                 success: function (response) {
                     if (response.status === 200) {
@@ -413,7 +415,8 @@
 
             $.ajax({
                 method: "POST",
-                url: form.attr('action'),
+                url: updateRoute,
+                // url: form.attr('action'),
                 data: form.serialize(),
                 success: function (response) {
                     if (response.status === 200) {
@@ -427,7 +430,7 @@
             });
         }
 
-        function statusProgress(id) {
+        function statusProgress(id, route) {
             let data = {
                 _token: '{{ csrf_token() }}',
                 _method: 'put',
@@ -435,7 +438,7 @@
 
             $.ajax({
                 method: "POST",
-                url: "/messages/status/" + id,
+                url: route,
                 data: data,
                 success: function (response) {
                     searchMessages();
@@ -444,10 +447,10 @@
             });
         }
 
-        function viewMessage(id) {
+        function viewMessage(id, route) {
             $.ajax({
                 method: "get",
-                url: "/messages/show/" + id,
+                url: route,
                 success: function (response) {
                     if (response.status === 200) {
                         let html = `<table class="table table-striped table-hover">
@@ -516,17 +519,17 @@
 
                         if (is_admin == 1 && htmlId === '#message_pending') {
                             adminOption = `<td>
-                                <a href="javascript:void(0)" data-toggle="tooltip" title="status change" onclick="statusProgress(${value.id})"><i class="fa fa-check-circle"></i></a>
+                                <a href="javascript:void(0)" data-toggle="tooltip" title="status change" onclick="statusProgress('${value.id}', '${value.routes.status}')"><i class="fa fa-check-circle"></i></a>
                             </td>`;
                         }
 
                         if (htmlId === '#message_pending') {
                             action = `<td class="action-box">
-                            <a href="javascript:void(0);" onclick="openEditMessageModel(${ value.id })">EDIT</a>
-                            <a href="javascript:void(0);" class="down" onclick="deleteConfirm(${ value.id })">DELETE</a>
+                            <a href="javascript:void(0);" onclick="openEditMessageModel('${value.id}', '${value.routes.edit}', '${value.routes.update}')">EDIT</a>
+                            <a href="javascript:void(0);" class="down" onclick="deleteConfirm('${value.id}', '${value.routes.destroy}')">DELETE</a>
                         </td>`;
                         } else {
-                            action = `<td><a href="javascript:void(0);" onclick="viewMessage(${ value.id })">VIEW</a></td>`;
+                            action = `<td><a href="javascript:void(0);" onclick="viewMessage('${value.id}', '${value.routes.show}')">VIEW</a></td>`;
                         }
 
                         html += `<tr>

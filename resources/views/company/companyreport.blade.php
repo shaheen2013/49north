@@ -139,7 +139,7 @@
     </div>
 
     <script type="text/javascript">
-        var id = null;
+        var id = updateRoute = null;
         $.ajaxSetup({ headers: { 'X-CSRF-Token': "{{csrf_token()}}" } });
 
         $(document).ready(function () {
@@ -196,12 +196,13 @@
             });
         }
 
-        function OpenEditCompanyModel(id) {
+        function OpenEditCompanyModel(id, route, update) {
+            updateRoute = update;
             console.log(id)
             $('#company-modal-edit2').modal();
             $.ajax({
                 type: 'GET',
-                url: "company/edit/"+id,
+                url: route,
                 dataType: 'JSON',
                 success: function (results) {
                     if (results.status === 'success') {
@@ -223,7 +224,7 @@
             var data = new FormData(document.getElementById('editCompanyForm'));
             $.ajax({
                 method: "POST",
-                url: "company/update/"+id,
+                url: updateRoute,
                 data: data,
                 enctype: 'multipart/form-data',
                 processData: false,  // Important!
@@ -272,8 +273,8 @@
                                         <td> ${data[index].companyname} </td>
                                         <td> ${data[index].email !== null ? data[index].email : 'N/A'} </td>
                                         <td class="text-right">
-                                            <a href="javascript:void(0);" onclick="OpenEditCompanyModel('${data[index].id}')">EDIT</a>
-                                            <a href="javascript:void(0);" class="down" onclick="deleteconfirm('${data[index].id}')">DELETE</a></td>
+                                            <a href="javascript:void(0);" onclick="OpenEditCompanyModel('${data[index].id}', '${data[index].routes.edit}', '${data[index].routes.update}')">EDIT</a>
+                                            <a href="javascript:void(0);" class="down" onclick="deleteconfirm('${data[index].id}', '${data[index].routes.destroy}')">DELETE</a></td>
                                         </td>
                                     </tr><tr class="spacer"></tr>`;
                                 }

@@ -185,6 +185,18 @@ class MessageController extends Controller
                     }
                 })->isEmployee()->dateSearch()->get();
 
+                if (count($data)) {
+                    foreach ($data as $datum) {
+                        $routes = [];
+                        $routes['show'] = route('messages.show', $datum->id);
+                        $routes['edit'] = route('messages.edit', $datum->id);
+                        $routes['update'] = route('messages.update', $datum->id);
+                        $routes['destroy'] = route('messages.destroy', $datum->id);
+                        $routes['status'] = route('messages.status.update', $datum->id);
+                        $datum->routes = $routes;
+                    }
+                }
+
             foreach ($data as $key => $datum) {
                 if (auth()->user()->is_admin == 0 && ($datum->is_anonymous || $datum->is_contact)) {
                     $data->forget($key);

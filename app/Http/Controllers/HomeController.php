@@ -33,12 +33,13 @@ class HomeController extends Controller {
     {
         $emp_id = auth()->user()->id;
         $activeMenu = 'profile';
-        $findUser = User::where('id','!=', auth()->user()->id)->with('employee_details')->orderBy('name')->get(); 
+        $findUser = User::where('id','!=', auth()->user()->id)->with('employee_details')->orderBy('name')->get();
         // return $findUser;
         $companies = Company::Latest()->get();
         $data['user'] = DB::table('users as u')->join('employee_details as ed', 'u.id', '=', 'ed.id')->select('ed.*')->where('u.id', '=', $emp_id)->first();
-
-        return view('home', $data, compact('activeMenu', 'companies', 'findUser'));
+        $route = route('reset.password', $emp_id);
+        $route1 = route('reset.stuff.password', $emp_id);
+        return view('home', $data, compact('activeMenu', 'companies', 'findUser', 'route', 'route1'));
     }
 
     /**
