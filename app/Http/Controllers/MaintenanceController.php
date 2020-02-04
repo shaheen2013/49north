@@ -50,7 +50,7 @@ class MaintenanceController extends Controller
     // edit view
     function edit_maintenanceview(Request $request)
     {
-    	$data['maintanance'] = Maintenance_ticket::find($request->id)->first();
+    	$data['maintanance'] = Maintenance_ticket::find($request->id);
         $data['category'] = Categorys::all();
         $data['categorya1'] = Categorys::where('id', $data['maintanance']->category)->first();
         $data['users'] = User::where('is_admin', 0)->get();
