@@ -70,14 +70,16 @@ function delete_agreement(id,type)
 
 
 
-function mainance_edit_view_ajax(id){
+function mainance_edit_view_ajax(id, route){
 	var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
 	$.ajax({
-		type:'POST',
-		url:"./editview",
+		type: 'POST',
+		url: route,
 		dataType:'html',
-		data: {_token: CSRF_TOKEN ,
-			   id: id},
+		data: {
+		    _token: CSRF_TOKEN ,
+           id: id
+        },
 		success:function(response)
 		{
 	      $(".maintenance1_edit").html(response);
@@ -85,25 +87,6 @@ function mainance_edit_view_ajax(id){
 		}
 	});
 }
-
-
-
-function delete_maintance(id){
-	var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-	$.ajax({
-		type:'POST',
-		url:"./delete",
-		dataType:'html',
-		data: {_token: CSRF_TOKEN ,
-			   id: id},
-		success:function(response)
-		{
-	   	  maintanance_list();
-		  swal("Tech Maintenance Inprogress Successfully","", "success");
-		}
-	});
-}
-
 
 function ticket_cancel(id){
 	var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
