@@ -839,11 +839,7 @@
         }
 
         function expence_approve_new(id, route) {
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-Token': "{{csrf_token()}}"
-                }
-            });
+
             let data = {id: id};
 
             $.ajax({

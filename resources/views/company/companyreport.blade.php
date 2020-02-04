@@ -140,7 +140,6 @@
 
     <script type="text/javascript">
         var id = updateRoute = null;
-        $.ajaxSetup({ headers: { 'X-CSRF-Token': "{{csrf_token()}}" } });
 
         $(document).ready(function () {
             $("#historical_span").click(function () {

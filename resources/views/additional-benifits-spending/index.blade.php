@@ -280,11 +280,6 @@
                 return false;
             }
 
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-Token': "{{csrf_token()}}"
-                }
-            });
             $.ajax({
                 method: "POST",
                 url: "{{ route('additional-benefits.store') }}",
@@ -497,11 +492,6 @@
 
         function benefit_approve(id, route) {
 
-            $.ajaxSetup({
-            headers: {
-                'X-CSRF-Token': "{{csrf_token()}}"
-            }
-            });
             let data = {id: id};
 
             $.ajax({
@@ -539,11 +529,6 @@
 
         function benefit_paid(id, route) {
 
-            $.ajaxSetup({
-            headers: {
-                'X-CSRF-Token': "{{csrf_token()}}"
-            }
-            });
             let data = {id: id};
 
             $.ajax({

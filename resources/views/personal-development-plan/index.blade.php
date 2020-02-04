@@ -280,11 +280,6 @@
                 return false;
             }
 
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-Token': "{{csrf_token()}}"
-                }
-            });
             $.ajax({
                 method: "POST",
                 url: "{{ route('personal-development-plan.store') }}",

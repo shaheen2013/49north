@@ -235,7 +235,7 @@
         });
 
         function OpenEditMileageModel(id) {
-           
+
             $('#mileage-modaledit').modal();
             $.ajax({
                 type: 'POST',
@@ -513,11 +513,6 @@
 
         function mileage_pending(id, route) {
 
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-Token': "{{csrf_token()}}"
-                }
-            });
             let data = {id: id};
 
             $.ajax({
