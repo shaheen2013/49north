@@ -112,11 +112,14 @@ class MaintenanceController extends Controller
             $tagged = [];
             if (!auth()->user()->is_admin) {
                 $tagged = array_unique(auth()->user()->tickets->pluck('id')->toArray());
+                $ids = Maintenance_ticket::where('emp_id',auth()->user()->id)->pluck('id')->toArray();
+                $tagged = array_merge($tagged, $ids);
             }
 
-            $data = Maintenance_ticket::select('maintenance_tickets.*')->with('employee')
+            $data = Maintenance_ticket::select('maintenance_tickets.*')
+                ->with('employee')
                 ->leftjoin('employee_details AS emp','emp.id','=','maintenance_tickets.emp_id')
-                ->where(function ($q) use ($request) {
+                ->where(function ($q) use ($request, $tagged) {
                     if (isset($request->search)) {
                         $q->where(function ($query) use ($request) {
                             $query->where('maintenance_tickets.subject', 'like', '%' . $request->search . '%')
@@ -133,12 +136,11 @@ class MaintenanceController extends Controller
                     } else {
                         $q->whereNull('maintenance_tickets.status');
                     }
-                })
-                ->where(function ($q) use ($tagged) {
-                    if (!auth()->user()->is_admin && count($tagged)) {
+                    if (!auth()->user()->is_admin) {
                         $q->whereIn('maintenance_tickets.id', $tagged);
                     }
-                })->isEmployee()->get();
+                })
+                ->get();
 
                 if (count($data)) {
                     foreach ($data as $datum) {
