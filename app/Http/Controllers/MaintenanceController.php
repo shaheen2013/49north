@@ -111,12 +111,12 @@ class MaintenanceController extends Controller
         try {
             $tagged = [];
             if (!auth()->user()->is_admin) {
-                $tagged = array_unique(auth()->user()->tickets->pluck('id'));
+                $tagged = array_unique(auth()->user()->tickets->pluck('id')->toArray());
             }
 
             $data = Maintenance_ticket::select('maintenance_tickets.*')->with('employee')
                 ->leftjoin('employee_details AS emp','emp.id','=','maintenance_tickets.emp_id')
-                ->where(function ($q) use ($request, $tagged) {
+                ->where(function ($q) use ($request) {
                     if (isset($request->search)) {
                         $q->where(function ($query) use ($request) {
                             $query->where('maintenance_tickets.subject', 'like', '%' . $request->search . '%')
@@ -133,8 +133,10 @@ class MaintenanceController extends Controller
                     } else {
                         $q->whereNull('maintenance_tickets.status');
                     }
+                })
+                ->where(function ($q) use ($tagged) {
                     if (!auth()->user()->is_admin && count($tagged)) {
-                        $q->whereIn('id', $tagged);
+                        $q->whereIn('maintenance_tickets.id', $tagged);
                     }
                 })->isEmployee()->get();
 
