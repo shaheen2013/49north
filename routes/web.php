@@ -140,13 +140,10 @@ Route::group(['middleware' => ['auth']], function () {
     });
 
     // Journal
-    Route::group(['prefix' => 'journal', 'as' => 'journal.', 'middleware' => 'can:classroom-enabled'], function () {
-        Route::get('/', 'JournalController@index')->name('index');
-        Route::post('/store', 'JournalController@store')->name('store');
-        Route::post('/search', 'JournalController@searchJournal')->name('search-journal');
-        Route::get('/edit/{id}', 'JournalController@edit')->name('edit');
-        Route::POST('/update/{id}', 'JournalController@update')->name('update');
-        Route::POST('/destroy/{id}', 'JournalController@destroy')->name('destroy');
+    Route::group(['middleware' => 'can:classroom-enabled'], function () {
+        Route::post('journal/search', 'JournalController@searchJournal')->name('journal.search-journal');
+        Route::post('/destroy/{journal}', 'JournalController@destroy')->name('journal.destroy');
+        Route::resource('journal', 'JournalController')->only(['index','store','edit','update']);
     });
 
     // Timeoff route

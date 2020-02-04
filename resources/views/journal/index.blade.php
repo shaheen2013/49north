@@ -1,4 +1,5 @@
 @extends('layouts.main')
+@section('title','Journal Entries')
 @include('modal')
 @section('content1')
 
@@ -18,15 +19,14 @@
                         <div class="row">
                             <div class="col-sm-2">
                                 <div class="form-group">
-                                    <input type="text" name="date" id="date" placeholder="Select Date" class="form-control-new" onChange="">
+                                    {!! Form::text('date',null,['id' => 'date', 'placeholder' => 'Select Date','class' => 'form-control-new','onChange' => '']) !!}
                                 </div>
                             </div>
                             <div class="col-sm-1">
                                 <div id="wait"></div>
                             </div>
                             <div class="col-sm-9">
-                                <a href="javascript:void(0)" class="_new_icon_button_1" data-toggle="modal"
-                                   data-target="#journal-modal">
+                                <a href="javascript:void(0)" class="_new_icon_button_1" data-toggle="modal" data-target="#journal-edit-modal" onclick="openJournalForm();">
                                     <i class="fa fa-plus"></i>
                                 </a>
                             </div>
@@ -52,74 +52,28 @@
         </div>
     </div>
 
-
-    <!----- Journal Modal ---->
-    <div id="journal-modal" class="modal fade bs-example-modal-lg" tabindex="-1">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-body">
-                    <div class="col-md-12" style="margin-top:40px;margin-bottom:20px;">
-                        <div class="row">
-
-                            <div class="col-md-6 col-sm-6">
-                                <div class="text_outer">
-                                    <label for="edit_date" class="">Date</label>
-                                    <input type="text" placeholder="Select Date" name="date" id="create_date" class="flatpickr form-control">
-                                </div>
-                            </div>
-                            <div class="col-md-6 col-sm-6">
-                                <div class="text_outer">
-                                    <label for="edit_vehicle" class="">Title</label>
-                                    <input type="text" id="title" name="title" class="form-control" placeholder="Insert title here">
-                                </div>
-                            </div>
-                            <div class="col-md-12 col-sm-12">
-                                <div class="text_outer">
-                                    <textarea style="min-height: 100px" name="details" class="form-control" placeholder="Insert text here" id="details"></textarea>
-                                </div>
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="row margin-top-30">
-                            <div class="form-group" style="width:100%;">
-                                <div class="col-md-12 col-sm-12">
-                                    <button type="button" onclick="create_journal(event)" class="btn-dark contact_btn" data-form="expences" id="create">Save
-                                    </button>
-                                    <span class="close close-span" data-dismiss="modal" aria-label="Close"><i class="fa fa-arrow-left"></i>  Return to journal Reports</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <!----- Journal Modal edit ---->
-
-    <div id="journal-edit-modal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog"
-         aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div id="journal-edit-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-body">
                     <div class="col-md-12" style="margin-top:40px;margin-bottom:20px;">
                         <div class="row">
-
                             <div class="col-md-6 col-sm-6">
                                 <div class="text_outer">
-                                    <label for="edit_date" class="">Date</label>
-                                    <input type="text" placeholder="Select Date" name="date" id="edit_date" class="flatpickr form-control">
+                                    {!! Form::label('edit_date','Date') !!}
+                                    {!! Form::text('date',null,['id' => 'edit_date', 'class' => 'flatpickr form-control','placeholder' => 'Select Date']) !!}
                                 </div>
                             </div>
                             <div class="col-md-6 col-sm-6">
                                 <div class="text_outer">
-                                    <label for="edit_vehicle" class="">Title</label>
-                                    <input type="text" id="edit_title" name="title" class="form-control" placeholder="Insert title here">
+                                    {!! Form::label('title') !!}
+                                    {!! Form::text('title',null,['class' => 'form-control','placeholder' => 'Insert title here']) !!}
                                 </div>
                             </div>
                             <div class="col-md-12 col-sm-12">
                                 <div class="text_outer">
-                                    <textarea style="min-height: 100px" name="details" class="form-control" placeholder="Insert text here" id="edit_details"></textarea>
+                                    {!! Form::textarea('details',null,['id' => 'details', 'class' => 'form-control','placeholder' => 'Insert text here','style' => 'min-height: 100px']) !!}
                                 </div>
                             </div>
                         </div>
@@ -150,16 +104,14 @@
         $(document).ready(function () {
             const date = new Date(), y = date.getFullYear(), m = date.getMonth();
 
-            var today = new Date();
+            const today = new Date();
             to = formatDate(today);
-            from = formatDate(today.setDate(today.getDate()-30));
+            from = formatDate(today.setDate(today.getDate() - 30));
             searchJournalPage();
 
             $("#pending_span").click(function () {
                 $("#pending_span").addClass("active-span");
                 $("#pending_div").show();
-
-
             });
 
             $('#date').flatpickr({
@@ -182,23 +134,32 @@
             });
         });
 
-        function create_journal(event){
+        function openJournalForm () {
+            // $('#edit_date').val('');
+            $('#title').val('');
+            $('#details').val('');
+            $('#update').attr('onclick', 'create_journal(event)').attr('data-id', '');
+        }
+
+        function create_journal(event) {
             event.preventDefault();
-            $('#create').attr('disabled','disabled');
-            var date = $('#create_date').val();
-            var title = $('#title').val();
-            var details = $('#details').val();
+            const $create = $('#create');
+            $create.attr('disabled', true);
 
-            var data = {
-                date:date,
-                title:title,
-                details:details,
+            const date = $('#edit_date').val();
+            const title = $('#title').val();
+            const details = $('#details').val();
 
-            }
+            const data = {
+                date: date,
+                title: title,
+                details: details,
+
+            };
             // console.log(data)
-            if(date == '' || title == ''|| details == ''){
-                $.toaster({ message : 'Field is required!', title : 'Required', priority : 'danger' });
-                $('#create').removeAttr('disabled');
+            if (date === '' || title === '' || details === '') {
+                $.toaster({message: 'Field is required!', title: 'Required', priority: 'danger'});
+                $create.removeAttr('disabled');
                 return false;
             }
 
@@ -207,12 +168,11 @@
                 url: "{{ route('journal.store') }}",
                 data: data,
                 dataType: 'JSON',
-                success: function( response ) {
-                    $.toaster({ message : 'Created successfully', title : 'Success', priority : 'success' });
-                    $('#journal-modal').modal('hide');
+                success: function (response) {
+                    $.toaster({message: 'Created successfully', title: 'Success', priority: 'success'});
+                    $('#journal-edit-modal').modal('hide');
                     searchJournalPage();
                 }
-
             });
         }
 
@@ -223,26 +183,25 @@
             $('#journal-edit-modal').modal();
             $.ajax({
                 type: 'GET',
-               
                 url: route,
                 dataType: 'JSON',
                 success: function (results) {
 
                     if (results.status === 'success') {
+                        const $editDate = $('#edit_date');
 
-                        $('#edit_date').val(results.data.date.split(' ')[0]);
-                        $('#edit_title').val(results.data.title);
-                        $('#edit_details').val(results.data.details);
-                        $('#update').attr('onclick', 'update_journal(' + id + ')');
-                        $('#update').attr('data-id', id);
+                        $editDate.val(results.data.date.split(' ')[0]);
+                        $('#title').val(results.data.title);
+                        $('#details').val(results.data.details);
+                        $('#update').attr('onclick', 'update_journal(' + id + ')').attr('data-id', id);
 
-                        $('#edit_date').flatpickr({
+                        $editDate.flatpickr({
                             altInput: true,
                             altFormat: 'j M, Y',
                             defaultDate: results.data.date,
                             onChange: function (selectedDates, dateStr, instance) {
-                                from = formatDate(selectedDates[0]);
-                                to = formatDate(selectedDates[1]);
+                                let from = formatDate(selectedDates[0]);
+                                let to = formatDate(selectedDates[1]);
                                 if (selectedDates[0] === undefined || (selectedDates[0] !== undefined && selectedDates[1] !== undefined)) {
                                     if (selectedDates[0] === undefined) {
                                         from = to = null;
@@ -263,8 +222,8 @@
 
             const data = {
                 date: $('#edit_date').val(),
-                title: $('#edit_title').val(),
-                details: $('#edit_details').val(),
+                title: $('#title').val(),
+                details: $('#details').val(),
                 id: id
             };
 
@@ -312,15 +271,8 @@
                                 let html = '';
                                 let date = '';
                                 for (let index = 0; index < data.length; index++) {
-                                    if (data[index].date !== null && data[index].date !== '') {
-                                        var time = data[index].date.split(' ')[0];
-                                        date = new Date(time);
-                                        date = date.toDateString().split(' ')[2] + " " + date.toDateString().split(' ')[1] + ", " + date.toDateString().split(' ')[3]
-                                    } else {
-                                        date = '-';
-                                    }
                                     html += `<tr>
-                                        <td> ${date} </td>
+                                        <td> ${data[index].formatted_date} </td>
                                         <td> ${data[index].title} </td>
                                         <td> ${data[index].details} </td>`;
 
