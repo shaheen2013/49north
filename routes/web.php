@@ -120,6 +120,10 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/ticket_cancel', 'MaintenanceController@ticket_cancel')->name('ticket_cancel')->middleware('isAdmin');
         Route::get('search', 'MaintenanceController@search')->name('search');
 
+        Route::post('/comment/store/{id}', 'MaintenanceController@commentStore')->name('comment.store');
+        Route::post('/comment/update/{id}', 'MaintenanceController@commentUpdate')->name('comment.update');
+        Route::get('/show/{id}', 'MaintenanceController@show')->name('show');
+
     });
 
     // Mileage

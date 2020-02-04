@@ -81,9 +81,10 @@ class MaintenanceController extends Controller
     function delete(Request $request)
     {
         Maintenance_ticket::destroy($request->id);
-
         $msg = 'Ticket deleted';
-        return redirect()->back()->with('alert-info',$msg);
+        \Session::flash('alert-info', $msg);
+
+        return redirect()->route('maintenance.list');
     }
 
     function ticket_inprogress(Request $request)
@@ -137,6 +138,19 @@ class MaintenanceController extends Controller
                     }
                 })->isEmployee()->get();
 
+                if (count($data)) {
+                    foreach ($data as $datum) {
+                        $routes = [];
+                        $routes['commentStore'] = route('maintenance.comment.store', $datum->id);
+                        $routes['commentUpdate'] = route('maintenance.comment.update', $datum->id);
+                        $routes['edit'] = route('maintenance.editview');
+                        // $routes['update'] = route('maintenance.update', $datum->id);
+                        $routes['show'] = route('maintenance.show', $datum->id);
+                        $routes['destroy'] = route('maintenance.delete');
+                        $datum->routes = $routes;
+                    }
+                }
+
             foreach ($data as $datum) {
                 $datum->updated_at_formatted = date('d M, Y', strtotime($datum->updated_at));
             }
@@ -145,5 +159,87 @@ class MaintenanceController extends Controller
         } catch (\Exception $e) {
             return response()->json(['status' => 500, 'message' => $e->getMessage()]);
         }
+    }
+
+    public function show($id)
+    {
+        if (auth()->user()->is_admin) {
+            $activeMenu = 'admin';
+        } else {
+            $activeMenu = 'submit';
+        }
+        $show = Maintenance_ticket::with('employee')->find($id);
+
+        if ($show->comment)
+        {
+            $route = route('maintenance.comment.update', $show->id);
+        } else {
+            $route = route('maintenance.comment.store', $show->id);
+        }
+
+        $editRoute = route('maintenance.editview', $id);
+
+        $deleteRoute = route('maintenance.delete');
+        return view('maintenance.show', compact('show', 'user', 'activeMenu', 'route', 'editRoute', 'deleteRoute'));
+    }
+
+    public function commentStore(Request $request, $id)
+    {
+
+        // Validate form data
+        $rules = [
+            'comment' => 'string|max:491',
+        ];
+
+        $validator = validator($request->all(), $rules, []);
+
+        if ($validator->fails()) {
+            return response()->json(['status' => 'fail', 'errors' => $validator->getMessageBag()->toarray()]);
+        }
+
+        try {
+            // return $request->all();
+            $data = Maintenance_ticket::findOrFail($id);
+            $data->comment = $request->comment;
+
+            if ($data->save()) {
+                return response()->json(['status' => 'success']);
+            }
+
+            return response()->json(['status' => 'fail']);
+        } catch (\Exception $e) {
+            return response()->json(['status' => 'fail', 'msg' => $e->getMessage()]);
+        }
+
+    }
+
+    public function commentUpdate(Request $request, $id)
+    {
+
+        // Validate form data
+        $rules = [
+            'comment' => 'string|max:491',
+        ];
+
+        $validator = validator($request->all(), $rules, []);
+
+        if ($validator->fails()) {
+            return response()->json(['status' => 'fail', 'errors' => $validator->getMessageBag()->toarray()]);
+        }
+
+        try {
+            // return $request->all();
+            $data = Maintenance_ticket::findOrFail($id);
+            $data->comment = $request->comment;
+
+            if ($data->update()) {
+                return response()->json(['status' => 'success']);
+            }
+
+            return response()->json(['status' => 'fail']);
+        } catch (\Exception $e) {
+            return response()->json(['status' => 'fail', 'msg' => $e->getMessage()]);
+        }
+
     }
 }

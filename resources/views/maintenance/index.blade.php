@@ -331,8 +331,9 @@
 
                         if (htmlId === '#maintanance') {
                             action = `<td class="action-box">
-                            <a href="javascript:void(0);" onclick="mainance_edit_view_ajax(${ value.id })">EDIT</a>
-                            <a href="javascript:void(0);" class="down" onclick="delete_maintance(${ value.id })">DELETE</a>
+                                <a href="${value.routes.show}"> View</a>
+                            <a href="javascript:void(0);" onclick="mainance_edit_view_ajax(${ value.id }, '${value.routes.edit}')">EDIT</a>
+                            <a href="javascript:void(0);" class="down" onclick="delete_maintance(${ value.id }, '${value.routes.destroy}')">DELETE</a>
                         </td>`;
                         } else {
                             action = `<td></td>`;
