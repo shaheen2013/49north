@@ -340,7 +340,7 @@
                         }
 
                         html += `<tr>
-                        <td> "#00${value.id}"</td>
+                        <td> #00${value.id}</td>
                         <td> ${value.subject} </td>
                         <td> ${status} </td>
                         <td> ${value.updated_at_formatted} </td>
@@ -405,6 +405,24 @@
                 success:function(response)
                 {
                     searchMaintenance();
+                }
+            });
+        }
+
+        function delete_maintance(id, route){
+
+            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+            $.ajax({
+                type:'POST',
+                url: route,
+                // url:"./delete",
+                dataType:'html',
+                data: {_token: CSRF_TOKEN ,
+                    id: id},
+                success:function(response)
+                {
+                    searchMaintenance();
+                    swal("Tech Maintenance Inprogress Successfully","", "success");
                 }
             });
         }

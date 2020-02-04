@@ -88,26 +88,6 @@ function mainance_edit_view_ajax(id, route){
 	});
 }
 
-
-
-function delete_maintance(id, route){
-	var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-	$.ajax({
-		type:'POST',
-		url: route,
-		// url:"./delete",
-		dataType:'html',
-		data: {_token: CSRF_TOKEN ,
-			   id: id},
-		success:function(response)
-		{
-	   	  maintanance_list();
-		  swal("Tech Maintenance Inprogress Successfully","", "success");
-		}
-	});
-}
-
-
 function ticket_cancel(id){
 	var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
 	$.ajax({

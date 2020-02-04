@@ -1,4 +1,3 @@
-{{-- \resources\views\users\edit.blade.php --}}
 
 @extends('layouts.main')
 
@@ -259,7 +258,7 @@
         </div><!--------Emergency Contact Information----------->
 
         <div class="emergency">
-            <h2 class="form_title">Company</h2> 
+            <h2 class="form_title">Company</h2>
                 <div class="col-md-3">
                     <div class="text_outer">
                         <label for="company_id" class="">Company</label>
@@ -271,12 +270,12 @@
                         </select>
                     </div>
                 </div>
-                @if($user->is_admin) 
+                @if($user->is_admin)
                     <h2 class="form_title">Ticket Admin</h2>
                      <div class='col-md-3'>
                             <div class="text_outer">
                                 <label class="custom-checkbox form-check-label">
-                                    <input class="form-check-input" name="is_ticket_admin" type="checkbox" value="1">Is Ticket Admin
+                                    <input class="form-check-input" name="is_ticket_admin" type="checkbox" value="1" @if($user->user->is_ticket_admin) checked @endif>Is Ticket Admin
                                 </label>
                             </div>
                         </div>
@@ -305,7 +304,7 @@
                                             {!! Form::label('role-' . $role->id,$role->name,['class' => 'font-weight-bold']) !!}
                                             @foreach ($role->permissions AS $permission)
                                                 <div class="form-check">
-                                                    {!! Form::checkbox('permission[' . $permission->id .']',$permission->id, false,['class' => 'form-check-input','id' => 'permission-' . $permission->id]) !!}
+                                                    {!! Form::checkbox('permission[' . $permission->id .']',$permission->id, false,['class' => 'form-check-input','id' => 'permission-' . $permission->id, 'checked' => $user->user->hasPermissionTo($permission->name) ? true : false ]) !!}
                                                     {!! Form::label('permission-' . $permission->id,$permission->name,['class' => 'form-check-label']) !!}
                                                 </div>
                                             @endforeach
@@ -320,7 +319,7 @@
             </div>
         @endif
 
-        
+
 
         {{ Form::button($user->exists ? 'Edit' : 'Add', array('class' => 'btn-dark contact_btn','type'=>'submit')) }}
 

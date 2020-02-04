@@ -262,7 +262,6 @@
 
 <script type="text/javascript" src="{{ asset('js/bootstrap-datepicker.min.js') }}"></script>
 <script type="text/javascript" src="{{ asset('js/admin.js') }}"></script>
-<script src="{{asset('js/custom_function.js')}}"></script>
 <script src="{{asset('js/custom_function_admin.js')}}"></script>
 <script src="{{ URL::asset('toaster/jquery.toaster.js') }}"></script>
 <script src="{{ URL::asset('assets/jquery-spinner/js/jquery.spinner.js') }}"></script>
