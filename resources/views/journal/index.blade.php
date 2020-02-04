@@ -202,11 +202,6 @@
                 return false;
             }
 
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-Token': "{{csrf_token()}}"
-                }
-            });
             $.ajax({
                 method: "POST",
                 url: "{{ route('journal.store') }}",
@@ -346,6 +341,8 @@
                 }
             });
         }
+
+
         function deleteconfirm(id, route) {
             swal({
                 title: "Delete?",
@@ -381,23 +378,5 @@
                 return false;
             })
         }
-
-
-
-
-        // Format date
-        function formatDate(date) {
-            const d = new Date(date), year = d.getFullYear();
-            let month = '' + (d.getMonth() + 1),
-                day = '' + d.getDate();
-
-            if (month.length < 2)
-                month = '0' + month;
-            if (day.length < 2)
-                day = '0' + day;
-
-            return [year, month, day].join('-');
-        }
-
     </script>
 @endpush
