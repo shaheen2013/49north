@@ -40,13 +40,29 @@
                             </li>
                             @endadmin
 
+                            @if(!auth()->user()->is_admin) 
+                            <li class="nav-item">
+                                <a class="nav-link {{ $activeMenu == 'benefits' ? 'active' : '' }}" href="{{ route('benefits.module') }}" role="tab">Benefits</a>
+                            </li> 
+                            @endif
+
+                            @admin
                             <li class="nav-item">
                                 <a class="nav-link {{ $activeMenu == 'benefits' ? 'active' : '' }}" href="{{ route('plans.index') }}" role="tab">Benefits</a>
                             </li>
+                            @endadmin
 
+                            @if(!auth()->user()->is_admin)
+                            <li class="nav-item">
+                                <a class="nav-link {{ $activeMenu == 'classroom' ? 'active' : '' }}" href="{{ route('classroom.module') }}" role="tab">Classroom</a>
+                            </li>
+                            @endif
+
+                            @admin
                             <li class="nav-item">
                                 <a class="nav-link {{ $activeMenu == 'classroom' ? 'active' : '' }}" href="{{ route('missions.index') }}" role="tab">Classroom</a>
                             </li>
+                            @endadmin
                         </ul>
                     </div>
                     <div class="pull-right">

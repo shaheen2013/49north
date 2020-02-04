@@ -208,7 +208,7 @@ class UserController extends Controller {
      *
      * @return Factory|View
      */
-    public function edit ($id) {
+    public function edit (Request $request, $id) {
 
         $activeMenu = 'admin';
         $companies = Company::Latest()->get();
@@ -236,8 +236,14 @@ class UserController extends Controller {
                 $q->orderBy('orderval')->orderBy('name');
             }
         ])->has('permissions')->orderBy('orderval')->get();
-        $permissions = Permission::pluck('name', 'id');
-
+        // $permissions = Permission::pluck('name', 'id');
+       
+        if (isset($request->permission) && count($request->permission)){ 
+            $permissions = Permission::find($request->permission)->pluck('name', 'id');
+            $u->givePermissionTo(['permissions']);
+        } else{
+            $permissions = '-';
+        }
         $route = route('reset.stuff.password', $u->id);
 
         return view('users.edit', compact('user', 'activeMenu', 'companies', 'roles', 'permissions', 'route'));
