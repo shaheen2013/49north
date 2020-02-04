@@ -29,6 +29,16 @@ class HomeController extends Controller {
         return view('employee-module', compact('activeMenu'));
     }
 
+    public function benefitsModule () {
+        $activeMenu = 'benefits';
+        return view('benefits-module', compact('activeMenu'));
+    }
+
+    public function classroomModule () {
+        $activeMenu = 'classroom';
+        return view('classroom-module', compact('activeMenu'));
+    }
+
     /**
      * Show the application dashboard.
      *
