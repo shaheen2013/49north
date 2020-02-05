@@ -39,8 +39,8 @@
                         <a href="javascript:void(0)" title="Cancel!" onclick="ticketCancel({{ $maintanance_list->id  }})"><i class="fa fa-ban"></i></a>
                     </td>
 
-                    <td class="action-box"><a href="javascript:void(0);" onclick="mainance_edit_view_ajax({{ $maintanance_list->id  }})" >EDIT</a>
-                        <a href="javascript:void(0);" class="down" onclick="delete_maintance({{ $maintanance_list->id  }})">DELETE</a></td>
+                    <td class="action-box"><a href="javascript:void(0);" onclick="maintenanceEditView({{ $maintanance_list->id  }})" >EDIT</a>
+                        <a href="javascript:void(0);" class="down" onclick="deleteMaintenance({{ $maintanance_list->id  }})">DELETE</a></td>
                 </tr>
                 <tr class="spacer"></tr>
               <?php  } ?>

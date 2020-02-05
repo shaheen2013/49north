@@ -70,7 +70,7 @@ function delete_agreement(id,type)
 
 
 
-function mainance_edit_view_ajax(id, route){
+function maintenanceEditView(id, route){
 	var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
 	$.ajax({
 		type: 'POST',

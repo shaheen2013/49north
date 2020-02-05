@@ -99,7 +99,7 @@
                                 <div class="row margin-top-30">
                                     <div class="form-group" style="width:100%;">
                                         <div class="col-md-12 col-sm-12">
-                                            <button type="button" id="create" onclick="create_upload(event)"
+                                            <button type="button" id="create" onclick="createUpload(event)"
                                                     class="btn-dark contact_btn" data-form="expences">Save
                                             </button>
                                             <span class="close close-span" data-dismiss="modal" aria-label="Close"><i
@@ -147,7 +147,7 @@
             });
         });
 
-        function create_upload(event) {
+        function createUpload(event) {
             event.preventDefault();
             $('#create').attr('disabled', 'disabled');
             var data = new FormData(document.getElementById('createPayForm'));
@@ -228,7 +228,7 @@
                                     // console.log(admin_user);
 
                                     if (admin_user == 1) {
-                                        action = `<a href="javascript:void(0);" class="down" onclick="deleteconfirm('${data[index].id}', '${data[index].routes.destroy}')">DELETE</a>`;
+                                        action = `<a href="javascript:void(0);" class="down" onclick="deleteConfirm('${data[index].id}', '${data[index].routes.destroy}')">DELETE</a>`;
                                     } else {
                                         action = '';
                                     }
@@ -254,7 +254,7 @@
             });
         }
 
-        function deleteconfirm(id, route) {
+        function deleteConfirm(id, route) {
             swal({
                 title: "Delete?",
                 text: "Please ensure and then confirm!",

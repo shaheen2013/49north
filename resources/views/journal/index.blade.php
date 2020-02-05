@@ -83,7 +83,7 @@
                         <div class="row margin-top-30">
                             <div class="form-group" style="width:100%;">
                                 <div class="col-md-12 col-sm-12">
-                                    <button type="button" onclick="create_journal(event)" class="btn-dark contact_btn" data-form="expences" id="create">Save
+                                    <button type="button" onclick="createJournal(event)" class="btn-dark contact_btn" data-form="expences" id="create">Save
                                     </button>
                                     <span class="close close-span" data-dismiss="modal" aria-label="Close"><i class="fa fa-arrow-left"></i>  Return to journal Reports</span>
                                 </div>
@@ -127,7 +127,7 @@
                         <div class="row margin-top-30">
                             <div class="form-group" style="width:100%;">
                                 <div class="col-md-12 col-sm-12">
-                                    <button type="button" id="update" onclick="update_journal('')" class="btn-dark contact_btn" data-form="expences">Save
+                                    <button type="button" id="update" onclick="updateJournal('')" class="btn-dark contact_btn" data-form="expences">Save
                                     </button>
                                     <span class="close close-span" data-dismiss="modal" aria-label="Close"><i class="fa fa-arrow-left"></i>  Return to journal Reports</span>
                                 </div>
@@ -182,7 +182,7 @@
             });
         });
 
-        function create_journal(event){
+        function createJournal(event){
             event.preventDefault();
             $('#create').attr('disabled','disabled');
             var date = $('#create_date').val();
@@ -222,13 +222,13 @@
         }
 
 
-        function OpenEditJournalModel(id, route, update) {
+        function openEditJournalModel(id, route, update) {
             updateRoute = update;
             console.log(id);
             $('#journal-edit-modal').modal();
             $.ajax({
                 type: 'GET',
-               
+
                 url: route,
                 dataType: 'JSON',
                 success: function (results) {
@@ -238,7 +238,7 @@
                         $('#edit_date').val(results.data.date.split(' ')[0]);
                         $('#edit_title').val(results.data.title);
                         $('#edit_details').val(results.data.details);
-                        $('#update').attr('onclick', 'update_journal(' + id + ')');
+                        $('#update').attr('onclick', 'updateJournal(' + id + ')');
                         $('#update').attr('data-id', id);
 
                         $('#edit_date').flatpickr({
@@ -263,7 +263,7 @@
             });
         }
 
-        function update_journal(id) {
+        function updateJournal(id) {
             $('#update').attr('disabled', 'disabled');
 
             const data = {
@@ -331,8 +331,8 @@
 
                                     html += `
                                         <td class="text-right">
-                                            <a href="javascript:void(0);" onclick="OpenEditJournalModel('${data[index].id}', '${data[index].routes.edit}', '${data[index].routes.update}')">EDIT</a>
-                                            <a href="javascript:void(0);" class="down" onclick="deleteconfirm('${data[index].id}', '${data[index].routes.destroy}')">DELETE</a></td>
+                                            <a href="javascript:void(0);" onclick="openEditJournalModel('${data[index].id}', '${data[index].routes.edit}', '${data[index].routes.update}')">EDIT</a>
+                                            <a href="javascript:void(0);" class="down" onclick="deleteConfirm('${data[index].id}', '${data[index].routes.destroy}')">DELETE</a></td>
                                         </td>
                                     </tr><tr class="spacer"></tr>`;
 
@@ -346,7 +346,7 @@
                 }
             });
         }
-        function deleteconfirm(id, route) {
+        function deleteConfirm(id, route) {
             swal({
                 title: "Delete?",
                 text: "Please ensure and then confirm!",

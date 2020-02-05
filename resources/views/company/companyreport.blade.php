@@ -75,7 +75,7 @@
                                 </div>
                                 <div class="col-md-12 col-sm-12">
                                     <input type="hidden" name="emp_id" value="{{ auth()->user()->id }}">
-                                    <button type="button" id="create" onclick="create_company(event)" class="btn-dark contact_btn" data-form="expences">Save</button>
+                                    <button type="button" id="create" onclick="createCompany(event)" class="btn-dark contact_btn" data-form="expences">Save</button>
                                     <span class="close close-span" data-dismiss="modal" aria-label="Close"><i class="fa fa-arrow-left"></i> Return to Company Reports</span>
                                 </div>
                             </div>
@@ -122,7 +122,7 @@
 
                                     <input type="hidden" name="emp_id" value="{{ auth()->user()->id }}">
                                     <button type="button" id="update"
-                                            onclick="update_company({{ auth()->user()->id }})"
+                                            onclick="updateCompany({{ auth()->user()->id }})"
                                             class="btn-dark contact_btn" data-form="expences">Save
                                     </button>
                                     <span class="close close-span" data-dismiss="modal" aria-label="Close"><i
@@ -161,7 +161,7 @@
             searchCompanyPage()
         };
 
-        function create_company(event){
+        function createCompany(event){
             event.preventDefault();
             $('#create').attr('disabled','disabled');
             var companyname = $('#companyname').val();
@@ -196,7 +196,7 @@
             });
         }
 
-        function OpenEditCompanyModel(id, route, update) {
+        function openEditCompanyModel(id, route, update) {
             updateRoute = update;
             console.log(id)
             $('#company-modal-edit2').modal();
@@ -209,7 +209,7 @@
                         $('#edit_companyname').val(results.data.companyname);
                         $('#edit_email').val(results.data.email);
                         $('#edit_logo_show').attr('src','{{ fileUrl() }}' + results.data.logo);
-                        $('#update').attr('onclick', 'update_company(' + id + ')');
+                        $('#update').attr('onclick', 'updateCompany(' + id + ')');
                     } else {
                         swal("Error!", results.message, "error");
                     }
@@ -217,7 +217,7 @@
             });
         }
 
-        function update_company(id) {
+        function updateCompany(id) {
             $('#update').attr('disabled','disabled');
             var companyname = $('#edit_companyname').val();
             var email = $('#edit_email').val();
@@ -273,8 +273,8 @@
                                         <td> ${data[index].companyname} </td>
                                         <td> ${data[index].email !== null ? data[index].email : 'N/A'} </td>
                                         <td class="text-right">
-                                            <a href="javascript:void(0);" onclick="OpenEditCompanyModel('${data[index].id}', '${data[index].routes.edit}', '${data[index].routes.update}')">EDIT</a>
-                                            <a href="javascript:void(0);" class="down" onclick="deleteconfirm('${data[index].id}', '${data[index].routes.destroy}')">DELETE</a></td>
+                                            <a href="javascript:void(0);" onclick="openEditCompanyModel('${data[index].id}', '${data[index].routes.edit}', '${data[index].routes.update}')">EDIT</a>
+                                            <a href="javascript:void(0);" class="down" onclick="deleteConfirm('${data[index].id}', '${data[index].routes.destroy}')">DELETE</a></td>
                                         </td>
                                     </tr><tr class="spacer"></tr>`;
                                 }
@@ -288,7 +288,7 @@
             });
         }
 
-        function deleteconfirm(id) {
+        function deleteConfirm(id) {
             swal({
                 title: "Delete?",
                 text: "Please ensure and then confirm!",
