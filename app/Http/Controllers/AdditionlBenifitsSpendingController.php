@@ -3,33 +3,37 @@
 namespace App\Http\Controllers;
 
 use App\AdditionlBenifitsSpending;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\View\View;
 
 class AdditionlBenifitsSpendingController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Factory|View
      */
-    public function index()
+    public function index ()
     {
         $activeMenu = 'benefits';
-        $data= AdditionlBenifitsSpending::get();
+        $data = AdditionlBenifitsSpending::get();
 
         return view('additional-benifits-spending.index', compact('activeMenu', 'data'));
     }
 
-    private function _searchPending ($searchField) {
-        $query = AdditionlBenifitsSpending::orderByDesc('date')->whereNull('status');
-        $query->dateSearch('date');
-        // $query->isEmployee();
-        return $query->get();
-    }
 
-    public function searchPending (Request $request) {
+    /**
+     * Filter pending additional benefits spending.
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function searchPending (Request $request)
+    {
 
-        $data = $this->_searchPending('search');
+        $data = $this->searchAdditionalBenefits('pending_date', $isPending = true);
 
         if (count($data)) {
             foreach ($data as $datum) {
@@ -48,16 +52,36 @@ class AdditionlBenifitsSpendingController extends Controller
         return response()->json(['status' => 'success', 'data' => $data]);
     }
 
-    private function _searchHistory ($searchField) {
-        $query = AdditionlBenifitsSpending::orderByDesc('date')->whereNotNull('status');
+    /**
+     * Filter historical additional benefits spending.
+     * @param string $searchField
+     * @param bool $isPending
+     * @return Response
+     */
+    private function searchAdditionalBenefits ($searchField, $isPending = true)
+    {
+        $query = AdditionlBenifitsSpending::orderByDesc('date');
         $query->dateSearch('date');
         // $query->isEmployee();
+
+        // pending has not status
+        if ($isPending) {
+            $query->whereNull('status');
+        } else {
+            $query->whereNotNull('status');
+        }
         return $query->get();
     }
 
-    public function searchHistory (Request $request) {
+    /**
+     * Filter historical additional benefits spending.
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function searchHistory (Request $request)
+    {
 
-        $data = $this->_searchHistory('search');
+        $data = $this->searchAdditionalBenefits('history_date', false);
 
         if (count($data)) {
             foreach ($data as $datum) {
@@ -75,14 +99,14 @@ class AdditionlBenifitsSpendingController extends Controller
 
         return response()->json(['status' => 'success', 'data' => $data]);
     }
-    
+
 
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return void
      */
-    public function create()
+    public function create ()
     {
         //
     }
@@ -90,10 +114,10 @@ class AdditionlBenifitsSpendingController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return JsonResponse
      */
-    public function store(Request $request)
+    public function store (Request $request)
     {
         $rules = [
             'date' => 'required',
@@ -125,42 +149,39 @@ class AdditionlBenifitsSpendingController extends Controller
 
     /**
      * Display the specified resource.
-     *
-     * @param  \App\AdditionlBenifitsSpending  $additionlBenifitsSpending
-     * @return \Illuminate\Http\Response
+     * @param int $id
+     * @return void
      */
-    public function show($id)
+    public function show ($id)
     {
         //
     }
 
     /**
      * Show the form for editing the specified resource.
-     *
-     * @param  \App\AdditionlBenifitsSpending  $additionlBenifitsSpending
-     * @return \Illuminate\Http\Response
+     * @param int $id
+     * @return JsonResponse
      */
-    public function edit($id)
+    public function edit ($id)
     {
         $data = AdditionlBenifitsSpending::findOrFail($id)->first();
-        if($data){
-            return response()->json(['status'=>'success', 'data'=>$data]);
+        if ($data) {
+            return response()->json(['status' => 'success', 'data' => $data]);
         }
-        return response()->json(['status'=>'fail']);
+        return response()->json(['status' => 'fail']);
     }
 
     /**
      * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\AdditionlBenifitsSpending  $additionlBenifitsSpending
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param int $id
+     * @return JsonResponse
      */
-    public function update(Request $request, $id)
+    public function update (Request $request, $id)
     {
-            // Validate form data
+        // Validate form data
         $rules = [
-                'description' => 'string|max:491',
+            'description' => 'string|max:491',
         ];
 
         $validator = validator($request->all(), $rules, []);
@@ -187,73 +208,85 @@ class AdditionlBenifitsSpendingController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\AdditionlBenifitsSpending  $additionlBenifitsSpending
-     * @return \Illuminate\Http\Response
+     * Change the resource status approve.
+     * @param int $id
+     * @return JsonResponse
      */
-
-     /// approved expense
-    public function approve($id)
+    public function approve ($id)
     {
-        $data = AdditionlBenifitsSpending::find($id);
+        $data = AdditionlBenifitsSpending::findOrFail($id);
         $data->status = 1;
         $data->save();
-        if($data->update()){
-            return response()->json(['status'=>'success']);
+        if ($data->update()) {
+            return response()->json(['status' => 'success']);
         }
-        return response()->json(['status'=>'fail']);
+        return response()->json(['status' => 'fail']);
 
     }
 
-    /// expense reject
-    public function reject($id)
+    /**
+     * Change the resource status reject.
+     * @param int $id
+     * @return JsonResponse
+     */
+    public function reject ($id)
     {
-        $data = AdditionlBenifitsSpending::find($id);
+        $data = AdditionlBenifitsSpending::findOrFail($id);
         $data->status = 2;
         $data->save();
-        if($data->update()){
-            return response()->json(['status'=>'success']);
+        if ($data->update()) {
+            return response()->json(['status' => 'success']);
         }
-        return response()->json(['status'=>'fail']);
+        return response()->json(['status' => 'fail']);
 
     }
 
-    /// approved expense
-    public function paid($id)
+    /**
+     * Change the resource status paid.
+     * @param int $id
+     * @return JsonResponse
+     */
+    public function paid ($id)
     {
-        $data = AdditionlBenifitsSpending::find($id);
+        $data = AdditionlBenifitsSpending::findOrFail($id);
         $data->pay_status = 1;
         $data->save();
-        if($data->update()){
-            return response()->json(['status'=>'success']);
+        if ($data->update()) {
+            return response()->json(['status' => 'success']);
         }
-        return response()->json(['status'=>'fail']);
+        return response()->json(['status' => 'fail']);
 
     }
 
-    /// expense reject
-    public function nonPaid($id)
+    /**
+     * Change the resource status non paid.
+     * @param int $id
+     * @return JsonResponse
+     */
+    public function nonPaid ($id)
     {
-        $data = AdditionlBenifitsSpending::find($id);
+        $data = AdditionlBenifitsSpending::findOrFail($id);
         $data->pay_status = 0;
         $data->save();
-        if($data->update()){
-            return response()->json(['status'=>'success']);
+        if ($data->update()) {
+            return response()->json(['status' => 'success']);
         }
-        return response()->json(['status'=>'fail']);
+        return response()->json(['status' => 'fail']);
 
     }
 
-
-    public function destroy($id)
+    /**
+     * Remove the specified resource from storage.
+     * @param int $id
+     * @return JsonResponse
+     */
+    public function destroy ($id)
     {
         $benefit = AdditionlBenifitsSpending::findOrFail($id);
         if ($benefit->delete() == 1) {
             $success = true;
             $message = "Journal deleted successfully";
-        }
-        else {
+        } else {
             $success = false;
             $message = "journal not found";
         }
@@ -263,5 +296,5 @@ class AdditionlBenifitsSpendingController extends Controller
             'message' => $message,
         ]);
     }
-    
+
 }

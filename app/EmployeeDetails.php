@@ -3,10 +3,13 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Employee_detail extends Model {
+class EmployeeDetails extends Model
+{
     protected $guarded = [];
     use SoftDeletes;
     protected $fillable = [
@@ -38,39 +41,52 @@ class Employee_detail extends Model {
     /**
      * @return HasOne
      */
-    public function user () {
+    public function user ()
+    {
         return $this->hasOne(User::class, 'id', 'id');
     }
 
     /**
+     * Get name attributes
      * @return string
      */
-    public function getNameAttribute () {
+    public function getNameAttribute ()
+    {
         return $this->firstname . ' ' . $this->lastname;
     }
 
     /**
+     * Get the agreement that owns the employee details
      * @return HasOne
      */
-    public function activeAgreement () {
-        return $this->hasOne(Agreement::class,'emp_id')->where('status','A')->whereNull('parent_id');
+    public function activeAgreement ()
+    {
+        return $this->hasOne(Agreement::class, 'emp_id')->where('status', 'A')->whereNull('parent_id');
     }
 
-    public function personalPlan(){
+    /**
+     * Get the personal development plan that owns the employee details
+     * @return HasMany
+     */
+    public function personalPlan ()
+    {
         return $this->hasMany('App\PersonalDevelopmentPlan', 'emp_id', 'id');
     }
-    
+
     /**
+     * Get the codeOfConduct that owns the employee details
      * @return HasOne
      */
-    public function activeCodeofconduct () {
-        return $this->hasOne(Codeofconduct::class,'emp_id')->where('status','A');
+    public function activeCodeofconduct ()
+    {
+        return $this->hasOne(CodeOfConduct::class, 'emp_id')->where('status', 'A');
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * Get the company that owns the employee details
+     * @return BelongsTo
      */
-    public function company()
+    public function company ()
     {
         return $this->belongsTo(Company::class);
     }

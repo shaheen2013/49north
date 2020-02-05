@@ -324,8 +324,8 @@
 
                         if (is_ticket_admin == 1 && htmlId === '#maintanance') {
                             adminOption = `<td class="text-right">
-                                <a href="javascript:void(0)" data-toggle="tooltip" title="In Progress" onclick="ticket_inprogress(${value.id})"><i class="fa fa-check-circle"></i></a>
-                                <a href="javascript:void(0)" data-toggle="tooltip" title="Cancel!" onclick="ticket_cancel(${value.id})"><i class="fa fa-ban"></i></a>
+                                <a href="javascript:void(0)" data-toggle="tooltip" title="In Progress" onclick="ticketInProgress(${value.id})"><i class="fa fa-check-circle"></i></a>
+                                <a href="javascript:void(0)" data-toggle="tooltip" title="Cancel!" onclick="ticketCancel(${value.id})"><i class="fa fa-ban"></i></a>
                             </td>`;
                         }
 
@@ -394,7 +394,7 @@
             });
         }
 
-        function ticket_inprogress(id){
+        function ticketInProgress(id){
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
             $.ajax({
                 type:'POST',

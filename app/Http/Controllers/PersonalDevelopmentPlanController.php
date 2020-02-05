@@ -3,7 +3,11 @@
 namespace App\Http\Controllers;
 
 
-use App\{PersonalDevelopmentPlan, Employee_detail, User};
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Response;
+use Illuminate\View\View;
+use App\{PersonalDevelopmentPlan, EmployeeDetails, User};
 use Illuminate\Http\Request;
 
 class PersonalDevelopmentPlanController extends Controller
@@ -11,9 +15,9 @@ class PersonalDevelopmentPlanController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Factory|View
      */
-    public function index()
+    public function index ()
     {
         $activeMenu = 'classroom';
         $data = PersonalDevelopmentPlan::get();
@@ -21,7 +25,12 @@ class PersonalDevelopmentPlanController extends Controller
         return view('personal-development-plan.index', compact('data', 'user', 'activeMenu'));
     }
 
-    private function _searchArchive($searchField)
+    /**
+     * Filter personal development plan .
+     * @param string $searchField
+     * @return JsonResponse
+     */
+    private function search($searchField)
     {
         $query = PersonalDevelopmentPlan::orderByDesc('start_date');
         $query->dateSearch('start_date');
@@ -29,10 +38,15 @@ class PersonalDevelopmentPlanController extends Controller
         return $query->get();
     }
 
+    /**
+     * Filter archive personal development plan .
+     * @param Request $request
+     * @return JsonResponse
+     */
     public function searchArchive(Request $request)
     {
 
-        $data = $this->_searchArchive('search');
+        $data = $this->search('search');
 
         if (count($data)) {
             foreach ($data as $datum) {
@@ -54,7 +68,7 @@ class PersonalDevelopmentPlanController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return void
      */
     public function create()
     {
@@ -63,9 +77,8 @@ class PersonalDevelopmentPlanController extends Controller
 
     /**
      * Store a newly created resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return JsonResponse
      */
     public function store(Request $request)
     {
@@ -99,9 +112,14 @@ class PersonalDevelopmentPlanController extends Controller
         }
     }
 
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
     public function commentStore(Request $request, $id)
     {
-
         // Validate form data
         $rules = [
             'comment' => 'string|max:491',
@@ -129,6 +147,13 @@ class PersonalDevelopmentPlanController extends Controller
 
     }
 
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param Request $request
+     * @param int $id
+     * @return JsonResponse
+     */
     public function commentUpdate(Request $request, $id)
     {
 
@@ -162,17 +187,15 @@ class PersonalDevelopmentPlanController extends Controller
 
     /**
      * Display the specified resource.
-     *
-     * @param \App\PersonalDevelopmentPlan $personalDevelopmentPlan
-     * @return \Illuminate\Http\Response
+     * @param $id
+     * @return Factory|View
      */
     public function show($id)
     {
         $activeMenu = 'classroom';
         $show = PersonalDevelopmentPlan::with('employee')->find($id);
 
-        if ($show->comment)
-        {
+        if ($show->comment) {
             $route = route('personal-development-plan.comment.update', $show->id);
         } else {
             $route = route('personal-development-plan.comment.store', $show->id);
@@ -184,8 +207,8 @@ class PersonalDevelopmentPlanController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param \App\PersonalDevelopmentPlan $personalDevelopmentPlan
-     * @return \Illuminate\Http\Response
+     * @param $id
+     * @return JsonResponse
      */
     public function edit($id)
     {
@@ -200,9 +223,9 @@ class PersonalDevelopmentPlanController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param \App\PersonalDevelopmentPlan $personalDevelopmentPlan
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param $id
+     * @return JsonResponse
      */
     public function update(Request $request, $id)
     {
@@ -241,8 +264,8 @@ class PersonalDevelopmentPlanController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param \App\PersonalDevelopmentPlan $personalDevelopmentPlan
-     * @return \Illuminate\Http\Response
+     * @param $id
+     * @return JsonResponse
      */
     public function destroy($id)
     {

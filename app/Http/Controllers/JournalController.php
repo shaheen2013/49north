@@ -3,34 +3,50 @@
 namespace App\Http\Controllers;
 
 use App\Journal;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\View\View;
 
 class JournalController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Factory|View
      */
-    public function index()
+    public function index ()
     {
-        $data= Journal::get();
+        $data = Journal::get();
         $activeMenu = 'classroom';
         // return $data;
         // return response()->json(['status'=>'success', 'data'=>$data]);
         return view('journal.index', compact('activeMenu'))->with('data', $data);
     }
 
-    private function _searchJournal ($searchField) {
+    /**
+     * Filter journal.
+     * @param string $searchField
+     * @return Response
+     */
+    private function journalSearch ($searchField)
+    {
         $query = Journal::orderByDesc('date');
         $query->dateSearch('date');
         // $query->isEmployee();
         return $query->get();
     }
 
-    public function searchJournal (Request $request) {
+    /**
+     * Filter journal.
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function searchJournal (Request $request)
+    {
 
-        $data = $this->_searchJournal('search');
+        $data = $this->journalSearch('search');
         if (count($data)) {
             foreach ($data as $datum) {
                 $routes = [];
@@ -47,9 +63,9 @@ class JournalController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return void
      */
-    public function create()
+    public function create ()
     {
         //
     }
@@ -57,10 +73,10 @@ class JournalController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return JsonResponse
      */
-    public function store(Request $request)
+    public function store (Request $request)
     {
         $rules = [
             'date' => 'required',
@@ -93,10 +109,10 @@ class JournalController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Journal  $journal
-     * @return \Illuminate\Http\Response
+     * @param Journal $journal
+     * @return void
      */
-    public function show(Journal $journal)
+    public function show (Journal $journal)
     {
         //
     }
@@ -104,71 +120,69 @@ class JournalController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Journal  $journal
-     * @return \Illuminate\Http\Response
+     * @param int $id
+     * @return JsonResponse
      */
-    public function edit($id)
+    public function edit ($id)
     {
         $data = Journal::findOrFail($id)->first();
-        if($data){
-            return response()->json(['status'=>'success', 'data'=>$data]);
+        if ($data) {
+            return response()->json(['status' => 'success', 'data' => $data]);
         }
-        return response()->json(['status'=>'fail']);
+        return response()->json(['status' => 'fail']);
     }
 
     /**
      * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Journal  $journal
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param $id
+     * @return JsonResponse
      */
-    public function update(Request $request, $id)
+    public function update (Request $request, $id)
     {
-       // Validate form data
-       $rules = [
-        'date' => 'required',
-        'title' => 'required|string|max:191',
-        'details' => 'required|string|max:491',
-    ];
+        // Validate form data
+        $rules = [
+            'date' => 'required',
+            'title' => 'required|string|max:191',
+            'details' => 'required|string|max:491',
+        ];
 
-    $validator = validator($request->all(), $rules, []);
+        $validator = validator($request->all(), $rules, []);
 
-    if ($validator->fails()) {
-        return response()->json(['status' => 'fail', 'errors' => $validator->getMessageBag()->toarray()]);
-    }
-
-    try {
-        // return $request->all();
-        $data = Journal::findOrFail($id);
-        $data->date = $request->date;
-        $data->title = $request->title;
-        $data->details = $request->details;
-
-        if ($data->update()) {
-            return response()->json(['status' => 'success']);
+        if ($validator->fails()) {
+            return response()->json(['status' => 'fail', 'errors' => $validator->getMessageBag()->toarray()]);
         }
 
-        return response()->json(['status' => 'fail']);
-    } catch (\Exception $e) {
-        return response()->json(['status' => 'fail', 'msg' => $e->getMessage()]);
-    }
+        try {
+            // return $request->all();
+            $data = Journal::findOrFail($id);
+            $data->date = $request->date;
+            $data->title = $request->title;
+            $data->details = $request->details;
+
+            if ($data->update()) {
+                return response()->json(['status' => 'success']);
+            }
+
+            return response()->json(['status' => 'fail']);
+        } catch (\Exception $e) {
+            return response()->json(['status' => 'fail', 'msg' => $e->getMessage()]);
+        }
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Journal  $journal
-     * @return \Illuminate\Http\Response
+     * @param $id
+     * @return JsonResponse
      */
-    public function destroy($id)
+    public function destroy ($id)
     {
         $journal = Journal::findOrFail($id);
         if ($journal->delete() == 1) {
             $success = true;
             $message = "Journal deleted successfully";
-        }
-        else {
+        } else {
             $success = false;
             $message = "journal not found";
         }

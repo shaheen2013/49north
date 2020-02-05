@@ -88,7 +88,7 @@ function mainance_edit_view_ajax(id, route){
 	});
 }
 
-function ticket_cancel(id){
+function ticketCancel(id){
 	var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
 	$.ajax({
 		type:'POST',

@@ -512,7 +512,7 @@
 
             $.ajax({
                 type: 'post',
-                url: "{{ route('expense.pending') }}",
+                url: "{{ route('expenses.pending') }}",
                 data: data,
                 dataType: 'JSON',
                 success: function (results) {
@@ -586,7 +586,7 @@
             $('#wait-his').css('display', 'inline-block'); // wait for loader
             $.ajax({
                 type: 'post',
-                url: "{{ route('expense.history') }}",
+                url: "{{ route('expenses.history') }}",
                 data: data,
                 dataType: 'JSON',
                 success: function (results) {
@@ -809,7 +809,7 @@
             var data = new FormData(document.getElementById('editExpenseForm'));
 
             $.ajax({
-                method: "POST",
+                method: "PUT",
                 url: updateRoute,
                 data: data,
                 enctype: 'multipart/form-data',

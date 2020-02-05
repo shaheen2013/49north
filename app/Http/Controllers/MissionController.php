@@ -3,16 +3,20 @@
 namespace App\Http\Controllers;
 
 use App\Mission;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\View\View;
 
 class MissionController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Factory|View
      */
-    public function index()
+    public function index ()
     {
         $activeMenu = 'classroom';
         $mission = Mission::Latest()->where('status', 1)->first();
@@ -23,9 +27,9 @@ class MissionController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return void
      */
-    public function create()
+    public function create ()
     {
         //
     }
@@ -33,10 +37,10 @@ class MissionController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return RedirectResponse
      */
-    public function store(Request $request)
+    public function store (Request $request)
     {
         $request->validate([
             'file' => 'required|file|mimes:pdf'
@@ -52,22 +56,20 @@ class MissionController extends Controller
 
     /**
      * Display the specified resource.
-     *
-     * @param  \App\Mission  $mission
-     * @return \Illuminate\Http\Response
+     * @param Mission $mission
+     * @return void
      */
-    public function show(Mission $mission)
+    public function show (Mission $mission)
     {
         //
     }
 
     /**
      * Show the form for editing the specified resource.
-     *
-     * @param  \App\Mission  $mission
-     * @return \Illuminate\Http\Response
+     * @param Mission $mission
+     * @return void
      */
-    public function edit(Mission $mission)
+    public function edit (Mission $mission)
     {
         //
     }
@@ -75,11 +77,11 @@ class MissionController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Mission  $mission
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param Mission $mission
+     * @return RedirectResponse
      */
-    public function update(Request $request, Mission $mission)
+    public function update (Request $request, Mission $mission)
     {
         // Validate form data
         $request->validate([
@@ -100,10 +102,10 @@ class MissionController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Mission  $mission
-     * @return \Illuminate\Http\Response
+     * @param Mission $mission
+     * @return void
      */
-    public function destroy(Mission $mission)
+    public function destroy (Mission $mission)
     {
         //
     }

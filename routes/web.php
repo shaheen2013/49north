@@ -28,28 +28,29 @@ Auth::routes();
 Route::group(['middleware' => ['auth']], function () {
     Route::get('home', 'HomeController@home')->name('home');
     Route::get('edit-profile', 'HomeController@editProfile')->name('edit-profile');
-    Route::post('edit_employee', 'HomeController@edit_employee')->name('edit_employee');
+    Route::post('edit_employee', 'HomeController@editEmployee')->name('edit_employee');
 
     // Agreements
-    Route::get('agreementlist', 'AgreementController@agreementlist')->name('agreement-list');
-    Route::post('addagreement', 'AgreementController@addagreement')->name('add-agreement');
+    Route::get('agreementlist', 'AgreementController@agreementList')->name('agreement-list');
+    Route::post('addagreement', 'AgreementController@addAgreement')->name('add-agreement');
     Route::delete('delete_agreement/{id}/{type}', 'AgreementController@destroy')->name('delete_agreement')->middleware('isAdmin');
     Route::get('agreement/search', 'AgreementController@search')->name('agreement.search');
 
     // Expenses
-    Route::group(['prefix' => 'expense', 'as' => 'expense.', 'middleware' => 'can:expenses-enabled'], function () {
-        Route::get('/list', 'ExpenseController@expenselist')->name('expense-list');
-        Route::post('/addexpense', 'ExpenseController@addexpense')->name('expense-add');
+    Route::resource('expenses', 'ExpenseController');
+    Route::group(['prefix' => 'expenses', 'as' => 'expenses.', 'middleware' => 'can:expenses-enabled'], function () {
+        /*Route::get('/list', 'ExpenseController@expenseList')->name('expense-list');
+        Route::post('/addexpense', 'ExpenseController@addExpense')->name('expense-add');
 
         Route::get('/edit/{id}', 'ExpenseController@edit')->name('edit');
-        Route::POST('/update/{id}', 'ExpenseController@update')->name('update');
+        Route::POST('/update/{id}', 'ExpenseController@update')->name('update');*/
 
         Route::post('/new/approve/{id}', 'ExpenseController@approve')->name('approve')->middleware('isAdmin');
         Route::post('/new/reject/{id}', 'ExpenseController@reject')->name('reject')->middleware('isAdmin');
 
         Route::post('/new/history', 'ExpenseController@searchHistory')->name('history');
         Route::POST('/pending', 'ExpenseController@searchPending')->name('pending');
-        Route::POST('/destroy/{id}', 'ExpenseController@destroy')->name('destroy');
+        /*Route::POST('/destroy/{id}', 'ExpenseController@destroy')->name('destroy');*/
     });
 
     // Additional Benefits Spending
@@ -106,18 +107,18 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('', 'EfficiencyController@index')->name('index');
     });
 
-    Route::post('/reset_apssword', 'RegisterController@reset_password')->name('reset_apssword');
+    Route::post('/reset_apssword', 'RegisterController@resetPassword')->name('reset_apssword');
     Route::post('/registration', 'RegisterController@store')->name('registration');
 
     // Maintenance
     Route::group(['prefix' => 'maintenance', 'as' => 'maintenance.', 'middleware' => 'can:maintenance-enabled'], function () {
-        Route::get('/list', 'MaintenanceController@Maintenance_list')->name('list');
-        Route::post('/add', 'MaintenanceController@addmaintenance')->name('add');
-        Route::post('/editview', 'MaintenanceController@edit_maintenanceview')->name('editview');
+        Route::get('/list', 'MaintenanceController@maintenanceList')->name('list');
+        Route::post('/add', 'MaintenanceController@addMaintenance')->name('add');
+        Route::post('/editview', 'MaintenanceController@editMaintenanceView')->name('editview');
         Route::post('/edit', 'MaintenanceController@edit')->name('edit');
         Route::post('/delete', 'MaintenanceController@delete')->name('delete');
-        Route::post('/ticket_inprogress', 'MaintenanceController@ticket_inprogress')->name('ticket_inprogress')->middleware('isAdmin');
-        Route::post('/ticket_cancel', 'MaintenanceController@ticket_cancel')->name('ticket_cancel')->middleware('isAdmin');
+        Route::post('/ticket_inprogress', 'MaintenanceController@ticketInProgress')->name('ticket_inprogress')->middleware('isAdmin');
+        Route::post('/ticket_cancel', 'MaintenanceController@ticketCancel')->name('ticket_cancel')->middleware('isAdmin');
         Route::get('search', 'MaintenanceController@search')->name('search');
 
         Route::post('/comment/store/{id}', 'MaintenanceController@commentStore')->name('comment.store');
@@ -128,7 +129,7 @@ Route::group(['middleware' => ['auth']], function () {
 
     // Mileage
     Route::group(['prefix' => 'mileage', 'as' => 'mileage.', 'middleware' => 'can:mileage-enabled'], function () {
-        Route::get('mileagelist', 'MileageController@mileagelist')->name('mileage-list');
+        Route::get('mileagelist', 'MileageController@mileageList')->name('mileage-list');
         Route::post('edit', 'MileageController@edit')->name('edit');
         Route::post('update', 'MileageController@update')->name('update');
         Route::post('destroy', 'MileageController@destroy')->name('destroy');
@@ -151,12 +152,12 @@ Route::group(['middleware' => ['auth']], function () {
 
     // Timeoff route
     Route::group(['prefix' => 'timeoff', 'as' => 'timeoff.'], function () {
-        Route::get('/list', 'TimeoffController@timeofflist')->name('list');
+        Route::get('/list', 'TimeoffController@timeOffList')->name('list');
     });
 
     // Paystatement route
     Route::group(['prefix' => 'paystatement', 'as' => 'paystatement.', 'middleware' => 'can:pay-statement-enabled'], function () {
-        Route::get('/list', 'PaystatementController@paylist')->name('list');
+        Route::get('/list', 'PaystatementController@payList')->name('list');
         Route::POST('/search', 'PaystatementController@searchPaymentPage')->name('search');
         Route::post('/store', 'PaystatementController@store')->name('store');
         Route::POST('/destroy/{id}', 'PaystatementController@destroy')->name('destroy');

@@ -2,6 +2,9 @@
 
 namespace App;
 
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -46,14 +49,15 @@ class User extends Authenticatable {
     /**
      * Get Employee Details
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     * @return HasOne
      */
     public function employee_details() {
-        return $this->hasOne(Employee_detail::class, 'id', 'id');
+        return $this->hasOne(EmployeeDetails::class, 'id', 'id');
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * Get Mileage
+     * @return HasMany
      */
     public function mileage() {
         return $this->hasMany(Mileage::class,'emp_id');
@@ -66,9 +70,9 @@ class User extends Authenticatable {
     /**
      * Ticket records associated with users
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * @return BelongsToMany
      */
     public function tickets() {
-        return $this->belongsToMany(Maintenance_ticket::class);
+        return $this->belongsToMany(MaintenanceTicket::class);
     }
 }

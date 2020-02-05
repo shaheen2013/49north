@@ -11,20 +11,21 @@ use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 use Spatie\Permission\Models\{Role, Permission};
 
-class PermissionController extends Controller {
+class PermissionController extends Controller
+{
 
     /**
      * Display a listing of the resource.
      *
      * @return Factory|View
      */
-    public function index () {
-        if(auth()->user()->is_admin == 1){
+    public function index ()
+    {
+        if (auth()->user()->is_admin == 1) {
             $permissions = Permission::all(); //Get all permissions
 
             return view('permissions.index')->with('permissions', $permissions);
-        }
-        else{
+        } else {
             abort(401);
         }
     }
@@ -34,27 +35,26 @@ class PermissionController extends Controller {
      *
      * @return Factory|View
      */
-    public function create () {
-        if(auth()->user()->is_admin == 1){
+    public function create ()
+    {
+        if (auth()->user()->is_admin == 1) {
             $roles = Role::get(); //Get all roles
 
             return view('permissions.create')->with('roles', $roles);
-        }
-        else{
+        } else {
             abort(401);
         }
     }
 
     /**
      * Store a newly created resource in storage.
-     *
      * @param Request $request
-     *
      * @return RedirectResponse
      * @throws ValidationException
      */
-    public function store (Request $request) {
-        if(auth()->user()->is_admin == 1){
+    public function store (Request $request)
+    {
+        if (auth()->user()->is_admin == 1) {
             $this->validate($request, [
                 'name' => 'required|max:40',
             ]);
@@ -77,59 +77,53 @@ class PermissionController extends Controller {
             }
 
             return redirect()->route('permissions.index')->with('alert-info', 'Permission' . $permission->name . ' added!');
-        }
-        else{
+        } else {
             abort(401);
         }
-            
+
 
     }
 
     /**
      * Display the specified resource.
-     *
      * @param int $id
-     *
      * @return RedirectResponse|Redirector
      */
-    public function show ($id) {
-        if(auth()->user()->is_admin == 1){
+    public function show ($id)
+    {
+        if (auth()->user()->is_admin == 1) {
             return redirect('permissions');
-        }
-        else{
+        } else {
             abort(401);
         }
     }
 
     /**
      * Show the form for editing the specified resource.
-     *
      * @param int $id
-     *
      * @return Factory|View
      */
-    public function edit ($id) {
-        if(auth()->user()->is_admin == 1){
+    public function edit ($id)
+    {
+        if (auth()->user()->is_admin == 1) {
             $permission = Permission::findOrFail($id);
 
             return view('permissions.edit', compact('permission'));
-        }
-        else{
+        } else {
             abort(401);
         }
     }
 
     /**
      * Update the specified resource in storage.
-     *
      * @param Request $request
-     * @param int     $id
-     *
+     * @param int $id
      * @return RedirectResponse
      * @throws ValidationException
      */
-    public function update (Request $request, $id) {
-        if(auth()->user()->is_admin == 1){
+    public function update (Request $request, $id)
+    {
+        if (auth()->user()->is_admin == 1) {
             $permission = Permission::findOrFail($id);
             $this->validate($request, [
                 'name' => 'required|max:40',
@@ -138,8 +132,7 @@ class PermissionController extends Controller {
             $permission->fill($input)->save();
 
             return redirect()->route('permissions.index')->with('alert-info', 'Permission' . $permission->name . ' updated!');
-        }
-        else{
+        } else {
             abort(401);
         }
 
@@ -147,12 +140,11 @@ class PermissionController extends Controller {
 
     /**
      * Remove the specified resource from storage.
-     *
      * @param int $id
-     *
      * @return RedirectResponse
      */
-    public function destroy ($id) {
+    public function destroy ($id)
+    {
         $permission = Permission::findOrFail($id);
 
         //Make it impossible to delete this specific permission

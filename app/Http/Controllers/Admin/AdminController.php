@@ -6,12 +6,13 @@ use App\Http\Controllers\Controller;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\{RedirectResponse,Request};
 use Illuminate\View\View;
-use App\{User,Expenses,Company,Project,Purchases,Categorys,Maintenance_ticket};
+use App\{User,Expenses,Company,Project,Purchases,Categorys,MaintenanceTicket};
 use Illuminate\Support\Facades\DB;
 
 class AdminController extends Controller {
 
     /**
+     * Display a listing of the resource.
      * @return Factory|View
      */
     public function index () {
@@ -19,6 +20,7 @@ class AdminController extends Controller {
     }
 
     /**
+     * Display expense report.
      * @return Factory|View
      */
     public function expences_report () {
@@ -32,6 +34,7 @@ class AdminController extends Controller {
     }
 
     /**
+     * Display mileage list.
      * @return Factory|View
      */
     public function milegebook () {
@@ -42,17 +45,19 @@ class AdminController extends Controller {
     }
 
     /**
+     * Display tech maintenance list.
      * @return Factory|View
      */
     public function tech_maintanance () {
-        $data['maintanance'] = Maintenance_ticket::where(['delete_status' => NULL, 'status' => NULL])->get();
-        $data['maintanance1'] = Maintenance_ticket::where(['delete_status' => NULL, 'status' => 1])->orWhere(['status' => 2])->get();
+        $data['maintanance'] = MaintenanceTicket::where(['delete_status' => NULL, 'status' => NULL])->get();
+        $data['maintanance1'] = MaintenanceTicket::where(['delete_status' => NULL, 'status' => 1])->orWhere(['status' => 2])->get();
         $data['category'] = Categorys::all();
 
         return view('admin/tech_maintanance', $data);
     }
 
     /**
+     * Display time off.
      * @return Factory|View
      */
     public function timeoff () {
@@ -60,6 +65,7 @@ class AdminController extends Controller {
     }
 
     /**
+     * Display report of concern.
      * @return Factory|View
      */
     public function reportconcern () {
@@ -67,6 +73,7 @@ class AdminController extends Controller {
     }
 
     /**
+     * user registration.
      * @param Request $request
      *
      * @return RedirectResponse
@@ -105,7 +112,7 @@ class AdminController extends Controller {
         if ($check_email == 1) {
             return back()->with('error', 'This Email Already Available Please Try Another EMail !!');
         }
-        $Employee_detail = Employee_detail::create($employee_detailsarray);
+        $Employee_detail = EmployeeDetails::create($employee_detailsarray);
         $last_id = $Employee_detail->id;
         $user_detail = User::create([
             'id'        => $last_id,

@@ -5,7 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Codeofconduct extends Model {
+class CodeOfConduct extends Model {
     use  SoftDeletes, HasEmployee;
 
     protected $guarded = [];
