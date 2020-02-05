@@ -1,9 +1,6 @@
 @extends('layouts.main')
 
-
-
 @section('content1')
-
     @if($show->comment)
         <div class="well-default-trans">
             <div class="row">
@@ -28,7 +25,7 @@
                                 <div class="row margin-top-30">
                                     <div class="form-group" style="width:100%;">
                                         <div class="col-md-12 col-sm-12">
-                                            <button type="button" onclick="update_comment()" class="btn-dark contact_btn"
+                                            <button type="button" onclick="updateComment()" class="btn-dark contact_btn"
                                                     data-form="expences" id="update">Save
                                             </button>
                                         </div>
@@ -73,7 +70,7 @@
                                 <div class="row margin-top-30">
                                     <div class="form-group" style="width:100%;">
                                         <div class="col-md-12 col-sm-12">
-                                            <button type="button" onclick="create_comment()" class="btn-dark contact_btn"
+                                            <button type="button" onclick="createComment()" class="btn-dark contact_btn"
                                                     data-form="expences" id="create">Save
                                             </button>
                                         </div>
@@ -95,11 +92,10 @@
     <script type="text/javascript">
         let updateRoute = null;
         let route = '@php echo $route; @endphp';
-        function create_comment() {
+        function createComment() {
             event.preventDefault();
 
             let id = $('#personal_development_comment_id').val();
-            console.log(id);
             $('#create').attr('disabled', 'disabled');
 
             $.ajax({
@@ -112,18 +108,15 @@
                 cache: false,
                 success: function (response) {
                     $.toaster({message: 'Created successfully', title: 'Success', priority: 'success'});
-
-
                     $('#create').removeAttr('disabled');
                 }
-
             });
         }
 
-        function update_comment() {
+        function updateComment() {
             event.preventDefault();
+
             let id = $('#personal_development_update_id').val();
-            console.log(id);
             $('#update').attr('disabled', 'disabled');
 
             $.ajax({
@@ -136,8 +129,6 @@
                 cache: false,
                 success: function (response) {
                     $.toaster({message: 'Created successfully', title: 'Success', priority: 'success'});
-
-
                     $('#update').removeAttr('disabled');
                 }
 
