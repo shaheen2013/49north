@@ -210,7 +210,7 @@ class ExpenseController extends Controller
      * @param Request $request
      * @return RedirectResponse
      */
-    function addExpense(Request $request)
+    function store(Request $request)
     {
         $request->validate([
             'receipt' => 'nullable|file|mimes:pdf,doc,docx',
@@ -242,16 +242,16 @@ class ExpenseController extends Controller
      * @param int $id
      * @return JsonResponse
      */
-    public function approve($id)
+    public function approve(Expenses $expense)
     {
-        $data = Expenses::findOrFail($id);
+        $data = Expenses::findOrFail($expense->id);
         $data->status = 1;
         $data->save();
         if ($data->update()) {
             return response()->json(['status' => 'success']);
         }
-        return response()->json(['status' => 'fail']);
 
+        return response()->json(['status' => 'fail']);
     }
 
     /**
@@ -259,15 +259,15 @@ class ExpenseController extends Controller
      * @param int $id
      * @return JsonResponse
      */
-    public function reject($id)
+    public function reject(Expenses $expense)
     {
-        $data = Expenses::findOrFail($id);
+        $data = Expenses::findOrFail($expense->id);
         $data->status = 2;
         $data->save();
         if ($data->update()) {
             return response()->json(['status' => 'success']);
         }
-        return response()->json(['status' => 'fail']);
 
+        return response()->json(['status' => 'fail']);
     }
 }

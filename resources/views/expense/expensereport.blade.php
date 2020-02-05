@@ -107,7 +107,7 @@
                 <!-- body modal -->
                 <div class="modal-body">
                     <div class="col-md-12" style="margin-top:40px;margin-bottom:20px;">
-                        <form class="expences" action="{{url('expense/addexpense')}}" method="POST" id="addexpense-form" enctype="multipart/form-data" novalidate>
+                        <form class="expences" action="{{route('expenses.store')}}" method="POST" id="addexpense-form" enctype="multipart/form-data" novalidate>
                             <div class="row">
                                 <div class="col-md-6 col-sm-6">
                                     <div class="text_outer">

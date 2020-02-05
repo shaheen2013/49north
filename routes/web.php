@@ -39,8 +39,8 @@ Route::group(['middleware' => ['auth']], function () {
     // Expenses
     Route::resource('expenses', 'ExpenseController')->middleware('can:expenses-enabled');
     Route::group(['prefix' => 'expenses', 'as' => 'expenses.', 'middleware' => 'can:expenses-enabled'], function () {
-        Route::post('/new/approve/{id}', 'ExpenseController@approve')->name('approve')->middleware('isAdmin');
-        Route::post('/new/reject/{id}', 'ExpenseController@reject')->name('reject')->middleware('isAdmin');
+        Route::post('/new/approve/{expenses}', 'ExpenseController@approve')->name('approve')->middleware('isAdmin');
+        Route::post('/new/reject/{expenses}', 'ExpenseController@reject')->name('reject')->middleware('isAdmin');
 
         Route::post('/new/history', 'ExpenseController@searchHistory')->name('history');
         Route::POST('/pending', 'ExpenseController@searchPending')->name('pending');
@@ -49,11 +49,11 @@ Route::group(['middleware' => ['auth']], function () {
     // Additional Benefits Spending
     Route::resource('additionl_benifits_spendings', 'AdditionlBenifitsSpendingController')->middleware('can:additional-spending-enabled');
     Route::group(['prefix' => 'additionl_benifits_spendings', 'as' => 'additionl_benifits_spendings.', 'middleware' => 'can:additional-spending-enabled'], function () {
-        Route::post('/approve/{id}', 'AdditionlBenifitsSpendingController@approve')->name('approve')->middleware('isAdmin');
-        Route::post('/reject/{id}', 'AdditionlBenifitsSpendingController@reject')->name('reject')->middleware('isAdmin');
+        Route::post('/approve/{additionl_benifits_spendings}', 'AdditionlBenifitsSpendingController@approve')->name('approve')->middleware('isAdmin');
+        Route::post('/reject/{additionl_benifits_spendings}', 'AdditionlBenifitsSpendingController@reject')->name('reject')->middleware('isAdmin');
 
-        Route::post('/paid/{id}', 'AdditionlBenifitsSpendingController@paid')->name('paid');
-        Route::post('/non-paid/{id}', 'AdditionlBenifitsSpendingController@nonPaid')->name('non-paid');
+        Route::post('/paid/{additionl_benifits_spendings}', 'AdditionlBenifitsSpendingController@paid')->name('paid');
+        Route::post('/non-paid/{additionl_benifits_spendings}', 'AdditionlBenifitsSpendingController@nonPaid')->name('non-paid');
 
         Route::post('/history', 'AdditionlBenifitsSpendingController@searchHistory')->name('history');
         Route::POST('/pending', 'AdditionlBenifitsSpendingController@searchPending')->name('pending');
