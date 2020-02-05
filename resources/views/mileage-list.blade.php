@@ -30,7 +30,7 @@
                                 <div id="wait"></div>
                             </div>
                             <div class="@admin col-sm-7 @else col-sm-8 @endadmin">
-                                <a href="javascript:void(0)" onclick="$('#mileage-modaledit input').val(''); $('#update').attr('onclick', 'update_mileage(0);');" class="_new_icon_button_1" data-toggle="modal" data-target="#mileage-modaledit">
+                                <a href="javascript:void(0)" onclick="$('#mileage-modaledit input').val(''); $('#update').attr('onclick', 'updateMileage(0);');" class="_new_icon_button_1" data-toggle="modal" data-target="#mileage-modaledit">
                                     <i class="fa fa-plus"></i> </a>
                             </div>
                             <div class="col-sm-12">
@@ -153,7 +153,7 @@
                         <div class="row margin-top-30">
                             <div class="form-group" style="width:100%;">
                                 <div class="col-md-12 col-sm-12">
-                                    <button type="button" id="update" onclick="update_mileage(id)" class="btn-dark contact_btn" data-form="expences">Save
+                                    <button type="button" id="update" onclick="updateMileage(id)" class="btn-dark contact_btn" data-form="expences">Save
                                     </button>
                                     <span class="close close-span" data-dismiss="modal" aria-label="Close"><i class="fa fa-arrow-left"></i> Return to Mileage</span>
                                 </div>
@@ -234,8 +234,8 @@
             });
         });
 
-        function OpenEditMileageModel(id) {
-           
+        function openEditMileageModel(id) {
+
             $('#mileage-modaledit').modal();
             $.ajax({
                 type: 'POST',
@@ -259,7 +259,7 @@
                         $('#edit_vehicle').val(results.data.mileage.vehicle);
                         $('#edit_kilometers').val(results.data.mileage.kilometers);
                         $('#edit_reasonformileage').val(results.data.mileage.reasonmileage);
-                        $('#update').attr('onclick', 'update_mileage(' + id + ')');
+                        $('#update').attr('onclick', 'updateMileage(' + id + ')');
 
                         $('#edit_date').flatpickr({
                             altInput: true,
@@ -282,7 +282,7 @@
             });
         }
 
-        function update_mileage(id) {
+        function updateMileage(id) {
             $('#update').attr('disabled', 'disabled');
 
             const data = {
@@ -359,7 +359,7 @@
                                     // console.log(admin_user);
 
                                     if (admin_user == 1) {
-                                        action = `<a href="javascript:void(0)" data-toggle="tooltip" title="Approved" onclick="mileage_approve('${data[index].id}', '${data[index].routes.approve}')"><i class="fa fa-check-circle"></i></a> <a href="javascript:void(0)" data-toggle="tooltip" title="Reject!" onclick="mileage_reject('${data[index].id}', '${data[index].routes.reject}')"><i class="fa fa-ban"></i></a>`;
+                                        action = `<a href="javascript:void(0)" data-toggle="tooltip" title="Approved" onclick="mileageApprove('${data[index].id}', '${data[index].routes.approve}')"><i class="fa fa-check-circle"></i></a> <a href="javascript:void(0)" data-toggle="tooltip" title="Reject!" onclick="mileageReject('${data[index].id}', '${data[index].routes.reject}')"><i class="fa fa-ban"></i></a>`;
                                     } else {
                                         action = '';
                                     }
@@ -378,8 +378,8 @@
 
                                     html += `
                                         <td class="text-right">
-                                            <a href="javascript:void(0);" onclick="OpenEditMileageModel('${data[index].id}')">EDIT</a>
-                                            <a href="javascript:void(0);" class="down" onclick="deleteconfirm('${data[index].id}')">DELETE</a>
+                                            <a href="javascript:void(0);" onclick="openEditMileageModel('${data[index].id}')">EDIT</a>
+                                            <a href="javascript:void(0);" class="down" onclick="deleteConfirm('${data[index].id}')">DELETE</a>
                                         </td>
                                     </tr><tr class="spacer"></tr>`;
 
@@ -441,11 +441,11 @@
 
                                     if (is_admin == 1) {
                                         admin = `<td class="text-center">
-                                            <a href="javascript:void(0)"  data-toggle="tooltip" title="Pending" onclick="mileage_pending('${data[index].id}', '${data[index].routes.pending}')"><i class="fa fa-check-circle"></i></a>
+                                            <a href="javascript:void(0)"  data-toggle="tooltip" title="Pending" onclick="mileagePending('${data[index].id}', '${data[index].routes.pending}')"><i class="fa fa-check-circle"></i></a>
                                         </td>
 
                                         <td class="text-right">
-                                            <a href="javascript:void(0);" class="down" onclick="deleteconfirm('${data[index].id}')">DELETE</a></td>
+                                            <a href="javascript:void(0);" class="down" onclick="deleteConfirm('${data[index].id}')">DELETE</a></td>
                                         </td>`;
                                     } else {
                                         admin = `<td class="text-center">N/A</td><td></td>`;
@@ -473,7 +473,7 @@
             });
         }
 
-        function deleteconfirm(id) {
+        function deleteConfirm(id) {
             swal({
                 title: "Delete?",
                 text: "Please ensure and then confirm!",
@@ -490,11 +490,10 @@
                         data: {id: id},
                         dataType: 'JSON',
                         success: function (results) {
-
                             if (results.success === true) {
                                 swal("Done!", results.message, "success").then(function () {
-                                    searchPendingMileagePage()
-                                    searchHistoryMileagePage()
+                                    searchPendingMileagePage();
+                                    searchHistoryMileagePage();
                                 })
                             } else {
                                 swal("Error!", results.message, "error");
@@ -505,14 +504,12 @@
                 } else {
                     e.dismiss;
                 }
-
             }, function (dismiss) {
                 return false;
             })
         }
 
-        function mileage_pending(id, route) {
-
+        function mileagePending(id, route) {
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-Token': "{{csrf_token()}}"
@@ -521,7 +518,6 @@
             let data = {id: id};
 
             $.ajax({
-
                 method: "POST",
                 url: route,
                 data: data,
@@ -531,11 +527,9 @@
                     searchHistoryMileagePage()
                 }
             });
-
         }
 
-        function mileage_approve(id, route) {
-
+        function mileageApprove(id, route) {
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-Token': "{{csrf_token()}}"
@@ -544,20 +538,18 @@
             let data = {id: id};
 
             $.ajax({
-
                 method: "POST",
                 url: route,
                 data: data,
                 success: function (response) {
                     $.toaster({message: 'Enabled', title: 'Success', priority: 'success'});
-                    searchPendingMileagePage()
-                    searchHistoryMileagePage()
+                    searchPendingMileagePage();
+                    searchHistoryMileagePage();
                 }
             });
-
         }
 
-        function mileage_reject(id, route) {
+        function mileageReject(id, route) {
 
             let data = {id: id};
             $.ajax({

@@ -16,7 +16,7 @@
                         <div class="col-sm-2">
                             <div class="form-group">
                                 <input type="date" name="archive_date" id="archive_date" placeholder="Select Date"
-                                       class="form-control-new" onChange="personal_development_archive_search()">
+                                       class="form-control-new" onChange="personalDevelopmentArchiveSearch()">
                             </div>
                         </div>
                         <div class="col-sm-1">
@@ -114,7 +114,7 @@
                         <div class="row margin-top-30">
                             <div class="form-group" style="width:100%;">
                                 <div class="col-md-12 col-sm-12">
-                                    <button type="button" onclick="create_personal_development(event)"
+                                    <button type="button" onclick="createPersonalDevelopment(event)"
                                             class="btn-dark contact_btn" data-form="expences" id="create">Save
                                     </button>
                                     <span class="close close-span" data-dismiss="modal" aria-label="Close"><i
@@ -197,7 +197,7 @@
                             <div class="row margin-top-30">
                                 <div class="form-group" style="width:100%;">
                                     <div class="col-md-12 col-sm-12">
-                                        <button type="button" onclick="update_personal_development()"
+                                        <button type="button" onclick="updatePersonalDevelopment()"
                                                 class="btn-dark contact_btn" data-form="expences" id="create">Save
                                         </button>
                                         <span class="close close-span" data-dismiss="modal" aria-label="Close"><i
@@ -215,9 +215,7 @@
     </div>
     <!--ajax come modal-->
 
-
     <script type="text/javascript">
-
         let id = from = to = archive_from = archive_to = updateRoute = null;
 
         $(document).ready(function () {
@@ -226,14 +224,13 @@
             var today = new Date();
             to = formatDate(today);
             from = formatDate(today.setDate(today.getDate()-30));
-            personal_development_archive_search();
+            personalDevelopmentArchiveSearch();
 
             $("#pending_span").click(function () {
                 $("#pending_span").addClass("active-span");
                 $("#historical_span").removeClass("active-span");
                 $("#pending_div").show();
                 $("#historical_div").hide();
-
             });
 
             $('#archive_date').flatpickr({
@@ -250,13 +247,13 @@
                             archive_from = archive_to = null;
                         }
 
-                        personal_development_archive_search();
+                        personalDevelopmentArchiveSearch();
                     }
                 },
             });
         });
 
-        function create_personal_development(event) {
+        function createPersonalDevelopment(event) {
             event.preventDefault();
             $('#create').attr('disabled', 'disabled');
             var title = $('#create_title').val();
@@ -271,9 +268,8 @@
                 start_date: start_date,
                 end_date: end_date,
                 emp_id: emp_id,
+            };
 
-            }
-            // console.log(data)
             if (title == '' || description == '' || start_date == '' || end_date == '' || emp_id == '') {
                 $.toaster({message: 'Field is required!', title: 'Required', priority: 'danger'});
                 $('#create').removeAttr('disabled');
@@ -293,16 +289,12 @@
                 success: function (response) {
                     $.toaster({message: 'Created successfully', title: 'Success', priority: 'success'});
                     $('#journal-modal').modal('hide');
-                    // benifits_pending_new();
-                    personal_development_archive_search();
+                    personalDevelopmentArchiveSearch();
                 }
-
             });
         }
 
-
-        function personal_development_archive_search() {
-
+        function personalDevelopmentArchiveSearch() {
             let data = {
                 from: archive_from,
                 to: archive_to,
@@ -310,9 +302,9 @@
 
             $('#wait').css('display', 'inline-block'); // wait for loader
             $('#wait-his').css('display', 'inline-block'); // wait for loader
+
             $.ajax({
                 type: 'post',
-
                 url: "{{ route('personal-development-plan.archive') }}",
                 data: data,
                 dataType: 'JSON',
@@ -325,7 +317,6 @@
                             pageSize: 10,
                             totalNumber: results.data.length,
                             callback: function (data, pagination) {
-
                                 let html = date = '';
 
                                 for (let index = 0; index < data.length; index++) {
@@ -345,8 +336,8 @@
                                     </td>
                                     <td class="action-box">
                                         <a href="${data[index].routes.show}"> View</a>
-                                        <a href="javascript:void(0);" onclick="OpenEditDevelopmentModel('${data[index].id}', '${data[index].routes.edit}', '${data[index].routes.update}') ">EDIT</a>
-                                        <a href="javascript:void(0);" class="down" onclick="deleteconfirm('${data[index].id}', '${data[index].routes.destroy}')">DELETE</a>
+                                        <a href="javascript:void(0);" onclick="openEditDevelopmentModel('${data[index].id}', '${data[index].routes.edit}', '${data[index].routes.update}') ">EDIT</a>
+                                        <a href="javascript:void(0);" class="down" onclick="deleteConfirm('${data[index].id}', '${data[index].routes.destroy}')">DELETE</a>
                                     </td>
                                </tr>
                                <tr class="spacer"></tr>`;
@@ -361,19 +352,20 @@
             });
         }
 
-        function OpenEditDevelopmentModel(id, route, update) {
+        function openEditDevelopmentModel(id, route, update) {
             updateRoute = update;
             $('#personal_development_update_id').val(id);
             $('#personal_development_edit_modal').modal();
+
             $.ajax({
                 type: 'GET',
                 url: route,
                 dataType: 'JSON',
                 success: function (results) {
-
                     if (results.status === 'success') {
                         let mentor = '';
                         let selecteds = '';
+
                         for (let i = 0; i < results.data.user.length; i++) {
                             if (results.data.user[i].id === results.data.emp_id) {
                                 selecteds = 'selected';
@@ -383,7 +375,6 @@
                         }
 
                         $('#edit_title').val(results.data.title);
-                        console.log(results.data.title);
                         $('#edit_description').val(results.data.description);
                         $('#edit_start_date').val(results.data.start_date.split(' ')[0]);
                         $('#edit_end_date').val(results.data.end_date.split(' ')[0]);
@@ -391,7 +382,7 @@
                         $('#edit_emp_id').html(mentor);
                         $('#edit_emp_id').val(results.data.emp_id);
 
-                        $('#update').attr('onclick', 'update_personal_development(' + id + ')');
+                        $('#update').attr('onclick', 'updatePersonalDevelopment(' + id + ')');
                         $('#update').attr('data-id', id);
 
                         $('#edit_start_date').flatpickr({
@@ -423,7 +414,6 @@
                                 }
                             },
                         });
-
                     } else {
                         swal("Error!", results.message, "error");
                     }
@@ -431,7 +421,7 @@
             });
         }
 
-        function update_personal_development() {
+        function updatePersonalDevelopment() {
             let id = $('#personal_development_update_id').val();
             $('#update').attr('disabled', 'disabled');
 
@@ -445,7 +435,7 @@
                 cache: false,
                 success: function (response) {
                     $.toaster({message: 'Updated successfully', title: 'Success', priority: 'success'});
-                    personal_development_archive_search();
+                    personalDevelopmentArchiveSearch();
                     $('#personal_development_edit_modal').modal('hide');
                     $('#update').removeAttr('disabled');
                 }
@@ -453,8 +443,7 @@
             });
         }
 
-
-        function deleteconfirm(id, route) {
+        function deleteConfirm(id, route) {
             swal({
                 title: "Delete?",
                 text: "Please ensure and then confirm!",
@@ -470,22 +459,18 @@
                         url: route,
                         dataType: 'JSON',
                         success: function (results) {
-
                             if (results.success === true) {
                                 swal("Done!", results.message, "success").then(function () {
-
-                                    window.location.reload()
+                                    personalDevelopmentArchiveSearch();
                                 })
                             } else {
                                 swal("Error!", results.message, "error");
                             }
                         }
                     });
-
                 } else {
                     e.dismiss;
                 }
-
             }, function (dismiss) {
                 return false;
             })
@@ -505,7 +490,6 @@
 
             return [year, month, day].join('-');
         }
-
     </script>
 
 @endsection
