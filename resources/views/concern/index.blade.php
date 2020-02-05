@@ -1,4 +1,5 @@
 @extends('layouts.main')
+@section('title', 'Concern')
 @section('content1')
     <div class="well-default-trans">
         <div class="tab-pane" id="nav-expense" role="tabpanel" aria-labelledby="nav-employee-tab">

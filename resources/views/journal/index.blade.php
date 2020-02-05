@@ -1,4 +1,5 @@
 @extends('layouts.main')
+@section('title', 'Journal Entries')
 @include('modal')
 @section('content1')
 

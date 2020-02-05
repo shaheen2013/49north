@@ -1,4 +1,5 @@
 @extends('layouts.main')
+@section('title','Time off')
 @section('content1')
 
     <div class="container-fluid">

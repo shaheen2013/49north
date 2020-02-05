@@ -1,5 +1,5 @@
 @extends('layouts.main')
-
+@section('title', 'Personal development | Single view')
 @section('content1')
     @if($show->comment)
         <div class="well-default-trans">

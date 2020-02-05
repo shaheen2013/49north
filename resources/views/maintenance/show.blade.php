@@ -1,4 +1,5 @@
 @extends('layouts.main')
+@section('title', 'Maintenance| Single view')
 @section('content1')
 
     {{-- @if($show->comment) --}}

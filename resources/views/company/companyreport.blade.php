@@ -1,4 +1,5 @@
 @extends('layouts.main')
+@section('title', 'Company')
 @include('modal')
 @section('content1')
     <div class="well-default-trans">

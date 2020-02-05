@@ -1,4 +1,5 @@
 @extends('layouts.main')
+@section('title', 'Agreement')
 @include('modal')
 @section('content1')
 

@@ -1,4 +1,5 @@
 @extends('layouts.main')
+@section('title', 'Additional benefits pending')
 @include('modal')
 @section('content1')
 
