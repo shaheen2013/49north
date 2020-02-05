@@ -23,7 +23,8 @@ class MaintenanceController extends Controller
     {
         if (auth()->user()->is_admin) {
             $activeMenu = 'admin';
-        } else {
+        }
+        else {
             $activeMenu = 'submit';
         }
 
@@ -36,13 +37,13 @@ class MaintenanceController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Add maintenance
      *
      * @param Request $request
+     *
      * @return RedirectResponse
      */
-    function addMaintenance (Request $request)
-    {
+    function addMaintenance (Request $request) {
         $request->validate([
             'user' => 'nullable|array'
         ]);
@@ -63,14 +64,14 @@ class MaintenanceController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * edit view
      *
      * @param Request $request
+     *
      * @return Factory|View
      */
-    function editMaintenanceView (Request $request)
-    {
-        $data['maintanance'] = MaintenanceTicket::findOrFail($request->id);
+    function editMaintenanceView (Request $request) {
+        $data['maintanance'] = MaintenanceTicket::find($request->id);
         $data['category'] = Categorys::all();
         $data['categorya1'] = Categorys::where('id', $data['maintanance']->category)->first();
         $data['users'] = User::where('is_admin', 0)->get();
@@ -79,13 +80,13 @@ class MaintenanceController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * update maintenance
      *
      * @param Request $request
+     *
      * @return RedirectResponse
      */
-    function edit (Request $request)
-    {
+    function edit (Request $request) {
         $id = $request->id;
         $data = $request->all();
         unset($data['user']);
@@ -103,28 +104,26 @@ class MaintenanceController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * delete tickets
      *
      * @param Request $request
+     *
      * @return RedirectResponse
      */
-    function delete (Request $request)
-    {
+    function delete (Request $request) {
         MaintenanceTicket::destroy($request->id);
         $msg = 'Ticket deleted';
-        \Session::flash('alert-info', $msg);
+        session()->flash('alert-info', $msg);
 
         return redirect()->route('maintenance.list');
     }
 
     /**
-     * Change the resource status in progress.
      * @param Request $request
+     *
      * @return JsonResponse
      */
-
-    function ticketInProgress (Request $request)
-    {
+    function ticketInProgress (Request $request) {
         $id = $request->id;
         MaintenanceTicket::where(['id' => $id])->update(['status' => 1]);
 
@@ -132,19 +131,16 @@ class MaintenanceController extends Controller
     }
 
     /**
-     * Change the resource status cancel.
      * @param Request $request
-     * @return void
      */
-
-    public function ticketCancel (Request $request)
-    {
+    public function ticketCancel (Request $request) {
         $id = $request->id;
         MaintenanceTicket::where(['id' => $id])->update(['status' => 2]);
     }
 
     /**
-     * Filter maintenance
+     * Filter agreement
+     *
      * @param Request $request
      *
      * @return JsonResponse
@@ -167,7 +163,7 @@ class MaintenanceController extends Controller
                         $q->where(function ($query) use ($request) {
                             $query->where('maintenance_tickets.subject', 'like', '%' . $request->search . '%')
                                 ->orWhere('maintenance_tickets.status', 'like', '%' . $request->search . '%')
-                                ->orWhere(\DB::raw("CONCAT(emp.firstname, ' ', emp.lastname)"), 'like', '%' . $request->search . '%')
+                                ->orWhere(DB::raw("CONCAT(emp.firstname, ' ', emp.lastname)"), 'like', '%' . $request->search . '%')
                                 ->orWhere('maintenance_tickets.updated_at', 'like', '%' . $request->search . '%');
                         });
                     }
@@ -176,14 +172,14 @@ class MaintenanceController extends Controller
                     }
                     if ($request->id == 'completed') {
                         $q->where('maintenance_tickets.status', '>', 0);
-                    } else {
+                    }
+                    else {
                         $q->whereNull('maintenance_tickets.status');
                     }
                     if (!auth()->user()->is_admin) {
                         $q->whereIn('maintenance_tickets.id', $tagged);
                     }
-                })
-                ->get();
+                })->get();
 
             if (count($data)) {
                 foreach ($data as $datum) {
@@ -203,46 +199,46 @@ class MaintenanceController extends Controller
             }
 
             return response()->json(['status' => 200, 'data' => $data]);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return response()->json(['status' => 500, 'message' => $e->getMessage()]);
         }
     }
 
     /**
-     * Display the specified resource.
-     *
      * @param int $id
+     *
      * @return Factory|View
      */
-    public function show ($id)
-    {
+    public function show ($id) {
         if (auth()->user()->is_admin) {
             $activeMenu = 'admin';
-        } else {
+        }
+        else {
             $activeMenu = 'submit';
         }
         $show = MaintenanceTicket::with('employee')->findOrFail($id);
 
         if ($show->comment) {
             $route = route('maintenance.comment.update', $show->id);
-        } else {
+        }
+        else {
             $route = route('maintenance.comment.store', $show->id);
         }
 
         $editRoute = route('maintenance.editview', $id);
 
         $deleteRoute = route('maintenance.delete');
+
         return view('maintenance.show', compact('show', 'user', 'activeMenu', 'route', 'editRoute', 'deleteRoute'));
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
      * @param Request $request
+     * @param       int  $id
+     *
      * @return JsonResponse
      */
-    public function commentStore (Request $request, $id)
-    {
+    public function commentStore (Request $request, $id) {
 
         // Validate form data
         $rules = [
@@ -272,14 +268,12 @@ class MaintenanceController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
-     *
      * @param Request $request
-     * @param int $id
+     * @param       int  $id
+     *
      * @return JsonResponse
      */
-    public function commentUpdate (Request $request, $id)
-    {
+    public function commentUpdate (Request $request, $id) {
 
         // Validate form data
         $rules = [
@@ -302,7 +296,7 @@ class MaintenanceController extends Controller
             }
 
             return response()->json(['status' => 'fail']);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return response()->json(['status' => 'fail', 'msg' => $e->getMessage()]);
         }
 
