@@ -11,7 +11,6 @@ use Illuminate\View\View;
 
 class ExpenseController extends Controller
 {
-
     /**
      * Display a listing of the resource.
      *
@@ -109,9 +108,9 @@ class ExpenseController extends Controller
      * @param $id
      * @return JsonResponse
      */
-    public function edit($id)
+    public function edit(Expenses $expense)
     {
-        $data['expense'] = Expenses::findOrFail($id);
+        $data['expense'] = Expenses::findOrFail($expense->id);
         $data['companies'] = Company::all();
         $data['project'] = Project::all();
         $data['purchases'] = Purchases::all();
@@ -130,7 +129,7 @@ class ExpenseController extends Controller
      * @param int $id
      * @return JsonResponse
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Expenses $expense)
     {
         // Validate form data
         $rules = [
@@ -148,7 +147,7 @@ class ExpenseController extends Controller
         }
 
         try {
-            $data = Expenses::findOrFail($id);
+            $data = Expenses::findOrFail($expense->id);
             $receipt = null;
 
             if ($request->hasFile('receipt')) {
@@ -190,9 +189,9 @@ class ExpenseController extends Controller
      * @param int $id
      * @return JsonResponse
      */
-    public function destroy($id)
+    public function destroy(Expenses $expense)
     {
-        $expense = Expenses::findOrFail($id);
+        $expense = Expenses::findOrFail($expense->id);
         if ($expense->delete() == 1) {
             $success = true;
             $message = "Expense deleted successfully";

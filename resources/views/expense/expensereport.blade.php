@@ -414,6 +414,7 @@
                                 <div class="form-group" style="width:100%;">
                                     <div class="col-md-12 col-sm-12">
                                         {{ csrf_field() }}
+                                        @method('put')
                                         <input type="hidden" name="emp_id" value="{{ auth()->user()->id }}">
                                         <button type="button" id="update" onclick="update_expense({{ auth()->user()->id }})" class="btn-dark contact_btn" data-form="expences">
                                             Save
@@ -647,26 +648,23 @@
             }).then(function (e) {
                 if (e.value === true) {
                     $.ajax({
+                        method: 'delete',
                         type: 'post',
                         url: route,
                         dataType: 'JSON',
                         success: function (results) {
-
                             if (results.success === true) {
                                 swal("Done!", results.message, "success").then(function () {
-
-                                    window.location.reload()
+                                    expences_pending_new();
                                 })
                             } else {
                                 swal("Error!", results.message, "error");
                             }
                         }
                     });
-
                 } else {
                     e.dismiss;
                 }
-
             }, function (dismiss) {
                 return false;
             })
@@ -735,7 +733,6 @@
 
                         $('#edit_company').html(company);
                         $('#edit_category').val(results.data.expense.company);
-                        $('#edit_date').val(results.data.expense.date.split(' ')[0]);
                         $('#edit_category').html(category);
                         $('#edit_category').val(results.data.expense.category);
                         $('#edit_purchase').html(purchase);
@@ -809,7 +806,7 @@
             var data = new FormData(document.getElementById('editExpenseForm'));
 
             $.ajax({
-                method: "PUT",
+                method: "post",
                 url: updateRoute,
                 data: data,
                 enctype: 'multipart/form-data',
