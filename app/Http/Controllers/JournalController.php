@@ -125,7 +125,7 @@ class JournalController extends Controller
      */
     public function edit ($id)
     {
-        $data = Journal::findOrFail($id)->first();
+        $data = Journal::findOrFail($id);
         if ($data) {
             return response()->json(['status' => 'success', 'data' => $data]);
         }

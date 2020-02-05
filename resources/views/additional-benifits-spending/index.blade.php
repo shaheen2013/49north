@@ -8,8 +8,8 @@
             <div class="expense inner-tab-box">
                 <div class="col-sm-12">
                     <h3>
-                        <span class="active-span clickable" id="pending_span" onclick="benifits_pending_new()">Pending </span> |
-                        <span class="clickable" id="historical_span" onclick="benifits_history_new()"> Historical</span>
+                        <span class="active-span clickable" id="pending_span" onclick="benefitsPending()">Pending </span> |
+                        <span class="clickable" id="historical_span" onclick="benefitsHistory()"> Historical</span>
                     </h3>
                     <br>
                 </div>
@@ -18,7 +18,7 @@
 
                         <div class="col-sm-2">
                             <div class="form-group">
-                                <input type="date" name="pending_date" id="date" placeholder="Select Date"  class="form-control-new" onChange="benifits_pending_new()">
+                                <input type="date" name="pending_date" id="date" placeholder="Select Date"  class="form-control-new" onChange="benefitsPending()">
                             </div>
                         </div>
                         <div class="col-sm-1">
@@ -54,7 +54,7 @@
 
                         <div class="col-sm-2">
                             <div class="form-group">
-                                <input type="date" name="history_date" id="history_date" placeholder="Select Date" class="form-control-new" onChange="benifits_history_new()">
+                                <input type="date" name="history_date" id="history_date" placeholder="Select Date" class="form-control-new" onChange="benefitsHistory()">
                             </div>
                         </div>
                         <div class="col-sm-1">
@@ -126,7 +126,7 @@
                             <div class="row margin-top-30">
                                 <div class="form-group" style="width:100%;">
                                     <div class="col-md-12 col-sm-12">
-                                        <button type="button" onclick="create_additional_benefits(event)" class="btn-dark contact_btn" data-form="expences" id="create">Save
+                                        <button type="button" onclick="createAdditionalBenefits(event)" class="btn-dark contact_btn" data-form="expences" id="create">Save
                                         </button>
                                         <span class="close close-span" data-dismiss="modal" aria-label="Close"><i class="fa fa-arrow-left"></i>  Return to Additional Benefits Spending Reports</span>
                                     </div>
@@ -178,7 +178,7 @@
                             <div class="row margin-top-30">
                                 <div class="form-group" style="width:100%;">
                                     <div class="col-md-12 col-sm-12">
-                                        <button type="button" onclick="update_additional_benefits(id)" id="update" class="btn-dark contact_btn" data-form="expences">Save
+                                        <button type="button" onclick="updateAdditionalBenefits(id)" id="update" class="btn-dark contact_btn" data-form="expences">Save
                                         </button>
                                         <span class="close close-span" data-dismiss="modal" aria-label="Close"><i class="fa fa-arrow-left"></i>  Return to Additional Benefits Spending Reports</span>
                                     </div>
@@ -204,7 +204,7 @@
             var today = new Date();
             to = formatDate(today);
             from = formatDate(today.setDate(today.getDate()-30));
-            benifits_pending_new();
+            benefitsPending();
 
             $("#historical_span").click(function () {
                 $("#historical_span").addClass("active-span");
@@ -235,7 +235,7 @@
                             from = to = null;
                         }
 
-                        benifits_pending_new();
+                        benefitsPending();
                     }
                 },
             });
@@ -254,13 +254,13 @@
                             history_from = history_to = null;
                         }
 
-                        benifits_history_new();
+                        benefitsHistory();
                     }
                 },
             });
         });
 
-        function create_additional_benefits(event){
+        function createAdditionalBenefits(event){
             event.preventDefault();
             $('#create').attr('disabled','disabled');
             var date = $('#create_date').val();
@@ -293,14 +293,14 @@
                 success: function( response ) {
                     $.toaster({ message : 'Created successfully', title : 'Success', priority : 'success' });
                     $('#journal-modal').modal('hide');
-                    benifits_pending_new();
-                    benifits_history_new();
+                    benefitsPending();
+                    benefitsHistory();
                 }
 
             });
         }
 
-        function benifits_pending_new() {
+        function benefitsPending() {
             let data = {
                 from: from,
                 to: to,
@@ -336,14 +336,14 @@
 
                                     if (is_admin == 1) {
                                         if (data[index].pay_status == 1) {
-                                            action = `<a href="javascript:void(0)" data-toggle="tooltip" title="Non-Paid" onclick="benefit_non_paid('${data[index].id}', '${data[index].routes.nonPaid}')"><i class="fa fa-usd"></i></a>`;
+                                            action = `<a href="javascript:void(0)" data-toggle="tooltip" title="Non-Paid" onclick="benefitNonPaid('${data[index].id}', '${data[index].routes.nonPaid}')"><i class="fa fa-usd"></i></a>`;
                                         }
                                         else{
-                                            action = `<a href="javascript:void(0)" data-toggle="tooltip" title="Paid" onclick="benefit_paid('${data[index].id}', '${data[index].routes.paid}')"><i class="fa fa-usd"></i></a>`;
+                                            action = `<a href="javascript:void(0)" data-toggle="tooltip" title="Paid" onclick="benefitPaid('${data[index].id}', '${data[index].routes.paid}')"><i class="fa fa-usd"></i></a>`;
                                         }
 
-                                        admin = `<a href="javascript:void(0)" data-toggle="tooltip" title="Approved" onclick="benefit_approve('${data[index].id}', '${data[index].routes.approve}')"><i class="fa fa-check-circle"></i></a>
-                                        <a href="javascript:void(0)" data-toggle="tooltip" title="Reject!" onclick="benefit_reject('${data[index].id}', '${data[index].routes.approve}')"><i class="fa fa-ban"></i></a>`;
+                                        admin = `<a href="javascript:void(0)" data-toggle="tooltip" title="Approved" onclick="benefitApprove('${data[index].id}', '${data[index].routes.approve}')"><i class="fa fa-check-circle"></i></a>
+                                        <a href="javascript:void(0)" data-toggle="tooltip" title="Reject!" onclick="benefitReject('${data[index].id}', '${data[index].routes.approve}')"><i class="fa fa-ban"></i></a>`;
                                     }
 
                                     html += `<tr>
@@ -355,8 +355,8 @@
                                         ${admin}
                                     </td>
                                     <td class="action-box">
-                                        <a href="javascript:void(0);" onclick="OpenEditBenifitsModel('${data[index].id}', '${data[index].routes.edit}', '${data[index].routes.update}') ">EDIT</a>
-                                        <a href="javascript:void(0);" class="down" onclick="deleteconfirm('${data[index].id}', '${data[index].routes.destroy}')">DELETE</a>
+                                        <a href="javascript:void(0);" onclick="openEditBenefitsModel('${data[index].id}', '${data[index].routes.edit}', '${data[index].routes.update}') ">EDIT</a>
+                                        <a href="javascript:void(0);" class="down" onclick="deleteConfirm('${data[index].id}', '${data[index].routes.destroy}')">DELETE</a>
                                     </td>
                                 </tr>
                                 <tr class="spacer"></tr>`;
@@ -374,7 +374,7 @@
             });
         }
 
-        function benifits_history_new() {
+        function benefitsHistory() {
 
             let data = {
                 from: history_from,
@@ -410,12 +410,12 @@
 
                                     if (is_admin == 1) {
                                         if (data[index].pay_status == 1) {
-                                            action = `<a href="javascript:void(0)" data-toggle="tooltip" title="Non-Paid" onclick="benefit_non_paid('${data[index].id}', '${data[index].routes.nonPaid}')"><i class="fa fa-usd"></i></a>`;
+                                            action = `<a href="javascript:void(0)" data-toggle="tooltip" title="Non-Paid" onclick="benefitNonPaid('${data[index].id}', '${data[index].routes.nonPaid}')"><i class="fa fa-usd"></i></a>`;
                                         } else{
-                                            action = `<a href="javascript:void(0)" data-toggle="tooltip" title="Paid" onclick="benefit_paid('${data[index].id}', '${data[index].routes.paid}')"><i class="fa fa-usd"></i></a>`;
+                                            action = `<a href="javascript:void(0)" data-toggle="tooltip" title="Paid" onclick="benefitPaid('${data[index].id}', '${data[index].routes.paid}')"><i class="fa fa-usd"></i></a>`;
                                         }
 
-                                        admin = `<a href="javascript:void(0);" class="down" onclick="deleteconfirm('${data[index].id}', '${data[index].routes.destroy}')">DELETE</a>`;
+                                        admin = `<a href="javascript:void(0);" class="down" onclick="deleteConfirm('${data[index].id}', '${data[index].routes.destroy}')">DELETE</a>`;
                                     }
 
 
@@ -446,7 +446,7 @@
             });
         }
 
-        function OpenEditBenifitsModel(id, route, update) {
+        function openEditBenefitsModel(id, route, update) {
             // console.log(id);
             updateRoute = update;
             $('#additional_benefits_edit_modal').modal();
@@ -461,8 +461,23 @@
                         $('#edit_date').val(results.data.date.split(' ')[0]);
                         $('#edit_description').val(results.data.description);
                         $('#edit_total').val(results.data.total);
-                        $('#update').attr('onclick', 'update_additional_benefits(' + id + ')');
+                        $('#update').attr('onclick', 'updateAdditionalBenefits(' + id + ')');
                         $('#update').attr('data-id', id);
+
+                        $('#edit_date').flatpickr({
+                            altInput: true,
+                            altFormat: 'j M, Y',
+                            defaultDate: results.data.date,
+                            onChange: function (selectedDates, dateStr, instance) {
+                                from = formatDate(selectedDates[0]);
+                                to = formatDate(selectedDates[1]);
+                                if (selectedDates[0] === undefined || (selectedDates[0] !== undefined && selectedDates[1] !== undefined)) {
+                                    if (selectedDates[0] === undefined) {
+                                        from = to = null;
+                                    }
+                                }
+                            },
+                        });
                     } else {
                         swal("Error!", results.message, "error");
                     }
@@ -470,7 +485,7 @@
             });
         }
 
-        function update_additional_benefits(id) {
+        function updateAdditionalBenefits(id) {
             $('#update').attr('disabled', 'disabled');
 
             const data = {
@@ -495,7 +510,7 @@
             });
         }
 
-        function benefit_approve(id, route) {
+        function benefitApprove(id, route) {
 
             $.ajaxSetup({
             headers: {
@@ -519,7 +534,7 @@
 
         }
 
-        function benefit_reject(id, route) {
+        function benefitReject(id, route) {
 
             let data = {id: id};
             $.ajax({
@@ -537,7 +552,7 @@
             });
         }
 
-        function benefit_paid(id, route) {
+        function benefitPaid(id, route) {
 
             $.ajaxSetup({
             headers: {
@@ -561,7 +576,7 @@
 
         }
 
-        function benefit_non_paid(id, route) {
+        function benefitNonPaid(id, route) {
 
             let data = {id: id};
             $.ajax({
@@ -579,7 +594,7 @@
             });
         }
 
-        function deleteconfirm(id, route) {
+        function deleteConfirm(id, route) {
             swal({
                 title: "Delete?",
                 text: "Please ensure and then confirm!",

@@ -164,7 +164,7 @@ class AdditionlBenifitsSpendingController extends Controller
      */
     public function edit ($id)
     {
-        $data = AdditionlBenifitsSpending::findOrFail($id)->first();
+        $data = AdditionlBenifitsSpending::findOrFail($id);
         if ($data) {
             return response()->json(['status' => 'success', 'data' => $data]);
         }

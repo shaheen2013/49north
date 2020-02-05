@@ -14,7 +14,7 @@
                                 <form action="{{$deleteRoute}}" method="post">
                                     @csrf
                                     <input type="hidden" name="id" value="{{ $show->id }}">
-                                    <button type="button" class="btn btn-info" onclick="mainance_edit_view_ajax('{{$show->id}}', '{{ $editRoute }}')"> Edit </button>
+                                    <button type="button" class="btn btn-info" onclick="maintenanceEditView('{{$show->id}}', '{{ $editRoute }}')"> Edit </button>
                                     <button type="submit" href="javascript:void(0);" class="btn btn-danger deleteit">Delete</button>
                                 </form>
                             </span>
@@ -75,7 +75,7 @@
                                     </div>
                                 </div>
                                 <div class="col-md-12 col-sm-12">
-                                    <button type="button" onclick="update_comment()" class="btn-dark contact_btn"
+                                    <button type="button" onclick="updateComment()" class="btn-dark contact_btn"
                                             data-form="expences" id="update" style="margin-bottom: 0px; ">Save
                                     </button>
                                 </div>
@@ -100,7 +100,7 @@
                                     </div>
                                 </div>
                                 <div class="col-md-12 col-sm-12">
-                                    <button type="button" onclick="create_comment()" class="btn-dark contact_btn"
+                                    <button type="button" onclick="createComment()" class="btn-dark contact_btn"
                                             data-form="expences" id="update" style="margin-bottom: 0px; ">Save
                                     </button>
                                 </div>
@@ -132,7 +132,8 @@
     <script type="text/javascript">
         let updateRoute = null;
         let route = '@php echo $route; @endphp';
-        function create_comment() {
+
+        function createComment() {
             event.preventDefault();
 
             let id = $('#maintenance_create_id').val();
@@ -157,7 +158,7 @@
             });
         }
 
-        function update_comment() {
+        function updateComment() {
             event.preventDefault();
             let id = $('#maintenance_update_id').val();
             console.log(id);
@@ -179,7 +180,7 @@
                 }
 
             });
-        } 
+        }
     </script>
 
 
