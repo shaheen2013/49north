@@ -5,7 +5,7 @@
     <meta name="author" content="">
     <meta name="csrf-token" content="{{ csrf_token() }}"/>
 
-    <title>@yield('title', 'Home') - {{ env('APP_NAME') }}</title>
+    <title>{{ env('APP_NAME') }} - @yield('title', 'Home')</title>
 
     <!-- Bootstrap  CSS -->
     <link href="{{asset('css/bootstrap.min.css')}}" rel="stylesheet">

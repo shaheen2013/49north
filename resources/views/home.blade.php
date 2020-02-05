@@ -1,9 +1,7 @@
 {{-- \resources\views\users\edit.blade.php --}}
 
 @extends('layouts.main')
-
-
-
+@section('title','My Profile')
 @section('content1')
 
     <div class="well-default-trans">
@@ -361,7 +359,7 @@
                     </div>
                 </div>
             @endadmin
-            
+
             {{ Form::button(auth()->user()->id ? 'Save Changes' : 'Add', array('class' => 'btn btn-lg btn-dark contact_btn','type'=>'submit')) }}
 
             {{ Form::close() }}

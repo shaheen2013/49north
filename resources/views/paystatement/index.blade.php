@@ -1,4 +1,5 @@
 @extends('layouts.main')
+@section('title', 'Pay statements')
 @section('content1')
 
     <div class="well-default-trans">

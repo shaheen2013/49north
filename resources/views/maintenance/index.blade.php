@@ -1,5 +1,5 @@
 @extends('layouts.main')
-
+@section('title', 'Maintenance')
 @section('content1')
 
     <div class="well-default-trans">

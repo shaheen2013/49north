@@ -1,7 +1,5 @@
 @extends('layouts.main')
-
-@section('title', 'Agreements')
-
+@section('title', 'Agreement')
 @section('content1')
     <div class="well-default-trans">
         <div class="tab-pane fade employeeagreements" id="nav-agreements" role="tabpanel">
