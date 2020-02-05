@@ -288,7 +288,7 @@
             });
             $.ajax({
                 method: "POST",
-                url: "{{ route('additional-benefits.store') }}",
+                url: "{{ route('additionl_benifits_spendings.store') }}",
                 data: data,
                 dataType: 'JSON',
                 success: function( response ) {
@@ -312,7 +312,7 @@
 
             $.ajax({
                 type: 'post',
-                url: "{{ route('additional-benefits.pending') }}",
+                url: "{{ route('additionl_benifits_spendings.pending') }}",
                 data: data,
                 dataType: 'JSON',
                 success: function (results) {
@@ -386,7 +386,7 @@
             $('#wait-his').css('display', 'inline-block'); // wait for loader
             $.ajax({
                 type: 'post',
-                url: "{{ route('additional-benefits.history') }}",
+                url: "{{ route('additionl_benifits_spendings.history') }}",
                 data: data,
                 dataType: 'JSON',
                 success: function (results) {
@@ -493,7 +493,8 @@
                 date: $('#edit_date').val(),
                 description: $('#edit_description').val(),
                 total: $('#edit_total').val(),
-                id: id
+                _method: 'put',
+                id: id,
             };
 
             $.ajax({
@@ -503,11 +504,10 @@
                 dataType: 'JSON',
                 success: function (response) {
                     $.toaster({message: 'Updated successfully', title: 'Success', priority: 'success'});
-                    searchJournalPage();
+                    benefitsPending();
                     $('#additional_benefits_edit_modal').modal('hide');
                     $('#update').removeAttr('disabled');
                 }
-
             });
         }
 
@@ -609,13 +609,14 @@
                     $.ajax({
                         type: 'post',
                         url: route,
+                        data: {
+                            _method: 'delete'
+                        },
                         dataType: 'JSON',
                         success: function (results) {
-
                             if (results.success === true) {
                                 swal("Done!", results.message, "success").then(function () {
-
-                                    window.location.reload()
+                                    benefitsPending();
                                 })
                             } else {
                                 swal("Error!", results.message, "error");

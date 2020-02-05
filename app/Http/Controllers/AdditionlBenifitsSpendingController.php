@@ -24,7 +24,6 @@ class AdditionlBenifitsSpendingController extends Controller
         return view('additional-benifits-spending.index', compact('activeMenu', 'data'));
     }
 
-
     /**
      * Filter pending additional benefits spending.
      * @param Request $request
@@ -32,19 +31,18 @@ class AdditionlBenifitsSpendingController extends Controller
      */
     public function searchPending (Request $request)
     {
-
         $data = $this->searchAdditionalBenefits('pending_date', $isPending = true);
 
         if (count($data)) {
             foreach ($data as $datum) {
                 $routes = [];
-                $routes['edit'] = route('additional-benefits.edit', $datum->id);
-                $routes['update'] = route('additional-benefits.update', $datum->id);
-                $routes['approve'] = route('additional-benefits.approve', $datum->id);
-                $routes['reject'] = route('additional-benefits.reject', $datum->id);
-                $routes['paid'] = route('additional-benefits.paid', $datum->id);
-                $routes['non-paid'] = route('additional-benefits.non-paid', $datum->id);
-                $routes['destroy'] = route('additional-benefits.destroy', $datum->id);
+                $routes['edit'] = route('additionl_benifits_spendings.edit', $datum->id);
+                $routes['update'] = route('additionl_benifits_spendings.update', $datum->id);
+                $routes['approve'] = route('additionl_benifits_spendings.approve', $datum->id);
+                $routes['reject'] = route('additionl_benifits_spendings.reject', $datum->id);
+                $routes['paid'] = route('additionl_benifits_spendings.paid', $datum->id);
+                $routes['non-paid'] = route('additionl_benifits_spendings.non-paid', $datum->id);
+                $routes['destroy'] = route('additionl_benifits_spendings.destroy', $datum->id);
                 $datum->routes = $routes;
             }
         }
@@ -80,26 +78,24 @@ class AdditionlBenifitsSpendingController extends Controller
      */
     public function searchHistory (Request $request)
     {
-
         $data = $this->searchAdditionalBenefits('history_date', false);
 
         if (count($data)) {
             foreach ($data as $datum) {
                 $routes = [];
-                $routes['edit'] = route('additional-benefits.edit', $datum->id);
-                $routes['update'] = route('additional-benefits.update', $datum->id);
-                $routes['approve'] = route('additional-benefits.approve', $datum->id);
-                $routes['reject'] = route('additional-benefits.reject', $datum->id);
-                $routes['paid'] = route('additional-benefits.paid', $datum->id);
-                $routes['nonPaid'] = route('additional-benefits.non-paid', $datum->id);
-                $routes['destroy'] = route('additional-benefits.destroy', $datum->id);
+                $routes['edit'] = route('additionl_benifits_spendings.edit', $datum->id);
+                $routes['update'] = route('additionl_benifits_spendings.update', $datum->id);
+                $routes['approve'] = route('additionl_benifits_spendings.approve', $datum->id);
+                $routes['reject'] = route('additionl_benifits_spendings.reject', $datum->id);
+                $routes['paid'] = route('additionl_benifits_spendings.paid', $datum->id);
+                $routes['nonPaid'] = route('additionl_benifits_spendings.non-paid', $datum->id);
+                $routes['destroy'] = route('additionl_benifits_spendings.destroy', $datum->id);
                 $datum->routes = $routes;
             }
         }
 
         return response()->json(['status' => 'success', 'data' => $data]);
     }
-
 
     /**
      * Show the form for creating a new resource.
@@ -123,7 +119,6 @@ class AdditionlBenifitsSpendingController extends Controller
             'date' => 'required',
             'description' => 'required|string|max:491',
             'total' => 'required',
-
         ];
 
         $validator = validator($request->all(), $rules, []);
@@ -162,9 +157,9 @@ class AdditionlBenifitsSpendingController extends Controller
      * @param int $id
      * @return JsonResponse
      */
-    public function edit ($id)
+    public function edit (AdditionlBenifitsSpending $additionlBenifitsSpending)
     {
-        $data = AdditionlBenifitsSpending::findOrFail($id);
+        $data = AdditionlBenifitsSpending::findOrFail($additionlBenifitsSpending->id);
         if ($data) {
             return response()->json(['status' => 'success', 'data' => $data]);
         }
@@ -177,7 +172,7 @@ class AdditionlBenifitsSpendingController extends Controller
      * @param int $id
      * @return JsonResponse
      */
-    public function update (Request $request, $id)
+    public function update (Request $request, AdditionlBenifitsSpending $additionlBenifitsSpending)
     {
         // Validate form data
         $rules = [
@@ -192,7 +187,7 @@ class AdditionlBenifitsSpendingController extends Controller
 
         try {
             // return $request->all();
-            $data = AdditionlBenifitsSpending::findOrFail($id);
+            $data = AdditionlBenifitsSpending::findOrFail($additionlBenifitsSpending->id);
             $data->date = $request->date;
             $data->description = $request->description;
             $data->total = $request->total;
@@ -212,9 +207,9 @@ class AdditionlBenifitsSpendingController extends Controller
      * @param int $id
      * @return JsonResponse
      */
-    public function approve ($id)
+    public function approve (AdditionlBenifitsSpending $additionlBenifitsSpending)
     {
-        $data = AdditionlBenifitsSpending::findOrFail($id);
+        $data = AdditionlBenifitsSpending::findOrFail($additionlBenifitsSpending->id);
         $data->status = 1;
         $data->save();
         if ($data->update()) {
@@ -229,9 +224,9 @@ class AdditionlBenifitsSpendingController extends Controller
      * @param int $id
      * @return JsonResponse
      */
-    public function reject ($id)
+    public function reject (AdditionlBenifitsSpending $additionlBenifitsSpending)
     {
-        $data = AdditionlBenifitsSpending::findOrFail($id);
+        $data = AdditionlBenifitsSpending::findOrFail($additionlBenifitsSpending->id);
         $data->status = 2;
         $data->save();
         if ($data->update()) {
@@ -246,9 +241,9 @@ class AdditionlBenifitsSpendingController extends Controller
      * @param int $id
      * @return JsonResponse
      */
-    public function paid ($id)
+    public function paid (AdditionlBenifitsSpending $additionlBenifitsSpending)
     {
-        $data = AdditionlBenifitsSpending::findOrFail($id);
+        $data = AdditionlBenifitsSpending::findOrFail($additionlBenifitsSpending->id);
         $data->pay_status = 1;
         $data->save();
         if ($data->update()) {
@@ -263,9 +258,9 @@ class AdditionlBenifitsSpendingController extends Controller
      * @param int $id
      * @return JsonResponse
      */
-    public function nonPaid ($id)
+    public function nonPaid (AdditionlBenifitsSpending $additionlBenifitsSpending)
     {
-        $data = AdditionlBenifitsSpending::findOrFail($id);
+        $data = AdditionlBenifitsSpending::findOrFail($additionlBenifitsSpending->id);
         $data->pay_status = 0;
         $data->save();
         if ($data->update()) {
@@ -280,9 +275,9 @@ class AdditionlBenifitsSpendingController extends Controller
      * @param int $id
      * @return JsonResponse
      */
-    public function destroy ($id)
+    public function destroy (AdditionlBenifitsSpending $additionlBenifitsSpending)
     {
-        $benefit = AdditionlBenifitsSpending::findOrFail($id);
+        $benefit = AdditionlBenifitsSpending::findOrFail($additionlBenifitsSpending->id);
         if ($benefit->delete() == 1) {
             $success = true;
             $message = "Journal deleted successfully";
@@ -296,5 +291,4 @@ class AdditionlBenifitsSpendingController extends Controller
             'message' => $message,
         ]);
     }
-
 }
