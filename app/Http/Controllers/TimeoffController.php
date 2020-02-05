@@ -2,11 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class TimeoffController extends Controller
 {
-    function timeofflist()
+    /**
+     * Display a listing of the resource.
+     *
+     * @return Factory|View
+     */
+    function timeOffList ()
     {
         if (auth()->user()->is_admin) {
             $activeMenu = 'admin';
@@ -14,6 +21,6 @@ class TimeoffController extends Controller
             $activeMenu = 'submit';
         }
 
-    	return view('timeoff.index', compact('activeMenu'));
+        return view('timeoff.index', compact('activeMenu'));
     }
 }

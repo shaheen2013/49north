@@ -40,10 +40,10 @@
                             </li>
                             @endadmin
 
-                            @if(!auth()->user()->is_admin) 
+                            @if(!auth()->user()->is_admin)
                             <li class="nav-item">
                                 <a class="nav-link {{ $activeMenu == 'benefits' ? 'active' : '' }}" href="{{ route('benefits.module') }}" role="tab">Benefits</a>
-                            </li> 
+                            </li>
                             @endif
 
                             @admin
@@ -115,7 +115,7 @@
                     @endif
 
                     @can('expenses-enabled')
-                        <a class="nav-item nav-link {{ (request()->is('expense/*')) ? 'active' : '' }}" href="{{ route('expense.expense-list') }}">Expense Report</a>
+                        <a class="nav-item nav-link {{ (request()->is('expenses')) ? 'active' : '' }}" href="{{ route('expenses.index') }}">Expense Report</a>
                     @endcan
 
 

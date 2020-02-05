@@ -48,7 +48,7 @@
     </tr>
 </table>
 
-@component('mail::button', ['url' => url('expense/list')])
+@component('mail::button', ['url' => url('expenses')])
 Edit
 @endcomponent
 

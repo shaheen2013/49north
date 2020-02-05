@@ -5,22 +5,23 @@ namespace App\Http\Controllers;
 use App\{Company, Mail\ExpenseCreated, Project, Purchases, Categorys, Expenses};
 use Exception;
 use Illuminate\Contracts\View\Factory;
-use Illuminate\Http\{JsonResponse,RedirectResponse,Request};
-use Illuminate\Support\Facades\{Mail,Storage};
+use Illuminate\Http\{JsonResponse, RedirectResponse, Request};
+use Illuminate\Support\Facades\{Mail, Storage};
 use Illuminate\View\View;
 
-class ExpenseController extends Controller {
+class ExpenseController extends Controller
+{
 
     /**
-     * Add Expenselist
+     * Display a listing of the resource.
      *
      * @return Factory|View
      */
-    function expenselist () {
+    function index()
+    {
         if (auth()->user()->is_admin) {
             $activeMenu = 'admin';
-        }
-        else {
+        } else {
             $activeMenu = 'submit';
         }
 
@@ -33,18 +34,22 @@ class ExpenseController extends Controller {
         return view('expense.expensereport', $data, compact('activeMenu'));
     }
 
-   // Search history
+    /**
+     * Filter historical expense.
+     * @param Request $request
+     * @return JsonResponse
+     */
     public function searchHistory(Request $request)
     {
         $data = Expenses::orderByDesc('created_at')->with('employee:id,firstname,lastname')->where('status', '!=', null)
-        ->where(function ($q) use($request){
-            if(isset($request->history_search)){
-                $q->whereHas('employee', function($sql) use($request){
-                    $sql->where(\DB::raw("CONCAT(firstname, ' ', lastname)"), 'like', '%' . $request->history_search . '%');
-                    $sql->orWhere('description', 'LIKE', '%'.$request->history_search.'%');
-                });
-            }
-        });
+            ->where(function ($q) use ($request) {
+                if (isset($request->history_search)) {
+                    $q->whereHas('employee', function ($sql) use ($request) {
+                        $sql->where(\DB::raw("CONCAT(firstname, ' ', lastname)"), 'like', '%' . $request->history_search . '%');
+                        $sql->orWhere('description', 'LIKE', '%' . $request->history_search . '%');
+                    });
+                }
+            });
 
         $data = $data->dateSearch('date');
         $data = $data->isEmployee()->get();
@@ -52,30 +57,34 @@ class ExpenseController extends Controller {
         if (count($data)) {
             foreach ($data as $datum) {
                 $routes = [];
-                $routes['edit'] = route('expense.edit', $datum->id);
-                $routes['update'] = route('expense.update', $datum->id);
-                $routes['approve'] = route('expense.approve', $datum->id);
-                $routes['reject'] = route('expense.reject', $datum->id);
-                $routes['destroy'] = route('expense.destroy', $datum->id);
+                $routes['edit'] = route('expenses.edit', $datum->id);
+                $routes['update'] = route('expenses.update', $datum->id);
+                $routes['approve'] = route('expenses.approve', $datum->id);
+                $routes['reject'] = route('expenses.reject', $datum->id);
+                $routes['destroy'] = route('expenses.destroy', $datum->id);
                 $datum->routes = $routes;
             }
         }
 
-        return response()->json(['status'=>'success', 'data' => $data]);
+        return response()->json(['status' => 'success', 'data' => $data]);
     }
 
-    // Search pending
+    /**
+     * Filter pending expense.
+     * @param Request $request
+     * @return JsonResponse
+     */
     public function searchPending(Request $request)
     {
         $data = Expenses::orderByDesc('created_at')->with('employee:id,firstname,lastname')->where('status', null)
-        ->where(function ($q) use($request){
-            if(isset($request->pending_search)){
-                $q->whereHas('employee', function($sql) use($request){
-                    $sql->where(\DB::raw("CONCAT(firstname, ' ', lastname)"), 'like', '%' . $request->pending_search . '%');
-                    $sql->orWhere('description', 'LIKE', '%'.$request->pending_search.'%');
-                });
-            }
-        });
+            ->where(function ($q) use ($request) {
+                if (isset($request->pending_search)) {
+                    $q->whereHas('employee', function ($sql) use ($request) {
+                        $sql->where(\DB::raw("CONCAT(firstname, ' ', lastname)"), 'like', '%' . $request->pending_search . '%');
+                        $sql->orWhere('description', 'LIKE', '%' . $request->pending_search . '%');
+                    });
+                }
+            });
 
         $data = $data->dateSearch('date');
         $data = $data->isEmployee()->get();
@@ -83,34 +92,44 @@ class ExpenseController extends Controller {
         if (count($data)) {
             foreach ($data as $datum) {
                 $routes = [];
-                $routes['edit'] = route('expense.edit', $datum->id);
-                $routes['update'] = route('expense.update', $datum->id);
-                $routes['approve'] = route('expense.approve', $datum->id);
-                $routes['reject'] = route('expense.reject', $datum->id);
-                $routes['destroy'] = route('expense.destroy', $datum->id);
+                $routes['edit'] = route('expenses.edit', $datum->id);
+                $routes['update'] = route('expenses.update', $datum->id);
+                $routes['approve'] = route('expenses.approve', $datum->id);
+                $routes['reject'] = route('expenses.reject', $datum->id);
+                $routes['destroy'] = route('expenses.destroy', $datum->id);
                 $datum->routes = $routes;
             }
         }
 
-        return response()->json(['status'=>'success', 'data' => $data]);
+        return response()->json(['status' => 'success', 'data' => $data]);
     }
 
-    // Expense edit page with value
-    public function edit(Request $request)
+    /**
+     * Show the form for editing the specified resource.
+     * @param $id
+     * @return JsonResponse
+     */
+    public function edit($id)
     {
-        // $emp_id = auth()->user()->id;
-        $data['expense'] = Expenses::where('id', $request->id)->first();
+        $data['expense'] = Expenses::findOrFail($id);
         $data['companies'] = Company::all();
         $data['project'] = Project::all();
         $data['purchases'] = Purchases::all();
         $data['category'] = Categorys::all();
 
-        if($data){
-            return response()->json(['status'=>'success', 'data'=>$data]);
+        if ($data) {
+            return response()->json(['status' => 'success', 'data' => $data]);
         }
-        return response()->json(['status'=>'fail']);
+        return response()->json(['status' => 'fail']);
     }
 
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param Request $request
+     * @param int $id
+     * @return JsonResponse
+     */
     public function update(Request $request, $id)
     {
         // Validate form data
@@ -166,7 +185,11 @@ class ExpenseController extends Controller {
         }
     }
 
-    // Expense destroy
+    /**
+     * Remove the specified resource from storage.
+     * @param int $id
+     * @return JsonResponse
+     */
     public function destroy($id)
     {
         $expense = Expenses::findOrFail($id);
@@ -183,8 +206,12 @@ class ExpenseController extends Controller {
         ]);
     }
 
-    // Add Expense
-    function addexpense (Request $request)
+    /**
+     * Store a newly created resource in storage.
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    function addExpense(Request $request)
     {
         $request->validate([
             'receipt' => 'nullable|file|mimes:pdf,doc,docx',
@@ -211,29 +238,37 @@ class ExpenseController extends Controller {
         return redirect()->back()->with('alert-info', $msg);
     }
 
-    // Approved expense
+    /**
+     * Change the resource status approve.
+     * @param int $id
+     * @return JsonResponse
+     */
     public function approve($id)
     {
-        $data = Expenses::find($id);
+        $data = Expenses::findOrFail($id);
         $data->status = 1;
         $data->save();
-        if($data->update()){
-            return response()->json(['status'=>'success']);
+        if ($data->update()) {
+            return response()->json(['status' => 'success']);
         }
-        return response()->json(['status'=>'fail']);
+        return response()->json(['status' => 'fail']);
 
     }
 
-    // Expense reject
+    /**
+     * Change the resource status reject.
+     * @param int $id
+     * @return JsonResponse
+     */
     public function reject($id)
     {
-        $data = Expenses::find($id);
+        $data = Expenses::findOrFail($id);
         $data->status = 2;
         $data->save();
-        if($data->update()){
-            return response()->json(['status'=>'success']);
+        if ($data->update()) {
+            return response()->json(['status' => 'success']);
         }
-        return response()->json(['status'=>'fail']);
+        return response()->json(['status' => 'fail']);
 
     }
 }

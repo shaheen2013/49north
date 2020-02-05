@@ -6,7 +6,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
-use Illuminate\Database\Eloquent\{Model, SoftDeletes};
+use Illuminate\Database\Eloquent\{Model, Relations\BelongsTo, SoftDeletes};
 class Expenses extends Authenticatable {
     use Notifiable, HasRoles, HasEmployee, SearchTrait;
     use  SoftDeletes;
@@ -30,9 +30,9 @@ class Expenses extends Authenticatable {
     /**
      * Get the company that owns the expense
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
-    public function companyRel()
+    public function companyRel ()
     {
         return $this->belongsTo(Company::class, 'company', 'id');
     }
@@ -40,9 +40,9 @@ class Expenses extends Authenticatable {
     /**
      * Get the category that owns the expense
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
-    public function categoryRel()
+    public function categoryRel ()
     {
         return $this->belongsTo(Categorys::class, 'category', 'id');
     }
@@ -50,9 +50,9 @@ class Expenses extends Authenticatable {
     /**
      * Get the purchase that owns the expense
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
-    public function purchaseRel()
+    public function purchaseRel ()
     {
         return $this->belongsTo(Purchases::class, 'purchase', 'id');
     }
@@ -60,9 +60,9 @@ class Expenses extends Authenticatable {
     /**
      * Get the project that owns the expense
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
-    public function projectRel()
+    public function projectRel ()
     {
         return $this->belongsTo(Project::class, 'project', 'id');
     }

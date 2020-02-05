@@ -5,17 +5,21 @@ namespace App\Http\Controllers;
 use App\Mail\NotifyAdmin;
 use App\Message;
 use App\User;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\View\View;
 
 class MessageController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Factory|View
      */
-    public function index()
+    public function index ()
     {
         if (auth()->user()->is_admin) {
             $activeMenu = 'admin';
@@ -29,20 +33,19 @@ class MessageController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return void
      */
-    public function create()
+    public function create ()
     {
         //
     }
 
     /**
      * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\JsonResponse
+     * @param Request $request
+     * @return JsonResponse
      */
-    public function store(Request $request)
+    public function store (Request $request)
     {
         // Validate form data
         $rules = [
@@ -75,13 +78,13 @@ class MessageController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Message  $message
-     * @return \Illuminate\Http\JsonResponse
+     * @param Message $message
+     * @return JsonResponse
      */
-    public function show(Message $message)
+    public function show (Message $message)
     {
         try {
-            $message = Message::find($message->id);
+            $message = Message::findOrFail($message->id);
 
             return response()->json(['status' => 200, 'data' => $message]);
         } catch (\Exception $e) {
@@ -92,13 +95,13 @@ class MessageController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Message  $message
-     * @return \Illuminate\Http\JsonResponse
+     * @param Message $message
+     * @return JsonResponse
      */
-    public function edit(Message $message)
+    public function edit (Message $message)
     {
         try {
-            $message = Message::find($message->id);
+            $message = Message::findOrFail($message->id);
 
             return response()->json(['status' => 200, 'data' => $message]);
         } catch (\Exception $e) {
@@ -109,11 +112,11 @@ class MessageController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Message  $message
-     * @return \Illuminate\Http\JsonResponse
+     * @param Request $request
+     * @param Message $message
+     * @return JsonResponse
      */
-    public function update(Request $request, Message $message)
+    public function update (Request $request, Message $message)
     {
         // Validate form data
         $rules = [
@@ -129,7 +132,7 @@ class MessageController extends Controller
         }
 
         try {
-            $message = Message::find($message->id);
+            $message = Message::findOrFail($message->id);
             $message->subject = $request->subject;
             $message->description = $request->description;
             $message->is_anonymous = isset($request->is_anonymous) ? 1 : 0;
@@ -148,10 +151,10 @@ class MessageController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Message  $message
-     * @return \Illuminate\Http\JsonResponse
+     * @param Message $message
+     * @return JsonResponse
      */
-    public function destroy(Message $message)
+    public function destroy (Message $message)
     {
         try {
             Message::destroy($message->id);
@@ -166,36 +169,37 @@ class MessageController extends Controller
      * Filter agreement
      * @param Request $request
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function search(Request $request){
+    public function search (Request $request)
+    {
         try {
             $data = Message::where(function ($q) use ($request) {
-                    if (isset($request->search)) {
-                        $q->where(function ($query) use ($request) {
-                            $query->where('subject', 'like', '%' . $request->search . '%')
-                                ->orWhere('description', 'like', '%' . $request->search . '%')
-                                ->orWhere('created_at', 'like', '%' . $request->search . '%');
-                        });
-                    }
-                    if ($request->id == 'history') {
-                        $q->whereNotNull('status');
-                    } else {
-                        $q->whereNull('status');
-                    }
-                })->isEmployee()->dateSearch()->get();
-
-                if (count($data)) {
-                    foreach ($data as $datum) {
-                        $routes = [];
-                        $routes['show'] = route('messages.show', $datum->id);
-                        $routes['edit'] = route('messages.edit', $datum->id);
-                        $routes['update'] = route('messages.update', $datum->id);
-                        $routes['destroy'] = route('messages.destroy', $datum->id);
-                        $routes['status'] = route('messages.status.update', $datum->id);
-                        $datum->routes = $routes;
-                    }
+                if (isset($request->search)) {
+                    $q->where(function ($query) use ($request) {
+                        $query->where('subject', 'like', '%' . $request->search . '%')
+                            ->orWhere('description', 'like', '%' . $request->search . '%')
+                            ->orWhere('created_at', 'like', '%' . $request->search . '%');
+                    });
                 }
+                if ($request->id == 'history') {
+                    $q->whereNotNull('status');
+                } else {
+                    $q->whereNull('status');
+                }
+            })->isEmployee()->dateSearch()->get();
+
+            if (count($data)) {
+                foreach ($data as $datum) {
+                    $routes = [];
+                    $routes['show'] = route('messages.show', $datum->id);
+                    $routes['edit'] = route('messages.edit', $datum->id);
+                    $routes['update'] = route('messages.update', $datum->id);
+                    $routes['destroy'] = route('messages.destroy', $datum->id);
+                    $routes['status'] = route('messages.status.update', $datum->id);
+                    $datum->routes = $routes;
+                }
+            }
 
             foreach ($data as $key => $datum) {
                 if (auth()->user()->is_admin == 0 && ($datum->is_anonymous || $datum->is_contact)) {
@@ -214,14 +218,14 @@ class MessageController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Message  $message
-     * @return \Illuminate\Http\JsonResponse
+     * @param Request $request
+     * @param Message $message
+     * @return JsonResponse
      */
-    public function statusUpdate(Request $request, Message $message)
+    public function statusUpdate (Request $request, Message $message)
     {
         try {
-            $message = Message::find($message->id);
+            $message = Message::findOrFail($message->id);
             $message->status = 1;
             $message->save();
 

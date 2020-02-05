@@ -4,18 +4,19 @@ namespace App\Http\Controllers;
 
 use Carbon\Carbon;
 use Illuminate\Contracts\View\Factory;
-use Illuminate\Http\{RedirectResponse, Request};
+use Illuminate\Http\{JsonResponse, RedirectResponse, Request};
 use Illuminate\View\View;
-use App\{Paystatement, Employee_detail, User};
+use App\{Paystatement, EmployeeDetails, User};
 use Illuminate\Support\Facades\DB;
 
 class PaystatementController extends Controller
 {
     /**
-     * Payment List
+     * Display a listing of the resource
+     *
      * @return Factory|View
      */
-    function paylist()
+    function payList ()
     {
         //$data['user_list'] = User::all();
         $activeMenu = 'profile';
@@ -29,13 +30,11 @@ class PaystatementController extends Controller
     }
 
     /**
-     * Add New Payment
-     *
+     * Store a newly created resource in storage.
      * @param Request $request
-     * @return RedirectResponse
+     * @return JsonResponse
      */
-
-    public function store(Request $request)
+    public function store (Request $request)
     {
         // Validate form data
         $rules = [
@@ -75,7 +74,13 @@ class PaystatementController extends Controller
         }
     }
 
-    public function searchPaymentPage(Request $request)
+
+    /**
+     * Filter pay statements.
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function searchPaymentPage (Request $request)
     {
         $data = Paystatement::orderByDesc('date')->with('employee')
             ->where(function ($q) use ($request) {
@@ -108,7 +113,13 @@ class PaystatementController extends Controller
         return response()->json(['status' => 'success', 'data' => $data]);
     }
 
-    public function destroy($id)
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param int $id
+     * @return JsonResponse
+     */
+    public function destroy ($id)
     {
         if (auth()->user()->is_admin == '1') {
             $pay = Paystatement::where('id', $id)->first();

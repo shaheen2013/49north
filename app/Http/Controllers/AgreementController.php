@@ -2,22 +2,23 @@
 
 namespace App\Http\Controllers;
 
-use App\{Agreement, Codeofconduct, Employee_detail};
+use App\{Agreement, CodeOfConduct, EmployeeDetails};
 use Illuminate\Support\Facades\DB;
 use Exception;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\{JsonResponse, RedirectResponse, Request};
 use Illuminate\View\View;
 
-class AgreementController extends Controller {
+class AgreementController extends Controller
+{
 
     /**
      * @return Factory|View
      */
-    function agreementlist()
+    function agreementList ()
     {
         $activeMenu = 'profile';
-        $q = Employee_detail::orderBy('firstname')->with('activeAgreement', 'activeCodeofconduct', 'activeAgreement.amendments');
+        $q = EmployeeDetails::orderBy('firstname')->with('activeAgreement', 'activeCodeofconduct', 'activeAgreement.amendments');
 
         /// if employee is not admin
         if (auth()->user()->is_admin == 0) {
@@ -25,7 +26,7 @@ class AgreementController extends Controller {
         }
         $users = $q->get();
 
-        return view('agreement_listnew', compact('users', 'activeMenu'));
+        return view('agreement-list-new', compact('users', 'activeMenu'));
     }
 
     /**
@@ -33,14 +34,15 @@ class AgreementController extends Controller {
      *
      * @return RedirectResponse
      */
-    function addagreement (Request $request) {
+    function addAgreement (Request $request)
+    {
         //$file = $request->file('agreement_file');
         //$name = str_pad($request->input('employee_id'), '3', '0', STR_PAD_LEFT) . '-' . rand(11111, 99999) . '.' . $file->getClientOriginalExtension();
 
         $conditions = ['emp_id' => $request->input('employee_id'), 'status' => 'A'];
 
         // get file upload type
-        $type = $request->input('agreement_type') == 'EA' ? : 'COC';
+        $type = $request->input('agreement_type') == 'EA' ?: 'COC';
         // set file directory for upload
         $path = $type == 'EA' ? 'agreement' : 'codeofconduct';
 
@@ -56,30 +58,28 @@ class AgreementController extends Controller {
             if ($request->input('is_amendment', false)) {
                 $currentAgreement = Agreement::where($conditions)->first();
                 Agreement::create([
-                    'emp_id'    => $request->employee_id,
+                    'emp_id' => $request->employee_id,
                     'agreement' => $name,
                     'parent_id' => $currentAgreement['id']
                 ]);
 
                 $msg = 'Agreement added successfully';
-            }
-            else {
+            } else {
                 // set old agreement, if it exists, to "D"
                 Agreement::where($conditions)->update(['status' => 'D']);
                 Agreement::create([
-                    'emp_id'    => $request->employee_id,
+                    'emp_id' => $request->employee_id,
                     'agreement' => $name
                 ]);
 
                 $msg = 'Agreement updated successfully';
             }
-        }
-        elseif ($type == 'COC') {
+        } elseif ($type == 'COC') {
             // set old agreement, if it exists, to "D"
-            Codeofconduct::where($conditions)->update(['status' => 'D']);
+            CodeOfConduct::where($conditions)->update(['status' => 'D']);
 
-            Codeofconduct::create([
-                'emp_id'        => $request->employee_id,
+            CodeOfConduct::create([
+                'emp_id' => $request->employee_id,
                 'coc_agreement' => $name,
             ]);
 
@@ -91,38 +91,15 @@ class AgreementController extends Controller {
     }
 
     /**
-     * @param $id
-     * @param $type
-     *
-     * @return JsonResponse
-     */
-    function destroy ($id, $type) {
-
-        if ($type == 'EA') {
-            $agreement = Agreement::where('id', $id)->first();
-        }
-        else {
-            $agreement = Codeofconduct::where('id', $id)->first();
-        }
-
-        $agreement->delete();
-
-        return response()->json([
-            'success' => 'Agreement deleted successfully!'
-        ]);
-    }
-
-    /**
      * Filter agreement
-     *
      * @param Request $request
-     *
      * @return JsonResponse
      */
-    public function search (Request $request) {
+    public function search (Request $request)
+    {
         try {
 
-            $q = Employee_detail::latest()->with('activeAgreement', 'activeCodeofconduct', 'activeAgreement.amendments');
+            $q = EmployeeDetails::latest()->with('activeAgreement', 'activeCodeofconduct', 'activeAgreement.amendments');
 
             if (!auth()->user()->is_admin) {
                 $q->where('id', auth()->user()->id);
@@ -153,5 +130,27 @@ class AgreementController extends Controller {
         } catch (Exception $e) {
             return response()->json(['status' => 500, 'message' => $e->getMessage()]);
         }
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     * @param int $id
+     * @param string $type
+     * @return JsonResponse
+     */
+    function destroy ($id, $type)
+    {
+
+        if ($type == 'EA') {
+            $agreement = Agreement::where('id', $id)->first();
+        } else {
+            $agreement = CodeOfConduct::where('id', $id)->first();
+        }
+
+        $agreement->delete();
+
+        return response()->json([
+            'success' => 'Agreement deleted successfully!'
+        ]);
     }
 }

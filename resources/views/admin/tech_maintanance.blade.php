@@ -35,8 +35,8 @@
                     <td>{{ $maintanance_list->updated_at }}</td>
                     <td>{{ isset($emprec->firstname) .' '. isset($emprec->lastname) }}</td>
                      <td>
-                        <a href="javascript:void(0)" onclick="ticket_inprogress({{ $maintanance_list->id  }})"><i class="fa fa-check-circle" title="In Progress"></i></a>
-                        <a href="javascript:void(0)" title="Cancel!" onclick="ticket_cancel({{ $maintanance_list->id  }})"><i class="fa fa-ban"></i></a>
+                        <a href="javascript:void(0)" onclick="ticketInProgress({{ $maintanance_list->id  }})"><i class="fa fa-check-circle" title="In Progress"></i></a>
+                        <a href="javascript:void(0)" title="Cancel!" onclick="ticketCancel({{ $maintanance_list->id  }})"><i class="fa fa-ban"></i></a>
                     </td>
 
                     <td class="action-box"><a href="javascript:void(0);" onclick="mainance_edit_view_ajax({{ $maintanance_list->id  }})" >EDIT</a>
