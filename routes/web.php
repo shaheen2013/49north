@@ -37,20 +37,13 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('agreement/search', 'AgreementController@search')->name('agreement.search');
 
     // Expenses
-    Route::resource('expenses', 'ExpenseController');
+    Route::resource('expenses', 'ExpenseController')->middleware('can:expenses-enabled');
     Route::group(['prefix' => 'expenses', 'as' => 'expenses.', 'middleware' => 'can:expenses-enabled'], function () {
-        /*Route::get('/list', 'ExpenseController@expenseList')->name('expense-list');
-        Route::post('/addexpense', 'ExpenseController@addExpense')->name('expense-add');
-
-        Route::get('/edit/{id}', 'ExpenseController@edit')->name('edit');
-        Route::POST('/update/{id}', 'ExpenseController@update')->name('update');*/
-
         Route::post('/new/approve/{id}', 'ExpenseController@approve')->name('approve')->middleware('isAdmin');
         Route::post('/new/reject/{id}', 'ExpenseController@reject')->name('reject')->middleware('isAdmin');
 
         Route::post('/new/history', 'ExpenseController@searchHistory')->name('history');
         Route::POST('/pending', 'ExpenseController@searchPending')->name('pending');
-        /*Route::POST('/destroy/{id}', 'ExpenseController@destroy')->name('destroy');*/
     });
 
     // Additional Benefits Spending
