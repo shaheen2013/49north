@@ -6,8 +6,8 @@
             <div class="expense inner-tab-box">
                 <div class="col-sm-12">
                     <h3>
-                        <span class="active-span clickable" id="pending_span" onclick="expences_pending_new()">Pending </span> |
-                        <span class="clickable" id="historical_span" onclick="expences_history_new()"> Historical</span>
+                        <span class="active-span clickable" id="pending_span" onclick="searchExpensesPending()">Pending </span> |
+                        <span class="clickable" id="historical_span" onclick="searchExpensesHistory()"> Historical</span>
                     </h3>
                     <br>
                 </div>
@@ -15,14 +15,14 @@
                     <div class="row">
                         <div class="col-sm-2">
                             <div class="form-group">
-                                <input type="text" placeholder="Search employee" class="form-control-new" name="pending_search" id="pending_search" onkeyup="expences_pending_new()">
-                                <span class="remove-button" onclick="document.getElementById('pending_search').value = '';expences_pending_new()"><i class="fa fa-times" aria-hidden="true"></i></span>
+                                <input type="text" placeholder="Search employee" class="form-control-new" name="pending_search" id="pending_search" onkeyup="searchExpensesPending()">
+                                <span class="remove-button" onclick="document.getElementById('pending_search').value = '';searchExpensesPending()"><i class="fa fa-times" aria-hidden="true"></i></span>
                             </div>
                         </div>
                         <div class="col-sm-2">
                             <div class="form-group">
                                 <input type="date" name="pending_date" id="date" placeholder="Select Date"
-                                       class="form-control-new" onChange="expences_pending_new()">
+                                       class="form-control-new" onChange="searchExpensesPending()">
                             </div>
                         </div>
                         <div class="col-sm-1">
@@ -59,8 +59,8 @@
                     <div class="row">
                         <div class="col-sm-2">
                             <div class="form-group">
-                                <input type="text" placeholder="Search employee" class="form-control-new" name="history_search" id="history_search" onkeyup="expences_history_new()">
-                                <span class="remove-button" onclick="document.getElementById('history_search').value = '';expences_history_new()"><i class="fa fa-times" aria-hidden="true"></i></span>
+                                <input type="text" placeholder="Search employee" class="form-control-new" name="history_search" id="history_search" onkeyup="searchExpensesHistory()">
+                                <span class="remove-button" onclick="document.getElementById('history_search').value = '';searchExpensesHistory()"><i class="fa fa-times" aria-hidden="true"></i></span>
                             </div>
                         </div>
                         <div class="col-sm-2">
@@ -416,7 +416,7 @@
                                         {{ csrf_field() }}
                                         @method('put')
                                         <input type="hidden" name="emp_id" value="{{ auth()->user()->id }}">
-                                        <button type="button" id="update" onclick="update_expense({{ auth()->user()->id }})" class="btn-dark contact_btn" data-form="expences">
+                                        <button type="button" id="update" onclick="updateExpense({{ auth()->user()->id }})" class="btn-dark contact_btn" data-form="expences">
                                             Save
                                         </button>
                                         <span class="close close-span" data-dismiss="modal" aria-label="Close"><i class="fa fa-arrow-left"></i> Return to Expense Reports</span>
@@ -439,7 +439,7 @@
             var today = new Date();
             to = history_to = formatDate(today);
             from = history_from = formatDate(today.setDate(today.getDate()-30));
-            expences_pending_new();
+            searchExpensesPending();
 
             $("#historical_span").click(function () {
                 $("#historical_span").addClass("active-span");
@@ -470,7 +470,7 @@
                             from = to = null;
                         }
 
-                        expences_pending_new();
+                        searchExpensesPending();
                     }
                 },
             });
@@ -489,13 +489,13 @@
                             history_from = history_to = null;
                         }
 
-                        expences_history_new();
+                        searchExpensesHistory();
                     }
                 },
             });
         });
 
-        function expences_pending_new() {
+        function searchExpensesPending() {
             let pending_search = $('#pending_search').val();
             if ($.trim(pending_search).length > 0) {
                 $('.remove-button').show();
@@ -537,8 +537,8 @@
                                     }
 
                                     if (is_admin == 1) {
-                                        adminOption = `<a href="javascript:void(0)" data-toggle="tooltip" title="Approved!"  onclick="expence_approve_new('${data[index].id}', '${data[index].routes.approve}')"><i class="fa fa-check-circle"></i></a>
-                                        <a href="javascript:void(0)" data-toggle="tooltip"  title="Reject!" onclick="expence_reject_new('${data[index].id}', '${data[index].routes.reject}')"><i class="fa fa-ban"></i></a>`;
+                                        adminOption = `<a href="javascript:void(0)" data-toggle="tooltip" title="Approved!"  onclick="approveExpense('${data[index].id}', '${data[index].routes.approve}')"><i class="fa fa-check-circle"></i></a>
+                                        <a href="javascript:void(0)" data-toggle="tooltip"  title="Reject!" onclick="rejectExpense('${data[index].id}', '${data[index].routes.reject}')"><i class="fa fa-ban"></i></a>`;
                                     }
 
                                     html += `<tr>
@@ -550,8 +550,8 @@
                                         ${adminOption}
                                     </td>
                                     <td class="text-center">
-                                        <a href="javascript:void(0);" onclick="OpenEditExpenseModel('${data[index].id}', '${data[index].routes.edit}', '${data[index].routes.update}') ">EDIT</a>
-                                        <a href="javascript:void(0);" class="down" onclick="deleteconfirm('${data[index].id}', '${data[index].routes.destroy}')">DELETE</a>
+                                        <a href="javascript:void(0);" onclick="openEditExpenseModel('${data[index].id}', '${data[index].routes.edit}', '${data[index].routes.update}') ">EDIT</a>
+                                        <a href="javascript:void(0);" class="down" onclick="deleteConfirm('${data[index].id}', '${data[index].routes.destroy}')">DELETE</a>
                                     </td>
                                 </tr>
                                 <tr class="spacer"></tr>`;
@@ -570,7 +570,7 @@
             });
         }
 
-        function expences_history_new() {
+        function searchExpensesHistory() {
             let history_search = $('#history_search').val();
             if ($.trim(history_search).length > 0) {
                 $('.remove-button').show();
@@ -611,7 +611,7 @@
                                     }
 
                                     if (is_admin == 1) {
-                                        admin = `<a href="javascript:void(0);" class="down" onclick="deleteconfirm('${data[index].id}', '${data[index].routes.destroy}')">DELETE</a>`;
+                                        admin = `<a href="javascript:void(0);" class="down" onclick="deleteConfirm('${data[index].id}', '${data[index].routes.destroy}')">DELETE</a>`;
                                     }
 
                                     html += `<tr>
@@ -636,7 +636,7 @@
             });
         }
 
-        function deleteconfirm(id, route) {
+        function deleteConfirm(id, route) {
             swal({
                 title: "Delete?",
                 text: "Please ensure and then confirm!",
@@ -655,7 +655,7 @@
                         success: function (results) {
                             if (results.success === true) {
                                 swal("Done!", results.message, "success").then(function () {
-                                    expences_pending_new();
+                                    searchExpensesPending();
                                 })
                             } else {
                                 swal("Error!", results.message, "error");
@@ -670,7 +670,7 @@
             })
         }
 
-        function OpenEditExpenseModel(id, route, update) {
+        function openEditExpenseModel(id, route, update) {
             updateRoute = update;
             $('#expense-modal-edit2').modal();
 
@@ -750,7 +750,7 @@
                         $('#edit_pst').val(results.data.expense.pst);
                         $('#edit_total').val(results.data.expense.total);
 
-                        $('#update').attr('onclick', 'update_expense(' + id + ')');
+                        $('#update').attr('onclick', 'updateExpense(' + id + ')');
 
                         $('#edit_date').flatpickr({
                             altInput: true,
@@ -765,7 +765,7 @@
                                         from = to = null;
                                     }
 
-                                    expences_pending_new();
+                                    searchExpensesPending();
                                 }
                             },
                         });
@@ -776,7 +776,7 @@
             });
         }
 
-        function update_expense(id) {
+        function updateExpense(id) {
             if ($('#authorization-edit').prop('checked')) {
                 submitUpdateForm(id);
             } else {
@@ -816,8 +816,8 @@
                 success: function (response) {
                     if (response.status == 'success') {
                         $.toaster({message: 'Updated successfully', title: 'Success', priority: 'success'});
-                        expences_pending_new();
-                        expences_history_new();
+                        searchExpensesPending();
+                        searchExpensesHistory();
                         $('#expense-modal-edit2').modal('hide');
                         $('#update').removeAttr('disabled');
                     } else {
@@ -850,7 +850,7 @@
             return [year, month, day].join('-');
         }
 
-        function expence_approve_new(id, route) {
+        function approveExpense(id, route) {
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-Token': "{{csrf_token()}}"
@@ -871,7 +871,7 @@
             });
         }
 
-        function expence_reject_new(id, route) {
+        function rejectExpense(id, route) {
             let data = {id: id};
 
             $.ajax({
