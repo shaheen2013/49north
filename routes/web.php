@@ -47,14 +47,8 @@ Route::group(['middleware' => ['auth']], function () {
     });
 
     // Additional Benefits Spending
-    Route::group(['prefix' => 'additional-benefits', 'as' => 'additional-benefits.', 'middleware' => 'can:additional-spending-enabled'], function () {
-
-        Route::get('/', 'AdditionlBenifitsSpendingController@index')->name('index');
-        Route::post('/store', 'AdditionlBenifitsSpendingController@store')->name('store');
-
-        Route::get('/edit/{id}', 'AdditionlBenifitsSpendingController@edit')->name('edit');
-        Route::POST('/update/{id}', 'AdditionlBenifitsSpendingController@update')->name('update');
-
+    Route::resource('additionl_benifits_spendings', 'AdditionlBenifitsSpendingController')->middleware('can:additional-spending-enabled');
+    Route::group(['prefix' => 'additionl_benifits_spendings', 'as' => 'additionl_benifits_spendings.', 'middleware' => 'can:additional-spending-enabled'], function () {
         Route::post('/approve/{id}', 'AdditionlBenifitsSpendingController@approve')->name('approve')->middleware('isAdmin');
         Route::post('/reject/{id}', 'AdditionlBenifitsSpendingController@reject')->name('reject')->middleware('isAdmin');
 
@@ -63,7 +57,6 @@ Route::group(['middleware' => ['auth']], function () {
 
         Route::post('/history', 'AdditionlBenifitsSpendingController@searchHistory')->name('history');
         Route::POST('/pending', 'AdditionlBenifitsSpendingController@searchPending')->name('pending');
-        Route::POST('/destroy/{id}', 'AdditionlBenifitsSpendingController@destroy')->name('destroy');
     });
 
     // Personal development plan
