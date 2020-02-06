@@ -92,13 +92,11 @@
             </div>
         </div>
     </div>
+    <!--- Journal edit modal end -->
 @endsection
 
 @push('scripts')
-    <!--- Journal edit modal end -->
-
     <script type="text/javascript">
-
         let id = from = to = updateRoute = null;
 
         $(document).ready(function () {
@@ -176,10 +174,8 @@
             });
         }
 
-
         function openEditJournalModel(id, route, update) {
             updateRoute = update;
-            console.log(id);
             $('#journal-edit-modal').modal();
             $.ajax({
                 type: 'GET',
@@ -293,6 +289,7 @@
                 }
             });
         }
+
         function deleteConfirm(id, route) {
             swal({
                 title: "Delete?",
