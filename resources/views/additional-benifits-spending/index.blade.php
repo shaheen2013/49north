@@ -2,8 +2,6 @@
 @section('title', 'Additional benefits pending')
 @include('modal')
 @section('content1')
-
-
     <div class="well-default-trans">
         <div class="tab-pane" id="nav-expense" role="tabpanel" aria-labelledby="nav-employee-tab">
             <div class="expense inner-tab-box">
@@ -16,7 +14,6 @@
                 </div>
                 <div class="col-sm-12" id="pending_div">
                     <div class="row">
-
                         <div class="col-sm-2">
                             <div class="form-group">
                                 <input type="date" name="pending_date" id="date" placeholder="Select Date"  class="form-control-new" onChange="benefitsPending()">
@@ -38,7 +35,6 @@
                                     @admin
                                     <th>Action</th>
                                     @endadmin
-
                                     <th></th>
                                 </tr>
                                 </thead>
@@ -52,7 +48,6 @@
                 </div>
                 <div id="historical_div" class="col-sm-12" style="display:none;">
                     <div class="row">
-
                         <div class="col-sm-2">
                             <div class="form-group">
                                 <input type="date" name="history_date" id="history_date" placeholder="Select Date" class="form-control-new" onChange="benefitsHistory()">
@@ -73,12 +68,10 @@
                                     @admin
                                     <th>Action</th>
                                     @endadmin
-
                                     <th></th>
                                 </tr>
                                 </thead>
                                 <tbody class="return_expence_ajax" id="benefits_history">
-
 
                                 </tbody>
                             </table>
@@ -96,11 +89,12 @@
                 <!-- body modal -->
                 <div class="modal-body">
                     <div class="col-md-12" style="margin-top:40px;margin-bottom:20px;">
+                        {{ Form::open(array()) }}
                             <div class="row">
                                 <div class="col-md-6 col-sm-6">
                                     <div class="text_outer">
-                                        <label for="create_date" class="">Date</label>
-                                        <input type="date" placeholder="Select Date" class="flatpickr form-control" name="date" id="create_date">
+                                        {{ Form::label('create_date', 'Date') }}
+                                        {{ Form::text('date', null, array('class' => 'flatpickr form-control','placeholder'=>'Select Date','id'=>'create_date')) }}
                                     </div>
                                 </div>
                                 <div class="col-md-6 col-sm-6">
@@ -112,10 +106,7 @@
                             </div>
                             <div class="clearfix"></div>
 
-
-
                             <div class="row">
-
                                 <div class="col-md-6 col-sm-6">
                                     <div class="text_outer">
                                         <label for="create_total" class="">Total</label>
@@ -124,6 +115,7 @@
                                 </div>
                             </div>
                             <hr>
+
                             <div class="row margin-top-30">
                                 <div class="form-group" style="width:100%;">
                                     <div class="col-md-12 col-sm-12">
@@ -133,11 +125,9 @@
                                     </div>
                                 </div>
                             </div>
-
+                        {{ Form::close() }}
                     </div>
-
                 </div>
-
             </div>
         </div>
     </div>
@@ -148,55 +138,48 @@
                 <!-- body modal -->
                 <div class="modal-body">
                     <div class="col-md-12" style="margin-top:40px;margin-bottom:20px;">
-                            <div class="row">
-                                <div class="col-md-6 col-sm-6">
-                                    <div class="text_outer">
-                                        <label for="edit_date" class="">Date</label>
-                                        <input type="date" placeholder="Select Date" class="flatpickr form-control" name="date" id="edit_date">
-                                    </div>
-                                </div>
-                                <div class="col-md-6 col-sm-6">
-                                    <div class="text_outer">
-                                        <label for="edit_description" class="">Description</label>
-                                        <input type="text" id="edit_description" name="description" class="form-control" placeholder="Insert text here">
-                                    </div>
+                        <div class="row">
+                            <div class="col-md-6 col-sm-6">
+                                <div class="text_outer">
+                                    <label for="edit_date" class="">Date</label>
+                                    <input type="date" placeholder="Select Date" class="flatpickr form-control" name="date" id="edit_date">
                                 </div>
                             </div>
-                            <div class="clearfix"></div>
-
-
-
-                            <div class="row">
-
-                                <div class="col-md-6 col-sm-6">
-                                    <div class="text_outer">
-                                        <label for="edit_total" class="">Total</label>
-                                        <input type="number" id="edit_total" name="total" class="form-control" placeholder="Insert Figure here">
-                                    </div>
+                            <div class="col-md-6 col-sm-6">
+                                <div class="text_outer">
+                                    <label for="edit_description" class="">Description</label>
+                                    <input type="text" id="edit_description" name="description" class="form-control" placeholder="Insert text here">
                                 </div>
                             </div>
-                            <hr>
-                            <div class="row margin-top-30">
-                                <div class="form-group" style="width:100%;">
-                                    <div class="col-md-12 col-sm-12">
-                                        <button type="button" onclick="updateAdditionalBenefits(id)" id="update" class="btn-dark contact_btn" data-form="expences">Save
-                                        </button>
-                                        <span class="close close-span" data-dismiss="modal" aria-label="Close"><i class="fa fa-arrow-left"></i>  Return to Additional Benefits Spending Reports</span>
-                                    </div>
+                        </div>
+                        <div class="clearfix"></div>
+
+                        <div class="row">
+                            <div class="col-md-6 col-sm-6">
+                                <div class="text_outer">
+                                    <label for="edit_total" class="">Total</label>
+                                    <input type="number" id="edit_total" name="total" class="form-control" placeholder="Insert Figure here">
                                 </div>
                             </div>
-
+                        </div>
+                        <hr>
+                        <div class="row margin-top-30">
+                            <div class="form-group" style="width:100%;">
+                                <div class="col-md-12 col-sm-12">
+                                    <button type="button" onclick="updateAdditionalBenefits(id)" id="update" class="btn-dark contact_btn" data-form="expences">Save
+                                    </button>
+                                    <span class="close close-span" data-dismiss="modal" aria-label="Close"><i class="fa fa-arrow-left"></i>  Return to Additional Benefits Spending Reports</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-
                 </div>
-
             </div>
         </div>
     </div>
     <!--ajax come modal-->
 
     <script type="text/javascript">
-
         let id = from = to = history_from = history_to = updateRoute = null;
 
         $(document).ready(function () {
@@ -272,20 +255,14 @@
                 date:date,
                 description:description,
                 total:total,
+            };
 
-            }
-            // console.log(data)
             if(date == '' || description == ''|| total == ''){
                 $.toaster({ message : 'Field is required!', title : 'Required', priority : 'danger' });
                 $('#create').removeAttr('disabled');
                 return false;
             }
 
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-Token': "{{csrf_token()}}"
-                }
-            });
             $.ajax({
                 method: "POST",
                 url: "{{ route('additionl_benifits_spendings.store') }}",
@@ -297,7 +274,6 @@
                     benefitsPending();
                     benefitsHistory();
                 }
-
             });
         }
 
@@ -448,7 +424,6 @@
         }
 
         function openEditBenefitsModel(id, route, update) {
-            // console.log(id);
             updateRoute = update;
             $('#additional_benefits_edit_modal').modal();
             $.ajax({
@@ -456,9 +431,7 @@
                 url: route,
                 dataType: 'JSON',
                 success: function (results) {
-
                     if (results.status === 'success') {
-
                         $('#edit_date').val(results.data.date.split(' ')[0]);
                         $('#edit_description').val(results.data.description);
                         $('#edit_total').val(results.data.total);
@@ -514,23 +487,23 @@
         function benefitApprove(id, route) {
 
             $.ajaxSetup({
-            headers: {
-                'X-CSRF-Token': "{{csrf_token()}}"
-            }
+                headers: {
+                    'X-CSRF-Token': "{{csrf_token()}}"
+                }
             });
             let data = {id: id};
 
             $.ajax({
 
-            method: "POST",
-            url: route,
-            data: data,
-            success: function (response) {
-                $.toaster({message: 'Approved', title: 'Success', priority: 'success'});
-                setTimeout(function () {
-                    window.location.reload();
-                }, 1000);
-            }
+                method: "POST",
+                url: route,
+                data: data,
+                success: function (response) {
+                    $.toaster({message: 'Approved', title: 'Success', priority: 'success'});
+                    setTimeout(function () {
+                        window.location.reload();
+                    }, 1000);
+                }
             });
 
         }
@@ -556,23 +529,23 @@
         function benefitPaid(id, route) {
 
             $.ajaxSetup({
-            headers: {
-                'X-CSRF-Token': "{{csrf_token()}}"
-            }
+                headers: {
+                    'X-CSRF-Token': "{{csrf_token()}}"
+                }
             });
             let data = {id: id};
 
             $.ajax({
 
-            method: "POST",
-            url: route,
-            data: data,
-            success: function (response) {
-                $.toaster({message: 'Paid', title: 'Success', priority: 'success'});
-                setTimeout(function () {
-                    window.location.reload();
-                }, 1000);
-            }
+                method: "POST",
+                url: route,
+                data: data,
+                success: function (response) {
+                    $.toaster({message: 'Paid', title: 'Success', priority: 'success'});
+                    setTimeout(function () {
+                        window.location.reload();
+                    }, 1000);
+                }
             });
 
         }
@@ -632,6 +605,5 @@
                 return false;
             })
         }
-
     </script>
 @endsection
