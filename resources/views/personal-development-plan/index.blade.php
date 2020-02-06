@@ -2,30 +2,24 @@
 @section('title', 'Personal development plan')
 @include('modal')
 @section('content1')
-
-
     <div class="well-default-trans">
         <div class="tab-pane" id="nav-expense" role="tabpanel" aria-labelledby="nav-employee-tab">
             <div class="expense inner-tab-box">
                 <div class="col-sm-12">
-
                     <br>
                 </div>
                 <div class="col-sm-12" id="pending_div">
                     <div class="row">
-
                         <div class="col-sm-2">
                             <div class="form-group">
-                                <input type="date" name="archive_date" id="archive_date" placeholder="Select Date"
-                                       class="form-control-new" onChange="personalDevelopmentArchiveSearch()">
+                                <input type="date" name="archive_date" id="archive_date" placeholder="Select Date" class="form-control-new" onChange="personalDevelopmentArchiveSearch()">
                             </div>
                         </div>
                         <div class="col-sm-1">
                             <div id="wait-his"></div>
                         </div>
                         <div class="col-sm-9">
-                            <a href="javascript:void(0)" class="_new_icon_button_1" data-toggle="modal"
-                               data-target="#personal_development_modal"> <i class="fa fa-plus"></i> </a>
+                            <a href="javascript:void(0)" class="_new_icon_button_1" data-toggle="modal" data-target="#personal_development_modal" onclick="resetForm()"> <i class="fa fa-plus"></i> </a>
                         </div>
                         <div class="col-sm-12">
                             <table class="table _table _table-bordered">
@@ -34,12 +28,10 @@
                                     <th>Date</th>
                                     <th>Description</th>
                                     <th>Action</th>
-
                                     <th></th>
                                 </tr>
                                 </thead>
                                 <tbody class="return_expence_ajax" id="personal_development_archive">
-
 
                                 </tbody>
                             </table>
@@ -51,166 +43,75 @@
         </div><!-------------end--------->
     </div>
 
-    <div id="personal_development_modal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog"
-         aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div id="personal_development_modal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <!-- body modal -->
                 <div class="modal-body">
                     <div class="col-md-12" style="margin-top:40px;margin-bottom:20px;">
-                        <div class="row">
-                            <div class="col-md-6 col-sm-6">
-                                <div class="text_outer">
-                                    <label for="create_title" class="">Title</label>
-                                    <input type="text" id="create_title" name="title" class="form-control"
-                                           placeholder="Insert text here">
+                        {{ Form::open(array('id' => 'personal_development_plans_form')) }}
+                            <div class="row">
+                                <div class="col-md-6 col-sm-6">
+                                    <div class="text_outer">
+                                        {{ Form::label('create_title', 'Title') }}
+                                        {{ Form::text('title', null, array('class' => 'form-control','placeholder' => 'Insert text here', 'id' => 'create_title')) }}
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-sm-6">
+                                    <div class="text_outer">
+                                        {{ Form::label('create_description', 'Description') }}
+                                        {{ Form::text('description', null, array('class' => 'form-control','placeholder' => 'Insert text here', 'id' => 'create_description')) }}
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-md-6 col-sm-6">
-                                <div class="text_outer">
-                                    <label for="create_description" class="">Description</label>
-                                    <input type="text" id="create_description" name="description" class="form-control"
-                                           placeholder="Insert text here">
+                            <div class="clearfix"></div>
+
+                            <div class="row">
+                                <div class="col-md-6 col-sm-6">
+                                    <div class="text_outer">
+                                        {{ Form::label('create_start_date', 'Start Date') }}
+                                        {{ Form::text('start_date', null, array('class' => 'flatpickr form-control','placeholder' => 'Select Date', 'id' => 'create_start_date')) }}
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-sm-6">
+                                    <div class="text_outer">
+                                        {{ Form::label('create_end_date', 'End Date') }}
+                                        {{ Form::text('end_date', null, array('class' => 'flatpickr form-control','placeholder' => 'Select Date', 'id' => 'create_end_date')) }}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="clearfix"></div>
+                            <div class="clearfix"></div>
 
-                        <div class="row">
-
-                            <div class="col-md-6 col-sm-6">
-                                <div class="text_outer">
-                                    <label for="create_start_date" class="">Start Date</label>
-                                    <input type="date" placeholder="Select Date" class="flatpickr form-control"
-                                           name="start_date" id="create_start_date">
-                                </div>
-                            </div>
-                            <div class="col-md-6 col-sm-6">
-                                <div class="text_outer">
-                                    <label for="create_end_date" class="">End Date</label>
-                                    <input type="date" placeholder="Select Date" class="flatpickr form-control"
-                                           name="end_date" id="create_end_date">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="clearfix"></div>
-
-                        <div class="row">
-
-                            <div class="col-md-6 col-sm-6">
-                                <div class="text_outer">
-                                    <label for="company" class="">Mentor</label>
-                                    <select class="select_status form-control" name="emp_id" id="create_emp_id">
-                                        <option value="">Select</option>
+                            <div class="row">
+                                <div class="col-md-6 col-sm-6">
+                                    <div class="text_outer">
+                                        {{ Form::label('company', 'Mentor') }}
+                                        @php
+                                            $data = [];
+                                        @endphp
                                         @foreach($user as $usr)
-                                            <option value="{{ $usr->id }}">{{ $usr->name}}</option>
+                                            @php
+                                                $data[$usr->id] = $usr->name;
+                                            @endphp
                                         @endforeach
-                                    </select>
-                                </div>
-                            </div>
-
-                        </div>
-
-                        <hr>
-                        <div class="row margin-top-30">
-                            <div class="form-group" style="width:100%;">
-                                <div class="col-md-12 col-sm-12">
-                                    <button type="button" onclick="createPersonalDevelopment(event)"
-                                            class="btn-dark contact_btn" data-form="expences" id="create">Save
-                                    </button>
-                                    <span class="close close-span" data-dismiss="modal" aria-label="Close"><i
-                                            class="fa fa-arrow-left"></i>  Return to Personal Development Plan Reports</span>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-        </div>
-    </div>
-
-    <div id="personal_development_edit_modal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog"
-         aria-labelledby="myLargeModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <!-- body modal -->
-                <div class="modal-body">
-                    <div class="col-md-12" style="margin-top:40px;margin-bottom:20px;">
-                        <form action="" id="personal_development_update_form">
-                            <input type="hidden" id="personal_development_update_id" name='id'>
-                            <div class="row">
-                                <div class="col-md-6 col-sm-6">
-                                    <div class="text_outer">
-                                        <label for="edit_title" class="">Title</label>
-                                        <input type="text" id="edit_title" name="title" class="form-control"
-                                               placeholder="Insert text here">
-                                    </div>
-                                </div>
-                                <div class="col-md-6 col-sm-6">
-                                    <div class="text_outer">
-                                        <label for="edit_description" class="">Description</label>
-                                        <input type="text" id="edit_description" name="description" class="form-control"
-                                               placeholder="Insert text here">
+                                        {!! Form::select('emp_id', $data, '', ['class' => 'select_status form-control', 'placeholder' => 'Select', 'id' => 'create_emp_id']) !!}
                                     </div>
                                 </div>
                             </div>
-                            <div class="clearfix"></div>
-
-                            <div class="row">
-
-                                <div class="col-md-6 col-sm-6">
-                                    <div class="text_outer">
-                                        <label for="edit_start_date" class="">Start Date</label>
-                                        <input type="date" placeholder="Select Date" class="flatpickr form-control"
-                                               name="start_date" id="edit_start_date">
-                                    </div>
-                                </div>
-                                <div class="col-md-6 col-sm-6">
-                                    <div class="text_outer">
-                                        <label for="edit_end_date" class="">End Date</label>
-                                        <input type="date" placeholder="Select Date" class="flatpickr form-control"
-                                               name="end_date" id="edit_end_date">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="clearfix"></div>
-
-                            <div class="row">
-
-                                <div class="col-md-6 col-sm-6">
-                                    <div class="text_outer">
-                                        <label for="edit_emp_id" class="">Mentor</label>
-                                        <select class="select_status form-control" name="emp_id" id="edit_emp_id">
-                                            <option value="">Select</option>
-                                            @foreach($user as $usr)
-                                                <option value="{{ $usr->id }}">{{ $usr->name}}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-
-                            </div>
-
                             <hr>
+
                             <div class="row margin-top-30">
                                 <div class="form-group" style="width:100%;">
                                     <div class="col-md-12 col-sm-12">
-                                        <button type="button" onclick="updatePersonalDevelopment()"
-                                                class="btn-dark contact_btn" data-form="expences" id="create">Save
+                                        <button type="button" onclick="createPersonalDevelopment(event)" class="btn-dark contact_btn" data-form="expences" id="create">Save
                                         </button>
-                                        <span class="close close-span" data-dismiss="modal" aria-label="Close"><i
-                                                class="fa fa-arrow-left"></i>  Return to Personal Development Plan Reports</span>
+                                        <span class="close close-span" data-dismiss="modal" aria-label="Close"><i class="fa fa-arrow-left"></i>  Return to Personal Development Plan Reports</span>
                                     </div>
                                 </div>
                             </div>
-                        </form>
+                        {{ Form::close() }}
                     </div>
-
                 </div>
-
             </div>
         </div>
     </div>
@@ -254,6 +155,11 @@
             });
         });
 
+        function resetForm() {
+            document.getElementById('personal_development_plans_form').reset();
+            $('#create').attr('onclick', 'createPersonalDevelopment(event)');
+        }
+
         function createPersonalDevelopment(event) {
             event.preventDefault();
             $('#create').attr('disabled', 'disabled');
@@ -277,14 +183,9 @@
                 return false;
             }
 
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-Token': "{{csrf_token()}}"
-                }
-            });
             $.ajax({
                 method: "POST",
-                url: "{{ route('personal-development-plan.store') }}",
+                url: "{{ route('personal_development_plans.store') }}",
                 data: data,
                 dataType: 'JSON',
                 success: function (response) {
@@ -306,7 +207,7 @@
 
             $.ajax({
                 type: 'post',
-                url: "{{ route('personal-development-plan.archive') }}",
+                url: "{{ route('personal_development_plans.archive') }}",
                 data: data,
                 dataType: 'JSON',
                 success: function (results) {
@@ -355,8 +256,7 @@
 
         function openEditDevelopmentModel(id, route, update) {
             updateRoute = update;
-            $('#personal_development_update_id').val(id);
-            $('#personal_development_edit_modal').modal();
+            $('#personal_development_modal').modal();
 
             $.ajax({
                 type: 'GET',
@@ -375,18 +275,16 @@
                             selecteds = '';
                         }
 
-                        $('#edit_title').val(results.data.title);
-                        $('#edit_description').val(results.data.description);
-                        $('#edit_start_date').val(results.data.start_date.split(' ')[0]);
-                        $('#edit_end_date').val(results.data.end_date.split(' ')[0]);
+                        $('#create_title').val(results.data.title);
+                        $('#create_description').val(results.data.description);
 
-                        $('#edit_emp_id').html(mentor);
-                        $('#edit_emp_id').val(results.data.emp_id);
+                        $('#create_emp_id').html(mentor);
+                        $('#create_emp_id').val(results.data.emp_id);
 
-                        $('#update').attr('onclick', 'updatePersonalDevelopment(' + id + ')');
+                        $('#create').attr('onclick', 'updatePersonalDevelopment(' + id + ')');
                         $('#update').attr('data-id', id);
 
-                        $('#edit_start_date').flatpickr({
+                        $('#create_start_date').flatpickr({
                             altInput: true,
                             altFormat: 'j M, Y',
                             defaultDate: results.data.start_date,
@@ -401,7 +299,7 @@
                             },
                         });
 
-                        $('#edit_end_date').flatpickr({
+                        $('#create_end_date').flatpickr({
                             altInput: true,
                             altFormat: 'j M, Y',
                             defaultDate: results.data.end_date,
@@ -423,13 +321,14 @@
         }
 
         function updatePersonalDevelopment() {
-            let id = $('#personal_development_update_id').val();
+            let data = new FormData(document.getElementById('personal_development_plans_form'));
+            data.append('_method', 'put');
             $('#update').attr('disabled', 'disabled');
 
             $.ajax({
                 method: "POST",
                 url: updateRoute,
-                data: new FormData(document.getElementById('personal_development_update_form')),
+                data: data,
                 dataType: 'JSON',
                 processData: false,  // Important!
                 contentType: false,
@@ -458,6 +357,9 @@
                     $.ajax({
                         type: 'post',
                         url: route,
+                        data: {
+                            _method: 'delete'
+                        },
                         dataType: 'JSON',
                         success: function (results) {
                             if (results.success === true) {
@@ -476,7 +378,5 @@
                 return false;
             })
         }
-
     </script>
-
 @endsection

@@ -39,8 +39,8 @@ Route::group(['middleware' => ['auth']], function () {
     // Expenses
     Route::resource('expenses', 'ExpenseController')->middleware('can:expenses-enabled');
     Route::group(['prefix' => 'expenses', 'as' => 'expenses.', 'middleware' => 'can:expenses-enabled'], function () {
-        Route::post('/new/approve/{expenses}', 'ExpenseController@approve')->name('approve')->middleware('isAdmin');
-        Route::post('/new/reject/{expenses}', 'ExpenseController@reject')->name('reject')->middleware('isAdmin');
+        Route::post('/new/approve/{expense}', 'ExpenseController@approve')->name('approve')->middleware('isAdmin');
+        Route::post('/new/reject/{expense}', 'ExpenseController@reject')->name('reject')->middleware('isAdmin');
 
         Route::post('/new/history', 'ExpenseController@searchHistory')->name('history');
         Route::POST('/pending', 'ExpenseController@searchPending')->name('pending');
@@ -60,21 +60,12 @@ Route::group(['middleware' => ['auth']], function () {
     });
 
     // Personal development plan
-    Route::group(['prefix' => 'personal-development-plan', 'as' => 'personal-development-plan.', 'middleware' => 'can:classroom-enabled'], function () {
-
-        Route::get('/', 'PersonalDevelopmentPlanController@index')->name('index');
+    Route::resource('personal_development_plans', 'PersonalDevelopmentPlanController')->middleware('can:classroom-enabled');
+    Route::group(['prefix' => 'personal_development_plans', 'as' => 'personal_development_plans.', 'middleware' => 'can:classroom-enabled'], function () {
         Route::post('/comment/store/{id}', 'PersonalDevelopmentPlanController@commentStore')->name('comment.store');
         Route::post('/comment/update/{id}', 'PersonalDevelopmentPlanController@commentUpdate')->name('comment.update');
 
-        Route::post('/store', 'PersonalDevelopmentPlanController@store')->name('store');
-
-        Route::get('/edit/{id}', 'PersonalDevelopmentPlanController@edit')->name('edit');
-        Route::POST('/update/{id}', 'PersonalDevelopmentPlanController@update')->name('update');
-
-        Route::get('/show/{id}', 'PersonalDevelopmentPlanController@show')->name('show');
-
         Route::post('/archive', 'PersonalDevelopmentPlanController@searchArchive')->name('archive');
-        Route::POST('/destroy/{id}', 'PersonalDevelopmentPlanController@destroy')->name('destroy');
     });
 
     // Company

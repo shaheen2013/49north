@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
@@ -45,25 +44,23 @@ class PersonalDevelopmentPlanController extends Controller
      */
     public function searchArchive(Request $request)
     {
-
         $data = $this->search('search');
 
         if (count($data)) {
             foreach ($data as $datum) {
                 $routes = [];
-                $routes['commentStore'] = route('personal-development-plan.comment.store', $datum->id);
-                $routes['commentUpdate'] = route('personal-development-plan.comment.update', $datum->id);
-                $routes['edit'] = route('personal-development-plan.edit', $datum->id);
-                $routes['update'] = route('personal-development-plan.update', $datum->id);
-                $routes['show'] = route('personal-development-plan.show', $datum->id);
-                $routes['destroy'] = route('personal-development-plan.destroy', $datum->id);
+                $routes['commentStore'] = route('personal_development_plans.comment.store', $datum->id);
+                $routes['commentUpdate'] = route('personal_development_plans.comment.update', $datum->id);
+                $routes['edit'] = route('personal_development_plans.edit', $datum->id);
+                $routes['update'] = route('personal_development_plans.update', $datum->id);
+                $routes['show'] = route('personal_development_plans.show', $datum->id);
+                $routes['destroy'] = route('personal_development_plans.destroy', $datum->id);
                 $datum->routes = $routes;
             }
         }
 
         return response()->json(['status' => 'success', 'data' => $data]);
     }
-
 
     /**
      * Show the form for creating a new resource.
@@ -87,8 +84,6 @@ class PersonalDevelopmentPlanController extends Controller
             'description' => 'required|string|max:491',
             'start_date' => 'required',
             'end_date' => 'required',
-            // 'comment' => 'string|max:491',
-
         ];
 
         $validator = validator($request->all(), $rules, []);
@@ -156,7 +151,6 @@ class PersonalDevelopmentPlanController extends Controller
      */
     public function commentUpdate(Request $request, $id)
     {
-
         // Validate form data
         $rules = [
             'comment' => 'string|max:491',
@@ -184,21 +178,20 @@ class PersonalDevelopmentPlanController extends Controller
 
     }
 
-
     /**
      * Display the specified resource.
      * @param $id
      * @return Factory|View
      */
-    public function show($id)
+    public function show(PersonalDevelopmentPlan $personalDevelopmentPlan)
     {
         $activeMenu = 'classroom';
-        $show = PersonalDevelopmentPlan::with('employee')->find($id);
+        $show = PersonalDevelopmentPlan::with('employee')->findOrFail($personalDevelopmentPlan->id);
 
         if ($show->comment) {
-            $route = route('personal-development-plan.comment.update', $show->id);
+            $route = route('personal_development_plans.comment.update', $show->id);
         } else {
-            $route = route('personal-development-plan.comment.store', $show->id);
+            $route = route('personal_development_plans.comment.store', $show->id);
         }
 
         return view('personal-development-plan.show', compact('show', 'user', 'activeMenu', 'route'));
@@ -210,9 +203,9 @@ class PersonalDevelopmentPlanController extends Controller
      * @param $id
      * @return JsonResponse
      */
-    public function edit($id)
+    public function edit(PersonalDevelopmentPlan $personalDevelopmentPlan)
     {
-        $data = PersonalDevelopmentPlan::findOrFail($id);
+        $data = PersonalDevelopmentPlan::findOrFail($personalDevelopmentPlan->id);
         $data['user'] = User::get();
         if ($data) {
             return response()->json(['status' => 'success', 'data' => $data]);
@@ -227,9 +220,8 @@ class PersonalDevelopmentPlanController extends Controller
      * @param $id
      * @return JsonResponse
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, PersonalDevelopmentPlan $personalDevelopmentPlan)
     {
-
         // Validate form data
         $rules = [
             'description' => 'string|max:491',
@@ -243,7 +235,7 @@ class PersonalDevelopmentPlanController extends Controller
 
         try {
             // return $request->all();
-            $data = PersonalDevelopmentPlan::findOrFail($id);
+            $data = PersonalDevelopmentPlan::findOrFail($personalDevelopmentPlan->id);
             $data->emp_id = $request->emp_id;
             $data->title = $request->title;
             $data->description = $request->description;
@@ -267,9 +259,9 @@ class PersonalDevelopmentPlanController extends Controller
      * @param $id
      * @return JsonResponse
      */
-    public function destroy($id)
+    public function destroy(PersonalDevelopmentPlan $personalDevelopmentPlan)
     {
-        $benefit = PersonalDevelopmentPlan::findOrFail($id);
+        $benefit = PersonalDevelopmentPlan::findOrFail($personalDevelopmentPlan->id);
         if ($benefit->delete() == 1) {
             $success = true;
             $message = "Journal deleted successfully";
