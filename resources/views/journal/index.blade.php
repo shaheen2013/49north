@@ -3,7 +3,6 @@
 @include('modal')
 @section('content1')
 
-
     <div class="well-default-trans">
         <div class="tab-pane" id="nav-mileage" role="tabpanel" aria-labelledby="nav-mileage-tab">
             <div class="mileage inner-tab-box">
@@ -14,7 +13,6 @@
                         </h3>
                         <br>
                     </div>
-
                     <div class="col-sm-12" id="pending_div">
                         <div class="row">
                             <div class="col-sm-2">

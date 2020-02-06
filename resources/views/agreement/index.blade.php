@@ -24,36 +24,27 @@
                                     @if($user->agreement)
                                         <a href="javascript:void(0);" onclick="show_modal_agreement('{{$user->id}}','EA')">Edit</a>
                                         <a href="{{asset('agreement/'.$user->agreement)}}" target="_blank">View</a>
-                                        <a href="javascript:void(0);" onclick="delete_agreement('{{$user->id}}','EA')"
-                                           class="down">DELETE</a>
+                                        <a href="javascript:void(0);" onclick="delete_agreement('{{$user->id}}','EA')" class="down">DELETE</a>
                                     @else
                                         <a href="javascript:void(0);" onclick="show_modal_agreement('{{$user->id}}','EA')">Upload</a>
                                     @endif
                                 </td>
-
                                 <td>
                                     @if($user->coc_agreement)
                                         <a href="javascript:void(0);" onclick="show_modal_agreement('{{$user->id}}','COC')">Edit</a>
                                         <a href="{{asset('codeofconduct/'.$user->coc_agreement)}}" target="_blank">View</a>
-
-                                        <a href="javascript:void(0);" onclick="delete_agreement('{{$user->id}}','COC')"
-                                           class="down">DELETE</a>
+                                        <a href="javascript:void(0);" onclick="delete_agreement('{{$user->id}}','COC')" class="down">DELETE</a>
                                     @else
                                         <a href="javascript:void(0);" onclick="show_modal_agreement('{{$user->id}}','COC')">Upload</a>
                                     @endif
-
                                 </td>
-
                             </tr>
                             <tr class="spacer"></tr>
-
                             </tbody>
                         @endforeach
                     @endif
                 </table>
             </div>
-
-
         </div>
     </div>
 @endsection

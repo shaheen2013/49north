@@ -105,7 +105,7 @@ class ExpenseController extends Controller
 
     /**
      * Show the form for editing the specified resource.
-     * @param $id
+     * @param Expenses $expense
      * @return JsonResponse
      */
     public function edit(Expenses $expense)
@@ -186,7 +186,7 @@ class ExpenseController extends Controller
 
     /**
      * Remove the specified resource from storage.
-     * @param int $id
+     * @param Expenses $expense
      * @return JsonResponse
      */
     public function destroy(Expenses $expense)
@@ -239,7 +239,7 @@ class ExpenseController extends Controller
 
     /**
      * Change the resource status approve.
-     * @param int $id
+     * @param Expenses $expense
      * @return JsonResponse
      */
     public function approve(Expenses $expense)
@@ -256,7 +256,7 @@ class ExpenseController extends Controller
 
     /**
      * Change the resource status reject.
-     * @param int $id
+     * @param Expenses $expense
      * @return JsonResponse
      */
     public function reject(Expenses $expense)

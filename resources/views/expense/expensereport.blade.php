@@ -22,15 +22,14 @@
                         </div>
                         <div class="col-sm-2">
                             <div class="form-group">
-                                <input type="date" name="pending_date" id="date" placeholder="Select Date"
-                                       class="form-control-new" onChange="searchExpensesPending()">
+                                <input type="date" name="pending_date" id="date" placeholder="Select Date" class="form-control-new" onChange="searchExpensesPending()">
                             </div>
                         </div>
                         <div class="col-sm-1">
                             <div id="wait"></div>
                         </div>
                         <div class="col-sm-7">
-                            <a href="javascript:void(0)" class="_new_icon_button_1" data-toggle="modal" data-target="#expense-modal"> <i class="fa fa-plus"></i> </a>
+                            <a href="javascript:void(0)" class="_new_icon_button_1" data-toggle="modal" data-target="#expense-modal" onclick="openExpenseForm();"> <i class="fa fa-plus"></i> </a>
                         </div>
                         <div class="col-sm-12">
                             <table class="table _table _table-bordered">
@@ -107,11 +106,11 @@
                 <!-- body modal -->
                 <div class="modal-body">
                     <div class="col-md-12" style="margin-top:40px;margin-bottom:20px;">
-                        <form class="expences" action="{{route('expenses.store')}}" method="POST" id="addexpense-form" enctype="multipart/form-data" novalidate>
+                        {{ Form::open(array('id'=>'Expense_form_id', 'url' => route('expenses.store'), 'enctype' => 'multipart/form-data', 'class' => 'expences')) }}
                             <div class="row">
                                 <div class="col-md-6 col-sm-6">
                                     <div class="text_outer">
-                                        <label for="company" class="">Company</label>
+                                        {{ Form::label('company', 'Company') }}
                                         <select class="select_status form-control" name="company" id="company">
                                             <option value="">Select</option>
                                             @if(auth()->user()->is_admin)
@@ -129,8 +128,8 @@
 
                                 <div class="col-md-6 col-sm-6">
                                     <div class="text_outer">
-                                        <label for="expense_date" class="">Date</label>
-                                        <input type="date" placeholder="Select Date" class="flatpickr form-control" name="date" id="expense_date">
+                                        {{ Form::label('expense_date', 'Date') }}
+                                        {{ Form::text('date', null, array('class' => 'flatpickr form-control','placeholder'=>'Select Date','id'=>'expense_date')) }}
                                     </div>
                                 </div>
                             </div>
@@ -139,7 +138,7 @@
                             <div class="row">
                                 <div class="col-md-6 col-sm-6">
                                     <div class="text_outer">
-                                        <label for="category" class="">Category</label>
+                                        {{ Form::label('category', 'Category') }}
                                         <select class="select_status form-control" name="category" id="category">
                                             <option value="">Select</option>
                                             @foreach($category as $category_ex_report)
@@ -151,7 +150,7 @@
                                 </div>
                                 <div class="col-md-6 col-sm-6">
                                     <div class="text_outer">
-                                        <label for="purchase" class="">Purchase via</label>
+                                        {{ Form::label('purchase', 'Purchase via') }}
                                         <select class="select_status form-control" name="purchase" id="purchase">
                                             <option value="">Select</option>
                                             @foreach($purchases as $purchases_ex_report)
@@ -167,7 +166,7 @@
                             <div class="row">
                                 <div class="col-md-6 col-sm-6">
                                     <div class="text_outer">
-                                        <label for="project" class="">Project</label>
+                                        {{ Form::label('project', 'Project') }}
                                         <select class="select_status form-control" name="project" id="project">
                                             <option value="">Select</option>
                                             @foreach($project as $project_ex_report)
@@ -180,8 +179,8 @@
                                 <div class="col-md-6 col-sm-6 image-chooser">
                                     <div class="image-chooser-preview"></div>
                                     <div class="text_outer">
-                                        <label for="name"><i class="fa fa-fw fa-photo"></i> Select Receipt</label>
-                                        <input type="file" onchange="renderChoosedFile(this)" name="receipt" class="form-control _input_choose_file">
+                                        {!! Html::decode(Form::label('name', '<i class="fa fa-fw fa-photo"></i>Select Receipt'))!!}
+                                        {{ Form::file('receipt', array('class' => 'form-control _input_choose_file', 'id' => 'receipt', 'onChange' => 'renderChoosedFile(this)')) }}
                                     </div>
                                 </div>
                             </div>
@@ -190,25 +189,25 @@
                             <div class="row">
                                 <div class="col-md-6 col-sm-6">
                                     <div class="text_outer">
-                                        <label for="description" class="">Description</label>
-                                        <input type="text" id="description" name="description" class="form-control" placeholder="Insert text here">
+                                        {{ Form::label('description', 'Description') }}
+                                        {{ Form::text('description', null, array('class' => 'form-control','placeholder' => 'Insert text here','id' => 'description')) }}
                                     </div>
                                 </div>
                                 <div class="col-md-6 col-sm-6">
                                     <div class="col-md-12 col-sm-12">
                                         <label class="form-check-label">
-                                            <input class="form-check-input" type="checkbox" name="billable"> Billable
+                                            {!! Form::checkbox('billable', null, false, array('class' => 'form-check-input', 'id' => 'billable')) !!} Billable
                                         </label>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-12" style="display:inline-flex;">
                                             <div class="col-md-7 col-sm-7">
                                                 <label class="form-check-label">
-                                                    <input class="form-check-input" type="checkbox" id="authorization"> Received authorization
+                                                    {!! Form::checkbox('received_auth', null, false, array('class' => 'form-check-input', 'id' => 'authorization')) !!} Received authorization
                                                 </label>
                                             </div>
                                             <div class="col-md-5 col-sm-5">
-                                                <input type="text" id="ireceived_auth" onkeyup="checkAuthorization('#authorization')" name="received_auth" class="form-control" placeholder="" style="border:0px; border-bottom:1px solid;padding: 0px;background-color: #fff !important;">
+                                                {{ Form::text('received_auth', null, array('class' => 'form-control', 'placeholder' => '','id' => 'ireceived_auth', 'style' => 'border:0px; border-bottom:1px solid;padding: 0px;background-color: #fff !important;', 'onkeyup' => 'checkAuthorization("#authorization")')) }}
                                             </div>
                                         </div>
                                     </div>
@@ -219,14 +218,14 @@
                             <div class="row">
                                 <div class="col-md-6 col-sm-6">
                                     <div class="text_outer">
-                                        <label for="subtotal" class="">Subtotal</label>
-                                        <input type="number" id="subtotal" name="subtotal" class="form-control" placeholder="Insert text here">
+                                        {{ Form::label('subtotal', 'Subtotal') }}
+                                        {{ Form::number('subtotal', null, array('class' => 'form-control','placeholder' => 'Insert text here','id' => 'subtotal')) }}
                                     </div>
                                 </div>
                                 <div class="col-md-6 col-sm-6">
                                     <div class="text_outer">
-                                        <label for="gst" class="">GST</label>
-                                        <input type="number" id="gst" name="gst" class="form-control" placeholder="Insert Figure here">
+                                        {{ Form::label('gst', 'GST') }}
+                                        {{ Form::number('gst', null, array('class' => 'form-control','placeholder' => 'Insert Figure here','id' => 'gst')) }}
                                     </div>
                                 </div>
                             </div>
@@ -235,14 +234,14 @@
                             <div class="row">
                                 <div class="col-md-6 col-sm-6">
                                     <div class="text_outer">
-                                        <label for="pst" class="">PST</label>
-                                        <input type="number" id="pst" name="pst" class="form-control" placeholder="Insert Figure here">
+                                        {{ Form::label('pst', 'PST') }}
+                                        {{ Form::number('pst', null, array('class' => 'form-control','placeholder' => 'Insert Figure here','id' => 'pst')) }}
                                     </div>
                                 </div>
                                 <div class="col-md-6 col-sm-6">
                                     <div class="text_outer">
-                                        <label for="total" class="">Total</label>
-                                        <input type="number" id="total" name="total" class="form-control" placeholder="Insert Figure here">
+                                        {{ Form::label('total', 'Total') }}
+                                        {{ Form::number('total', null, array('class' => 'form-control','placeholder' => 'Insert Figure here','id' => 'total')) }}
                                     </div>
                                 </div>
                             </div>
@@ -251,186 +250,18 @@
                                 <div class="form-group" style="width:100%;">
                                     <div class="col-md-12 col-sm-12">
                                         {{ csrf_field() }}
-                                        <input type="hidden" name="emp_id" value="{{ auth()->user()->id }}">
-                                        <button type="button" onclick="storeExpense()" class="btn-dark contact_btn" data-form="expences">Save</button>
+                                        {{ Form::hidden('emp_id', auth()->user()->id) }}
+                                        <button type="button" onclick="updateExpense({{ auth()->user()->id }})" class="btn-dark contact_btn" data-form="expences" id="create">Save</button>
                                         <span class="close close-span" data-dismiss="modal" aria-label="Close"><i class="fa fa-arrow-left"></i> Return to Expense Reports</span>
                                     </div>
                                 </div>
                             </div>
-                        </form>
-                    </div>
-
-                </div>
-
-            </div>
-        </div>
-    </div>
-
-    <div id="expense-modal-edit2" class="modal fade bs-example-modal-lg expense-modal-edit" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-body">
-                    <div class="col-md-12" style="margin-top:40px;margin-bottom:20px;">
-                        <form id="editExpenseForm" enctype="multipart/form-data" novalidate>
-                            <div class="row">
-                                <div class="col-md-6 col-sm-6">
-                                    <div class="text_outer">
-                                        <label for="edit_company" class="">Company</label>
-                                        <select class="select_status form-control" name="company" id="edit_company">
-                                            <option value="">Select</option>
-                                            @if(auth()->user()->is_admin)
-                                                @foreach($companies as $company_ex_report)
-                                                    <option value="{{ $company_ex_report->id }}">{{ $company_ex_report->companyname }}</option>
-                                                @endforeach
-                                            @else
-                                                @if(auth()->user()->employee_details && auth()->user()->employee_details->company_id)
-                                                    <option value="{{ auth()->user()->employee_details->company_id }}" selected>{{ auth()->user()->employee_details->company->companyname }}</option>
-                                                @endif
-                                            @endif
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-md-6 col-sm-6">
-                                    <div class="text_outer">
-                                        <label for="edit_date" class="">Date</label>
-                                        <input type="date" placeholder="Select Date" class="flatpickr form-control" name="date" id="edit_date">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="clearfix"></div>
-
-                            <div class="row">
-                                <div class="col-md-6 col-sm-6">
-                                    <div class="text_outer">
-                                        <label for="edit_category" class="">Category</label>
-                                        <select class="select_status form-control" name="category" id="edit_category">
-                                            <option value="">Select</option>
-                                            @foreach($category as $category_ex_report)
-                                                <option
-                                                    value="{{ $category_ex_report->id }}">{{ $category_ex_report->categoryname }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-md-6 col-sm-6">
-                                    <div class="text_outer">
-                                        <label for="edit_purchase" class="">Purchase via</label>
-                                        <select class="select_status form-control" name="purchase" id="edit_purchase">
-                                            <option value="">Select</option>
-                                            @foreach($purchases as $purchases_ex_report)
-                                                <option
-                                                    value="{{ $purchases_ex_report->id }}">{{ $purchases_ex_report->purchasename }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="clearfix"></div>
-
-                            <div class="row">
-                                <div class="col-md-6 col-sm-6">
-                                    <div class="text_outer">
-                                        <label for="edit_project" class="">Project</label>
-                                        <select class="select_status form-control" name="project" id="edit_project">
-                                            <option value="">Select</option>
-                                            @foreach($project as $project_ex_report)
-                                                <option
-                                                    value="{{ $project_ex_report->id }}">{{ $project_ex_report->projectname }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-md-6 col-sm-6 image-chooser">
-                                    <div class="image-chooser-preview"></div>
-                                    <div class="text_outer">
-                                        <label for="name"><i class="fa fa-fw fa-photo"></i> Select Receipt</label>
-                                        <span id="edit_receipt_show" style="position: relative;z-index: 5"></span>
-                                        <input type="file" onchange="renderChoosedFile(this)" name="receipt" class="form-control _input_choose_file">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="clearfix"></div>
-
-                            <div class="row">
-                                <div class="col-md-6 col-sm-6">
-                                    <div class="text_outer">
-                                        <label for="edit_description" class="">Description</label>
-                                        <input type="text" name="description" id="edit_description" class="form-control" placeholder="Insert text here">
-                                    </div>
-                                </div>
-                                <div class="col-md-6 col-sm-6">
-                                    <div class="col-md-12 col-sm-12">
-                                        <label class="form-check-label">
-                                            <input class="form-check-input" type="checkbox" name="billable" id="edit_billable"> Billable
-                                        </label>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-12" style="display:inline-flex;">
-                                            <div class="col-md-7 col-sm-7">
-                                                <label class="form-check-label">
-                                                    <input class="form-check-input" type="checkbox" id="authorization-edit"> Received authorization
-                                                </label>
-                                            </div>
-                                            <div class="col-md-5 col-sm-5">
-                                                <input type="text" name="received_auth" onkeyup="checkAuthorization('#authorization-edit')" id="received_auth" class="form-control" placeholder="" style="border:0px; border-bottom:1px solid;padding: 0px;background-color: #fff !important;">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="clearfix"></div>
-
-                            <div class="row">
-                                <div class="col-md-6 col-sm-6">
-                                    <div class="text_outer">
-                                        <label for="edit_subtotal" class="">Subtotal</label>
-                                        <input type="number" id="edit_subtotal" name="subtotal" class="form-control" placeholder="Insert text here">
-                                    </div>
-                                </div>
-                                <div class="col-md-6 col-sm-6">
-                                    <div class="text_outer">
-                                        <label for="edit_gst" class="">GST</label>
-                                        <input type="number" id="edit_gst" name="gst" class="form-control" placeholder="Insert Figure here">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="clearfix"></div>
-
-                            <div class="row">
-                                <div class="col-md-6 col-sm-6">
-                                    <div class="text_outer">
-                                        <label for="edit_pst" class="">PST</label>
-                                        <input type="number" id="edit_pst" name="pst" class="form-control" placeholder="Insert Figure here">
-                                    </div>
-                                </div>
-                                <div class="col-md-6 col-sm-6">
-                                    <div class="text_outer">
-                                        <label for="edit_total" class="">Total</label>
-                                        <input type="number" id="edit_total" name="total" class="form-control" placeholder="Insert Figure here">
-                                    </div>
-                                </div>
-                            </div>
-                            <hr>
-                            <div class="row margin-top-30">
-                                <div class="form-group" style="width:100%;">
-                                    <div class="col-md-12 col-sm-12">
-                                        {{ csrf_field() }}
-                                        @method('put')
-                                        <input type="hidden" name="emp_id" value="{{ auth()->user()->id }}">
-                                        <button type="button" id="update" onclick="updateExpense({{ auth()->user()->id }})" class="btn-dark contact_btn" data-form="expences">
-                                            Save
-                                        </button>
-                                        <span class="close close-span" data-dismiss="modal" aria-label="Close"><i class="fa fa-arrow-left"></i> Return to Expense Reports</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
+                        {{ Form::close() }}
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <!--ajax come modal-->
 
     <script type="text/javascript">
         let id = from = to = history_from = history_to = updateRoute = null;
@@ -495,6 +326,211 @@
                 },
             });
         });
+
+        function openExpenseForm() {
+            $('#Expense_form_id').trigger('reset');
+            $('#create').attr('onclick', 'storeExpense()');
+        }
+
+        function storeExpense() {
+            event.preventDefault();
+
+            if ($('#authorization').prop('checked')) {
+                $('#Expense_form_id').submit();
+            } else {
+                swal({
+                    title: "Confirm",
+                    text: "Are you sure want to create without receive authorization!",
+                    type: "warning",
+                    showCancelButton: !0,
+                    confirmButtonText: "Yes, create!",
+                    cancelButtonText: "No, cancel!",
+                    reverseButtons: !0
+                }).then(function (e) {
+                    if (e.value === true) {
+                        $('#Expense_form_id').submit();
+                    } else {
+                        e.dismiss;
+                    }
+                }, function (dismiss) {
+                    return false;
+                })
+            }
+        }
+
+        function openEditExpenseModel(id, route, update) {
+            updateRoute = update;
+            $('#expense-modal').modal();
+            $('#create').attr('onclick', 'updateExpense(' + id + ')');
+
+            $.ajax({
+                type: 'GET',
+                url: route,
+                dataType: 'JSON',
+                success: function (results) {
+                    if (results.status === 'success') {
+                        let company = '';
+                        let selecteds = '';
+
+                        for (let i = 0; i < results.data.companies.length; i++) {
+                            if (results.data.companies[i].id === results.data.expense.company) {
+                                selecteds = 'selected';
+                            }
+                            company += ` <option value="${results.data.companies[i].id}" ${selecteds}>${results.data.companies[i].companyname}</option>`;
+                            selecteds = '';
+                        }
+
+                        let category = '';
+                        let selectedc = '';
+
+                        for (let i = 0; i < results.data.category.length; i++) {
+                            if (results.data.category[i].id === results.data.expense.category) {
+                                selectedc = 'selected';
+                            }
+                            category += ` <option value="${results.data.category[i].id}" ${selectedc}>${results.data.category[i].categoryname}</option>`;
+                            selectedc = '';
+                        }
+
+                        let purchase = '';
+                        let selectedp = '';
+
+                        for (let i = 0; i < results.data.purchases.length; i++) {
+                            if (results.data.purchases[i].id === results.data.expense.purchase) {
+                                selectedp = 'selected';
+                            }
+                            purchase += ` <option value="${results.data.purchases[i].id}" ${selectedp}>${results.data.purchases[i].purchasename}</option>`;
+                            selectedp = '';
+                        }
+
+                        let project = '';
+                        let selectedpr = '';
+
+                        for (let i = 0; i < results.data.project.length; i++) {
+                            if (results.data.project[i].id === results.data.expense.project) {
+                                selectedpr = 'selected';
+                            }
+                            project += ` <option value="${results.data.project[i].id}" ${selectedpr}>${results.data.project[i].projectname}</option>`;
+                            selectedpr = '';
+                        }
+
+                        let check = '';
+
+                        if (results.data.expense.billable != null) {
+                            check = $('#billable').attr('checked', true);
+                        } else {
+                            check = $('#billable').val(results.data.expense.billable);
+                        }
+
+                        if (results.data.expense.billable != null) {
+                            check = $('#billable').attr('checked', true);
+                        } else {
+                            check = $('#billable').val(results.data.expense.billable);
+                        }
+
+                        $('#company').html(company);
+                        $('#category').val(results.data.expense.company);
+                        $('#category').html(category);
+                        $('#category').val(results.data.expense.category);
+                        $('#purchase').html(purchase);
+                        $('#purchase').val(results.data.expense.purchase);
+                        $('#project').html(project);
+                        $('#project').val(results.data.expense.project);
+                        $('#description').val(results.data.expense.description);
+
+                        if (results.data.expense.receipt != null) {
+                            $('#receipt_show').html('<a href="{{ fileUrl() }}' + results.data.expense.receipt + '" target="_blank"><i class="fa fa-file-pdf-o"></i><a>');
+                        }
+
+                        $('#billable').val(check);
+                        $('#ireceived_auth').val(results.data.expense.received_auth);
+                        $('#subtotal').val(results.data.expense.subtotal);
+                        $('#gst').val(results.data.expense.gst);
+                        $('#pst').val(results.data.expense.pst);
+                        $('#total').val(results.data.expense.total);
+
+                        $('#expense_date').flatpickr({
+                            altInput: true,
+                            altFormat: 'j M, Y',
+                            defaultDate: results.data.expense.date,
+                            onChange: function (selectedDates, dateStr, instance) {
+                                from = formatDate(selectedDates[0]);
+                                to = formatDate(selectedDates[1]);
+
+                                if (selectedDates[0] === undefined || (selectedDates[0] !== undefined && selectedDates[1] !== undefined)) {
+                                    if (selectedDates[0] === undefined) {
+                                        from = to = null;
+                                    }
+
+                                    searchExpensesPending();
+                                }
+                            },
+                        });
+                    } else {
+                        swal("Error!", results.message, "error");
+                    }
+                }
+            });
+        }
+
+        function updateExpense(id) {
+            if ($('#authorization-edit').prop('checked')) {
+                submitUpdateForm(id);
+            } else {
+                swal({
+                    title: "Confirm",
+                    text: "Are you sure want to update without receive authorization!",
+                    type: "warning",
+                    showCancelButton: !0,
+                    confirmButtonText: "Yes, create!",
+                    cancelButtonText: "No, cancel!",
+                    reverseButtons: !0
+                }).then(function (e) {
+                    if (e.value === true) {
+                        submitUpdateForm(id);
+                    } else {
+                        e.dismiss;
+                    }
+
+                }, function (dismiss) {
+                    return false;
+                })
+            }
+        }
+
+        function submitUpdateForm(id) {
+            $('#update').attr('disabled', 'disabled');
+            var data = new FormData(document.getElementById('Expense_form_id'));
+            data.append('_method', 'put');
+
+            $.ajax({
+                method: "post",
+                url: updateRoute,
+                data: data,
+                enctype: 'multipart/form-data',
+                processData: false,  // Important!
+                contentType: false,
+                cache: false,
+                success: function (response) {
+                    if (response.status == 'success') {
+                        $.toaster({message: 'Updated successfully', title: 'Success', priority: 'success'});
+                        searchExpensesPending();
+                        searchExpensesHistory();
+                        $('#expense-modal-edit2').modal('hide');
+                        $('#update').removeAttr('disabled');
+                    } else {
+                        if (response.errors === undefined) {
+                            swal("Error!", response.msg, "error");
+                        } else {
+                            let errors = '';
+                            for (let [key, value] of Object.entries(response.errors)) {
+                                errors += value[0] + '<br>';
+                            }
+                            swal("Error!", errors, "error");
+                        }
+                    }
+                }
+            });
+        }
 
         function searchExpensesPending() {
             let pending_search = $('#pending_search').val();
@@ -671,172 +707,7 @@
             })
         }
 
-        function openEditExpenseModel(id, route, update) {
-            updateRoute = update;
-            $('#expense-modal-edit2').modal();
-
-            $.ajax({
-                type: 'GET',
-                url: route,
-                dataType: 'JSON',
-                success: function (results) {
-                    if (results.status === 'success') {
-                        let company = '';
-                        let selecteds = '';
-                        for (let i = 0; i < results.data.companies.length; i++) {
-                            if (results.data.companies[i].id === results.data.expense.company) {
-                                selecteds = 'selected';
-                            }
-                            company += ` <option value="${results.data.companies[i].id}" ${selecteds}>${results.data.companies[i].companyname}</option>`;
-                            selecteds = '';
-                        }
-
-                        let category = '';
-                        let selectedc = '';
-                        for (let i = 0; i < results.data.category.length; i++) {
-                            if (results.data.category[i].id === results.data.expense.category) {
-                                selectedc = 'selected';
-                            }
-                            category += ` <option value="${results.data.category[i].id}" ${selectedc}>${results.data.category[i].categoryname}</option>`;
-                            selectedc = '';
-                        }
-
-                        let purchase = '';
-                        let selectedp = '';
-                        for (let i = 0; i < results.data.purchases.length; i++) {
-                            if (results.data.purchases[i].id === results.data.expense.purchase) {
-                                selectedp = 'selected';
-                            }
-                            purchase += ` <option value="${results.data.purchases[i].id}" ${selectedp}>${results.data.purchases[i].purchasename}</option>`;
-                            selectedp = '';
-                        }
-
-                        let project = '';
-                        let selectedpr = '';
-                        for (let i = 0; i < results.data.project.length; i++) {
-                            if (results.data.project[i].id === results.data.expense.project) {
-                                selectedpr = 'selected';
-                            }
-                            project += ` <option value="${results.data.project[i].id}" ${selectedpr}>${results.data.project[i].projectname}</option>`;
-                            selectedpr = '';
-                        }
-                        let check = '';
-                        if (results.data.expense.billable != null) {
-                            check = $('#edit_billable').attr('checked', true);
-                        } else {
-                            check = $('#edit_billable').val(results.data.expense.billable);
-                        }
-                        if (results.data.expense.billable != null) {
-                            check = $('#edit_billable').attr('checked', true);
-                        } else {
-                            check = $('#edit_billable').val(results.data.expense.billable);
-                        }
-
-                        $('#edit_company').html(company);
-                        $('#edit_category').val(results.data.expense.company);
-                        $('#edit_category').html(category);
-                        $('#edit_category').val(results.data.expense.category);
-                        $('#edit_purchase').html(purchase);
-                        $('#edit_purchase').val(results.data.expense.purchase);
-                        $('#edit_project').html(project);
-                        $('#edit_project').val(results.data.expense.project);
-                        $('#edit_description').val(results.data.expense.description);
-                        if (results.data.expense.receipt != null) {
-                            $('#edit_receipt_show').html('<a href="{{ fileUrl() }}' + results.data.expense.receipt + '" target="_blank"><i class="fa fa-file-pdf-o"></i><a>');
-                        }
-                        $('#edit_billable').val(check);
-                        $('#received_auth').val(results.data.expense.received_auth);
-                        $('#edit_subtotal').val(results.data.expense.subtotal);
-                        $('#edit_gst').val(results.data.expense.gst);
-                        $('#edit_pst').val(results.data.expense.pst);
-                        $('#edit_total').val(results.data.expense.total);
-
-                        $('#update').attr('onclick', 'updateExpense(' + id + ')');
-
-                        $('#edit_date').flatpickr({
-                            altInput: true,
-                            altFormat: 'j M, Y',
-                            defaultDate: results.data.expense.date,
-                            onChange: function (selectedDates, dateStr, instance) {
-                                from = formatDate(selectedDates[0]);
-                                to = formatDate(selectedDates[1]);
-
-                                if (selectedDates[0] === undefined || (selectedDates[0] !== undefined && selectedDates[1] !== undefined)) {
-                                    if (selectedDates[0] === undefined) {
-                                        from = to = null;
-                                    }
-
-                                    searchExpensesPending();
-                                }
-                            },
-                        });
-                    } else {
-                        swal("Error!", results.message, "error");
-                    }
-                }
-            });
-        }
-
-        function updateExpense(id) {
-            if ($('#authorization-edit').prop('checked')) {
-                submitUpdateForm(id);
-            } else {
-                swal({
-                    title: "Confirm",
-                    text: "Are you sure want to update without receive authorization!",
-                    type: "warning",
-                    showCancelButton: !0,
-                    confirmButtonText: "Yes, create!",
-                    cancelButtonText: "No, cancel!",
-                    reverseButtons: !0
-                }).then(function (e) {
-                    if (e.value === true) {
-                        submitUpdateForm(id);
-                    } else {
-                        e.dismiss;
-                    }
-
-                }, function (dismiss) {
-                    return false;
-                })
-            }
-        }
-
-        function submitUpdateForm(id) {
-            $('#update').attr('disabled', 'disabled');
-            var data = new FormData(document.getElementById('editExpenseForm'));
-
-            $.ajax({
-                method: "post",
-                url: updateRoute,
-                data: data,
-                enctype: 'multipart/form-data',
-                processData: false,  // Important!
-                contentType: false,
-                cache: false,
-                success: function (response) {
-                    if (response.status == 'success') {
-                        $.toaster({message: 'Updated successfully', title: 'Success', priority: 'success'});
-                        searchExpensesPending();
-                        searchExpensesHistory();
-                        $('#expense-modal-edit2').modal('hide');
-                        $('#update').removeAttr('disabled');
-                    } else {
-                        if (response.errors === undefined) {
-                            swal("Error!", response.msg, "error");
-                        } else {
-                            let errors = '';
-                            for (let [key, value] of Object.entries(response.errors)) {
-                                errors += value[0] + '<br>';
-                            }
-                            swal("Error!", errors, "error");
-                        }
-                    }
-                }
-            });
-        }
-
-        function expence_approve_new(id, route) {
+        function approveExpense(id, route) {
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-Token': "{{csrf_token()}}"
@@ -871,33 +742,6 @@
                     }, 1000);
                 }
             });
-        }
-
-        function storeExpense() {
-            event.preventDefault();
-
-            if ($('#authorization').prop('checked')) {
-                $('#addexpense-form').submit();
-            } else {
-                swal({
-                    title: "Confirm",
-                    text: "Are you sure want to create without receive authorization!",
-                    type: "warning",
-                    showCancelButton: !0,
-                    confirmButtonText: "Yes, create!",
-                    cancelButtonText: "No, cancel!",
-                    reverseButtons: !0
-                }).then(function (e) {
-                    if (e.value === true) {
-                        $('#addexpense-form').submit();
-                    } else {
-                        e.dismiss;
-                    }
-
-                }, function (dismiss) {
-                    return false;
-                })
-            }
         }
 
         function checkAuthorization(id) {
