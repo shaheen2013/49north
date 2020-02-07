@@ -167,9 +167,8 @@
             $('#create').attr('disabled', 'disabled');
             var data = new FormData(document.getElementById('company_form_id'));
             data.append('_method', 'put');
-
             $.ajax({
-                method: "POST",
+                method: "post",
                 url: updateRoute,
                 data: data,
                 enctype: 'multipart/form-data',

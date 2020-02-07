@@ -24,7 +24,6 @@ class PostController extends Controller
     public function index ()
     {
         $posts = Post::orderby('id', 'desc')->paginate(5); //show only 5 items at a time in descending order
-
         return view('posts.index', compact('posts'));
     }
 
@@ -54,12 +53,9 @@ class PostController extends Controller
             'title' => 'required|max:100',
             'body' => 'required',
         ]);
-
         $title = $request['title'];
         $body = $request['body'];
-
         $post = Post::create($request->only('title', 'body'));
-
         //Display a successful message upon save
         return redirect()->route('posts.index')->with('alert-info', 'Article,
              ' . $post->title . ' created');
@@ -75,7 +71,6 @@ class PostController extends Controller
     public function show ($id)
     {
         $post = Post::findOrFail($id); //Find post of id = $id
-
         return view('posts.show', compact('post'));
     }
 
@@ -89,7 +84,6 @@ class PostController extends Controller
     public function edit ($id)
     {
         $post = Post::findOrFail($id);
-
         return view('posts.edit', compact('post'));
     }
 
@@ -113,7 +107,6 @@ class PostController extends Controller
         $post->title = $request->input('title');
         $post->body = $request->input('body');
         $post->save();
-
         return redirect()->route('posts.show', $post->id)->with('alert-info', 'Article, ' . $post->title . ' updated');
 
     }
@@ -129,7 +122,6 @@ class PostController extends Controller
     {
         $post = Post::findOrFail($id);
         $post->delete();
-
         return redirect()->route('posts.index')->with('alert-info', 'Article successfully deleted');
 
     }

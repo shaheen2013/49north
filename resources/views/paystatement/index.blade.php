@@ -10,18 +10,14 @@
                         @if(auth()->user()->is_admin ==1)
                         <div class="col-sm-2">
                             <div class="form-group">
-                                <input type="text" placeholder="Search pay-statement" class="form-control-new" name="search"
-                                       id="search" onkeyup="searchPayStatementsPage()">
-                                <span class="remove-button"
-                                      onclick="document.getElementById('search').value = '';searchPayStatementsPage()"><i
-                                        class="fa fa-times" aria-hidden="true"></i></span>
+                                {!! Form::text('search',null,['id' => 'search', 'placeholder' => 'Select pay-statement','class' => 'form-control-new','onkeyup' => 'searchPayStatementsPage()']) !!}
+                                <span class="remove-button" onclick="document.getElementById('search').value = '';searchPayStatementsPage()"><i class="fa fa-times" aria-hidden="true"></i></span>
                             </div>
                         </div>
                         @endif
                         <div class="col-sm-2">
                             <div class="form-group">
-                                <input type="text" name="date" id="date" placeholder="Select Date"
-                                       class="form-control-new" onChange="searchPayStatementsPage()">
+                                {!! Form::text('date',null,['id' => 'date', 'placeholder' => 'Select Date','class' => 'form-control-new','onChange' => 'searchPayStatementsPage()']) !!}
                             </div>
                         </div>
 
@@ -54,19 +50,16 @@
             </div>
         </div>
 
-
-        <div id="show_modal_paystatement" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog"
-             aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div id="show_modal_paystatement" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
-
                     <div class="modal-body">
                         <div class="col-md-12" style="margin-top:40px;margin-bottom:20px;">
-                            <form id="createPayForm">
+                            {{ Form::open(array('id'=>'createPayForm')) }}
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="text_outer">
-                                            <label for="company" class="">Employee</label>
+                                            {{ Form::label('employee', 'Employee') }}
                                             <select class="select_status form-control" name="emp_id" id="emp_id">
                                                 <option value="">Select</option>
                                                 @foreach($user as $usr)
@@ -77,22 +70,21 @@
                                     </div>
                                     <div class="col-md-6">
                                         <div class="text_outer">
-                                            <label for="name" class="">Description</label>
-                                            <input type="text" id="description" name="description" class="form-control"
-                                                   placeholder="Insert text here">
+                                            {{ Form::label('description', 'Description') }}
+                                            {{ Form::text('description', null, array('class' => 'form-control','placeholder'=>'Insert text here','id'=>'description')) }}
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="text_outer">
-                                            <label for="name" class="">Date</label>
-                                            <input type="date" id="date" name="date" class="flatpickr form-control" placeholder="Insert text here">
+                                            {{ Form::label('date', 'Date') }}
+                                            {{ Form::text('date', null, array('class' => 'flatpickr form-control','placeholder' => 'Insert text here',)) }}
                                         </div>
                                     </div>
                                     <div class="col-md-6 image-chooser">
                                         <div class="image-chooser-preview"></div>
                                         <div class="text_outer">
-                                            <label for="name" class=""><i class="fa fa-fw fa-photo"></i> Upload PDF</label>
-                                            <input type="file" onchange="renderChoosedFile(this)" name="pdfname" id="pdfname" class="form-control _input_choose_file">
+                                            {!! Html::decode(Form::label('pdfname', '<i class="fa fa-fw fa-photo"></i>Upload PDF'))!!}
+                                            {{ Form::file('pdfname', array('class' => 'form-control _input_choose_file', 'id' => 'pdfname', 'onchange' => 'renderChoosedFile(this)')) }}
                                         </div>
                                     </div>
                                 </div>
@@ -100,19 +92,14 @@
                                 <div class="row margin-top-30">
                                     <div class="form-group" style="width:100%;">
                                         <div class="col-md-12 col-sm-12">
-                                            <button type="button" id="create" onclick="createUpload(event)"
-                                                    class="btn-dark contact_btn" data-form="expences">Save
-                                            </button>
-                                            <span class="close close-span" data-dismiss="modal" aria-label="Close"><i
-                                                    class="fa fa-arrow-left"></i> Return to Paystatement</span>
+                                            <button type="button" id="create" onclick="createUpload(event)" class="btn-dark contact_btn" data-form="expences">Save </button>
+                                            <span class="close close-span" data-dismiss="modal" aria-label="Close"><i class="fa fa-arrow-left"></i> Return to Paystatement</span>
                                         </div>
                                     </div>
                                 </div>
-                            </form>
+                            {{ Form::close() }}
                         </div>
-
                     </div>
-
                 </div>
             </div>
         </div>
@@ -143,7 +130,6 @@
                         }
                         searchPayStatementsPage();
                     }
-
                 },
             });
         });
@@ -155,7 +141,6 @@
 
             $.ajax({
                 method: "POST",
-                // url: "/paystatement/store", //resource route
                 url: "{{ route('paystatement.store') }}",
                 data: data,
                 enctype: 'multipart/form-data',
@@ -274,8 +259,7 @@
 
                             if (results.success === true) {
                                 swal("Done!", results.message, "success").then(function () {
-
-                                    window.location.reload()
+                                    searchPayStatementsPage();
                                 })
                             } else {
                                 swal("Error!", results.message, "error");

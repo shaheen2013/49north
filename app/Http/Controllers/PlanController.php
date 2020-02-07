@@ -21,7 +21,6 @@ class PlanController extends Controller
         // Get all resources
         $activeMenu = 'benefits';
         $plan = Plan::Latest()->where('status', 1)->first();
-
         return view('plan.index', compact('activeMenu', 'plan'));
     }
 
@@ -47,12 +46,10 @@ class PlanController extends Controller
         $request->validate([
             'file' => 'required|file|mimes:pdf'
         ]);
-
         // Create new model instance
         $plan = new Plan();
         $plan->file = fileUpload('file');
         $plan->save();
-
         return redirect()->back()->with('success', 'File uploaded successfully.');
     }
 
@@ -99,7 +96,6 @@ class PlanController extends Controller
         $plan = new Plan();
         $plan->file = fileUpload('file');
         $plan->save();
-
         return redirect()->back()->with('success', 'File uploaded successfully.');
     }
 

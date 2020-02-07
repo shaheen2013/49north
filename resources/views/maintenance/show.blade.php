@@ -12,12 +12,12 @@
                         <h2 class="header" style="margin-bottom: 1rem; font-size: 1.5rem; padding : inherit; ">
                             Subject
                             <span class="pull-right">
-                                <form action="{{$deleteRoute}}" method="post">
-                                    @csrf
-                                    <input type="hidden" name="id" value="{{ $show->id }}">
+                                {{ Form::open(array('route' => 'maintenance.delete', 'method' => 'post', 'id' => 'delete-form')) }}
+                                @csrf
+                                {!! Form::hidden('id', $show->id) !!}
                                     <button type="button" class="btn btn-info" onclick="maintenanceEditView('{{$show->id}}', '{{ $editRoute }}')"> Edit </button>
-                                    <button type="submit" href="javascript:void(0);" class="btn btn-danger deleteit">Delete</button>
-                                </form>
+                                    <button type="button" onclick="deleteConfirm()" class="btn btn-danger">Delete</button>
+                               {{ Form::close() }}
                             </span>
                         </h2>
                         <div class="col-md-12">
@@ -26,14 +26,12 @@
                                     <div class="card">
                                         <div class="card-body">
                                             <p><strong>Subject</strong>: {{$show->subject}}</p>
-
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
 
@@ -49,80 +47,46 @@
                                     <div class="card">
                                         <div class="card-body">
                                             <p><strong>Description</strong>: {{$show->description}}</p>
-
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
-            @if($show->comment)
 
-                <div class="col-md-12">
-                    <div class="card" style="margin-top: 25px;margin-bottom: 10px;">
-                        <div class="card-body">
-                            <h2 class="header" style="margin-bottom: 1rem; font-size: 1.5rem; padding : inherit; ">
-                                Comment
-                            </h2>
-                            <form action="" id="maintenance_update_form">
-                                <input type="hidden" id="maintenance_update_id" name='id' value="{{$show->id}}">
-                                <div class="col-md-12">
-
-                                    <div class="text_outer">
-                                        <textarea style="height: 100px" class="form-control" placeholder="write here....." name="comment" id="create_comment"></textarea>
-                                    </div>
-                                </div>
-                                <div class="col-md-12 col-sm-12">
-                                    <button type="button" onclick="updateComment()" class="btn-dark contact_btn"
-                                            data-form="expences" id="update" style="margin-bottom: 0px; ">Save
-                                    </button>
-                                </div>
-                            </form>
+            <div class="col-md-12">
+                <div class="card" style="margin-top: 25px;margin-bottom: 10px;">
+                    <div class="card-body">
+                        <h2 class="header" style="margin-bottom: 1rem; font-size: 1.5rem; padding : inherit; ">
+                            Comment
+                        </h2>
+                        {{ Form::open(array('id' => 'maintenance_form')) }}
+                        <div class="col-md-12">
+                            <div class="text_outer">
+                                {!! Form::textarea('comment', null, ['class' => 'form-control', 'placeholder' => 'write here.....', 'style' => 'height: 100px']) !!}
+                            </div>
                         </div>
+                        <div class="col-md-12 col-sm-12">
+                            <button type="button" onclick="{{ $show->comment ? 'updateComment' : 'createCommentNew' }}()" class="btn-dark contact_btn" data-form="expences" style="margin-bottom: 0px; ">Save</button>
+                        </div>
+                        {{ Form::close() }}
                     </div>
                 </div>
-
-            @else
-
-                <div class="col-md-12">
-                    <div class="card" style="margin-top: 25px;margin-bottom: 10px;">
-                        <div class="card-body">
-                            <h2 class="header" style="margin-bottom: 1.5rem; font-size: 1.5rem; padding : inherit; ">
-                                Comment
-                            </h2>
-                            <form action="" id="maintenance_create_form">
-                                <input type="hidden" id="maintenance_create_id" name='id' value="{{$show->id}}">
-                                <div class="col-md-12">
-                                    <div class="text_outer">
-                                        <textarea style="height: 100px" class="form-control" placeholder="write here....." name="comment" id="create_comment_add"></textarea>
-                                    </div>
-                                </div>
-                                <div class="col-md-12 col-sm-12">
-                                    <button type="button" onclick="createComment()" class="btn-dark contact_btn"
-                                            data-form="expences" id="update" style="margin-bottom: 0px; ">Save
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            @endif
-
+            </div>
         </div>
     </div>
 
-    <div id="edit-maintenance-modal" class="modal fade bs-example-modal-lg edit-maintenance-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div id="edit-maintenance-modal" class="modal fade bs-example-modal-lg edit-maintenance-modal" tabindex="-1"
+         role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
         <!-- modal come on ajax-->
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-body">
                     <div class="col-md-12" style="margin-top:40px;margin-bottom:20px;">
-                        <form class="maintenance1_edit" action="{{ route('maintenance.edit') }}" method="POST">
-
-                        </form>
+                        {{ Form::open(array('route' => 'maintenance.edit', 'method' => 'post', 'class' => 'maintenance1_edit')) }}
+                        {{ Form::close() }}
                     </div>
                 </div>
             </div>
@@ -133,57 +97,61 @@
     <script type="text/javascript">
         let updateRoute = null;
         let route = '@php echo $route; @endphp';
-
-        function createComment() {
+        function createCommentNew() {
             event.preventDefault();
-
-            let id = $('#maintenance_create_id').val();
-            console.log(id);
             $('#create').attr('disabled', 'disabled');
 
             $.ajax({
                 method: "POST",
                 url: route,
-                data: new FormData(document.getElementById('maintenance_create_form')),
+                data: new FormData(document.getElementById('maintenance_form')),
                 dataType: 'JSON',
                 processData: false,  // Important!
                 contentType: false,
                 cache: false,
                 success: function (response) {
                     $.toaster({message: 'Created successfully', title: 'Success', priority: 'success'});
-
-
                     $('#create').removeAttr('disabled');
                 }
-
             });
         }
 
         function updateComment() {
             event.preventDefault();
-            let id = $('#maintenance_update_id').val();
-            console.log(id);
             $('#update').attr('disabled', 'disabled');
-
             $.ajax({
                 method: "POST",
                 url: route,
-                data: new FormData(document.getElementById('maintenance_update_form')),
+                data: new FormData(document.getElementById('maintenance_form')),
                 dataType: 'JSON',
                 processData: false,  // Important!
                 contentType: false,
                 cache: false,
                 success: function (response) {
-                    $.toaster({message: 'Created successfully', title: 'Success', priority: 'success'});
-
-
+                    $.toaster({message: 'updated successfully', title: 'Success', priority: 'success'});
                     $('#update').removeAttr('disabled');
                 }
-
             });
         }
+
+        function deleteConfirm() {
+            swal({
+                title: "Delete?",
+                text: "Please ensure and then confirm!",
+                type: "warning",
+                showCancelButton: !0,
+                confirmButtonText: "Yes, delete it!",
+                cancelButtonText: "No, cancel!",
+                reverseButtons: !0
+            }).then(function (e) {
+                if (e.value === true) {
+                    $('#delete-form').submit();
+                } else {
+                    e.dismiss;
+                }
+            }, function (dismiss) {
+                return false;
+            })
+        }
     </script>
-
-
-
 @endsection

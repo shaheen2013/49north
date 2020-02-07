@@ -26,7 +26,6 @@ class MessageController extends Controller
         } else {
             $activeMenu = 'submit';
         }
-
         return view('concern.index', compact('activeMenu'));
     }
 
@@ -64,11 +63,8 @@ class MessageController extends Controller
             $input = $request->all();
             $input['is_anonymous'] = isset($request->is_anonymous) ? 1 : 0;
             $input['is_contact'] = isset($request->is_contact) ? 1 : 0;
-
             $message = Message::create($input);
-
             Mail::to(User::where('is_admin', 1)->pluck('email'))->send(new NotifyAdmin($request));
-
             return response()->json(['status' => 200, 'data' => $message]);
         } catch (\Exception $e) {
             return response()->json(['status' => 500, 'message' => $e->getMessage()]);
@@ -85,7 +81,6 @@ class MessageController extends Controller
     {
         try {
             $message = Message::findOrFail($message->id);
-
             return response()->json(['status' => 200, 'data' => $message]);
         } catch (\Exception $e) {
             return response()->json(['status' => 500, 'message' => $e->getMessage()]);
@@ -102,7 +97,6 @@ class MessageController extends Controller
     {
         try {
             $message = Message::findOrFail($message->id);
-
             return response()->json(['status' => 200, 'data' => $message]);
         } catch (\Exception $e) {
             return response()->json(['status' => 500, 'message' => $e->getMessage()]);
@@ -139,9 +133,7 @@ class MessageController extends Controller
             $message->is_contact = isset($request->is_contact) ? 1 : 0;
             $message->emp_id = $request->emp_id;
             $message->save();
-
             Mail::to(User::where('is_admin', 1)->pluck('email'))->send(new NotifyAdmin($request));
-
             return response()->json(['status' => 200, 'data' => $message]);
         } catch (\Exception $e) {
             return response()->json(['status' => 500, 'message' => $e->getMessage()]);
@@ -158,7 +150,6 @@ class MessageController extends Controller
     {
         try {
             Message::destroy($message->id);
-
             return response()->json(['status' => 200, 'message' => 'Message deleted successfully.']);
         } catch (\Exception $e) {
             return response()->json(['status' => 500, 'message' => $e->getMessage()]);
@@ -208,7 +199,6 @@ class MessageController extends Controller
 
                 $datum->created_at_formatted = date('d M, Y', strtotime($datum->created_at));
             }
-
             return response()->json(['status' => 200, 'data' => $data]);
         } catch (\Exception $e) {
             return response()->json(['status' => 500, 'message' => $e->getMessage()]);
@@ -228,7 +218,6 @@ class MessageController extends Controller
             $message = Message::findOrFail($message->id);
             $message->status = 1;
             $message->save();
-
             return response()->json(['status' => 200, 'message' => 'Status updated successfully.']);
         } catch (\Exception $e) {
             return response()->json(['status' => 500, 'message' => $e->getMessage()]);

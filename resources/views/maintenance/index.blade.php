@@ -18,13 +18,13 @@
                     <div class="row">
                         <div class="col-sm-2">
                             <div class="form-group">
-                                <input type="text" placeholder="Search employee" class="form-control-new" name="pending_search" id="pending_search" onkeyup="searchMaintenance()">
+                                {!! Form::text('pending_search',null,['id' => 'pending_search', 'placeholder' => 'Select employee','class' => 'form-control-new','onkeyup' => 'searchMaintenance()']) !!}
                                 <span class="remove-button" onclick="document.getElementById('pending_search').value = '';searchMaintenance()"><i class="fa fa-times" aria-hidden="true"></i></span>
                             </div>
                         </div>
                         <div class="col-sm-2">
                             <div class="form-group">
-                                <input type="date" name="pending_date" id="date" placeholder="Select Date" class="form-control-new">
+                                {!! Form::text('pending_date',null,['id' => 'date', 'placeholder' => 'Select Date','class' => 'form-control-new']) !!}
                             </div>
                         </div>
                         <div class="col-sm-1">
@@ -58,13 +58,13 @@
                     <div class="row">
                         <div class="col-sm-2">
                             <div class="form-group">
-                                <input type="text" placeholder="Search employee" class="form-control-new" name="completed_search" id="completed_search" onkeyup="searchComplitedTicket()">
+                                {!! Form::text('completed_search',null,['id' => 'completed_search', 'placeholder' => 'Select employee','class' => 'form-control-new','onkeyup' => 'searchComplitedTicket()']) !!}
                                 <span class="remove-button" onclick="document.getElementById('completed_search').value = '';searchComplitedTicket()"><i class="fa fa-times" aria-hidden="true"></i></span>
                             </div>
                         </div>
                         <div class="col-sm-2">
                             <div class="form-group">
-                                <input type="date" name="pending_date" id="date-completed" placeholder="Select Date" class="form-control-new">
+                                {!! Form::text('pending_date',null,['id' => 'date-completed', 'placeholder' => 'Select Date','class' => 'form-control-new']) !!}
                             </div>
                         </div>
                         <div class="col-sm-1">
@@ -86,7 +86,6 @@
                         </tr>
                         </thead>
                         <tbody class="maintanance_list_come_ajax_completed_ticket" id="maintanance-completed">
-
                         </tbody>
                     </table>
                     <div id="paginate-completed"></div>
@@ -101,9 +100,9 @@
             <div class="modal-content">
                 <div class="modal-body">
                     <div class="col-md-12" style="margin-top:40px;margin-bottom:20px;">
-                        <form class="maintenance1_edit" action="{{ route('maintenance.edit') }}" method="POST">
+                        {{ Form::open(array('route' => 'maintenance.edit', 'method' => 'post', 'class' => 'maintenance1_edit')) }}
 
-                        </form>
+                        {{ Form::close() }}
                     </div>
                 </div>
             </div>
@@ -115,19 +114,18 @@
             <div class="modal-content">
                 <div class="modal-body">
                     <div class="col-md-12" style="margin-top:40px;margin-bottom:20px;">
-
-                        <form class="maintenance1" action="{{ route('maintenance.add') }}" method="POST">
+                        {{ Form::open(array('route' => 'maintenance.add', 'method' => 'post', 'class' => 'maintenance1')) }}
                             <div class="row">
                                 <div class="col-md-6 col-sm-6">
                                     <div class="text_outer">
-                                        <label for="name" class="">Subject</label>
-                                        <input type="text" id="name" name="subject" class="form-control" placeholder="Insert text here">
+                                        {{ Form::label('subject', 'Subject') }}
+                                        {{ Form::text('subject', null, array('class' => 'form-control','placeholder'=>'Insert text here','id'=>'subject')) }}
                                     </div>
                                 </div>
                                 <div class="col-md-6 col-sm-6">
                                     <div class="text_outer">
-                                        <label for="name" class="">Website</label>
-                                        <select class="select_status form-control" name="website">
+                                        {{ Form::label('website', 'Website') }}
+                                        <select class="select_status form-control" name="website" id="website">
                                             <option>Select</option>
                                             <option value="Website1">Website1</option>
                                             <option value="Website2">Website2</option>
@@ -140,16 +138,16 @@
                                 <div class="col-md-12 col-sm-12">
                                     A brief description of your ticket
                                     <div class="text_outer">
-                                        <label for="name" class="">Description</label>
-                                        <input type="text" id="name" name="description" class="form-control" placeholder="Insert text here">
+                                        {{ Form::label('description', 'Description') }}
+                                        {{ Form::text('description', null, array('class' => 'form-control','placeholder'=>'Insert text here','id'=>'description')) }}
                                     </div>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-6 col-sm-6">
                                     <div class="text_outer">
-                                        <label for="name" class="">Priority</label>
-                                        <select class="select_status form-control" name="priority">
+                                        {{ Form::label('priority', 'Priority') }}
+                                        <select class="select_status form-control" name="priority" id="priority">
                                             <option selected disabled>Select</option>
                                             <option value="1">Low</option>
                                             <option value="2">Normal</option>
@@ -159,8 +157,8 @@
                                 </div>
                                 <div class="col-md-6 col-sm-6">
                                     <div class="text_outer">
-                                        <label for="name" class="">Category</label>
-                                        <select class="select_status form-control" name="category">
+                                        {{ Form::label('category', 'Category') }}
+                                        <select class="select_status form-control" name="category" id="category">
                                             <option>Select</option>
                                             @foreach($category as $category_ex_report)
                                                 <option value="{{ $category_ex_report->id }}">{{ $category_ex_report->categoryname }}</option>
@@ -172,8 +170,8 @@
                             <div class="row">
                                 <div class="col-md-12 col-sm-12">
                                     <div class="text_outer">
-                                        <label for="name" class="">Employee</label>
-                                        <select class="select2 select_status form-control" name="user[]" multiple>
+                                        {{ Form::label('employee', 'Employee') }}
+                                        <select class="select2 select_status form-control" id="employee" name="user[]" multiple>
                                             @foreach($users as $user)
                                                 <option value="{{ $user->id }}">{{ $user->employee_details->firstname }} {{ $user->employee_details->lastname }}</option>
                                             @endforeach
@@ -186,13 +184,13 @@
                                 <div class="form-group" style="width:100%;">
                                     <div class="col-md-12 col-sm-12">
                                         {{ csrf_field() }}
-                                        <input type="hidden" name="emp_id" value="{{ auth()->user()->id }}">
+                                        {!! Form::hidden('emp_id', auth()->user()->id) !!}
                                         <button type="submit" class="btn-dark contact_btn">Save</button>
                                         <span class="close close-span" data-dismiss="modal" aria-label="Close"><i class="fa fa-arrow-left"></i> Return to Maintenance</span>
                                     </div>
                                 </div>
                             </div>
-                        </form>
+                        {{ Form::close() }}
                     </div>
 
                 </div>
@@ -208,14 +206,11 @@
         let from = to = fromCompleted = toCompleted = null;
 
         $(document).ready(function () {
-
             const date = new Date(), y = date.getFullYear(), m = date.getMonth();
-
             var today = new Date();
             to = formatDate(today);
             from = formatDate(today.setDate(today.getDate()-30));
             searchMaintenance();
-
 
             $("#active_ticket_span").click(function () {
                 $("#active_ticket_span").addClass("active-span");
@@ -231,8 +226,6 @@
                 $("#active_ticket_div").hide();
                 $("#complited_ticket_div").show();
             });
-
-
 
             $('#date').flatpickr({
                 mode: "range",
@@ -410,12 +403,10 @@
         }
 
         function deleteMaintenance(id, route){
-
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
             $.ajax({
                 type:'POST',
                 url: route,
-                // url:"./delete",
                 dataType:'html',
                 data: {_token: CSRF_TOKEN ,
                     id: id},

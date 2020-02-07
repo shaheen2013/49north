@@ -75,7 +75,6 @@ class HomeController extends Controller
         $companies = Company::Latest()->get();
         $data['user'] = DB::table('users as u')->join('employee_details as ed', 'u.id', '=', 'ed.id')->select('ed.*')->where('u.id', '=', $emp_id)->first();
         $route = route('reset.password', $emp_id);
-
         return view('home', $data, compact('activeMenu', 'companies', 'findUser', 'route'));
     }
 
@@ -108,7 +107,6 @@ class HomeController extends Controller
             $rules['password'] = ['required', 'string', 'min:8', 'regex:/^.*(?=.{3,})(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[\d\X])(?=.*[!$#%]).*$/'];
             $input['password'] = Hash::make($request->input('password'));
         }
-
         $this->validate($request, $rules);
 
         // check for admin details
@@ -166,12 +164,11 @@ class HomeController extends Controller
             if (isset($emp_id) && $profile_pic = EmployeeDetails::findOrFail($id)->profile_pic) {
                 Storage::delete($profile_pic);
             }
-
             $profilepicname = fileUpload('profile_pic');
             $user_array['profile_pic'] = $profilepicname;
         }
-        // end profile pic
 
+        // end profile pic
         if (isset($emp_id)) {
             //$user->employee_details()->update($user_array);
             EmployeeDetails::where('id', '=', $emp_id)->update($user_array);

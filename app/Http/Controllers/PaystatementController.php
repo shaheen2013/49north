@@ -25,7 +25,6 @@ class PaystatementController extends Controller
             ->select('p.*', 'u.id as empid')
             ->get();
         $user = User::where('is_admin', 0)->get();
-
         return view('paystatement/index', compact('user_list', 'user', 'activeMenu'));
     }
 
@@ -42,9 +41,7 @@ class PaystatementController extends Controller
             'pdfname' => 'required|file|mimes:pdf',
             'description' => 'required|string|max:491',
             'date' => 'required',
-
         ];
-
         $validator = validator($request->all(), $rules, []);
 
         if ($validator->fails()) {
@@ -52,16 +49,13 @@ class PaystatementController extends Controller
         }
 
         try {
-            $data = $request->all();
+            $data = $request->except('_token');
             $pdfname = null;
-
             if ($request->hasFile('pdfname')) {
                 $pdfname = fileUpload('pdfname', true);
-                // $pdfname = fileUpload('pdfname');
                 $data['pdfname'] = $pdfname;
             }
             $data['created_at'] = Carbon::now();
-
             $check = Paystatement::insert($data);
 
             if ($check) {
@@ -88,10 +82,9 @@ class PaystatementController extends Controller
                     $q->whereHas('employee', function ($sql) use ($request) {
                         $sql->where('firstname', 'LIKE', '%' . $request->search . '%');
                         $sql->orWhere('lastname', 'LIKE', '%' . $request->search . '%');
-
                     });
-
                 }
+
                 if (auth()->user()->is_admin != 1) {
                     $q->where('emp_id', auth()->user()->id);
                 }
@@ -109,7 +102,6 @@ class PaystatementController extends Controller
         foreach ($data as &$datum) {
             $datum->pdfname = fileUrl($datum->pdfname, true);
         }
-
         return response()->json(['status' => 'success', 'data' => $data]);
     }
 

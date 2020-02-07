@@ -27,47 +27,37 @@ class MaintenanceController extends Controller
         else {
             $activeMenu = 'submit';
         }
-
         $data['maintanance'] = MaintenanceTicket::where(['delete_status' => NULL, 'status' => NULL])->with('employee:id,firstname,lastname')->get();
         $data['maintanance1'] = MaintenanceTicket::where(['delete_status' => NULL, 'status' => 1])->orWhere(['status' => 2])->with('employee:id,firstname,lastname')->get();
         $data['category'] = Categorys::all();
         $data['users'] = User::where('is_admin', 0)->get();
-
         return view('maintenance.index', $data, compact('activeMenu'));
     }
 
     /**
      * Add maintenance
-     *
      * @param Request $request
-     *
      * @return RedirectResponse
      */
     function addMaintenance (Request $request) {
         $request->validate([
             'user' => 'nullable|array'
         ]);
-
         $data = $request->all();
         unset($data['user']);
-
         $maintenance = MaintenanceTicket::create($data);
 
         if (count($request->user)) {
             $maintenance->users()->attach($request->user);
             Mail::to(User::find($request->user)->pluck('email'))->send(new MaintenanceNotify($request));
         }
-
         $msg = 'Ticket Added successfully';
-
         return redirect()->back()->with('alert-info', $msg);
     }
 
     /**
      * edit view
-     *
      * @param Request $request
-     *
      * @return Factory|View
      */
     function editMaintenanceView (Request $request) {
@@ -75,15 +65,12 @@ class MaintenanceController extends Controller
         $data['category'] = Categorys::all();
         $data['categorya1'] = Categorys::where('id', $data['maintanance']->category)->first();
         $data['users'] = User::where('is_admin', 0)->get();
-
         return view('ajaxview.editmaintenance', $data);
     }
 
     /**
      * update maintenance
-     *
      * @param Request $request
-     *
      * @return RedirectResponse
      */
     function edit (Request $request) {
@@ -93,28 +80,23 @@ class MaintenanceController extends Controller
         $try = MaintenanceTicket::where(['id' => $id])->update($data);
         $maintenance = MaintenanceTicket::findOrFail($id);
         $msg = 'Updated a ticket';
-
         $maintenance->users()->detach();
         if (count($request->user)) {
             $maintenance->users()->attach($request->user);
             Mail::to(User::find($request->user)->pluck('email'))->send(new MaintenanceNotify($request));
         }
-
         return redirect()->back()->with('alert-info', $msg);
     }
 
     /**
      * delete tickets
-     *
      * @param Request $request
-     *
      * @return RedirectResponse
      */
     function delete (Request $request) {
         MaintenanceTicket::destroy($request->id);
         $msg = 'Ticket deleted';
         session()->flash('alert-info', $msg);
-
         return redirect()->route('maintenance.list');
     }
 
@@ -126,7 +108,6 @@ class MaintenanceController extends Controller
     function ticketInProgress (Request $request) {
         $id = $request->id;
         MaintenanceTicket::where(['id' => $id])->update(['status' => 1]);
-
         return response()->json(['status' => 200]);
     }
 
@@ -140,9 +121,7 @@ class MaintenanceController extends Controller
 
     /**
      * Filter agreement
-     *
      * @param Request $request
-     *
      * @return JsonResponse
      */
     public function search (Request $request)
@@ -154,7 +133,6 @@ class MaintenanceController extends Controller
                 $ids = MaintenanceTicket::where('emp_id', auth()->user()->id)->pluck('id')->toArray();
                 $tagged = array_merge($tagged, $ids);
             }
-
             $data = MaintenanceTicket::select('maintenance_tickets.*')
                 ->with('employee')
                 ->leftjoin('employee_details AS emp', 'emp.id', '=', 'maintenance_tickets.emp_id')
@@ -172,8 +150,7 @@ class MaintenanceController extends Controller
                     }
                     if ($request->id == 'completed') {
                         $q->where('maintenance_tickets.status', '>', 0);
-                    }
-                    else {
+                    } else {
                         $q->whereNull('maintenance_tickets.status');
                     }
                     if (!auth()->user()->is_admin) {
@@ -197,7 +174,6 @@ class MaintenanceController extends Controller
             foreach ($data as $datum) {
                 $datum->updated_at_formatted = date('d M, Y', strtotime($datum->updated_at));
             }
-
             return response()->json(['status' => 200, 'data' => $data]);
         } catch (Exception $e) {
             return response()->json(['status' => 500, 'message' => $e->getMessage()]);
@@ -205,6 +181,7 @@ class MaintenanceController extends Controller
     }
 
     /**
+     * Display maintenance
      * @param int $id
      *
      * @return Factory|View
@@ -212,39 +189,30 @@ class MaintenanceController extends Controller
     public function show ($id) {
         if (auth()->user()->is_admin) {
             $activeMenu = 'admin';
-        }
-        else {
+        } else {
             $activeMenu = 'submit';
         }
         $show = MaintenanceTicket::with('employee')->findOrFail($id);
 
         if ($show->comment) {
             $route = route('maintenance.comment.update', $show->id);
-        }
-        else {
+        } else {
             $route = route('maintenance.comment.store', $show->id);
         }
-
         $editRoute = route('maintenance.editview', $id);
-
         $deleteRoute = route('maintenance.delete');
-
         return view('maintenance.show', compact('show', 'user', 'activeMenu', 'route', 'editRoute', 'deleteRoute'));
     }
 
     /**
      * @param Request $request
-     * @param       int  $id
-     *
+     * @param int  $id
      * @return JsonResponse
      */
     public function commentStore (Request $request, $id) {
-
-        // Validate form data
         $rules = [
             'comment' => 'string|max:491',
         ];
-
         $validator = validator($request->all(), $rules, []);
 
         if ($validator->fails()) {
@@ -259,7 +227,6 @@ class MaintenanceController extends Controller
             if ($data->save()) {
                 return response()->json(['status' => 'success']);
             }
-
             return response()->json(['status' => 'fail']);
         } catch (\Exception $e) {
             return response()->json(['status' => 'fail', 'msg' => $e->getMessage()]);
@@ -269,8 +236,7 @@ class MaintenanceController extends Controller
 
     /**
      * @param Request $request
-     * @param       int  $id
-     *
+     * @param int  $id
      * @return JsonResponse
      */
     public function commentUpdate (Request $request, $id) {
@@ -279,7 +245,6 @@ class MaintenanceController extends Controller
         $rules = [
             'comment' => 'string|max:491',
         ];
-
         $validator = validator($request->all(), $rules, []);
 
         if ($validator->fails()) {
@@ -294,7 +259,6 @@ class MaintenanceController extends Controller
             if ($data->update()) {
                 return response()->json(['status' => 'success']);
             }
-
             return response()->json(['status' => 'fail']);
         } catch (Exception $e) {
             return response()->json(['status' => 'fail', 'msg' => $e->getMessage()]);

@@ -42,10 +42,8 @@ class MileageController extends Controller
             $data['mileage_list'] = Auth::user()->mileage()->where('status', 'A')->orderByDesc('date')->get();
 
         }
-
         $data['companies'] = Company::all();
         $date_key = $request->date;
-
         return view('mileage-list', $data, compact('activeMenu'))->with('date_key', $date_key);
     }
 
@@ -70,7 +68,6 @@ class MileageController extends Controller
                 $datum->routes = $routes;
             }
         }
-
         return response()->json(['status' => 'success', 'data' => $data]);
     }
 
@@ -123,14 +120,15 @@ class MileageController extends Controller
         }
 
         return response()->json(['status' => 'success', 'data' => $data]);
+
     }
 
     /**
      * Store a newly created resource in storage.
      * @param Request $request
-     * @return JsonResponse
+     * @return void
      */
-    public function store (Request $request)
+    public function addMileage (Request $request)
     {
         // Validate form data
         $rules = [
@@ -197,6 +195,7 @@ class MileageController extends Controller
      */
     public function update (Request $request, Mileage $mileage)
     {
+
         $input = $request->only(['company', 'date', 'vehicle', 'kilometers', 'reasonmileage']);
 
         if ($id = $mileage->id) {
@@ -291,4 +290,5 @@ class MileageController extends Controller
             'message' => $message,
         ]);
     }
+
 }

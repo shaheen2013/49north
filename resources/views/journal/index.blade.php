@@ -99,7 +99,6 @@
 
         $(document).ready(function () {
             const date = new Date(), y = date.getFullYear(), m = date.getMonth();
-
             const today = new Date();
             to = formatDate(today);
             from = formatDate(today.setDate(today.getDate() - 30));
@@ -123,7 +122,6 @@
                         if (selectedDates[0] === undefined) {
                             from = to = null;
                         }
-
                         searchJournalPage();
                     }
                 },
@@ -134,14 +132,13 @@
             // $('#edit_date').val('');
             $('#title').val('');
             $('#details').val('');
-            $('#update').attr('onclick', 'create_journal(event)').attr('data-id', '');
+            $('#update').attr('onclick', 'createJournal(event)').attr('data-id', '');
         }
 
-        function create_journal(event) {
+        function createJournal(event) {
             event.preventDefault();
             const $create = $('#create');
             $create.attr('disabled', true);
-
             const date = $('#edit_date').val();
             const title = $('#title').val();
             const details = $('#details').val();
@@ -150,7 +147,6 @@
                 date: date,
                 title: title,
                 details: details,
-
             };
             // console.log(data)
             if (date === '' || title === '' || details === '') {
@@ -158,7 +154,6 @@
                 $create.removeAttr('disabled');
                 return false;
             }
-
             $.ajax({
                 method: "POST",
                 url: "{{ route('journal.store') }}",
@@ -183,7 +178,6 @@
 
                     if (results.status === 'success') {
                         const $editDate = $('#edit_date');
-
                         $editDate.val(results.data.date.split(' ')[0]);
                         $('#title').val(results.data.title);
                         $('#details').val(results.data.details);
@@ -213,7 +207,6 @@
 
         function updateJournal(id) {
             $('#update').attr('disabled', 'disabled');
-
             const data = {
                 date: $('#edit_date').val(),
                 title: $('#title').val(),
@@ -232,17 +225,13 @@
                     $('#journal-edit-modal').modal('hide');
                     $('#update').removeAttr('disabled');
                 }
-
             });
         }
 
         function searchJournalPage() {
-
-            // console.log(date);
             let data = {
                 from: from,
                 to: to,
-
             };
 
             $('#wait').css('display', 'inline-block'); // wait for loader
@@ -269,14 +258,12 @@
                                         <td> ${data[index].formatted_date} </td>
                                         <td> ${data[index].title} </td>
                                         <td> ${data[index].details} </td>`;
-
                                     html += `
                                         <td class="text-right">
                                             <a href="javascript:void(0);" onclick="openEditJournalModel('${data[index].id}', '${data[index].routes.edit}', '${data[index].routes.update}')">EDIT</a>
                                             <a href="javascript:void(0);" class="down" onclick="deleteConfirm('${data[index].id}', '${data[index].routes.destroy}')">DELETE</a></td>
                                         </td>
-                                    </tr><tr class="spacer"></tr>`;
-
+                                        </tr><tr class="spacer"></tr>`;
                                 }
                                 $('#search_journal').html(html);
                             }
