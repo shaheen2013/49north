@@ -16,13 +16,13 @@
                     <div class="row">
                         <div class="col-sm-2">
                             <div class="form-group">
-                                <input type="text" placeholder="Search employee" class="form-control-new" name="pending_search" id="pending_search" onkeyup="searchExpensesPending()">
+                                {!! Form::text('pending_search',null,['id' => 'pending_search', 'placeholder' => 'Search employee','class' => 'form-control-new','onkeyup' => 'searchExpensesPending()']) !!}
                                 <span class="remove-button" onclick="document.getElementById('pending_search').value = '';searchExpensesPending()"><i class="fa fa-times" aria-hidden="true"></i></span>
                             </div>
                         </div>
                         <div class="col-sm-2">
                             <div class="form-group">
-                                <input type="date" name="pending_date" id="date" placeholder="Select Date" class="form-control-new" onChange="searchExpensesPending()">
+                                {!! Form::text('pending_date',null,['id' => 'date', 'placeholder' => 'Select Date','class' => 'form-control-new','onChange' => 'searchExpensesPending()']) !!}
                             </div>
                         </div>
                         <div class="col-sm-1">
@@ -59,14 +59,13 @@
                     <div class="row">
                         <div class="col-sm-2">
                             <div class="form-group">
-                                <input type="text" placeholder="Search employee" class="form-control-new" name="history_search" id="history_search" onkeyup="searchExpensesHistory()">
+                                {!! Form::text('history_search',null,['id' => 'history_search', 'placeholder' => 'Search employee','class' => 'form-control-new','onkeyup' => 'searchExpensesHistory()']) !!}
                                 <span class="remove-button" onclick="document.getElementById('history_search').value = '';searchExpensesHistory()"><i class="fa fa-times" aria-hidden="true"></i></span>
                             </div>
                         </div>
                         <div class="col-sm-2">
                             <div class="form-group">
-                                <input type="date" name="history_date" id="history_date" placeholder="Select Date"
-                                       class="form-control-new">
+                                {!! Form::text('history_date',null,['id' => 'history_date', 'placeholder' => 'Search Date','class' => 'form-control-new','onkeyup' => 'searchExpensesHistory()']) !!}
                             </div>
                         </div>
                         <div class="col-sm-1">
@@ -106,7 +105,7 @@
                 <!-- body modal -->
                 <div class="modal-body">
                     <div class="col-md-12" style="margin-top:40px;margin-bottom:20px;">
-                        {{ Form::open(array('id'=>'Expense_form_id', 'url' => route('expenses.store'), 'enctype' => 'multipart/form-data', 'class' => 'expences')) }}
+                        {{ Form::open(array('id'=>'Expense_form_id', 'route' => 'expenses.store', 'enctype' => 'multipart/form-data', 'class' => 'expences')) }}
                             <div class="row">
                                 <div class="col-md-6 col-sm-6">
                                     <div class="text_outer">
@@ -414,6 +413,7 @@
                         }
 
                         let check = '';
+                        let check1 = '';
 
                         if (results.data.expense.billable != null) {
                             check = $('#billable').attr('checked', true);
@@ -421,10 +421,10 @@
                             check = $('#billable').val(results.data.expense.billable);
                         }
 
-                        if (results.data.expense.billable != null) {
-                            check = $('#billable').attr('checked', true);
+                        if (results.data.expense.received_auth != null) {
+                            check1 = $('#authorization').attr('checked', true);
                         } else {
-                            check = $('#billable').val(results.data.expense.billable);
+                            check1 = $('#authorization').val(results.data.expense.received_auth);
                         }
 
                         $('#company').html(company);
@@ -442,6 +442,7 @@
                         }
 
                         $('#billable').val(check);
+                        $('#authorization').val(check1);
                         $('#ireceived_auth').val(results.data.expense.received_auth);
                         $('#subtotal').val(results.data.expense.subtotal);
                         $('#gst').val(results.data.expense.gst);
@@ -685,9 +686,11 @@
             }).then(function (e) {
                 if (e.value === true) {
                     $.ajax({
-                        method: 'delete',
                         type: 'post',
                         url: route,
+                        data: {
+                            _method: 'delete'
+                        },
                         dataType: 'JSON',
                         success: function (results) {
                             if (results.success === true) {

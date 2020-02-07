@@ -28,7 +28,6 @@ class UserController extends Controller
             //Get all users and pass it to the view
             $activeMenu = 'admin';
             $users = User::with('employee_details')->orderBy('name')->get();
-
             return view('users.index', compact('activeMenu', 'users'));
         } else {
             abort(401);
@@ -54,8 +53,6 @@ class UserController extends Controller
                 }
             ])->has('permissions')->orderBy('orderval')->get();
             $permissions = Permission::pluck('name', 'id');
-
-
             $route = '#';
             return view('users.edit', compact('user', 'activeMenu', 'companies', 'roles', 'permissions', 'route'));
         } else {
@@ -87,7 +84,6 @@ class UserController extends Controller
     {
 
         $isAdmin = auth()->user()->is_admin;
-
         $id = $request->input('id');
 
         //Validate name, email and password fields
@@ -108,7 +104,6 @@ class UserController extends Controller
             $rules['password'] = ['required', 'string', 'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/'];
             $input['password'] = Hash::make($request->input('password'));
         }
-
         $this->validate($request, $rules);
 
         // check for admin details
@@ -162,7 +157,6 @@ class UserController extends Controller
             if (isset($emp_id) && $profile_pic = EmployeeDetails::find($id)->profile_pic) {
                 Storage::delete($profile_pic);
             }
-
             $profilepicname = fileUpload('profile_pic');
             $user_array['profile_pic'] = $profilepicname;
         }
@@ -186,7 +180,6 @@ class UserController extends Controller
             $user->is_ticket_admin = 1;
             $user->save();
         }
-
         //Redirect to the users.index view and display message
         return redirect()->route('users.index')->with('alert-info', $msg);
     }
@@ -213,7 +206,6 @@ class UserController extends Controller
      */
     public function edit(Request $request, $id)
     {
-
         $activeMenu = 'admin';
         $companies = Company::Latest()->get();
         $u = User::findOrFail($id); //Get user with specified id
@@ -234,7 +226,6 @@ class UserController extends Controller
         }
         $user->is_admin = $u->is_admin; // lazy load details from admin
         $user->id = $u->id; // override ID to match User table instead of Employee Details
-
         $roles = Role::with([
             'permissions' => function ($q) {
                 $q->orderBy('orderval')->orderBy('name');
@@ -249,7 +240,6 @@ class UserController extends Controller
             $permissions = '-';
         }
         $route = route('reset.stuff.password', $u->id);
-
         return view('users.edit', compact('user', 'activeMenu', 'companies', 'roles', 'permissions', 'route'));
 
     }
@@ -266,7 +256,6 @@ class UserController extends Controller
         $user = User::find($id);
         $success = $user->exists ? true : false;
         $user->delete();
-
         return response()->json(['success' => $success]);
     }
 
@@ -287,7 +276,6 @@ class UserController extends Controller
         } else {
             return redirect()->back();
         }
-
         return redirect()->route('home');
     }
 
@@ -416,7 +404,6 @@ class UserController extends Controller
                     $message = "You have no email!";
                 }
             }
-
             return response()->json([
                 'success' => $success,
                 'message' => $message,

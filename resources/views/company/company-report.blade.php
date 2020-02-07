@@ -168,8 +168,9 @@
             var companyname = $('#companyName').val();
             var email = $('#email').val();
             var data = new FormData(document.getElementById('company_form_id'));
+            data.append('_method', 'put');
             $.ajax({
-                method: "POST",
+                method: "post",
                 url: updateRoute,
                 data: data,
                 enctype: 'multipart/form-data',
@@ -231,7 +232,7 @@
             });
         }
 
-        function deleteConfirm(id) {
+        function deleteConfirm(id, route) {
             swal({
                 title: "Delete?",
                 text: "Please ensure and then confirm!",
@@ -244,7 +245,10 @@
                 if (e.value === true) {
                     $.ajax({
                         type: 'post',
-                        url: "/company/destroy/" + id,
+                        url: route,
+                        data: {
+                            _method: 'delete'
+                        },
                         dataType: 'JSON',
                         success: function (results) {
                             if (results.success === true) {

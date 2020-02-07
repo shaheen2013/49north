@@ -69,14 +69,10 @@ Route::group(['middleware' => ['auth']], function () {
     });
 
     // Company
+    Route::resource('company', 'CompanyController')->middleware('isAdmin');;
     Route::group(['prefix' => 'company', 'as' => 'company.', 'middleware' => 'isAdmin'], function () {
         Route::get('', 'CompanyController@index')->name('index');
         Route::POST('/search', 'CompanyController@searchCompanyPage')->name('search');
-        Route::get('/create', 'CompanyController@create')->name('create');
-        Route::post('/store', 'CompanyController@store')->name('store');
-        Route::get('/edit/{id}', 'CompanyController@edit')->name('edit');
-        Route::POST('/update/{id}', 'CompanyController@update')->name('update');
-        Route::POST('/destroy/{id}', 'CompanyController@destroy')->name('destroy');
     });
 
     // Efficiency

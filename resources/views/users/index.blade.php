@@ -47,7 +47,6 @@
 @section('js')
     <script !src="">
         let from = to = null;
-
         function searchAdmin() {
             $('#users').html('');
             $('#wait').css('display', 'inline-block'); // wait for loader
@@ -80,7 +79,6 @@
             /*from = formatDate(new Date(y, m, 1));
             to = formatDate(new Date(y, m + 1, 0));*/
             searchAdmin();
-
             $('#date').flatpickr({
                 mode: "range",
                 altInput: true,
@@ -141,7 +139,6 @@
                         } else {
                             date = 'N/A';
                         }
-
                         html += `<tr class="del-{{ $delSection }}-${value.id}">
                         <td> ${value.name} ${is_admin === 1 && auth_id != value.id ? '<a class="remove-default-style" href="force-login/' + value.id + '"><i class="fa fa-sign-in"></i></a>' : ''}</td>
                         <td> ${value.email} </td>

@@ -23,7 +23,6 @@ class PermissionController extends Controller
     {
         if (auth()->user()->is_admin == 1) {
             $permissions = Permission::all(); //Get all permissions
-
             return view('permissions.index')->with('permissions', $permissions);
         } else {
             abort(401);
@@ -39,7 +38,6 @@ class PermissionController extends Controller
     {
         if (auth()->user()->is_admin == 1) {
             $roles = Role::get(); //Get all roles
-
             return view('permissions.create')->with('roles', $roles);
         } else {
             abort(401);
@@ -58,13 +56,10 @@ class PermissionController extends Controller
             $this->validate($request, [
                 'name' => 'required|max:40',
             ]);
-
             $name = $request['name'];
             $permission = new Permission();
             $permission->name = $name;
-
             $roles = $request['roles'];
-
             $permission->save();
 
             if (!empty($request['roles'])) { //If one or more role is selected
@@ -75,7 +70,6 @@ class PermissionController extends Controller
                     $r->givePermissionTo($permission);
                 }
             }
-
             return redirect()->route('permissions.index')->with('alert-info', 'Permission' . $permission->name . ' added!');
         } else {
             abort(401);
@@ -107,7 +101,6 @@ class PermissionController extends Controller
     {
         if (auth()->user()->is_admin == 1) {
             $permission = Permission::findOrFail($id);
-
             return view('permissions.edit', compact('permission'));
         } else {
             abort(401);
@@ -130,7 +123,6 @@ class PermissionController extends Controller
             ]);
             $input = $request->all();
             $permission->fill($input)->save();
-
             return redirect()->route('permissions.index')->with('alert-info', 'Permission' . $permission->name . ' updated!');
         } else {
             abort(401);
@@ -151,9 +143,7 @@ class PermissionController extends Controller
         if ($permission->name == "Admin Panel") {
             return redirect()->route('permissions.index')->with('alert-info', 'Cannot delete this Permission!');
         }
-
         $permission->delete();
-
         return redirect()->route('permissions.index')->with('alert-info', 'Permission deleted!');
 
     }

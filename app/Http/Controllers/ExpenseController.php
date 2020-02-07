@@ -23,14 +23,12 @@ class ExpenseController extends Controller
         } else {
             $activeMenu = 'submit';
         }
-
         $data['companies'] = Company::all();
         $data['project'] = Project::all();
         $data['purchases'] = Purchases::all();
         $data['category'] = Categorys::all();
         $data['expense'] = Expenses::where(['delete_status' => NULL, 'status' => NULL])->get();
-
-        return view('expense.expensereport', $data, compact('activeMenu'));
+        return view('expense.expense-report', $data, compact('activeMenu'));
     }
 
     /**
@@ -56,15 +54,10 @@ class ExpenseController extends Controller
         if (count($data)) {
             foreach ($data as $datum) {
                 $routes = [];
-                $routes['edit'] = route('expenses.edit', $datum->id);
-                $routes['update'] = route('expenses.update', $datum->id);
-                $routes['approve'] = route('expenses.approve', $datum->id);
-                $routes['reject'] = route('expenses.reject', $datum->id);
                 $routes['destroy'] = route('expenses.destroy', $datum->id);
                 $datum->routes = $routes;
             }
         }
-
         return response()->json(['status' => 'success', 'data' => $data]);
     }
 
@@ -84,7 +77,6 @@ class ExpenseController extends Controller
                     });
                 }
             });
-
         $data = $data->dateSearch('date');
         $data = $data->isEmployee()->get();
 
@@ -99,7 +91,6 @@ class ExpenseController extends Controller
                 $datum->routes = $routes;
             }
         }
-
         return response()->json(['status' => 'success', 'data' => $data]);
     }
 
@@ -139,7 +130,6 @@ class ExpenseController extends Controller
             'description' => 'required|string',
             'total' => 'required|regex:/^\d+(\.\d{1,5})?$/',
         ];
-
         $validator = validator($request->all(), $rules, []);
 
         if ($validator->fails()) {
@@ -154,7 +144,6 @@ class ExpenseController extends Controller
                 Storage::delete($data->receipt);
                 $data->receipt = fileUpload('receipt');
             }
-
             $data->company = $request->company;
             $data->category = $request->category;
             $data->purchase = $request->purchase;
@@ -174,10 +163,8 @@ class ExpenseController extends Controller
                 if ($company) {
                     Mail::to($company->email)->send(new ExpenseCreated($data, true));
                 }
-
                 return response()->json(['status' => 'success']);
             }
-
             return response()->json(['status' => 'fail']);
         } catch (\Exception $e) {
             return response()->json(['status' => 'fail', 'msg' => $e->getMessage()]);
@@ -219,13 +206,11 @@ class ExpenseController extends Controller
             'description' => 'required|string',
             'total' => 'required|regex:/^\d+(\.\d{1,5})?$/',
         ]);
-
         $data = $request->all();
 
         if ($request->hasFile('receipt')) {
             $data['receipt'] = fileUpload('receipt');
         }
-
         $expense = Expenses::create($data);
         $msg = "Expense added successfully";
         $company = Company::findOrFail($request->company);
@@ -233,7 +218,6 @@ class ExpenseController extends Controller
         if ($company) {
             Mail::to($company->email)->send(new ExpenseCreated($expense, false));
         }
-
         return redirect()->back()->with('alert-info', $msg);
     }
 
@@ -250,7 +234,6 @@ class ExpenseController extends Controller
         if ($data->update()) {
             return response()->json(['status' => 'success']);
         }
-
         return response()->json(['status' => 'fail']);
     }
 
@@ -267,7 +250,6 @@ class ExpenseController extends Controller
         if ($data->update()) {
             return response()->json(['status' => 'success']);
         }
-
         return response()->json(['status' => 'fail']);
     }
 }

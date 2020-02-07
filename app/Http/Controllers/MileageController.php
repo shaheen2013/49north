@@ -42,10 +42,8 @@ class MileageController extends Controller
             $data['mileage_list'] = Auth::user()->mileage()->where('status', 'A')->orderByDesc('date')->get();
 
         }
-
         $data['companies'] = Company::all();
         $date_key = $request->date;
-
         return view('mileage-list', $data, compact('activeMenu'))->with('date_key', $date_key);
     }
 
@@ -68,7 +66,6 @@ class MileageController extends Controller
                 $datum->routes = $routes;
             }
         }
-
         return response()->json(['status' => 'success', 'data' => $data]);
     }
 
@@ -88,7 +85,6 @@ class MileageController extends Controller
                 $sql->orWhere('lastname', 'LIKE', '%' . $search . '%');
             });
         }
-
         $query->dateSearch('date');
         $query->isEmployee();
 
@@ -98,7 +94,6 @@ class MileageController extends Controller
         } else {
             $query->whereNotNull('status');
         }
-
         return $query->get();
     }
 
@@ -109,7 +104,6 @@ class MileageController extends Controller
      */
     public function searchHistoryMileage (Request $request)
     {
-
         $data = $this->searchMileage('history_search', false);
         if (count($data)) {
             foreach ($data as $datum) {
@@ -119,9 +113,7 @@ class MileageController extends Controller
                 $datum->routes = $routes;
             }
         }
-
         return response()->json(['status' => 'success', 'data' => $data]);
-
     }
 
     /**
@@ -139,9 +131,7 @@ class MileageController extends Controller
             'kilometers' => $request->kilometers,
             'reasonmileage' => $request->reasonformileage,
         ];
-
         DB::table('mileages')->insert($mileagearray);
-
     }
 
     /**
@@ -152,20 +142,17 @@ class MileageController extends Controller
      */
     public function edit (Request $request)
     {
-
         $q = Mileage::where('id', $request->input('id'));
 
         // if not admin, ensure they are only loading their own data
         if (!auth()->user()->is_admin) {
             $q->where('emp_id', auth()->user()->id);
         }
-
         $data['mileage'] = $q->first();
         $data['companies'] = Company::all();
         if ($data) {
             return response()->json(['status' => 'success', 'data' => $data]);
         }
-
         return response()->json(['status' => 'fail']);
     }
 
@@ -176,10 +163,8 @@ class MileageController extends Controller
      */
     public function update (Request $request)
     {
-
         $input = $request->only(['company', 'date', 'vehicle', 'kilometers', 'reasonmileage']);
         if ($id = $request->input('id')) {
-
             $data = Mileage::findOrFail($request->input('id'));
 
             if ($data->update($input)) {
@@ -192,7 +177,6 @@ class MileageController extends Controller
                 return response()->json(['status' => 'success']);
             }
         }
-
         return response()->json(['status' => 'fail']);
     }
 
@@ -209,9 +193,7 @@ class MileageController extends Controller
         if ($data->update()) {
             return response()->json(['status' => 'success']);
         }
-
         return response()->json(['status' => 'fail']);
-
     }
 
     /**
@@ -227,7 +209,6 @@ class MileageController extends Controller
         if ($data->update()) {
             return response()->json(['status' => 'success']);
         }
-
         return response()->json(['status' => 'fail']);
 
     }
@@ -242,12 +223,11 @@ class MileageController extends Controller
         $data = Mileage::findOrFail($id);
         $data->status = 'D';
         $data->save();
+
         if ($data->update()) {
             return response()->json(['status' => 'success']);
         }
-
         return response()->json(['status' => 'fail']);
-
     }
 
     /**
@@ -265,7 +245,6 @@ class MileageController extends Controller
             $success = false;
             $message = "Mileage not found";
         }
-
         return response()->json([
             'success' => $success,
             'message' => $message,

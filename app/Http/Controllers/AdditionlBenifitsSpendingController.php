@@ -57,7 +57,6 @@ class AdditionlBenifitsSpendingController extends Controller
     {
         $query = AdditionlBenifitsSpending::orderByDesc('date');
         $query->dateSearch('date');
-        // $query->isEmployee();
 
         // pending has not status
         if ($isPending) {
