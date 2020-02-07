@@ -32,7 +32,7 @@
 
                             @admin
                             <li class="nav-item">
-                                <a class="nav-link {{ $activeMenu == 'company' ? 'active' : '' }}" href="{{ route('company.index') }}" role="tab">Company</a>
+                                <a class="nav-link {{ $activeMenu == 'company' ? 'active' : '' }}" href="{{ route('companies.index') }}" role="tab">Company</a>
                             </li>
 
                             <li class="nav-item">
@@ -99,14 +99,14 @@
 
             <a class="nav-item nav-link {{ (request()->is('edit-profile')) ? 'active' : '' }}" href="{{ route('edit-profile') }}">Employee Information</a>
 
-            <a class="nav-item nav-link {{ (request()->is('agreementlist')) ? 'active' : '' }}" href="{{ route('agreement-list') }}">Agreements</a>
+            <a class="nav-item nav-link {{ (request()->is('agreements')) ? 'active' : '' }}" href="{{ route('agreements.index') }}">Agreements</a>
 
             <a class="nav-item nav-link {{request()->is('paystatement/list') ? 'active' : '' }}" href="{{ route('paystatement.list') }}">Pay Statements</a>
 
             @endif
 
             @if($activeMenu == 'company')
-                <a class="nav-item nav-link {{ (request()->is('company')) ? 'active' : '' }}" href="{{ route('company.index') }}">Company List</a>
+                <a class="nav-item nav-link {{ (request()->is('company')) ? 'active' : '' }}" href="{{ route('companies.index') }}">Company List</a>
             @endif
 
                 @if($activeMenu == 'admin' || $activeMenu == 'submit')
@@ -120,7 +120,7 @@
 
 
                     @can('mileage-enabled')
-                        <a class="nav-item nav-link {{ (request()->is('mileage/*')) ? 'active' : '' }}" href="{{ route('mileage.mileage-list') }}">Mileage Book</a>
+                        <a class="nav-item nav-link {{ (request()->is('mileages/*')) ? 'active' : '' }}" href="{{ route('mileages.index') }}">Mileage Book</a>
                     @endcan
 
                     <a class="nav-item nav-link {{ (request()->is('maintenance/*')) ? 'active' : '' }}" href="{{ url('maintenance/list') }}">Tech Maintenance</a>

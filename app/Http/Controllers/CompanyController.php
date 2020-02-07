@@ -88,7 +88,7 @@ class CompanyController extends Controller
      * @param int $id
      * @return void
      */
-    public function show ($id)
+    public function show (Company $company)
     {
         //
     }
@@ -98,10 +98,10 @@ class CompanyController extends Controller
      * @param int $id
      * @return JsonResponse
      */
-    public function edit ($id)
+    public function edit (Company $company)
     {
         if (auth()->user()->is_admin == 1) {
-            $data = Company::findOrFail($id);
+            $data = Company::findOrFail($company->id);
             if ($data) {
                 return response()->json(['status' => 'success', 'data' => $data]);
             }
@@ -117,7 +117,7 @@ class CompanyController extends Controller
      * @param int $id
      * @return JsonResponse
      */
-    public function update (Request $request, $id)
+    public function update (Request $request, Company $company)
     {
         // Validate form data
         $rules = [
@@ -132,7 +132,7 @@ class CompanyController extends Controller
         }
 
         try {// return $request->all();
-            $data = Company::findOrFail($id);
+            $data = Company::findOrFail($company->id);
             $logo = null;
 
             if ($request->hasFile('logo')) {
@@ -149,7 +149,6 @@ class CompanyController extends Controller
         } catch (\Exception $e) {
             return response()->json(['status' => 'fail', 'msg' => $e->getMessage()]);
         }
-
     }
 
     /**
@@ -169,9 +168,9 @@ class CompanyController extends Controller
         if (count($data)) {
             foreach ($data as $datum) {
                 $routes = [];
-                $routes['edit'] = route('company.edit', $datum->id);
-                $routes['update'] = route('company.update', $datum->id);
-                $routes['destroy'] = route('company.destroy', $datum->id);
+                $routes['edit'] = route('companies.edit', $datum->id);
+                $routes['update'] = route('companies.update', $datum->id);
+                $routes['destroy'] = route('companies.destroy', $datum->id);
                 $datum->routes = $routes;
             }
         }
@@ -184,10 +183,10 @@ class CompanyController extends Controller
      * @param int $id
      * @return JsonResponse
      */
-    public function destroy ($id)
+    public function destroy (Company $company)
     {
         try {
-            $company = Company::findOrFail($id);
+            $company = Company::findOrFail($company->id);
             Storage::delete($company->logo);
 
             if ($company->delete() == 1) {
@@ -204,7 +203,5 @@ class CompanyController extends Controller
         } catch (\Exception $e) {
             return response()->json(['status' => 'fail', 'msg' => $e->getMessage()]);
         }
-
-
     }
 }
