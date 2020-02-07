@@ -101,7 +101,7 @@
             });
         });
         window.onload = function () {
-            searchCompanyPage()
+            searchCompanyPage();
         };
 
         function openCompanyForm() {
@@ -123,7 +123,7 @@
             }
             $.ajax({
                 method: "POST",
-                url: "{{ route('company.store') }}",
+                url: "{{ route('companies.store') }}",
                 data: data,
                 enctype: 'multipart/form-data',
                 processData: false,  // Important!
@@ -165,9 +165,9 @@
 
         function updateCompany(id) {
             $('#create').attr('disabled', 'disabled');
-            var companyname = $('#companyName').val();
-            var email = $('#email').val();
             var data = new FormData(document.getElementById('company_form_id'));
+            data.append('_method', 'put');
+
             $.ajax({
                 method: "POST",
                 url: updateRoute,
@@ -198,7 +198,7 @@
             $('#wait').css('display', 'inline-block'); // wait for loader
             $.ajax({
                 type: 'post',
-                url: "{{ route('company.search') }}",
+                url: "{{ route('companies.search') }}",
                 data: data,
                 dataType: 'JSON',
                 success: function (results) {
@@ -231,7 +231,7 @@
             });
         }
 
-        function deleteConfirm(id) {
+        function deleteConfirm(id, route) {
             swal({
                 title: "Delete?",
                 text: "Please ensure and then confirm!",
@@ -244,12 +244,15 @@
                 if (e.value === true) {
                     $.ajax({
                         type: 'post',
-                        url: "/company/destroy/" + id,
+                        url: route,
+                        data: {
+                            _method: 'delete'
+                        },
                         dataType: 'JSON',
                         success: function (results) {
                             if (results.success === true) {
                                 swal("Done!", results.message, "success").then(function () {
-                                    window.location.reload()
+                                    searchCompanyPage();
                                 });
                             } else {
                                 swal("Error!", results.message, "error");
@@ -260,7 +263,6 @@
                 } else {
                     e.dismiss;
                 }
-
             }, function (dismiss) {
                 return false;
             })
