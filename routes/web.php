@@ -31,10 +31,12 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('edit_employee', 'HomeController@editEmployee')->name('edit_employee');
 
     // Agreements
-    Route::get('agreementlist', 'AgreementController@agreementList')->name('agreement-list');
-    Route::post('addagreement', 'AgreementController@addAgreement')->name('add-agreement');
-    Route::delete('delete_agreement/{id}/{type}', 'AgreementController@destroy')->name('delete_agreement')->middleware('isAdmin');
-    Route::get('agreement/search', 'AgreementController@search')->name('agreement.search');
+    Route::group(['prefix' => 'agreements', 'as' => 'agreements.'], function () {
+        Route::get('', 'AgreementController@index')->name('index');
+        Route::post('', 'AgreementController@store')->name('store');
+        Route::delete('/{agreement}', 'AgreementController@destroy')->name('destroy')->middleware('isAdmin');
+        Route::get('/search', 'AgreementController@search')->name('search');
+    });
 
     // Expenses
     Route::resource('expenses', 'ExpenseController')->middleware('can:expenses-enabled');
@@ -69,14 +71,9 @@ Route::group(['middleware' => ['auth']], function () {
     });
 
     // Company
-    Route::group(['prefix' => 'company', 'as' => 'company.', 'middleware' => 'isAdmin'], function () {
-        Route::get('', 'CompanyController@index')->name('index');
-        Route::POST('/search', 'CompanyController@searchCompanyPage')->name('search');
-        Route::get('/create', 'CompanyController@create')->name('create');
-        Route::post('/store', 'CompanyController@store')->name('store');
-        Route::get('/edit/{id}', 'CompanyController@edit')->name('edit');
-        Route::POST('/update/{id}', 'CompanyController@update')->name('update');
-        Route::POST('/destroy/{id}', 'CompanyController@destroy')->name('destroy');
+    Route::resource('companies', 'CompanyController')->middleware('isAdmin');
+    Route::group(['prefix' => 'companies', 'as' => 'companies.', 'middleware' => 'isAdmin'], function () {
+        Route::post('/search', 'CompanyController@searchCompanyPage')->name('search');
     });
 
     // Efficiency
@@ -101,18 +98,14 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/comment/store/{id}', 'MaintenanceController@commentStore')->name('comment.store');
         Route::post('/comment/update/{id}', 'MaintenanceController@commentUpdate')->name('comment.update');
         Route::get('/show/{id}', 'MaintenanceController@show')->name('show');
-
     });
 
     // Mileage
-    Route::group(['prefix' => 'mileage', 'as' => 'mileage.', 'middleware' => 'can:mileage-enabled'], function () {
-        Route::get('mileagelist', 'MileageController@mileageList')->name('mileage-list');
-        Route::post('edit', 'MileageController@edit')->name('edit');
-        Route::post('update', 'MileageController@update')->name('update');
-        Route::post('destroy', 'MileageController@destroy')->name('destroy');
-        Route::post('/pending/{id}', 'MileageController@mileagePending')->name('pending')->middleware('isAdmin');
-        Route::post('/approve/{id}', 'MileageController@mileageApprove')->name('approve')->middleware('isAdmin');
-        Route::post('/reject/{id}', 'MileageController@mileageReject')->name('reject')->middleware('isAdmin');
+    Route::resource('mileages', 'MileageController')->middleware('can:mileage-enabled');
+    Route::group(['prefix' => 'mileages', 'as' => 'mileages.', 'middleware' => 'can:mileage-enabled'], function () {
+        Route::post('/pending/{mileage}', 'MileageController@mileagePending')->name('pending')->middleware('isAdmin');
+        Route::post('/approve/{mileage}', 'MileageController@mileageApprove')->name('approve')->middleware('isAdmin');
+        Route::post('/reject/{mileage}', 'MileageController@mileageReject')->name('reject')->middleware('isAdmin');
         Route::post('/search/pending', 'MileageController@searchPendingMileage')->name('searchPending');
         Route::post('/search/history', 'MileageController@searchHistoryMileage')->name('searchHistory');
     });
@@ -132,9 +125,9 @@ Route::group(['middleware' => ['auth']], function () {
     // Paystatement route
     Route::group(['prefix' => 'paystatement', 'as' => 'paystatement.', 'middleware' => 'can:pay-statement-enabled'], function () {
         Route::get('/list', 'PaystatementController@payList')->name('list');
-        Route::POST('/search', 'PaystatementController@searchPaymentPage')->name('search');
+        Route::post('/search', 'PaystatementController@searchPaymentPage')->name('search');
         Route::post('/store', 'PaystatementController@store')->name('store');
-        Route::POST('/destroy/{id}', 'PaystatementController@destroy')->name('destroy');
+        Route::post('/destroy/{id}', 'PaystatementController@destroy')->name('destroy');
     });
 
     Route::get('force-login/{user}', 'UserController@forceLogin')->name('force-login');
@@ -147,8 +140,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::put('/{plan}', 'PlanController@update')->name('update');
     });
 
-    Route::group(['prefix' => 'missions', 'as' => 'missions.', 'middleware' => 'can:classroom-enabled'], function () {
     // Missions routes go here
+    Route::group(['prefix' => 'missions', 'as' => 'missions.', 'middleware' => 'can:classroom-enabled'], function () {
     Route::get('/', 'MissionController@index')->name('index');
     Route::post('/store', 'MissionController@store')->name('store');
     Route::put('/{plan}', 'MissionController@update')->name('update');
@@ -156,15 +149,10 @@ Route::group(['middleware' => ['auth']], function () {
 
     // Messages routes go here
     Route::group(['prefix' => 'messages', 'as' => 'messages.'], function () {
-        Route::get('/', 'MessageController@index')->name('index');
-        Route::post('/store', 'MessageController@store')->name('store');
-        Route::get('show/{message}', 'MessageController@show')->name('show');
-        Route::get('/{message}/edit', 'MessageController@edit')->name('edit');
-        Route::put('/{message}', 'MessageController@update')->name('update');
-        Route::delete('/{message}', 'MessageController@destroy')->name('destroy');
         Route::get('/search', 'MessageController@search')->name('search');
         Route::put('/status/{message}', 'MessageController@statusUpdate')->name('status.update');
     });
+    Route::resource('messages', 'MessageController');
 });
 
 Route::resource('posts', 'PostController');

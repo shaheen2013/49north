@@ -11,11 +11,10 @@ use Illuminate\View\View;
 
 class AgreementController extends Controller
 {
-
     /**
      * @return Factory|View
      */
-    function agreementList ()
+    function index ()
     {
         $activeMenu = 'profile';
         $q = EmployeeDetails::orderBy('firstname')->with('activeAgreement', 'activeCodeofconduct', 'activeAgreement.amendments');
@@ -34,7 +33,7 @@ class AgreementController extends Controller
      *
      * @return RedirectResponse
      */
-    function addAgreement (Request $request)
+    function store (Request $request)
     {
         //$file = $request->file('agreement_file');
         //$name = str_pad($request->input('employee_id'), '3', '0', STR_PAD_LEFT) . '-' . rand(11111, 99999) . '.' . $file->getClientOriginalExtension();
@@ -98,7 +97,6 @@ class AgreementController extends Controller
     public function search (Request $request)
     {
         try {
-
             $q = EmployeeDetails::latest()->with('activeAgreement', 'activeCodeofconduct', 'activeAgreement.amendments');
 
             if (!auth()->user()->is_admin) {
@@ -114,15 +112,27 @@ class AgreementController extends Controller
                 if ($datum->activeAgreement) {
                     $datum->active_agreement_url = fileUrl($datum->activeAgreement->agreement, true);
 
+                    $routes = [];
+                    $routes['destroy'] = route('agreements.destroy', $datum->activeAgreement->id);
+                    $datum->active_agreement_routes = $routes;
+
                     if (count($datum->activeAgreement->amendments)) {
                         foreach ($datum->activeAgreement->amendments as $amendment) {
                             $amendment->amendment_url = fileUrl($amendment->agreement, true);
+
+                            $routes = [];
+                            $routes['destroy'] = route('agreements.destroy', $amendment->id);
+                            $amendment->amendment_routes = $routes;
                         }
                     }
                 }
 
                 if ($datum->activeCodeofconduct) {
                     $datum->active_code_of_conduct_url = fileUrl($datum->activeCodeofconduct->coc_agreement, true);
+
+                    $routes = [];
+                    $routes['destroy'] = route('agreements.destroy', $datum->activeCodeofconduct->id);
+                    $datum->active_code_of_conduct_routes = $routes;
                 }
             }
 
@@ -138,13 +148,12 @@ class AgreementController extends Controller
      * @param string $type
      * @return JsonResponse
      */
-    function destroy ($id, $type)
+    function destroy (Agreement $agreement, Request $request)
     {
-
-        if ($type == 'EA') {
-            $agreement = Agreement::where('id', $id)->first();
+        if ($request->type == 'EA') {
+            $agreement = Agreement::where('id', $agreement->id)->first();
         } else {
-            $agreement = CodeOfConduct::where('id', $id)->first();
+            $agreement = CodeOfConduct::where('id', $agreement->id)->first();
         }
 
         $agreement->delete();

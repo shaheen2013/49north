@@ -31,8 +31,7 @@
                                 <div id="wait"></div>
                             </div>
                             <div class="@admin col-sm-7 @else col-sm-8 @endadmin">
-                                <a href="javascript:void(0)" onclick="$('#mileage-modaledit input').val(''); $('#update').attr('onclick', 'updateMileage(0);');" class="_new_icon_button_1" data-toggle="modal" data-target="#mileage-modaledit">
-                                    <i class="fa fa-plus"></i> </a>
+                                <a href="javascript:void(0)" onclick="$('#mileage-modaledit input').val(''); $('#update').attr('onclick', 'createMileage();');" class="_new_icon_button_1" data-toggle="modal" data-target="#mileage-modaledit"><i class="fa fa-plus"></i> </a>
                             </div>
                             <div class="col-sm-12">
                                 <table class="table _table _table-bordered">
@@ -102,64 +101,68 @@
     </div>
 
     <!----- Mileage Modal edit ---->
-    <div id="mileage-modaledit" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog"
-         aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div id="mileage-modaledit" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-body">
                     <div class="col-md-12" style="margin-top:40px;margin-bottom:20px;">
-                        <div class="row">
-                            <div class="col-md-6 col-sm-6">
-                                <div class="text_outer">
-                                    <label for="edit_companyname" class="">Company</label>
-                                    <select class="select_status form-control" name="companyname" id="edit_companyname">
-                                        <option>Select</option>
+                        {{ Form::open(array('id' => 'mileage')) }}
+                            <div class="row">
+                                <div class="col-md-6 col-sm-6">
+                                    <div class="text_outer">
+                                        {{ Form::label('edit_companyname', 'Company') }}
+                                        @php
+                                            $data = [];
+                                        @endphp
                                         @foreach($companies as $company)
-                                            <option value="{{$company->companyname}}">{{$company->companyname}}</option>
+                                            @php
+                                                $data[$company->companyname] = $company->companyname;
+                                            @endphp
                                         @endforeach
-                                    </select>
+                                        {!! Form::select('companyname', $data, '', ['class' => 'select_status form-control', 'placeholder' => 'Select', 'id' => 'edit_companyname']) !!}
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-sm-6">
+                                    <div class="text_outer">
+                                        {{ Form::label('edit_date', 'Date') }}
+                                        {{ Form::text('date', null, array('class' => 'flatpickr form-control', 'placeholder' => 'Select Date', 'id' => 'edit_date')) }}
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-md-6 col-sm-6">
-                                <div class="text_outer">
-                                    <label for="edit_date" class="">Date</label>
-                                    <input type="text" placeholder="Select Date" name="date" class="flatpickr form-control" id="edit_date">
+                            <div class="clearfix"></div>
+                            <div class="row">
+                                <div class="col-md-6 col-sm-6">
+                                    <div class="text_outer">
+                                        {{ Form::label('edit_vehicle', 'Vehicle') }}
+                                        {{ Form::text('vehicle', null, array('class' => 'form-control', 'placeholder' => 'Insert text here', 'id' => 'edit_vehicle')) }}
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-sm-6">
+                                    <div class="text_outer">
+                                        {{ Form::label('edit_kilometers', 'No of kilometers') }}
+                                        {{ Form::number('kilometers', null, array('class' => 'form-control', 'placeholder' => 'Insert figure here', 'id' => 'edit_kilometers')) }}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="clearfix"></div>
-                        <div class="row">
-                            <div class="col-md-6 col-sm-6">
-                                <div class="text_outer">
-                                    <label for="edit_vehicle" class="">Vehicle</label>
-                                    <input type="text" id="edit_vehicle" name="vehicle" class="form-control" placeholder="Insert text here">
-                                </div>
-                            </div>
-                            <div class="col-md-6 col-sm-6">
-                                <div class="text_outer">
-                                    <label for="edit_kilometers" class="">No of kilometers</label>
-                                    <input type="number" id="edit_kilometers" name="kilometers" class="form-control" placeholder="Insert figure here">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12 col-sm-12">
-                                <div class="text_outer">
-                                    <label for="edit_reasonformileage" class="">Reason for mileage</label>
-                                    <input type="text" id="edit_reasonformileage" name="reasonformileage" class="form-control" placeholder="Insert text here">
-                                </div>
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="row margin-top-30">
-                            <div class="form-group" style="width:100%;">
+                            <div class="row">
                                 <div class="col-md-12 col-sm-12">
-                                    <button type="button" id="update" onclick="updateMileage(id)" class="btn-dark contact_btn" data-form="expences">Save
-                                    </button>
-                                    <span class="close close-span" data-dismiss="modal" aria-label="Close"><i class="fa fa-arrow-left"></i> Return to Mileage</span>
+                                    <div class="text_outer">
+                                        {{ Form::label('edit_reasonformileage', 'Reason for mileage') }}
+                                        {{ Form::text('reasonformileage', null, array('class' => 'form-control', 'placeholder' => 'Insert text here', 'id' => 'edit_reasonformileage')) }}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                            <hr>
+                            <div class="row margin-top-30">
+                                <div class="form-group" style="width:100%;">
+                                    <div class="col-md-12 col-sm-12">
+                                        <button type="button" id="update" onclick="createMileage()" class="btn-dark contact_btn" data-form="expences">Save
+                                        </button>
+                                        <span class="close close-span" data-dismiss="modal" aria-label="Close"><i class="fa fa-arrow-left"></i> Return to Mileage</span>
+                                    </div>
+                                </div>
+                            </div>
+                        {{ Form::close() }}
                     </div>
                 </div>
             </div>
@@ -169,8 +172,7 @@
 
 @push('scripts')
     <script type="text/javascript">
-
-        let id = from = to = history_from = history_to = null;
+        let id = from = to = history_from = history_to = updateRoute = null;
 
         $(document).ready(function () {
             const date = new Date(), y = date.getFullYear(), m = date.getMonth();
@@ -235,32 +237,62 @@
             });
         });
 
-        function openEditMileageModel(id) {
-
-            $('#mileage-modaledit').modal();
+        function createMileage() {
             $.ajax({
-                type: 'POST',
+                method: "POST",
+                url: '{{ route('mileages.store') }}',
+                data: new FormData(document.getElementById('mileage')),
+                dataType: 'JSON',
+                processData: false,  // Important!
+                contentType: false,
+                cache: false,
+                success: function (response) {
+                    if (response.status === 200) {
+                        if (response.errors === undefined) {
+                            $.toaster({message: 'created successfully', title: 'Success', priority: 'success'});
+                            searchPendingMileagePage();
+                            $('#mileage-modaledit').modal('hide');
+                            $('#update').removeAttr('disabled');
+                        } else {
+                            let errors = '';
+                            for (let [key, value] of Object.entries(response.errors)) {
+                                errors += value[0] + '<br>';
+                            }
+                            swal("Error!", errors, "error");
+                        }
+                    } else {
+                        swal("Error!", response.message, "error");
+                    }
+                }
+            });
+        }
+
+        function openEditMileageModel(id, editRoute, updateUri) {
+            updateRoute = updateUri;
+            $('#mileage-modaledit').modal();
+            $('#update').attr('onclick', 'updateMileage();');
+
+            $.ajax({
+                type: 'get',
                 data: {id: id},
-                url: "{{ route('mileage.edit') }}",
+                url: editRoute,
                 dataType: 'JSON',
                 success: function (results) {
                     if (results.status === 'success') {
                         let company = '';
                         let selecteds = '';
                         for (let i = 0; i < results.data.companies.length; i++) {
-                            if (results.data.companies[i].id === results.data.mileage.company) {
+                            if (results.data.companies[i].companyname === results.data.mileage.company) {
                                 selecteds = 'selected';
                             }
-                            company += ` <option value="${results.data.companies[i].id}" ${selecteds}>${results.data.companies[i].companyname}</option>`;
+                            company += ` <option value="${results.data.companies[i].companyname}" ${selecteds}>${results.data.companies[i].companyname}</option>`;
                             selecteds = '';
                         }
                         $('#edit_companyname').html(company);
-
-                        $('#edit_date').val(results.data.mileage.date.split(' ')[0]);
                         $('#edit_vehicle').val(results.data.mileage.vehicle);
                         $('#edit_kilometers').val(results.data.mileage.kilometers);
                         $('#edit_reasonformileage').val(results.data.mileage.reasonmileage);
-                        $('#update').attr('onclick', 'updateMileage(' + id + ')');
+                        $('#update').attr('onclick', 'updateMileage()');
 
                         $('#edit_date').flatpickr({
                             altInput: true,
@@ -283,7 +315,7 @@
             });
         }
 
-        function updateMileage(id) {
+        function updateMileage() {
             $('#update').attr('disabled', 'disabled');
 
             const data = {
@@ -292,12 +324,12 @@
                 vehicle: $('#edit_vehicle').val(),
                 kilometers: $('#edit_kilometers').val(),
                 reasonmileage: $('#edit_reasonformileage').val(),
-                id: id
+                _method: 'put'
             };
 
             $.ajax({
                 method: "POST",
-                url: "{{ route('mileage.update') }}",
+                url: updateRoute,
                 data: data,
                 dataType: 'JSON',
                 success: function (response) {
@@ -306,7 +338,6 @@
                     $('#mileage-modaledit').modal('hide');
                     $('#update').removeAttr('disabled');
                 }
-
             });
         }
 
@@ -331,7 +362,7 @@
             $('#wait-his').css('display', 'inline-block'); // wait for loader
             $.ajax({
                 type: 'post',
-                url: "{{ route('mileage.searchPending') }}",
+                url: "{{ route('mileages.searchPending') }}",
                 data: data,
                 dataType: 'JSON',
                 success: function (results) {
@@ -379,8 +410,8 @@
 
                                     html += `
                                         <td class="text-right">
-                                            <a href="javascript:void(0);" onclick="openEditMileageModel('${data[index].id}')">EDIT</a>
-                                            <a href="javascript:void(0);" class="down" onclick="deleteConfirm('${data[index].id}')">DELETE</a>
+                                            <a href="javascript:void(0);" onclick="openEditMileageModel('${data[index].id}', '${data[index].routes.edit}', '${data[index].routes.update}')">EDIT</a>
+                                            <a href="javascript:void(0);" class="down" onclick="deleteConfirm('${data[index].id}', '${data[index].routes.destroy}')">DELETE</a>
                                         </td>
                                     </tr><tr class="spacer"></tr>`;
 
@@ -417,7 +448,7 @@
             $('#wait-his').css('display', 'inline-block'); // wait for loader
             $.ajax({
                 type: 'post',
-                url: "{{ route('mileage.searchHistory') }}",
+                url: "{{ route('mileages.searchHistory') }}",
                 data: data,
                 dataType: 'JSON',
                 success: function (results) {
@@ -446,7 +477,7 @@
                                         </td>
 
                                         <td class="text-right">
-                                            <a href="javascript:void(0);" class="down" onclick="deleteConfirm('${data[index].id}')">DELETE</a></td>
+                                            <a href="javascript:void(0);" class="down" onclick="deleteConfirm('${data[index].id}', '${data[index].routes.destroy}')">DELETE</a>
                                         </td>`;
                                     } else {
                                         admin = `<td class="text-center">N/A</td><td></td>`;
@@ -474,7 +505,7 @@
             });
         }
 
-        function deleteConfirm(id) {
+        function deleteConfirm(id, route) {
             swal({
                 title: "Delete?",
                 text: "Please ensure and then confirm!",
@@ -487,8 +518,8 @@
                 if (e.value === true) {
                     $.ajax({
                         type: 'post',
-                        url: "{{ route('mileage.destroy') }}",
-                        data: {id: id},
+                        url: route,
+                        data: {_method: 'delete'},
                         dataType: 'JSON',
                         success: function (results) {
                             if (results.success === true) {
@@ -566,6 +597,5 @@
                 }
             });
         }
-
     </script>
 @endpush
