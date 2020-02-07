@@ -1,4 +1,5 @@
 <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet" />
+@csrf
 <div class="row">
     <div class="col-md-6 col-sm-6">
         <div class="text_outer">

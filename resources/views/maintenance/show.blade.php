@@ -1,9 +1,8 @@
 @extends('layouts.main')
+
 @section('title', 'Maintenance| Single view')
+
 @section('content1')
-
-    {{-- @if($show->comment) --}}
-
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-12">
@@ -12,7 +11,7 @@
                         <h2 class="header" style="margin-bottom: 1rem; font-size: 1.5rem; padding : inherit; ">
                             Subject
                             <span class="pull-right">
-                                {{ Form::open(array('route' => 'maintenance.delete', 'method' => 'post', 'id' => 'delete-form')) }}
+                                {{ Form::open(array('route' => array('maintenance_tickets.destroy', $show->id), 'method' => 'post', 'id' => 'delete-form')) }}
                                 @csrf
                                 {!! Form::hidden('id', $show->id) !!}
                                     <button type="button" class="btn btn-info" onclick="maintenanceEditView('{{$show->id}}', '{{ $editRoute }}')"> Edit </button>
@@ -85,14 +84,13 @@
             <div class="modal-content">
                 <div class="modal-body">
                     <div class="col-md-12" style="margin-top:40px;margin-bottom:20px;">
-                        {{ Form::open(array('route' => 'maintenance.edit', 'method' => 'post', 'class' => 'maintenance1_edit')) }}
+                        {{ Form::open(array('route' => array('maintenance_tickets.update', $show->id), 'method' => 'post', 'class' => 'maintenance1_edit')) }}
                         {{ Form::close() }}
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
 
     <script type="text/javascript">
         let updateRoute = null;

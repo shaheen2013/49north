@@ -19,7 +19,7 @@ class MaintenanceController extends Controller
      *
      * @return Factory|View
      */
-    function maintenanceList ()
+    function index ()
     {
         if (auth()->user()->is_admin) {
             $activeMenu = 'admin';
@@ -39,7 +39,7 @@ class MaintenanceController extends Controller
      * @param Request $request
      * @return RedirectResponse
      */
-    function addMaintenance (Request $request) {
+    function store (Request $request) {
         $request->validate([
             'user' => 'nullable|array'
         ]);
@@ -60,11 +60,13 @@ class MaintenanceController extends Controller
      * @param Request $request
      * @return Factory|View
      */
-    function editMaintenanceView (Request $request) {
-        $data['maintanance'] = MaintenanceTicket::find($request->id);
+    function edit (MaintenanceTicket $maintenanceTicket)
+    {
+        $data['maintanance'] = MaintenanceTicket::find($maintenanceTicket->id);
         $data['category'] = Categorys::all();
         $data['categorya1'] = Categorys::where('id', $data['maintanance']->category)->first();
         $data['users'] = User::where('is_admin', 0)->get();
+
         return view('ajaxview.editmaintenance', $data);
     }
 
@@ -73,31 +75,35 @@ class MaintenanceController extends Controller
      * @param Request $request
      * @return RedirectResponse
      */
-    function edit (Request $request) {
-        $id = $request->id;
+    function update (Request $request, MaintenanceTicket $maintenanceTicket) {
+        $id = $maintenanceTicket->id;
         $data = $request->all();
         unset($data['user']);
         $try = MaintenanceTicket::where(['id' => $id])->update($data);
         $maintenance = MaintenanceTicket::findOrFail($id);
         $msg = 'Updated a ticket';
         $maintenance->users()->detach();
+
         if (count($request->user)) {
             $maintenance->users()->attach($request->user);
             Mail::to(User::find($request->user)->pluck('email'))->send(new MaintenanceNotify($request));
         }
+
         return redirect()->back()->with('alert-info', $msg);
     }
 
     /**
      * delete tickets
      * @param Request $request
-     * @return RedirectResponse
+     * @return JsonResponse
      */
-    function delete (Request $request) {
-        MaintenanceTicket::destroy($request->id);
+    function destroy (MaintenanceTicket $maintenanceTicket)
+    {
+        MaintenanceTicket::destroy($maintenanceTicket->id);
         $msg = 'Ticket deleted';
         session()->flash('alert-info', $msg);
-        return redirect()->route('maintenance.list');
+
+        return response()->json(['success']);
     }
 
     /**
@@ -105,18 +111,23 @@ class MaintenanceController extends Controller
      *
      * @return JsonResponse
      */
-    function ticketInProgress (Request $request) {
-        $id = $request->id;
+    function ticketInProgress (MaintenanceTicket $maintenanceTicket)
+    {
+        $id = $maintenanceTicket->id;
         MaintenanceTicket::where(['id' => $id])->update(['status' => 1]);
+
         return response()->json(['status' => 200]);
     }
 
     /**
      * @param Request $request
      */
-    public function ticketCancel (Request $request) {
-        $id = $request->id;
+    public function ticketCancel (MaintenanceTicket $maintenanceTicket)
+    {
+        $id = $maintenanceTicket->id;
         MaintenanceTicket::where(['id' => $id])->update(['status' => 2]);
+
+        return response()->json(['status' => 200]);
     }
 
     /**
@@ -161,12 +172,14 @@ class MaintenanceController extends Controller
             if (count($data)) {
                 foreach ($data as $datum) {
                     $routes = [];
-                    $routes['commentStore'] = route('maintenance.comment.store', $datum->id);
-                    $routes['commentUpdate'] = route('maintenance.comment.update', $datum->id);
-                    $routes['edit'] = route('maintenance.editview');
-                    // $routes['update'] = route('maintenance.update', $datum->id);
-                    $routes['show'] = route('maintenance.show', $datum->id);
-                    $routes['destroy'] = route('maintenance.delete');
+                    $routes['commentStore'] = route('maintenance_tickets.comment.store', $datum->id);
+                    $routes['commentUpdate'] = route('maintenance_tickets.comment.update', $datum->id);
+                    $routes['edit'] = route('maintenance_tickets.edit', $datum->id);
+                    $routes['update'] = route('maintenance_tickets.update', $datum->id);
+                    $routes['show'] = route('maintenance_tickets.show', $datum->id);
+                    $routes['destroy'] = route('maintenance_tickets.destroy', $datum->id);
+                    $routes['ticket_inprogress'] = route('maintenance_tickets.ticket_inprogress', $datum->id);
+                    $routes['ticket_cancel'] = route('maintenance_tickets.ticket_cancel', $datum->id);
                     $datum->routes = $routes;
                 }
             }
@@ -186,21 +199,25 @@ class MaintenanceController extends Controller
      *
      * @return Factory|View
      */
-    public function show ($id) {
+    public function show (MaintenanceTicket $maintenanceTicket)
+    {
         if (auth()->user()->is_admin) {
             $activeMenu = 'admin';
         } else {
             $activeMenu = 'submit';
         }
-        $show = MaintenanceTicket::with('employee')->findOrFail($id);
+
+        $show = MaintenanceTicket::with('employee')->findOrFail($maintenanceTicket->id);
 
         if ($show->comment) {
-            $route = route('maintenance.comment.update', $show->id);
+            $route = route('maintenance_tickets.comment.update', $show->id);
         } else {
-            $route = route('maintenance.comment.store', $show->id);
+            $route = route('maintenance_tickets.comment.store', $show->id);
         }
-        $editRoute = route('maintenance.editview', $id);
-        $deleteRoute = route('maintenance.delete');
+
+        $editRoute = route('maintenance_tickets.edit', $maintenanceTicket->id);
+        $deleteRoute = route('maintenance_tickets.destroy', $maintenanceTicket->id);
+
         return view('maintenance.show', compact('show', 'user', 'activeMenu', 'route', 'editRoute', 'deleteRoute'));
     }
 
@@ -209,10 +226,12 @@ class MaintenanceController extends Controller
      * @param int  $id
      * @return JsonResponse
      */
-    public function commentStore (Request $request, $id) {
+    public function commentStore (Request $request, MaintenanceTicket $maintenanceTicket)
+    {
         $rules = [
             'comment' => 'string|max:491',
         ];
+
         $validator = validator($request->all(), $rules, []);
 
         if ($validator->fails()) {
@@ -220,18 +239,17 @@ class MaintenanceController extends Controller
         }
 
         try {
-            // return $request->all();
-            $data = MaintenanceTicket::findOrFail($id);
+            $data = MaintenanceTicket::findOrFail($maintenanceTicket->id);
             $data->comment = $request->comment;
 
             if ($data->save()) {
                 return response()->json(['status' => 'success']);
             }
+
             return response()->json(['status' => 'fail']);
         } catch (\Exception $e) {
             return response()->json(['status' => 'fail', 'msg' => $e->getMessage()]);
         }
-
     }
 
     /**
@@ -239,12 +257,13 @@ class MaintenanceController extends Controller
      * @param int  $id
      * @return JsonResponse
      */
-    public function commentUpdate (Request $request, $id) {
-
+    public function commentUpdate (Request $request, MaintenanceTicket $maintenanceTicket)
+    {
         // Validate form data
         $rules = [
             'comment' => 'string|max:491',
         ];
+
         $validator = validator($request->all(), $rules, []);
 
         if ($validator->fails()) {
@@ -252,17 +271,16 @@ class MaintenanceController extends Controller
         }
 
         try {
-            // return $request->all();
-            $data = MaintenanceTicket::findOrFail($id);
+            $data = MaintenanceTicket::findOrFail($maintenanceTicket->id);
             $data->comment = $request->comment;
 
             if ($data->update()) {
                 return response()->json(['status' => 'success']);
             }
+
             return response()->json(['status' => 'fail']);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return response()->json(['status' => 'fail', 'msg' => $e->getMessage()]);
         }
-
     }
 }

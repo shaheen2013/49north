@@ -3,7 +3,6 @@
 @section('content1')
 
     <div class="well-default-trans">
-
         <div class="tab-pane" id="nav-maintenance" role="tabpanel" aria-labelledby="nav-maintenance-tab">
             <div class="maintenance inner-tab-box">
                 <div class="col-sm-12">
@@ -100,7 +99,7 @@
             <div class="modal-content">
                 <div class="modal-body">
                     <div class="col-md-12" style="margin-top:40px;margin-bottom:20px;">
-                        {{ Form::open(array('route' => 'maintenance.edit', 'method' => 'post', 'class' => 'maintenance1_edit')) }}
+                        {{ Form::open(array('method' => 'post', 'class' => 'maintenance1_edit')) }}
 
                         {{ Form::close() }}
                     </div>
@@ -114,7 +113,7 @@
             <div class="modal-content">
                 <div class="modal-body">
                     <div class="col-md-12" style="margin-top:40px;margin-bottom:20px;">
-                        {{ Form::open(array('route' => 'maintenance.add', 'method' => 'post', 'class' => 'maintenance1')) }}
+                        {{ Form::open(array('route' => 'maintenance_tickets.store', 'method' => 'post', 'class' => 'maintenance1')) }}
                             <div class="row">
                                 <div class="col-md-6 col-sm-6">
                                     <div class="text_outer">
@@ -192,9 +191,7 @@
                             </div>
                         {{ Form::close() }}
                     </div>
-
                 </div>
-
             </div>
         </div>
     </div>
@@ -208,8 +205,8 @@
         $(document).ready(function () {
             const date = new Date(), y = date.getFullYear(), m = date.getMonth();
             var today = new Date();
-            to = formatDate(today);
-            from = formatDate(today.setDate(today.getDate()-30));
+            to = fromCompleted = formatDate(today);
+            from = toCompleted = formatDate(today.setDate(today.getDate()-30));
             searchMaintenance();
 
             $("#active_ticket_span").click(function () {
@@ -282,7 +279,7 @@
 
             $.ajax({
                 type: 'get',
-                url: "{{ route('maintenance.search') }}",
+                url: "{{ route('maintenance_tickets.search') }}",
                 data: data,
                 dataType: 'JSON',
                 success: function (results) {
@@ -317,15 +314,15 @@
 
                         if (is_ticket_admin == 1 && htmlId === '#maintanance') {
                             adminOption = `<td class="text-right">
-                                <a href="javascript:void(0)" data-toggle="tooltip" title="In Progress" onclick="ticketInProgress(${value.id})"><i class="fa fa-check-circle"></i></a>
-                                <a href="javascript:void(0)" data-toggle="tooltip" title="Cancel!" onclick="ticketCancel(${value.id})"><i class="fa fa-ban"></i></a>
+                                <a href="javascript:void(0)" data-toggle="tooltip" title="In Progress" onclick="ticketInProgress(${value.id}, '${value.routes.ticket_inprogress}')"><i class="fa fa-check-circle"></i></a>
+                                <a href="javascript:void(0)" data-toggle="tooltip" title="Cancel!" onclick="ticketCancel(${value.id}, '${value.routes.ticket_cancel}')"><i class="fa fa-ban"></i></a>
                             </td>`;
                         }
 
                         if (htmlId === '#maintanance') {
                             action = `<td class="action-box">
                                 <a href="${value.routes.show}"> View</a>
-                            <a href="javascript:void(0);" onclick="maintenanceEditView(${ value.id }, '${value.routes.edit}')">EDIT</a>
+                            <a href="javascript:void(0);" onclick="maintenanceEditView(${ value.id }, '${value.routes.edit}', '${value.routes.update}')">EDIT</a>
                             <a href="javascript:void(0);" class="down" onclick="deleteMaintenance(${ value.id }, '${value.routes.destroy}')">DELETE</a>
                         </td>`;
                         } else {
@@ -372,7 +369,7 @@
 
             $.ajax({
                 type: 'get',
-                url: "{{ route('maintenance.search') }}",
+                url: "{{ route('maintenance_tickets.search') }}",
                 data: data,
                 dataType: 'JSON',
                 success: function (results) {
@@ -387,14 +384,13 @@
             });
         }
 
-        function ticketInProgress(id){
+        function ticketInProgress(id, route){
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
             $.ajax({
                 type:'POST',
-                url: "{{ route('maintenance.ticket_inprogress') }}",
+                url: route,
                 dataType:'html',
-                data: {_token: CSRF_TOKEN ,
-                    id: id},
+                data: {_token: CSRF_TOKEN , id: id},
                 success:function(response)
                 {
                     searchMaintenance();
@@ -408,12 +404,46 @@
                 type:'POST',
                 url: route,
                 dataType:'html',
+                data: {_token: CSRF_TOKEN , _method: 'delete'},
+                success:function(response)
+                {
+                    searchMaintenance();
+                    swal("Tech Maintenance deleted Successfully","", "success");
+                }
+            });
+        }
+
+        function maintenanceEditView(id, route, updateRoute){
+            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+            $.ajax({
+                type: 'get',
+                url: route,
+                dataType:'html',
+                data: {
+                    _token: CSRF_TOKEN ,
+                    id: id
+                },
+                success:function(response)
+                {
+                    $(".maintenance1_edit").attr('action', updateRoute);
+                    $(".maintenance1_edit").html(response);
+                    $(".edit-maintenance-modal").modal("show");
+                }
+            });
+        }
+
+        function ticketCancel(id, route){
+            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+            $.ajax({
+                type:'POST',
+                url:route,
+                dataType:'html',
                 data: {_token: CSRF_TOKEN ,
                     id: id},
                 success:function(response)
                 {
-                    searchMaintenance();
-                    swal("Tech Maintenance Inprogress Successfully","", "success");
+                    maintanance_list();
+                    swal("Tech Maintenance Cancel Successfully","", "success");
                 }
             });
         }

@@ -85,21 +85,15 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/registration', 'RegisterController@store')->name('registration');
 
     // Maintenance
-    Route::group(['prefix' => 'maintenance', 'as' => 'maintenance.', 'middleware' => 'can:maintenance-enabled'], function () {
-        Route::get('/list', 'MaintenanceController@maintenanceList')->name('list');
-        Route::post('/add', 'MaintenanceController@addMaintenance')->name('add');
-        Route::post('/editview', 'MaintenanceController@editMaintenanceView')->name('editview');
-        Route::post('/edit', 'MaintenanceController@edit')->name('edit');
-        Route::post('/delete', 'MaintenanceController@delete')->name('delete');
-        Route::post('/ticket_inprogress', 'MaintenanceController@ticketInProgress')->name('ticket_inprogress')->middleware('isAdmin');
-        Route::post('/ticket_cancel', 'MaintenanceController@ticketCancel')->name('ticket_cancel')->middleware('isAdmin');
+    Route::group(['prefix' => 'maintenance_tickets', 'as' => 'maintenance_tickets.', 'middleware' => 'can:maintenance-enabled'], function () {
+        Route::post('/ticket_inprogress/{maintenance_ticket}', 'MaintenanceController@ticketInProgress')->name('ticket_inprogress')->middleware('isAdmin');
+        Route::post('/ticket_cancel/{maintenance_ticket}', 'MaintenanceController@ticketCancel')->name('ticket_cancel')->middleware('isAdmin');
         Route::get('search', 'MaintenanceController@search')->name('search');
 
-        Route::post('/comment/store/{id}', 'MaintenanceController@commentStore')->name('comment.store');
-        Route::post('/comment/update/{id}', 'MaintenanceController@commentUpdate')->name('comment.update');
-        Route::get('/show/{id}', 'MaintenanceController@show')->name('show');
-
+        Route::post('/comment/store/{maintenance_ticket}', 'MaintenanceController@commentStore')->name('comment.store');
+        Route::post('/comment/update/{maintenance_ticket}', 'MaintenanceController@commentUpdate')->name('comment.update');
     });
+    Route::resource('maintenance_tickets', 'MaintenanceController')->middleware('can:maintenance-enabled');
 
     // Mileage
     Route::resource('mileages', 'MileageController')->middleware('can:mileage-enabled');
