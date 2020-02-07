@@ -106,7 +106,7 @@
             @endif
 
             @if($activeMenu == 'company')
-                <a class="nav-item nav-link {{ (request()->is('company')) ? 'active' : '' }}" href="{{ route('companies.index') }}">Company List</a>
+                <a class="nav-item nav-link {{ (request()->is('companies')) ? 'active' : '' }}" href="{{ route('companies.index') }}">Company List</a>
             @endif
 
                 @if($activeMenu == 'admin' || $activeMenu == 'submit')
@@ -120,10 +120,10 @@
 
 
                     @can('mileage-enabled')
-                        <a class="nav-item nav-link {{ (request()->is('mileages/*')) ? 'active' : '' }}" href="{{ route('mileages.index') }}">Mileage Book</a>
+                        <a class="nav-item nav-link {{ (request()->is('mileages')) ? 'active' : '' }}" href="{{ route('mileages.index') }}">Mileage Book</a>
                     @endcan
 
-                    <a class="nav-item nav-link {{ (request()->is('maintenance/*')) ? 'active' : '' }}" href="{{ url('maintenance/list') }}">Tech Maintenance</a>
+                    <a class="nav-item nav-link {{ (request()->is('maintenance_tickets')) ? 'active' : '' }}" href="{{ route('maintenance_tickets.index') }}">Tech Maintenance</a>
 
                     <a class="nav-item nav-link {{ (request()->is('timeoff/*')) ? 'active' : '' }}" href="{{ url('timeoff/list') }}">Time Off</a>
 
@@ -262,7 +262,6 @@
 
 <script type="text/javascript" src="{{ asset('js/bootstrap-datepicker.min.js') }}"></script>
 <script type="text/javascript" src="{{ asset('js/admin.js') }}"></script>
-<script src="{{asset('js/custom_function_admin.js')}}"></script>
 <script src="{{ URL::asset('toaster/jquery.toaster.js') }}"></script>
 <script src="{{ URL::asset('assets/jquery-spinner/js/jquery.spinner.js') }}"></script>
 <script src="{{asset('flatpicker/js/flatpicker.min.js')}}"></script>
