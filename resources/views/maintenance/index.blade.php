@@ -1,7 +1,6 @@
 @extends('layouts.main')
 @section('title', 'Maintenance')
 @section('content1')
-
     <div class="well-default-trans">
         <div class="tab-pane" id="nav-maintenance" role="tabpanel" aria-labelledby="nav-maintenance-tab">
             <div class="maintenance inner-tab-box">
@@ -17,20 +16,25 @@
                     <div class="row">
                         <div class="col-sm-2">
                             <div class="form-group">
-                                {!! Form::text('pending_search',null,['id' => 'pending_search', 'placeholder' => 'Select employee','class' => 'form-control-new','onkeyup' => 'searchMaintenance()']) !!}
+                                {!! Form::text('pending_search',null,['id' => 'pending_search', 'placeholder' => 'Select employee', 'class' => 'form-control-new', 'onkeyup' => 'searchMaintenance()']) !!}
                                 <span class="remove-button" onclick="document.getElementById('pending_search').value = '';searchMaintenance()"><i class="fa fa-times" aria-hidden="true"></i></span>
                             </div>
                         </div>
                         <div class="col-sm-2">
                             <div class="form-group">
-                                {!! Form::text('pending_date',null,['id' => 'date', 'placeholder' => 'Select Date','class' => 'form-control-new']) !!}
+                                {!! Form::text('pending_date', null, ['id' => 'date_from', 'placeholder' => 'From', 'class' => 'form-control-new']) !!}
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            <div class="form-group">
+                                {!! Form::text('pending_date', null, ['id' => 'date_to', 'placeholder' => 'To', 'class' => 'form-control-new']) !!}
                             </div>
                         </div>
                         <div class="col-sm-1">
                             <div id="wait"></div>
                         </div>
-                        <div class="col-sm-7">
-                            <a href="javascript:void(0)" class="_new_icon_button_1" data-toggle="modal" data-target="#maintenance-modal" style="padding: 7px 12px"><i class="fa fa-plus"></i></a>
+                        <div class="col-sm-5">
+                            <a href="javascript:void(0)" class="_new_icon_button_1" data-toggle="modal" data-target="#maintenance-modal" style="padding: 7px 12px" onclick="clearForm()"><i class="fa fa-plus"></i></a>
                         </div>
                     </div>
                     <table style="width:100%;" class="table _table _table-bordered">
@@ -63,13 +67,18 @@
                         </div>
                         <div class="col-sm-2">
                             <div class="form-group">
-                                {!! Form::text('pending_date',null,['id' => 'date-completed', 'placeholder' => 'Select Date','class' => 'form-control-new']) !!}
+                                {!! Form::text('pending_date', null, ['id' => 'date-completed-from', 'placeholder' => 'From','class' => 'form-control-new']) !!}
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            <div class="form-group">
+                                {!! Form::text('pending_date',null,['id' => 'date-completed-to', 'placeholder' => 'To','class' => 'form-control-new']) !!}
                             </div>
                         </div>
                         <div class="col-sm-1">
                             <div id="wait-his"></div>
                         </div>
-                        <div class="col-sm-7">
+                        <div class="col-sm-5">
                             <a href="javascript:void(0)" class="_new_icon_button_1" data-toggle="modal" data-target="#maintenance-modal" style="padding: 7px 12px"><i class="fa fa-plus"></i></a>
                         </div>
                     </div>
@@ -93,21 +102,6 @@
         </div><!-------------end--------->
     </div>
 
-    <div id="edit-maintenance-modal" class="modal fade bs-example-modal-lg edit-maintenance-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-        <!-- modal come on ajax-->
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-body">
-                    <div class="col-md-12" style="margin-top:40px;margin-bottom:20px;">
-                        {{ Form::open(array('method' => 'post', 'class' => 'maintenance1_edit')) }}
-
-                        {{ Form::close() }}
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <div id="maintenance-modal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -124,11 +118,7 @@
                                 <div class="col-md-6 col-sm-6">
                                     <div class="text_outer">
                                         {{ Form::label('website', 'Website') }}
-                                        <select class="select_status form-control" name="website" id="website">
-                                            <option>Select</option>
-                                            <option value="Website1">Website1</option>
-                                            <option value="Website2">Website2</option>
-                                        </select>
+                                        {!! Form::select('website', ['Website1' => 'Website1', 'Website2' => 'Website2'], '', ['class' => 'select_status form-control', 'placeholder' => 'Select', 'id' => 'website']) !!}
                                     </div>
                                 </div>
                             </div>
@@ -146,23 +136,21 @@
                                 <div class="col-md-6 col-sm-6">
                                     <div class="text_outer">
                                         {{ Form::label('priority', 'Priority') }}
-                                        <select class="select_status form-control" name="priority" id="priority">
-                                            <option selected disabled>Select</option>
-                                            <option value="1">Low</option>
-                                            <option value="2">Normal</option>
-                                            <option value="3">Critical</option>
-                                        </select>
+                                        {!! Form::select('priority', ['1' => 'Low', '2' => 'Normal', '3' => 'Critical'], '', ['class' => 'select_status form-control', 'placeholder' => 'Select', 'id' => 'priority']) !!}
                                     </div>
                                 </div>
                                 <div class="col-md-6 col-sm-6">
                                     <div class="text_outer">
                                         {{ Form::label('category', 'Category') }}
-                                        <select class="select_status form-control" name="category" id="category">
-                                            <option>Select</option>
-                                            @foreach($category as $category_ex_report)
-                                                <option value="{{ $category_ex_report->id }}">{{ $category_ex_report->categoryname }}</option>
-                                            @endforeach
-                                        </select>
+                                        @php
+                                            $data = [];
+                                        @endphp
+                                        @foreach($category as $category_ex_report)
+                                            @php
+                                                $data[$category_ex_report->id] = $category_ex_report->categoryname;
+                                            @endphp
+                                        @endforeach
+                                        {!! Form::select('category', $data, '', ['class' => 'select_status form-control', 'placeholder' => 'Select', 'id' => 'category']) !!}
                                     </div>
                                 </div>
                             </div>
@@ -170,11 +158,15 @@
                                 <div class="col-md-12 col-sm-12">
                                     <div class="text_outer">
                                         {{ Form::label('employee', 'Employee') }}
-                                        <select class="select2 select_status form-control" id="employee" name="user[]" multiple>
-                                            @foreach($users as $user)
-                                                <option value="{{ $user->id }}">{{ $user->employee_details->firstname }} {{ $user->employee_details->lastname }}</option>
-                                            @endforeach
-                                        </select>
+                                        @php
+                                            $data = [];
+                                        @endphp
+                                        @foreach($users as $user)
+                                            @php
+                                                $data[$user->id] = $user->employee_details->firstname . ' ' . $user->employee_details->lastname;
+                                            @endphp
+                                        @endforeach
+                                        {!! Form::select('user[]', $data, '', ['class' => 'select2 select_status form-control', 'id' => 'employee', 'multiple']) !!}
                                     </div>
                                 </div>
                             </div>
@@ -195,7 +187,6 @@
             </div>
         </div>
     </div>
-
 @endsection
 
 @section('js')
@@ -224,37 +215,63 @@
                 $("#complited_ticket_div").show();
             });
 
-            $('#date').flatpickr({
-                mode: "range",
+            $('#date_from').flatpickr({
                 altInput: true,
                 altFormat: 'j M, Y',
-                defaultDate: [from, to],
+                defaultDate: from,
                 onChange: function(selectedDates, dateStr, instance) {
-                    from = formatDate(selectedDates[0]);
-                    to = formatDate(selectedDates[1]);
-                    if (selectedDates[0] === undefined || (selectedDates[0] !== undefined && selectedDates[1] !== undefined)) {
-                        if (selectedDates[0] === undefined) {
-                            from = to = null;
-                        }
-                        searchMaintenance();
+                    if (selectedDates.length > 0) {
+                        from = formatDate(selectedDates);
+                    } else {
+                        from = null;
                     }
+
+                    searchMaintenance();
                 },
             });
 
-            $('#date-completed').flatpickr({
-                mode: "range",
+            $('#date_to').flatpickr({
                 altInput: true,
                 altFormat: 'j M, Y',
-                defaultDate: [from, to],
-                onChange: function(selectedDates, dateStr, instance) {
-                    fromCompleted = formatDate(selectedDates[0]);
-                    toCompleted = formatDate(selectedDates[1]);
-                    if (selectedDates[0] === undefined || (selectedDates[0] !== undefined && selectedDates[1] !== undefined)) {
-                        if (selectedDates[0] === undefined) {
-                            fromCompleted = toCompleted = null;
-                        }
-                        searchComplitedTicket();
+                defaultDate: to,
+                onChange: function (selectedDates, dateStr, instance) {
+                    if (selectedDates.length > 0) {
+                        to = formatDate(selectedDates);
+                    } else {
+                        to = null;
                     }
+
+                    searchMaintenance();
+                },
+            });
+
+            $('#date-completed-from').flatpickr({
+                altInput: true,
+                altFormat: 'j M, Y',
+                defaultDate: fromCompleted,
+                onChange: function(selectedDates, dateStr, instance) {
+                    if (selectedDates.length > 0) {
+                        fromCompleted = formatDate(selectedDates);
+                    } else {
+                        fromCompleted = null;
+                    }
+
+                    searchComplitedTicket();
+                },
+            });
+
+            $('#date-completed-to').flatpickr({
+                altInput: true,
+                altFormat: 'j M, Y',
+                defaultDate: toCompleted,
+                onChange: function(selectedDates, dateStr, instance) {
+                    if (selectedDates.length > 0) {
+                        toCompleted = formatDate(selectedDates);
+                    } else {
+                        toCompleted = null;
+                    }
+
+                    searchComplitedTicket();
                 },
             });
         });
@@ -418,16 +435,40 @@
             $.ajax({
                 type: 'get',
                 url: route,
-                dataType:'html',
                 data: {
                     _token: CSRF_TOKEN ,
                     id: id
                 },
                 success:function(response)
                 {
-                    $(".maintenance1_edit").attr('action', updateRoute);
-                    $(".maintenance1_edit").html(response);
-                    $(".edit-maintenance-modal").modal("show");
+                    if (response.status === 200) {
+                        let data = response.data;
+                        $(".maintenance1").attr('action', updateRoute);
+                        $(".maintenance1").prepend('<input type="hidden" name="_method" value="put">');
+                        $('#subject').val(data.subject);
+                        $('#description').val(data.description);
+                        $("#website > option").each(function() {
+                            if (this.value == data.website) {
+                                $(this).prop('selected', true);
+                            }
+                        });
+                        $("#priority > option").each(function() {
+                            if (this.value == data.priority) {
+                                $(this).prop('selected', true);
+                            }
+                        });
+                        $("#category > option").each(function() {
+                            if (this.value == data.category) {
+                                $(this).prop('selected', true);
+                            }
+                        });
+                        $('#employee').val(data.users.map(function(obj) {
+                            return obj.id;
+                        })).trigger('change');
+                        $("#maintenance-modal").modal("show");
+                    } else {
+                        swal("Error!", response.message, "error");
+                    }
                 }
             });
         }
@@ -442,10 +483,17 @@
                     id: id},
                 success:function(response)
                 {
-                    maintanance_list();
                     swal("Tech Maintenance Cancel Successfully","", "success");
+                    searchMaintenance();
                 }
             });
+        }
+
+        function clearForm() {
+            $(".maintenance1").attr('action', '{{ route('maintenance_tickets.store') }}');
+            $(".maintenance1").trigger('reset');
+            $(".maintenance1").find('input[name=_method]').remove();
+            $('#employee').val([]).trigger('change');
         }
     </script>
 @endsection

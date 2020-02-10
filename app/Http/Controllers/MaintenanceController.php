@@ -58,16 +58,17 @@ class MaintenanceController extends Controller
     /**
      * edit view
      * @param Request $request
-     * @return Factory|View
+     * @return JsonResponse
      */
     function edit (MaintenanceTicket $maintenanceTicket)
     {
-        $data['maintanance'] = MaintenanceTicket::find($maintenanceTicket->id);
-        $data['category'] = Categorys::all();
-        $data['categorya1'] = Categorys::where('id', $data['maintanance']->category)->first();
-        $data['users'] = User::where('is_admin', 0)->get();
+        try {
+            $data = MaintenanceTicket::with('users')->find($maintenanceTicket->id);
 
-        return view('ajaxview.editmaintenance', $data);
+            return response()->json(['status' => 200, 'data' => $data]);
+        } catch (\Exception $e) {
+            return response()->json(['status' => 500, 'message' => $e->getMessage()]);
+        }
     }
 
     /**
@@ -75,9 +76,10 @@ class MaintenanceController extends Controller
      * @param Request $request
      * @return RedirectResponse
      */
-    function update (Request $request, MaintenanceTicket $maintenanceTicket) {
+    function update (Request $request, MaintenanceTicket $maintenanceTicket)
+    {
         $id = $maintenanceTicket->id;
-        $data = $request->all();
+        $data = $request->except('_method');
         unset($data['user']);
         $try = MaintenanceTicket::where(['id' => $id])->update($data);
         $maintenance = MaintenanceTicket::findOrFail($id);
