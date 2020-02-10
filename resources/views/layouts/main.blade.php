@@ -101,7 +101,7 @@
 
             <a class="nav-item nav-link {{ (request()->is('agreements')) ? 'active' : '' }}" href="{{ route('agreements.index') }}">Agreements</a>
 
-            <a class="nav-item nav-link {{request()->is('paystatement/list') ? 'active' : '' }}" href="{{ route('paystatement.list') }}">Pay Statements</a>
+            <a class="nav-item nav-link {{request()->is('paystatements') ? 'active' : '' }}" href="{{ route('paystatements.index') }}">Pay Statements</a>
 
             @endif
 

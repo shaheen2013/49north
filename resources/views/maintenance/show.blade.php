@@ -13,6 +13,7 @@
                             <span class="pull-right">
                                 {{ Form::open(array('route' => array('maintenance_tickets.destroy', $show->id), 'method' => 'post', 'id' => 'delete-form')) }}
                                 @csrf
+                                @method('delete')
                                 {!! Form::hidden('id', $show->id) !!}
                                     <button type="button" class="btn btn-info" onclick="maintenanceEditView('{{$show->id}}', '{{ $editRoute }}')"> Edit </button>
                                     <button type="button" onclick="deleteConfirm()" class="btn btn-danger">Delete</button>
@@ -95,6 +96,7 @@
     <script type="text/javascript">
         let updateRoute = null;
         let route = '@php echo $route; @endphp';
+
         function createCommentNew() {
             event.preventDefault();
             $('#create').attr('disabled', 'disabled');
@@ -110,6 +112,25 @@
                 success: function (response) {
                     $.toaster({message: 'Created successfully', title: 'Success', priority: 'success'});
                     $('#create').removeAttr('disabled');
+                }
+            });
+        }
+
+        function maintenanceEditView(id, route, updateRoute){
+            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+            $.ajax({
+                type: 'get',
+                url: route,
+                dataType:'html',
+                data: {
+                    _token: CSRF_TOKEN ,
+                    id: id
+                },
+                success:function(response)
+                {
+                    $(".maintenance1_edit").attr('action', updateRoute);
+                    $(".maintenance1_edit").html(response);
+                    $(".edit-maintenance-modal").modal("show");
                 }
             });
         }
@@ -143,7 +164,17 @@
                 reverseButtons: !0
             }).then(function (e) {
                 if (e.value === true) {
-                    $('#delete-form').submit();
+                    $.ajax({
+                        type:'POST',
+                        url: '{{ $deleteRoute }}',
+                        dataType:'html',
+                        data: {_method: 'delete'},
+                        success:function(response)
+                        {
+                            swal("Tech Maintenance deleted Successfully","", "success");
+                            window.location.replace("{{ route('maintenance_tickets.index') }}");
+                        }
+                    });
                 } else {
                     e.dismiss;
                 }

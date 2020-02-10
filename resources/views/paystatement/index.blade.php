@@ -1,7 +1,8 @@
 @extends('layouts.main')
-@section('title', 'Pay statements')
-@section('content1')
 
+@section('title', 'Pay statements')
+
+@section('content1')
     <div class="well-default-trans">
         <div class="tab-pane " id="nav-statements" aria-labelledby="nav-statements-tab">
             <div class="agreements">
@@ -17,14 +18,19 @@
                         @endif
                         <div class="col-sm-2">
                             <div class="form-group">
-                                {!! Form::text('date',null,['id' => 'date', 'placeholder' => 'Select Date','class' => 'form-control-new','onChange' => 'searchPayStatementsPage()']) !!}
+                                {!! Form::text('date',null,['id' => 'date_from', 'placeholder' => 'From','class' => 'form-control-new']) !!}
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            <div class="form-group">
+                                {!! Form::text('date',null,['id' => 'date_to', 'placeholder' => 'To','class' => 'form-control-new']) !!}
                             </div>
                         </div>
                         <div class="col-sm-1">
                             <div id="wait"></div>
                         </div>
                         @if(auth()->user()->is_admin ==1)
-                            <div class="col-sm-7">
+                            <div class="col-sm-5">
                                 <a href="javascript:void(0)" class="_new_icon_button_1" data-toggle="modal" data-target="#show_modal_paystatement" style="padding: 7px 12px;"> <i class="fa fa-plus"></i> </a>
                             </div>
                         @endif
@@ -58,12 +64,15 @@
                                     <div class="col-md-6">
                                         <div class="text_outer">
                                             {{ Form::label('employee', 'Employee') }}
-                                            <select class="select_status form-control" name="emp_id" id="emp_id">
-                                                <option value="">Select</option>
-                                                @foreach($user as $usr)
-                                                    <option value="{{ $usr->id }}">{{ $usr->name}}</option>
-                                                @endforeach
-                                            </select>
+                                            @php
+                                                $data = [];
+                                            @endphp
+                                            @foreach($user as $usr)
+                                                @php
+                                                    $data[$usr->id] = $usr->name;
+                                                @endphp
+                                            @endforeach
+                                            {!! Form::select('emp_id', $data, '', ['class' => 'select_status form-control', 'placeholder' => 'Select', 'id' => 'emp_id']) !!}
                                         </div>
                                     </div>
                                     <div class="col-md-6">
@@ -82,7 +91,7 @@
                                         <div class="image-chooser-preview"></div>
                                         <div class="text_outer">
                                             {!! Html::decode(Form::label('pdfname', '<i class="fa fa-fw fa-photo"></i>Upload PDF'))!!}
-                                            {{ Form::file('pdfname', array('class' => 'form-control _input_choose_file', 'id' => 'pdfname', 'onchange' => 'renderChoosedFile(this)')) }}
+                                            {{ Form::file('pdfname', array('class' => 'form-control _input_choose_file', 'id' => 'pdfname', 'onchange' => 'renderChoosedFile(this)', 'accept' => 'application/pdf')) }}
                                         </div>
                                     </div>
                                 </div>
@@ -106,6 +115,7 @@
     <script type="text/javascript">
         var from = null;
         var to = null;
+
         $(document).ready(function () {
             const date = new Date(), y = date.getFullYear(), m = date.getMonth();
             var today = new Date();
@@ -113,21 +123,33 @@
             from = formatDate(today.setDate(today.getDate()-30));
             searchPayStatementsPage();
 
-            $('#date').flatpickr({
-                mode: "range",
+            $('#date_from').flatpickr({
                 altInput: true,
                 altFormat: 'j M, Y',
-                defaultDate: [from, to],
+                defaultDate: from,
                 onChange: function (selectedDates, dateStr, instance) {
-                    from = formatDate(selectedDates[0]);
-                    to = formatDate(selectedDates[1]);
-
-                    if (selectedDates[0] === undefined || (selectedDates[0] !== undefined && selectedDates[1] !== undefined)) {
-                        if (selectedDates[0] === undefined) {
-                            from = to = null;
-                        }
-                        searchPayStatementsPage();
+                    if (selectedDates.length > 0) {
+                        from = formatDate(selectedDates);
+                    } else {
+                        from = null;
                     }
+
+                    searchPayStatementsPage();
+                },
+            });
+
+            $('#date_to').flatpickr({
+                altInput: true,
+                altFormat: 'j M, Y',
+                defaultDate: to,
+                onChange: function (selectedDates, dateStr, instance) {
+                    if (selectedDates.length > 0) {
+                        to = formatDate(selectedDates);
+                    } else {
+                        to = null;
+                    }
+
+                    searchPayStatementsPage();
                 },
             });
         });
@@ -139,21 +161,30 @@
 
             $.ajax({
                 method: "POST",
-                url: "{{ route('paystatement.store') }}",
+                url: "{{ route('paystatements.store') }}",
                 data: data,
                 enctype: 'multipart/form-data',
                 processData: false,  // Important!
                 contentType: false,
                 cache: false,
                 success: function (response) {
+                    $('#create').removeAttr('disabled');
+
                     if (response.status === 'success') {
                         $('#createPayForm')[0].reset();
                         $.toaster({message: 'Created successfully', title: 'Success', priority: 'success'});
                         searchPayStatementsPage();
                         $('#show_modal_paystatement').modal('hide');
-                        $('#create').removeAttr('disabled');
                     } else {
-                        $.toaster({message: 'Created failed', title: 'Failed', priority: 'fail'});
+                        if (response.errors === undefined) {
+                            $.toaster({message: 'Created failed', title: 'Failed', priority: 'fail'});
+                        } else {
+                            let errors = '';
+                            for (let [key, value] of Object.entries(response.errors)) {
+                                errors += value[0] + '<br>';
+                            }
+                            swal("Error!", errors, "error");
+                        }
                     }
                 }
             });
@@ -175,9 +206,8 @@
             };
             $('#wait').css('display', 'inline-block'); // wait for loader
             $.ajax({
-                type: 'post',
-                // url: "/paystatement/search",
-                url: "{{ route('paystatement.search') }}",
+                type: 'get',
+                url: "{{ route('paystatements.search') }}",
                 data: data,
                 dataType: 'JSON',
                 success: function (results) {
@@ -252,9 +282,9 @@
                     $.ajax({
                         type: 'post',
                         url: route,
+                        data: {_method: 'delete'},
                         dataType: 'JSON',
                         success: function (results) {
-
                             if (results.success === true) {
                                 swal("Done!", results.message, "success").then(function () {
                                     searchPayStatementsPage();
@@ -264,15 +294,12 @@
                             }
                         }
                     });
-
                 } else {
                     e.dismiss;
                 }
-
             }, function (dismiss) {
                 return false;
             })
         }
-
     </script>
 @endsection

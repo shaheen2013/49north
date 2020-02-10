@@ -16,9 +16,8 @@ class PaystatementController extends Controller
      *
      * @return Factory|View
      */
-    function payList ()
+    function index ()
     {
-        //$data['user_list'] = User::all();
         $activeMenu = 'profile';
         $user_list = DB::table('users as  u')
             ->leftJoin('paystatements as p', 'u.id', '=', 'p.emp_id')
@@ -42,6 +41,7 @@ class PaystatementController extends Controller
             'description' => 'required|string|max:491',
             'date' => 'required',
         ];
+
         $validator = validator($request->all(), $rules, []);
 
         if ($validator->fails()) {
@@ -50,7 +50,6 @@ class PaystatementController extends Controller
 
         try {
             $data = $request->except('_token');
-            $pdfname = null;
             if ($request->hasFile('pdfname')) {
                 $pdfname = fileUpload('pdfname', true);
                 $data['pdfname'] = $pdfname;
@@ -67,7 +66,6 @@ class PaystatementController extends Controller
             return response()->json(['status' => 'fail', 'msg' => $e->getMessage()]);
         }
     }
-
 
     /**
      * Filter pay statements.
@@ -94,7 +92,7 @@ class PaystatementController extends Controller
         if (count($data)) {
             foreach ($data as $datum) {
                 $routes = [];
-                $routes['destroy'] = route('paystatement.destroy', $datum->id);
+                $routes['destroy'] = route('paystatements.destroy', $datum->id);
                 $datum->routes = $routes;
             }
         }
@@ -125,11 +123,10 @@ class PaystatementController extends Controller
         } else {
             $message = "You can't delete. Only Admin can delete!!";
         }
+
         return response()->json([
             'success' => $success,
             'message' => $message,
         ]);
     }
-
-
 }

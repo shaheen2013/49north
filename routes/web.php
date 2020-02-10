@@ -118,11 +118,11 @@ Route::group(['middleware' => ['auth']], function () {
     });
 
     // Paystatement route
-    Route::group(['prefix' => 'paystatement', 'as' => 'paystatement.', 'middleware' => 'can:pay-statement-enabled'], function () {
-        Route::get('/list', 'PaystatementController@payList')->name('list');
-        Route::post('/search', 'PaystatementController@searchPaymentPage')->name('search');
-        Route::post('/store', 'PaystatementController@store')->name('store');
-        Route::post('/destroy/{id}', 'PaystatementController@destroy')->name('destroy');
+    Route::group(['prefix' => 'paystatements', 'as' => 'paystatements.', 'middleware' => 'can:pay-statement-enabled'], function () {
+        Route::get('', 'PaystatementController@index')->name('index');
+        Route::post('', 'PaystatementController@store')->name('store');
+        Route::get('/search', 'PaystatementController@searchPaymentPage')->name('search');
+        Route::delete('/{id}', 'PaystatementController@destroy')->name('destroy');
     });
 
     Route::get('force-login/{user}', 'UserController@forceLogin')->name('force-login');
