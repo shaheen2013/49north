@@ -33,7 +33,7 @@
                         <div class="col-sm-1">
                             <div id="wait"></div>
                         </div>
-                        <div class="col-sm-7">
+                        <div class="col-sm-5">
                             <a href="javascript:void(0)" class="_new_icon_button_1" data-toggle="modal" data-target="#expense-modal" onclick="openExpenseForm();"> <i class="fa fa-plus"></i> </a>
                         </div>
                         <div class="col-sm-12">
@@ -402,7 +402,6 @@
                             company += ` <option value="${results.data.companies[i].id}" ${selecteds}>${results.data.companies[i].companyname}</option>`;
                             selecteds = '';
                         }
-
                         let category = '';
                         let selectedc = '';
 
@@ -413,7 +412,6 @@
                             category += ` <option value="${results.data.category[i].id}" ${selectedc}>${results.data.category[i].categoryname}</option>`;
                             selectedc = '';
                         }
-
                         let purchase = '';
                         let selectedp = '';
 
@@ -424,7 +422,6 @@
                             purchase += ` <option value="${results.data.purchases[i].id}" ${selectedp}>${results.data.purchases[i].purchasename}</option>`;
                             selectedp = '';
                         }
-
                         let project = '';
                         let selectedpr = '';
 
@@ -435,7 +432,6 @@
                             project += ` <option value="${results.data.project[i].id}" ${selectedpr}>${results.data.project[i].projectname}</option>`;
                             selectedpr = '';
                         }
-
                         let check = '';
                         let check1 = '';
 
@@ -450,7 +446,6 @@
                         } else {
                             check1 = $('#authorization').val(results.data.expense.received_auth);
                         }
-
                         $('#company').html(company);
                         $('#category').val(results.data.expense.company);
                         $('#category').html(category);
@@ -464,7 +459,6 @@
                         if (results.data.expense.receipt != null) {
                             $('#receipt_show').html('<a href="{{ fileUrl() }}' + results.data.expense.receipt + '" target="_blank"><i class="fa fa-file-pdf-o"></i><a>');
                         }
-
                         $('#billable').val(check);
                         $('#authorization').val(check1);
                         $('#ireceived_auth').val(results.data.expense.received_auth);
