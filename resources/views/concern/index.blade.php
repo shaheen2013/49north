@@ -31,7 +31,7 @@
                         <div class="col-sm-1">
                             <div id="wait"></div>
                         </div>
-                        <div class="col-sm-7">
+                        <div class="col-sm-5">
                             <a href="javascript:void(0)" class="_new_icon_button_1" data-toggle="modal" data-target="#message-modal" style="padding: 7px 12px" onclick="openConcernForm();"> <i class="fa fa-plus"></i> </a>
                         </div>
                         <div class="col-sm-12">
