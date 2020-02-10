@@ -461,7 +461,6 @@
                                     if (selectedDates[0] === undefined) {
                                         from = to = null;
                                     }
-
                                     searchExpensesPending();
                                 }
                             },

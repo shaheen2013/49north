@@ -93,7 +93,7 @@
                 <!-- body modal -->
                 <div class="modal-body">
                     <div class="col-md-12" style="margin-top:40px;margin-bottom:20px;">
-                        {{ Form::open(array('id'=>'concern-form-id', 'url' => route('messages.store'), 'enctype' => 'multipart/form-data', 'class' => 'expences')) }}
+                        {{ Form::open(array('id'=>'concern-form-id', 'route' => 'messages.store', 'enctype' => 'multipart/form-data', 'class' => 'expences')) }}
                         @csrf
                         <div class="row">
                             <div class="col-md-12">
@@ -141,8 +141,7 @@
         </div>
     </div>
     <!--ajax come modal-->
-    <div id="message-modal-show" class="modal fade bs-example-modal-lg expense-modal-edit" tabindex="-1" role="dialog"
-         aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div id="message-modal-show" class="modal fade bs-example-modal-lg expense-modal-edit" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">

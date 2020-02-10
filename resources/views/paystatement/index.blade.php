@@ -20,7 +20,6 @@
                                 {!! Form::text('date',null,['id' => 'date', 'placeholder' => 'Select Date','class' => 'form-control-new','onChange' => 'searchPayStatementsPage()']) !!}
                             </div>
                         </div>
-
                         <div class="col-sm-1">
                             <div id="wait"></div>
                         </div>
@@ -40,7 +39,6 @@
                                 </tr>
                                 </thead>
                                 <tbody class="return_expence_ajax" id="payments_search">
-
                                 </tbody>
                             </table>
                             <div id="paginate"></div>
