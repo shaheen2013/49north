@@ -56,6 +56,7 @@ class ExpenseController extends Controller
                 $routes = [];
                 $routes['destroy'] = route('expenses.destroy', $datum->id);
                 $datum->routes = $routes;
+                $datum->formatted_date = $datum->date->format('M d, Y');
             }
         }
         return response()->json(['status' => 'success', 'data' => $data]);
@@ -89,6 +90,7 @@ class ExpenseController extends Controller
                 $routes['reject'] = route('expenses.reject', $datum->id);
                 $routes['destroy'] = route('expenses.destroy', $datum->id);
                 $datum->routes = $routes;
+                $datum->formatted_date = $datum->date->format('M d, Y');
             }
         }
         return response()->json(['status' => 'success', 'data' => $data]);

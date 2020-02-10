@@ -56,6 +56,7 @@ class PersonalDevelopmentPlanController extends Controller
                 $routes['show'] = route('personal_development_plans.show', $datum->id);
                 $routes['destroy'] = route('personal_development_plans.destroy', $datum->id);
                 $datum->routes = $routes;
+                $datum->formatted_date = $datum->start_date ? $datum->start_date->format('M d, Y') : 'N/A';
             }
         }
 

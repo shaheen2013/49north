@@ -332,13 +332,8 @@
                                 let html = date = admin = action = '';
 
                                 for (let index = 0; index < data.length; index++) {
-                                    if (data[index].date != null && data[index].date != '') {
-                                        time = data[index].date.split(' ')[0];
-                                        date = new Date(time);
-                                        date = date.toDateString().split(' ')[2] + " " + date.toDateString().split(' ')[1] + ", " + date.toDateString().split(' ')[3]
-                                    } else {
-                                        date = '-';
-                                    }
+                                    date = results.data[index].formatted_date;
+
                                     if (is_admin == 1) {
                                         if (data[index].pay_status == 1) {
                                             action = `<a href="javascript:void(0)" data-toggle="tooltip" title="Non-Paid" onclick="benefitNonPaid('${data[index].id}', '${data[index].routes.nonPaid}')"><i class="fa fa-usd"></i></a>`;
@@ -401,13 +396,8 @@
                                 let html = date = admin = action = '';
 
                                 for (let index = 0; index < data.length; index++) {
-                                    if (data[index].date != null && data[index].date != '') {
-                                        time = data[index].date.split(' ')[0];
-                                        date = new Date(time);
-                                        date = date.toDateString().split(' ')[2] + " " + date.toDateString().split(' ')[1] + ", " + date.toDateString().split(' ')[3]
-                                    } else {
-                                        date = '-';
-                                    }
+                                    date = results.data[index].formatted_date;
+
                                     if (is_admin == 1) {
                                         if (data[index].pay_status == 1) {
                                             action = `<a href="javascript:void(0)" data-toggle="tooltip" title="Non-Paid" onclick="benefitNonPaid('${data[index].id}', '${data[index].routes.nonPaid}')"><i class="fa fa-usd"></i></a>`;

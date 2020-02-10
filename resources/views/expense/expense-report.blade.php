@@ -583,13 +583,7 @@
                                 let html = date = adminOption = '';
 
                                 for (let index = 0; index < data.length; index++) {
-                                    if (data[index].date != null && data[index].date != '') {
-                                        time = data[index].date.split(' ')[0];
-                                        date = new Date(time);
-                                        date = date.toDateString().split(' ')[2] + " " + date.toDateString().split(' ')[1] + ", " + date.toDateString().split(' ')[3]
-                                    } else {
-                                        date = '-';
-                                    }
+                                    date = results.data[index].formatted_date;
 
                                     if (is_admin == 1) {
                                         adminOption = `<a href="javascript:void(0)" data-toggle="tooltip" title="Approved!"  onclick="approveExpense('${data[index].id}', '${data[index].routes.approve}')"><i class="fa fa-check-circle"></i></a>
@@ -657,13 +651,7 @@
                                 let html = admin = date = '';
 
                                 for (let index = 0; index < data.length; index++) {
-                                    if (data[index].date != null && data[index].date != '') {
-                                        time = data[index].date.split(' ')[0];
-                                        date = new Date(time);
-                                        date = date.toDateString().split(' ')[2] + " " + date.toDateString().split(' ')[1] + ", " + date.toDateString().split(' ')[3]
-                                    } else {
-                                        date = '-';
-                                    }
+                                    date = results.data[index].formatted_date;
 
                                     if (is_admin == 1) {
                                         admin = `<a href="javascript:void(0);" class="down" onclick="deleteConfirm('${data[index].id}', '${data[index].routes.destroy}')">DELETE</a>`;

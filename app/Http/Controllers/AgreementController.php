@@ -109,6 +109,8 @@ class AgreementController extends Controller
             $data = $q->get();
 
             foreach ($data as $datum) {
+                $datum->formatted_date = $datum->created_at ? $datum->created_at->format('M d, Y') : 'N/A';
+
                 if ($datum->activeAgreement) {
                     $datum->active_agreement_url = fileUrl($datum->activeAgreement->agreement, true);
 

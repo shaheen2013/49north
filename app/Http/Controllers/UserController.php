@@ -431,6 +431,12 @@ class UserController extends Controller
                 }
             })->get();
 
+            if (count($data)) {
+                foreach ($data as $datum) {
+                    $datum->formatted_date = $datum->created_at ? $datum->created_at->format('M d, Y') : 'N/A';
+                }
+            }
+
             return response()->json(['status' => 200, 'data' => $data]);
         } catch (\Exception $e) {
             return response()->json(['status' => 500, 'message' => $e->getMessage()]);

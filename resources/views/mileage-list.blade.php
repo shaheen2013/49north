@@ -400,13 +400,7 @@
                                 let action = '';
                                 let date = '';
                                 for (let index = 0; index < data.length; index++) {
-                                    if (data[index].date !== null && data[index].date !== '') {
-                                        var time = data[index].date.split(' ')[0];
-                                        date = new Date(time);
-                                        date = date.toDateString().split(' ')[2] + " " + date.toDateString().split(' ')[1] + ", " + date.toDateString().split(' ')[3]
-                                    } else {
-                                        date = '-';
-                                    }
+                                    date = results.data[index].formatted_date;
 
                                     let admin_user = '{{ auth()->user()->is_admin }}';
                                     // console.log(admin_user);
@@ -482,13 +476,7 @@
                             callback: function (data, pagination) {
                                 let html = admin = '';
                                 for (let index = 0; index < data.length; index++) {
-                                    if (data[index].date !== null && data[index].date !== '') {
-                                        var time = data[index].date.split(' ')[0];
-                                        date = new Date(time);
-                                        date = date.toDateString().split(' ')[2] + " " + date.toDateString().split(' ')[1] + ", " + date.toDateString().split(' ')[3]
-                                    } else {
-                                        date = '-';
-                                    }
+                                    date = results.data[index].formatted_date;
 
                                     if (is_admin == 1) {
                                         admin = `<td class="text-center">

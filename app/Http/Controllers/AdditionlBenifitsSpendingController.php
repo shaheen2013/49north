@@ -42,6 +42,7 @@ class AdditionlBenifitsSpendingController extends Controller
                 $routes['nonPaid'] = route('additionl_benifits_spendings.non-paid', $datum->id);
                 $routes['destroy'] = route('additionl_benifits_spendings.destroy', $datum->id);
                 $datum->routes = $routes;
+                $datum->formatted_date = $datum->date ? $datum->date->format('M d, Y') : 'N/A';
             }
         }
         return response()->json(['status' => 'success', 'data' => $data]);
@@ -82,6 +83,7 @@ class AdditionlBenifitsSpendingController extends Controller
                 $routes['nonPaid'] = route('additionl_benifits_spendings.non-paid', $datum->id);
                 $routes['destroy'] = route('additionl_benifits_spendings.destroy', $datum->id);
                 $datum->routes = $routes;
+                $datum->formatted_date = $datum->date ? $datum->date->format('M d, Y') : 'N/A';
             }
         }
         return response()->json(['status' => 'success', 'data' => $data]);

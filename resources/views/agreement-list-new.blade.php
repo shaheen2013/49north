@@ -100,13 +100,7 @@
 
                     if (results.status == 200) {
                         for (let index = 0; index < results.data.length; index++) {
-                            if (results.data[index].created_at != null && results.data[index].created_at != '') {
-                                time = results.data[index].created_at.split(' ')[0];
-                                date = new Date(time);
-                                date = date.toDateString().split(' ')[2] + " " + date.toDateString().split(' ')[1] + ", " + date.toDateString().split(' ')[3]
-                            } else {
-                                date = '-';
-                            }
+                            date = results.data[index].formatted_date;
 
                             if (results.data[index].active_agreement) {
                                 if (is_admin) {
