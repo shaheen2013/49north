@@ -17,13 +17,18 @@
                         <div class="row">
                             <div class="col-sm-2">
                                 <div class="form-group">
-                                    {!! Form::text('date',null,['id' => 'date', 'placeholder' => 'Select Date','class' => 'form-control-new','onChange' => '']) !!}
+                                    {!! Form::text('date',null,['id' => 'date_from', 'placeholder' => 'Select Date','class' => 'form-control-new']) !!}
+                                </div>
+                            </div>
+                            <div class="col-sm-2">
+                                <div class="form-group">
+                                    {!! Form::text('date',null,['id' => 'date_to', 'placeholder' => 'Select Date','class' => 'form-control-new']) !!}
                                 </div>
                             </div>
                             <div class="col-sm-1">
                                 <div id="wait"></div>
                             </div>
-                            <div class="col-sm-9">
+                            <div class="col-sm-7">
                                 <a href="javascript:void(0)" class="_new_icon_button_1" data-toggle="modal" data-target="#journal-edit-modal" onclick="openJournalForm();"> <i class="fa fa-plus"></i> </a>
                             </div>
                             <div class="col-sm-12">
@@ -99,7 +104,7 @@
             const date = new Date(), y = date.getFullYear(), m = date.getMonth();
             const today = new Date();
             to = formatDate(today);
-            from = formatDate(today.setDate(today.getDate() - 30));
+            from = formatDate(today.setDate(today.getDate()-30));
             searchJournalPage();
 
             $("#pending_span").click(function () {
@@ -107,23 +112,32 @@
                 $("#pending_div").show();
             });
 
-            $('#date').flatpickr({
-                mode: "range",
+            $('#date_from').flatpickr({
                 altInput: true,
                 altFormat: 'j M, Y',
-                defaultDate: [from, to],
+                defaultDate: from,
                 onChange: function (selectedDates, dateStr, instance) {
-                    from = formatDate(selectedDates[0]);
-                    to = formatDate(selectedDates[1]);
-
-                    if (selectedDates[0] === undefined || (selectedDates[0] !== undefined && selectedDates[1] !== undefined)) {
-                        if (selectedDates[0] === undefined) {
-                            from = to = null;
-                        }
-                        searchJournalPage();
+                    from = null;
+                    if(selectedDates.length > 0){
+                        from = formatDate(selectedDates);
                     }
+                    searchJournalPage();
                 },
             });
+
+            $('#date_to').flatpickr({
+                altInput: true,
+                altFormat: 'j M, Y',
+                defaultDate: to,
+                onChange: function (selectedDates, dateStr, instance) {
+                    to = null;
+                    if(selectedDates.length > 0){
+                        to = formatDate(selectedDates);
+                    }
+                    searchJournalPage();
+                },
+            });
+
         });
 
         function openJournalForm () {
@@ -231,7 +245,6 @@
                 from: from,
                 to: to,
             };
-
             $('#wait').css('display', 'inline-block'); // wait for loader
             $('#wait-his').css('display', 'inline-block'); // wait for loader
             $.ajax({

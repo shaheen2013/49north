@@ -12,7 +12,8 @@
                 @admin
                     <div class="col-sm-2">
                         <div class="form-group">
-                            <input type="text" placeholder="Search agreement" onkeyup="searchAgreement()" class="form-control-new" name="search" id="search"><span class="remove-button" onclick="document.getElementById('search').value = '';searchAgreement()"><i class="fa fa-times" aria-hidden="true"></i></span>
+                            {!! Form::text('search',null,['id' => 'search', 'placeholder' => 'Search agreement','class' => 'form-control-new','onkeyup' => 'searchAgreement()']) !!}
+                            <span class="remove-button" onclick="document.getElementById('search').value = '';searchAgreement()"><i class="fa fa-times" aria-hidden="true"></i></span>
                         </div>
                     </div>
                     <div class="col-sm-1">

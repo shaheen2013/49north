@@ -16,13 +16,18 @@
                     <div class="row">
                         <div class="col-sm-2">
                             <div class="form-group">
-                                {!! Form::text('pending_date',null,['id' => 'date', 'placeholder' => 'Select Date','class' => 'form-control-new','onChange' => 'benefitsPending()']) !!}
+                                {!! Form::text('pending_date',null,['id' => 'pending_date_from', 'placeholder' => 'Select Date','class' => 'form-control-new','onChange' => 'benefitsPending()']) !!}
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            <div class="form-group">
+                                {!! Form::text('pending_date',null,['id' => 'pending_date_to', 'placeholder' => 'Select Date','class' => 'form-control-new','onChange' => 'benefitsPending()']) !!}
                             </div>
                         </div>
                         <div class="col-sm-1">
                             <div id="wait"></div>
                         </div>
-                        <div class="col-sm-9">
+                        <div class="col-sm-7">
                             <a href="javascript:void(0)" class="_new_icon_button_1" data-toggle="modal" data-target="#additional_benefits_modal" onclick="openAdditionalBenefitsForm();"> <i class="fa fa-plus"></i> </a>
                         </div>
                         <div class="col-sm-12">
@@ -49,7 +54,12 @@
                     <div class="row">
                         <div class="col-sm-2">
                             <div class="form-group">
-                                {!! Form::text('history_date',null,['id' => 'history_date', 'placeholder' => 'Select Date','class' => 'form-control-new','onChange' => 'benefitsHistory()']) !!}
+                                {!! Form::text('history_date',null,['id' => 'history_date_from', 'placeholder' => 'Select Date','class' => 'form-control-new','onChange' => 'benefitsHistory()']) !!}
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            <div class="form-group">
+                                {!! Form::text('history_date',null,['id' => 'history_date_to', 'placeholder' => 'Select Date','class' => 'form-control-new','onChange' => 'benefitsHistory()']) !!}
                             </div>
                         </div>
                         <div class="col-sm-1">
@@ -129,14 +139,12 @@
     </div>
 
     <script type="text/javascript">
-        let id = from = to = history_from = history_to = updateRoute = null;
-
+        let id = pending_from = pending_to = history_from = history_to = updateRoute = null;
         $(document).ready(function () {
             const date = new Date(), y = date.getFullYear(), m = date.getMonth();
-
             var today = new Date();
-            to = formatDate(today);
-            from = formatDate(today.setDate(today.getDate() - 30));
+            pending_to = history_to = formatDate(today);
+            pending_from = history_from = formatDate(today.setDate(today.getDate() - 30));
             benefitsPending();
 
             $("#historical_span").click(function () {
@@ -154,39 +162,55 @@
 
             });
 
-            $('#date').flatpickr({
-                mode: "range",
+            $('#pending_date_from').flatpickr({
                 altInput: true,
                 altFormat: 'j M, Y',
-                defaultDate: [from, to],
+                defaultDate: pending_from,
                 onChange: function (selectedDates, dateStr, instance) {
-                    from = formatDate(selectedDates[0]);
-                    to = formatDate(selectedDates[1]);
-
-                    if (selectedDates[0] === undefined || (selectedDates[0] !== undefined && selectedDates[1] !== undefined)) {
-                        if (selectedDates[0] === undefined) {
-                            from = to = null;
-                        }
-                        benefitsPending();
+                    pending_from = null;
+                    if(selectedDates.length > 0){
+                        pending_from = formatDate(selectedDates);
                     }
+                    benefitsPending();
                 },
             });
 
-            $('#history_date').flatpickr({
-                mode: "range",
+            $('#pending_date_to').flatpickr({
                 altInput: true,
                 altFormat: 'j M, Y',
-                defaultDate: [from, to],
+                defaultDate: pending_to,
                 onChange: function (selectedDates, dateStr, instance) {
-                    history_from = formatDate(selectedDates[0]);
-                    history_to = formatDate(selectedDates[1]);
-
-                    if (selectedDates[0] === undefined || (selectedDates[0] !== undefined && selectedDates[1] !== undefined)) {
-                        if (selectedDates[0] === undefined) {
-                            history_from = history_to = null;
-                        }
-                        benefitsHistory();
+                    pending_to = null;
+                    if(selectedDates.length > 0){
+                        pending_to = formatDate(selectedDates);
                     }
+                    benefitsPending();
+                },
+            });
+
+            $('#history_date_from').flatpickr({
+                altInput: true,
+                altFormat: 'j M, Y',
+                defaultDate: history_from,
+                onChange: function (selectedDates, dateStr, instance) {
+                    history_from = null;
+                    if(selectedDates.length > 0){
+                        history_from = formatDate(selectedDates);
+                    }
+                    benefitsHistory();
+                },
+            });
+
+            $('#history_date_to').flatpickr({
+                altInput: true,
+                altFormat: 'j M, Y',
+                defaultDate: history_to,
+                onChange: function (selectedDates, dateStr, instance) {
+                    history_to = null;
+                    if(selectedDates.length > 0){
+                        history_to = formatDate(selectedDates);
+                    }
+                    benefitsHistory();
                 },
             });
         });
@@ -286,8 +310,8 @@
 
         function benefitsPending() {
             let data = {
-                from: from,
-                to: to,
+                from: pending_from,
+                to: pending_to,
             };
             $('#wait').css('display', 'inline-block');
             $('#wait-his').css('display', 'inline-block');

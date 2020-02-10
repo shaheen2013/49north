@@ -18,13 +18,19 @@
                             @admin
                             <div class="col-sm-2">
                                 <div class="form-group">
-                                    <input type="text" placeholder="Search employee" onkeyup="searchPendingMileagePage()" class="form-control-new" name="search" id="search"><span class="remove-button" onclick="document.getElementById('search').value = '';searchPendingMileagePage()"><i class="fa fa-times" aria-hidden="true"></i></span>
+                                    {!! Form::text('search',null,['id' => 'search', 'placeholder' => 'Search employee','class' => 'form-control-new','onkeyup' => 'searchPendingMileagePage()']) !!}
+                                    <span class="remove-button" onclick="document.getElementById('search').value = '';searchPendingMileagePage()"><i class="fa fa-times" aria-hidden="true"></i></span>
                                 </div>
                             </div>
                             @endadmin
                             <div class="col-sm-2">
                                 <div class="form-group">
-                                    <input type="text" name="date" id="date" placeholder="Select Date" class="form-control-new" onChange="searchPendingMileagePage()">
+                                    {!! Form::text('date',null,['id' => 'pending_date_from', 'placeholder' => 'Select Date','class' => 'form-control-new']) !!}
+                                </div>
+                            </div>
+                            <div class="col-sm-2">
+                                <div class="form-group">
+                                    {!! Form::text('date',null,['id' => 'pending_date_to', 'placeholder' => 'Select Date','class' => 'form-control-new']) !!}
                                 </div>
                             </div>
                             <div class="col-sm-1">
@@ -59,13 +65,19 @@
                             @admin
                             <div class="col-sm-2">
                                 <div class="form-group">
-                                    <input type="text" placeholder="Search employee" onkeyup="searchHistoryMileagePage()" class="form-control-new" name="history_search" id="history_search"><span class="remove-button" onclick="document.getElementById('history_search').value = '';searchHistoryMileagePage()"><i class="fa fa-times" aria-hidden="true"></i></span>
+                                    {!! Form::text('history_search',null,['id' => 'history_search', 'placeholder' => 'Search employee','class' => 'form-control-new','onkeyup' => 'searchHistoryMileagePage()']) !!}
+                                    <span class="remove-button" onclick="document.getElementById('history_search').value = '';searchHistoryMileagePage()"><i class="fa fa-times" aria-hidden="true"></i></span>
                                 </div>
                             </div>
                             @endadmin
                             <div class="col-sm-2">
                                 <div class="form-group">
-                                    <input type="text" name="history_date" id="history_date" placeholder="Select Date" class="form-control-new" onChange="searchHistoryMileagePage()">
+                                    {!! Form::text('history_date',null,['id' => 'history_date_from', 'placeholder' => 'Select Date','class' => 'form-control-new']) !!}
+                                </div>
+                            </div>
+                            <div class="col-sm-2">
+                                <div class="form-group">
+                                    {!! Form::text('history_date',null,['id' => 'history_date_to', 'placeholder' => 'Select Date','class' => 'form-control-new']) !!}
                                 </div>
                             </div>
                             <div class="col-sm-1">
@@ -172,15 +184,13 @@
 
 @push('scripts')
     <script type="text/javascript">
-        let id = from = to = history_from = history_to = updateRoute = null;
+        let id = pending_from = pending_to = history_from = history_to = updateRoute = null;
 
         $(document).ready(function () {
             const date = new Date(), y = date.getFullYear(), m = date.getMonth();
-
             var today = new Date();
-            to = formatDate(today);
-            from = formatDate(today.setDate(today.getDate()-30));
-
+            pending_to = history_to = formatDate(today);
+            pending_from = history_from = formatDate(today.setDate(today.getDate()-30));
             searchPendingMileagePage();
 
             $("#historical_span").click(function () {
@@ -198,41 +208,55 @@
 
             });
 
-            $('#date').flatpickr({
-                mode: "range",
+            $('#pending_date_from').flatpickr({
                 altInput: true,
                 altFormat: 'j M, Y',
-                defaultDate: [from, to],
+                defaultDate: pending_from,
                 onChange: function (selectedDates, dateStr, instance) {
-                    from = formatDate(selectedDates[0]);
-                    to = formatDate(selectedDates[1]);
-
-                    if (selectedDates[0] === undefined || (selectedDates[0] !== undefined && selectedDates[1] !== undefined)) {
-                        if (selectedDates[0] === undefined) {
-                            from = to = null;
-                        }
-
-                        searchPendingMileagePage();
+                    pending_from = null;
+                    if(selectedDates.length > 0){
+                        pending_from = formatDate(selectedDates);
                     }
+                    searchPendingMileagePage();
                 },
             });
 
-            $('#history_date').flatpickr({
-                mode: "range",
+            $('#pending_date_to').flatpickr({
                 altInput: true,
                 altFormat: 'j M, Y',
-                defaultDate: [from, to],
+                defaultDate: pending_to,
                 onChange: function (selectedDates, dateStr, instance) {
-                    history_from = formatDate(selectedDates[0]);
-                    history_to = formatDate(selectedDates[1]);
-
-                    if (selectedDates[0] === undefined || (selectedDates[0] !== undefined && selectedDates[1] !== undefined)) {
-                        if (selectedDates[0] === undefined) {
-                            history_from = history_to = null;
-                        }
-
-                        searchHistoryMileagePage();
+                    pending_to = null;
+                    if(selectedDates.length > 0){
+                        pending_to = formatDate(selectedDates);
                     }
+                    searchPendingMileagePage();
+                },
+            });
+
+            $('#history_date_from').flatpickr({
+                altInput: true,
+                altFormat: 'j M, Y',
+                defaultDate: history_from,
+                onChange: function (selectedDates, dateStr, instance) {
+                    history_from = null;
+                    if(selectedDates.length > 0){
+                        history_from = formatDate(selectedDates);
+                    }
+                    searchHistoryMileagePage();
+                },
+            });
+
+            $('#history_date_to').flatpickr({
+                altInput: true,
+                altFormat: 'j M, Y',
+                defaultDate: history_to,
+                onChange: function (selectedDates, dateStr, instance) {
+                    history_to = null;
+                    if(selectedDates.length > 0){
+                        history_to = formatDate(selectedDates);
+                    }
+                    searchHistoryMileagePage();
                 },
             });
         });
@@ -350,14 +374,11 @@
                 $('.remove-button').hide();
             }
 
-            // console.log(date);
             let data = {
                 search: search,
-                from: from,
-                to: to,
-
+                from: pending_from,
+                to: pending_to,
             };
-
             $('#wait').css('display', 'inline-block'); // wait for loader
             $('#wait-his').css('display', 'inline-block'); // wait for loader
             $.ajax({
@@ -437,13 +458,11 @@
             } else {
                 $('.remove-button').hide();
             }
-
             let data = {
                 history_search: history_search,
                 from: history_from,
                 to: history_to,
             };
-
             $('#wait').css('display', 'inline-block'); // wait for loader
             $('#wait-his').css('display', 'inline-block'); // wait for loader
             $.ajax({
