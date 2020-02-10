@@ -93,7 +93,6 @@
                 <div class="col-md-3">
                     <div class="text_outer">
                         {{ Form::label('name', 'Marital status') }}
-                        {{ Form::label('name', 'Marital status') }}
                         {!!Form::select('marital_status', array('Single' => 'Single', 'Married' => 'Married', 'Common Law' => 'Common Law', 'Rather Not Say' => 'Rather Not Say'), $user->marital_status, ['class'=>'select_status form-control','placeholder'=>'Select'])!!}
                     </div>
                 </div>
