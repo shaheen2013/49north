@@ -12,13 +12,18 @@
                     <div class="row">
                         <div class="col-sm-2">
                             <div class="form-group">
-                                {!! Form::text('archive_date',null,['id' => 'archive_date', 'placeholder' => 'Select Date','class' => 'form-control-new','onChange' => 'personalDevelopmentArchiveSearch()']) !!}
+                                {!! Form::text('archive_date',null,['id' => 'archive_date_from', 'placeholder' => 'Select Date','class' => 'form-control-new']) !!}
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            <div class="form-group">
+                                {!! Form::text('archive_date',null,['id' => 'archive_date_to', 'placeholder' => 'Select Date','class' => 'form-control-new']) !!}
                             </div>
                         </div>
                         <div class="col-sm-1">
                             <div id="wait-his"></div>
                         </div>
-                        <div class="col-sm-9">
+                        <div class="col-sm-7">
                             <a href="javascript:void(0)" class="_new_icon_button_1" data-toggle="modal" data-target="#personal_development_modal" onclick="resetForm()"> <i class="fa fa-plus"></i> </a>
                         </div>
                         <div class="col-sm-12">
@@ -114,37 +119,44 @@
     <!--ajax come modal-->
 
     <script type="text/javascript">
-        let id = from = to = archive_from = archive_to = updateRoute = null;
+        let id = archive_from = archive_to = updateRoute = null;
 
         $(document).ready(function () {
             const date = new Date(), y = date.getFullYear(), m = date.getMonth();
             var today = new Date();
-            to = formatDate(today);
-            from = formatDate(today.setDate(today.getDate()-30));
+            archive_to = formatDate(today);
+            archive_from = formatDate(today.setDate(today.getDate()-30));
             personalDevelopmentArchiveSearch();
 
             $("#pending_span").click(function () {
                 $("#pending_span").addClass("active-span");
-                $("#historical_span").removeClass("active-span");
                 $("#pending_div").show();
-                $("#historical_div").hide();
+
             });
 
-            $('#archive_date').flatpickr({
-                mode: "range",
+            $('#archive_date_from').flatpickr({
                 altInput: true,
                 altFormat: 'j M, Y',
-                defaultDate: [from, to],
+                defaultDate: archive_from,
                 onChange: function (selectedDates, dateStr, instance) {
-                    archive_from = formatDate(selectedDates[0]);
-                    archive_to = formatDate(selectedDates[1]);
-
-                    if (selectedDates[0] === undefined || (selectedDates[0] !== undefined && selectedDates[1] !== undefined)) {
-                        if (selectedDates[0] === undefined) {
-                            archive_from = archive_to = null;
-                        }
-                        personalDevelopmentArchiveSearch();
+                    archive_from = null;
+                    if(selectedDates.length > 0){
+                        archive_from = formatDate(selectedDates);
                     }
+                    personalDevelopmentArchiveSearch();
+                },
+            });
+
+            $('#archive_date_to').flatpickr({
+                altInput: true,
+                altFormat: 'j M, Y',
+                defaultDate: archive_to,
+                onChange: function (selectedDates, dateStr, instance) {
+                    archive_to = null;
+                    if(selectedDates.length > 0){
+                        archive_to = formatDate(selectedDates);
+                    }
+                    personalDevelopmentArchiveSearch();
                 },
             });
         });
