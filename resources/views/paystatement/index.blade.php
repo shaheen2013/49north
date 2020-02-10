@@ -224,14 +224,7 @@
                                 let description = '';
                                 let action = '';
                                 for (let index = 0; index < data.length; index++) {
-
-                                    if (data[index].date != null && data[index].date != '') {
-                                        time = data[index].date.split(' ')[0];
-                                        date = new Date(time);
-                                        date = date.toDateString().split(' ')[2] + " " + date.toDateString().split(' ')[1] + ", " + date.toDateString().split(' ')[3]
-                                    } else {
-                                        date = '';
-                                    }
+                                    date = results.data[index].formatted_date;
 
                                     if (data[index].description != null && data[index].description != '') {
                                         description = data[index].description;

@@ -12,5 +12,5 @@ class Mileage extends Model {
     public $table = "mileages";
     protected $guarded = [];
     protected $fillable = ['emp_id', 'company', 'date', 'vehicle', 'kilometers', 'reasonmileage'];
-
+    protected $dates = ['date'];
 }

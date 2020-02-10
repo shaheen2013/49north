@@ -227,13 +227,8 @@
                                 let html = date = '';
 
                                 for (let index = 0; index < data.length; index++) {
-                                    if (data[index].start_date != null && data[index].start_date != '') {
-                                        time = data[index].start_date.split(' ')[0];
-                                        date = new Date(time);
-                                        date = date.toDateString().split(' ')[2] + " " + date.toDateString().split(' ')[1] + ", " + date.toDateString().split(' ')[3]
-                                    } else {
-                                        date = '-';
-                                    }
+                                    date = results.data[index].formatted_date;
+
                                     html += `<tr>
                                    <td> ${date} </td>
                                    <td>${data[index].description} </td>

@@ -89,11 +89,13 @@ class PaystatementController extends Controller
             });
         $data = $data->dateSearch('date');
         $data = $data->isEmployee()->get();
+
         if (count($data)) {
             foreach ($data as $datum) {
                 $routes = [];
                 $routes['destroy'] = route('paystatements.destroy', $datum->id);
                 $datum->routes = $routes;
+                $datum->formatted_date = $datum->date ? date('M d, Y', strtotime($datum->date)) : 'N/A';
             }
         }
 

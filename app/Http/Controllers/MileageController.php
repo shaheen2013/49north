@@ -66,6 +66,7 @@ class MileageController extends Controller
                 $routes['approve'] = route('mileages.approve', $datum->id);
                 $routes['reject'] = route('mileages.reject', $datum->id);
                 $datum->routes = $routes;
+                $datum->formatted_date = $datum->date ? $datum->date->format('M d, Y') : 'N/A';
             }
         }
         return response()->json(['status' => 'success', 'data' => $data]);
@@ -116,6 +117,7 @@ class MileageController extends Controller
                 $routes['pending'] = route('mileages.pending', $datum->id);
                 $routes['destroy'] = route('mileages.destroy', $datum->id);
                 $datum->routes = $routes;
+                $datum->formatted_date = $datum->date ? $datum->date->format('M d, Y') : 'N/A';
             }
         }
 

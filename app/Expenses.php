@@ -21,6 +21,7 @@ class Expenses extends Authenticatable {
      */
     protected $guard = [];
     protected $guarded  = [];
+    protected $dates = ['date'];
 
     /* public function setPasswordAttribute($password)
      {
