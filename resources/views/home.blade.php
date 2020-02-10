@@ -48,12 +48,15 @@
                     <div class="col-md-3">
                         <div class="text_outer">
                             {{ Form::label('report_to', 'Reports To') }}
-                            <select class="select_status form-control" name="report_to">
-                                <option selected disabled>Select user</option>
-                                @foreach($findUser as $user)
-                                    <option value="{{ $user->id }}">{{ $user->name }}</option>
-                                @endforeach
-                            </select>
+                            @php
+                                $data = [];
+                            @endphp
+                            @foreach($findUser as $user)
+                                @php
+                                    $data[$user->id] = $user->name;
+                                @endphp
+                            @endforeach
+                            {!! Form::select('report_to', $data, '', ['class' => 'select_status form-control', 'placeholder' => 'Select User']) !!}
                         </div>
                     </div>
                     <div class='col-md-3'>
@@ -116,9 +119,7 @@
                     <div class="col-md-3">
                         <div class="text_outer">
                             {{ Form::label('name', 'Password*') }}
-                            {{ Form::password('password', null, array('class' => 'form-control','Placeholder' => 'xxxxxxxx', 'id' => 'password', 'required' => auth()->user()->id ? false : true)) }}
-{{--                            <input type="password" id="password" name="password" class="form-control" placeholder="xxxxxxxx"--}}
-{{--                                {{ auth()->user()->id ? '' : 'required' }} --}}{{-- password is only required if it's a new user --}}{{-->--}}
+                            {{ Form::password('password', array('class' => 'form-control','Placeholder' => 'xxxxxxxx', 'id' => 'password', 'required' => auth()->user()->id ? false : true)) }}
                         </div>
                     </div>
                     <div class="col-md-3">
@@ -139,13 +140,7 @@
                     <div class="col-md-3">
                         <div class="text_outer">
                             {{ Form::label('name', 'Marital status') }}
-                            <select class="select_status form-control" name="marital_status">
-                                <option value="">Select</option>
-                                <option value="Single" {{ $user->marital_status == 'Single' ? 'selected' : '' }}>Single</option>
-                                <option value="Married" {{ $user->marital_status == 'Married' ? 'selected' : '' }}>Married</option>
-                                <option value="Common Law" {{ $user->marital_status == 'Common Law' ? 'selected' : '' }}>Common Law</option>
-                                <option value="Rather Not Say" {{ $user->marital_status == 'Rather Not Say' ? 'selected' : '' }}>Rather Not Say</option>
-                            </select>
+                            {!!Form::select('marital_status', array('Single' => 'Single', 'Married' => 'Married', 'Common Law' => 'Common Law', 'Rather Not Say' => 'Rather Not Say'), $user->marital_status, ['class'=>'select_status form-control','placeholder'=>'Select'])!!}
                         </div>
                     </div>
                     <div class="col-md-3">
@@ -255,18 +250,21 @@
                     <div class="col-md-3">
                         <div class="text_outer">
                             {{ Form::label('company_id', 'Company') }}
-                            <select class="select_status form-control" name="company_id">
-                                <option selected disabled>Select Company</option>
-                                @if(auth()->user()->is_admin)
-                                    @foreach($companies as $company)
-                                    <option value="{{ $company->id }}" {{ auth()->user()->employee_details && auth()->user()->employee_details->company_id && auth()->user()->employee_details->company_id == $company->id ? 'selected' : '' }}>{{ $company->companyname }}</option>
-                                    @endforeach
-                                @else
-                                    @if(auth()->user()->employee_details && auth()->user()->employee_details->company_id)
-                                    <option value="{{ auth()->user()->employee_details->company_id }}" selected>{{ auth()->user()->employee_details->company->companyname }}</option>
-                                    @endif
+                            @php
+                                $data = [];
+                            @endphp
+                            @if(auth()->user()->is_admin)
+                                @foreach($companies as $company)
+                                    @php
+                                        $data[$company->id] = $company->companyname;
+                                    @endphp
+                                @endforeach
+                                    {!! Form::select('company_id', $data, '', ['class' => 'select_status form-control', 'placeholder' => 'Select', auth()->user()->employee_details && auth()->user()->employee_details->company_id && auth()->user()->employee_details->company_id == $company->id ? 'selected' : '']) !!}
+                            @else
+                                @if(auth()->user()->employee_details && auth()->user()->employee_details->company_id)
+                                    {!! Form::select('company_id', [auth()->user()->employee_details->company_id => auth()->user()->employee_details->company->companyname], auth()->user()->employee_details->company_id, ['class' => 'select_status form-control']) !!}
                                 @endif
-                            </select>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -303,9 +301,6 @@
             url: route,
             dataType: 'JSON',
             success: function( results ) {
-                // $.toaster({ message : 'Password Updated successfully', title : 'Success', priority : 'success' });
-                // window.location.reload();
-
                 if (results.success === true) {
                     swal("Done!", results.message, "success").then(function () {
 

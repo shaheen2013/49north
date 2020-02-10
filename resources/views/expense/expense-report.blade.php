@@ -120,18 +120,21 @@
                                 <div class="col-md-6 col-sm-6">
                                     <div class="text_outer">
                                         {{ Form::label('company', 'Company') }}
-                                        <select class="select_status form-control" name="company" id="company">
-                                            <option value="">Select</option>
-                                            @if(auth()->user()->is_admin)
-                                                @foreach($companies as $company_ex_report)
-                                                    <option value="{{ $company_ex_report->id }}">{{ $company_ex_report->companyname }}</option>
-                                                @endforeach
-                                            @else
-                                                @if(auth()->user()->employee_details && auth()->user()->employee_details->company_id)
-                                                <option value="{{ auth()->user()->employee_details->company_id }}" selected>{{ auth()->user()->employee_details->company->companyname }}</option>
-                                                @endif
+                                        @php
+                                            $data = [];
+                                        @endphp
+                                        @if(auth()->user()->is_admin)
+                                            @foreach($companies as $company_ex_report)
+                                                @php
+                                                    $data[$company_ex_report->id] = $company_ex_report->companyname;
+                                                @endphp
+                                            @endforeach
+                                            {!! Form::select('company', $data, '', ['class' => 'select_status form-control', 'placeholder' => 'Select', 'id' => 'company']) !!}
+                                        @else
+                                            @if(auth()->user()->employee_details && auth()->user()->employee_details->company_id)
+                                            {!! Form::select('company', [auth()->user()->employee_details->company_id => auth()->user()->employee_details->company->companyname], auth()->user()->employee_details->company_id, ['class' => 'select_status form-control', 'placeholder' => 'Select', 'id' => 'company']) !!}
                                             @endif
-                                        </select>
+                                        @endif
                                     </div>
                                 </div>
 
@@ -148,25 +151,31 @@
                                 <div class="col-md-6 col-sm-6">
                                     <div class="text_outer">
                                         {{ Form::label('category', 'Category') }}
-                                        <select class="select_status form-control" name="category" id="category">
-                                            <option value="">Select</option>
-                                            @foreach($category as $category_ex_report)
-                                                <option
-                                                    value="{{ $category_ex_report->id }}">{{ $category_ex_report->categoryname }}</option>
-                                            @endforeach
-                                        </select>
+                                        @php
+                                            $data = [];
+                                        @endphp
+                                        @foreach($category as $category_ex_report)
+                                            @php
+                                                $data[$category_ex_report->id] = $category_ex_report->categoryname;
+                                            @endphp
+                                        @endforeach
+                                        {!! Form::select('category', $data, '', ['class' => 'select_status form-control', 'placeholder' => 'Select', 'id' => 'category']) !!}
+
                                     </div>
                                 </div>
                                 <div class="col-md-6 col-sm-6">
                                     <div class="text_outer">
                                         {{ Form::label('purchase', 'Purchase via') }}
-                                        <select class="select_status form-control" name="purchase" id="purchase">
-                                            <option value="">Select</option>
-                                            @foreach($purchases as $purchases_ex_report)
-                                                <option
-                                                    value="{{ $purchases_ex_report->id }}">{{ $purchases_ex_report->purchasename }}</option>
-                                            @endforeach
-                                        </select>
+                                        @php
+                                            $data = [];
+                                        @endphp
+                                        @foreach($purchases as $purchases_ex_report)
+                                            @php
+                                                $data[$purchases_ex_report->id] = $purchases_ex_report->purchasename;
+                                            @endphp
+                                        @endforeach
+                                        {!! Form::select('purchase', $data, '', ['class' => 'select_status form-control', 'placeholder' => 'Select', 'id' => 'purchase']) !!}
+
                                     </div>
                                 </div>
                             </div>
@@ -176,13 +185,15 @@
                                 <div class="col-md-6 col-sm-6">
                                     <div class="text_outer">
                                         {{ Form::label('project', 'Project') }}
-                                        <select class="select_status form-control" name="project" id="project">
-                                            <option value="">Select</option>
-                                            @foreach($project as $project_ex_report)
-                                                <option
-                                                    value="{{ $project_ex_report->id }}">{{ $project_ex_report->projectname }}</option>
-                                            @endforeach
-                                        </select>
+                                        @php
+                                            $data = [];
+                                        @endphp
+                                        @foreach($project as $project_ex_report)
+                                            @php
+                                                $data[$project_ex_report->id] = $project_ex_report->projectname;
+                                            @endphp
+                                        @endforeach
+                                        {!! Form::select('project', $data, '', ['class' => 'select_status form-control', 'placeholder' => 'Select', 'id' => 'project']) !!}
                                     </div>
                                 </div>
                                 <div class="col-md-6 col-sm-6 image-chooser">

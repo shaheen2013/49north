@@ -74,10 +74,7 @@
                 <div class="col-md-3">
                     <div class="text_outer">
                         {{ Form::label('name', 'Password*') }}
-                        {{ Form::password('password', null, array('class' => 'form-control','Placeholder' => 'xxxxxxxx', 'id' => 'password', 'required' => $user->id ? false : true)) }}
-
-{{--                        <input type="password" id="password" name="password" class="form-control" placeholder="xxxxxxxx"--}}
-{{--                            {{ $user->id ? '' : 'required' }} --}}{{-- password is only required if it's a new user --}}{{-->--}}
+                        {{ Form::password('password', array('class' => 'form-control','Placeholder' => 'xxxxxxxx', 'id' => 'password', 'required' => $user->id ? false : true)) }}
                     </div>
                 </div>
                 <div class="col-md-3">
@@ -96,13 +93,8 @@
                 <div class="col-md-3">
                     <div class="text_outer">
                         {{ Form::label('name', 'Marital status') }}
-                        <select class="select_status form-control" name="marital_status">
-                            <option value="">Select</option>
-                            <option value="Single" {{ $user->marital_status == 'Single' ? 'selected' : '' }}>Single</option>
-                            <option value="Married" {{ $user->marital_status == 'Married' ? 'selected' : '' }}>Married</option>
-                            <option value="Common Law" {{ $user->marital_status == 'Common Law' ? 'selected' : '' }}>Common Law</option>
-                            <option value="Rather Not Say" {{ $user->marital_status == 'Rather Not Say' ? 'selected' : '' }}>Rather Not Say</option>
-                        </select>
+                        {{ Form::label('name', 'Marital status') }}
+                        {!!Form::select('marital_status', array('Single' => 'Single', 'Married' => 'Married', 'Common Law' => 'Common Law', 'Rather Not Say' => 'Rather Not Say'), $user->marital_status, ['class'=>'select_status form-control','placeholder'=>'Select'])!!}
                     </div>
                 </div>
                 <div class="col-md-3">
@@ -207,12 +199,15 @@
                 <div class="col-md-3">
                     <div class="text_outer">
                         {{ Form::label('company_id', 'Company') }}
-                        <select class="select_status form-control" name="company_id">
-                            <option selected disabled>Select Company</option>
-                            @foreach($companies as $company)
-                                <option value="{{ $company->id }}" {{ $user->company_id && $user->company_id == $company->id ? 'selected' : '' }}>{{ $company->companyname }}</option>
-                            @endforeach
-                        </select>
+                        @php
+                            $data = [];
+                        @endphp
+                        @foreach($companies as $company)
+                            @php
+                                $data[$company->id] = $company->companyname;
+                            @endphp
+                        @endforeach
+                        {!! Form::select('company_id', $data, '', ['class' => 'select_status form-control', $user->company_id && $user->company_id == $company->id ? 'selected' : '']) !!}
                     </div>
                 </div>
                 @if($user->is_admin)
@@ -262,9 +257,6 @@
                 </div>
             </div>
         @endif
-
-
-
         {{ Form::button($user->exists ? 'Edit' : 'Add', array('class' => 'btn-dark contact_btn','type'=>'submit')) }}
 
         {{ Form::close() }}
