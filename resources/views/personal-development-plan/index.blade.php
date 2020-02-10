@@ -12,7 +12,7 @@
                     <div class="row">
                         <div class="col-sm-2">
                             <div class="form-group">
-                                <input type="date" name="archive_date" id="archive_date" placeholder="Select Date" class="form-control-new" onChange="personalDevelopmentArchiveSearch()">
+                                {!! Form::text('archive_date',null,['id' => 'archive_date', 'placeholder' => 'Select Date','class' => 'form-control-new','onChange' => 'personalDevelopmentArchiveSearch()']) !!}
                             </div>
                         </div>
                         <div class="col-sm-1">
@@ -32,7 +32,6 @@
                                 </tr>
                                 </thead>
                                 <tbody class="return_expence_ajax" id="personal_development_archive">
-
                                 </tbody>
                             </table>
                             <div id="paginate-new"></div>
@@ -65,7 +64,6 @@
                                 </div>
                             </div>
                             <div class="clearfix"></div>
-
                             <div class="row">
                                 <div class="col-md-6 col-sm-6">
                                     <div class="text_outer">
@@ -81,7 +79,6 @@
                                 </div>
                             </div>
                             <div class="clearfix"></div>
-
                             <div class="row">
                                 <div class="col-md-6 col-sm-6">
                                     <div class="text_outer">
@@ -99,7 +96,6 @@
                                 </div>
                             </div>
                             <hr>
-
                             <div class="row margin-top-30">
                                 <div class="form-group" style="width:100%;">
                                     <div class="col-md-12 col-sm-12">
@@ -122,7 +118,6 @@
 
         $(document).ready(function () {
             const date = new Date(), y = date.getFullYear(), m = date.getMonth();
-
             var today = new Date();
             to = formatDate(today);
             from = formatDate(today.setDate(today.getDate()-30));
@@ -148,7 +143,6 @@
                         if (selectedDates[0] === undefined) {
                             archive_from = archive_to = null;
                         }
-
                         personalDevelopmentArchiveSearch();
                     }
                 },
@@ -168,7 +162,6 @@
             var start_date = $('#create_start_date').val();
             var end_date = $('#create_end_date').val();
             var emp_id = $('#create_emp_id').val();
-
             var data = {
                 title: title,
                 description: description,
@@ -229,7 +222,6 @@
                                     } else {
                                         date = '-';
                                     }
-
                                     html += `<tr>
                                    <td> ${date} </td>
                                    <td>${data[index].description} </td>
@@ -339,7 +331,6 @@
                     $('#personal_development_edit_modal').modal('hide');
                     $('#update').removeAttr('disabled');
                 }
-
             });
         }
 

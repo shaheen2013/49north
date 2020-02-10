@@ -167,7 +167,6 @@
                         if (selectedDates[0] === undefined) {
                             from = to = null;
                         }
-
                         benefitsPending();
                     }
                 },
@@ -186,7 +185,6 @@
                         if (selectedDates[0] === undefined) {
                             history_from = history_to = null;
                         }
-
                         benefitsHistory();
                     }
                 },
