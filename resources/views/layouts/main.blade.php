@@ -135,7 +135,7 @@
                 @if($activeMenu == 'classroom' && auth()->user()->is_admin)
                     <a class="nav-item nav-link {{ (request()->is('missions')) ? 'active' : '' }}" href="{{ route('missions.index') }}">49 North Mission</a>
                     <a class="nav-item nav-link {{ (request()->is('personal_development_plans')) ? 'active' : '' }}" href="{{ route('personal_development_plans.index') }}">Personal Development Plan</a>
-                    <a class="nav-item nav-link {{ (request()->is('admin/classroom')) ? 'active' : '' }}" href="{{ route('admin.classroom.index') }}">Courses</a>
+                    <a class="nav-item nav-link {{ (request()->is('admin/classroom*')) ? 'active' : '' }}" href="{{ route('admin.classroom.index') }}">Courses</a>
                     <a class="nav-item nav-link {{ (request()->is('journal')) ? 'active' : '' }}" href="{{ route('journal.index') }}">Journal</a>
                 @endif
 

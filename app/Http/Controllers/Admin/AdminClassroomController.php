@@ -104,7 +104,7 @@ class AdminClassroomController extends Controller {
     }
 
     /**
-     * @param User            $user
+     * @param User $user
      * @param ClassroomCourse $course
      *
      * @return Factory|View
@@ -116,7 +116,7 @@ class AdminClassroomController extends Controller {
     }
 
     /**
-     * @param User             $user
+     * @param User $user
      * @param ClassroomChapter $chapter
      *
      * @return Factory|View
@@ -148,8 +148,8 @@ class AdminClassroomController extends Controller {
      *
      * @return Factory|View
      */
-    public function chapters (ClassroomCourse $course) {
-
+    public function chapters (ClassroomCourse $course)
+    {
         return view('admin.classrooms.chapters-index', compact('course'));
     }
 
