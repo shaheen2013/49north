@@ -45,12 +45,10 @@ class MissionController extends Controller
         $request->validate([
             'file' => 'required|file|mimes:pdf'
         ]);
-
         // Create new model instance
         $mission = new Mission();
         $mission->file = fileUpload('file');
         $mission->save();
-
         return redirect()->back()->with('success', 'File uploaded successfully.');
     }
 

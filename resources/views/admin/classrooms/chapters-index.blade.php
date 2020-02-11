@@ -9,7 +9,6 @@
 
     <h4>{{ $course->name }}</h4>
     <a href="{{ route('admin.classroom.chapter.create',$course->id) }}" class="btn btn-outline-secondary"><i class="fa fa-plus"></i></a>
-
     {{ Form::open(['url' => route('admin.classroom.chapter.update-chapter-order')]) }}
     <table class="table table-bordered">
         <thead>
