@@ -15,23 +15,38 @@
         <div class="card-body">
             <div class="row">
                 <div class="col col-sm-4">
-                    {{ Form::label('subject') }}
-                    {{ Form::select('subject',[0 => '-- New Subject'] + \App\Models\ClassroomCourse::groupBy('subject')->orderBy('subject')->pluck('subject','subject')->toArray(),null,['class' => 'form-control','placeholder' => '-- Select Subject --','required']) }}
-                    <div id="new-subject-container" style="display: none">
+                    <div class="text_outer">
+                        {{ Form::label('subject') }}
+                        {{ Form::select('subject',[0 => '-- New Subject'] + \App\Models\ClassroomCourse::groupBy('subject')->orderBy('subject')->pluck('subject','subject')->toArray(),null,['class' => 'select_status form-control','placeholder' => '-- Select Subject --','required']) }}
+                    </div>
+                    <div class="text_outer" id="new-subject-container" style="display: none">
                         {{ Form::label('new_subject') }}
                         {{ Form::text('new_subject',null,['class' => 'form-control']) }}
                     </div>
                 </div>
                 <div class="col col-sm-4">
-                    {{ Form::label('name','Course Name') }}
-                    {{ Form::text('name',null,['class' => 'form-control','required']) }}
+                    <div class="text_outer">
+                        {{ Form::label('name','Course Name') }}
+                        {{ Form::text('name',null,['class' => 'form-control','required']) }}
+                    </div>
                 </div>
                 <div class="col col-sm-4">
-                    {{ Form::label('upload','PDF Instruction Upload') }}
-                    {{ Form::file('upload',['accept' => '.pdf']) }}
-                    <br>
-                    @if ($classroom->s3_path)<small><a target="_blank" href="{{ $classroom->s3_url }}">{{ $classroom->s3_path }}</a></small>@endif
+                    <div class="text_outer">
+                        {!! Html::decode(Form::label('s3_path', '<i class="fa fa-fw fa-photo"></i>PDF Instruction Upload'))!!}
+                        {{ Form::file('s3_path', array('class' => 'form-control _input_choose_file', 'onchange' => 'renderChoosedFile(this)')) }}
+                        <br>
+                        @if ($classroom->s3_path)<small><a target="_blank" href="{{ fileUrl($classroom->s3_path) }}">{{ $classroom->s3_path }}</a></small>@endif
+                    </div>
                 </div>
+                <div class="col col-sm-4">
+                    <div class="text_outer">
+                        {!! Html::decode(Form::label('image_path', '<i class="fa fa-fw fa-photo"></i>Image Upload'))!!}
+                        {{ Form::file('image_path', array('class' => 'form-control _input_choose_file', 'onchange' => 'renderChoosedFile(this)')) }}
+                        <br>
+                        @if ($classroom->image_path) <img src="{{ fileUrl($classroom->image_path) }}" width="50" height="50">@endif
+                    </div>
+                </div>
+
             </div>
         </div>
         <div class="card-header">Assign To:</div>
@@ -45,9 +60,9 @@
                                 {{ $assignment->user->name }}
                             </td>
                             <td class="text-center">
-                                <a class="btn btn-outline-secondary" href="{{ route('admin.classroom.view-results',[$assignment->user_id,$assignment->classroom_course_id]) }}">View
+                                <a class="" href="{{ route('admin.classroom.view-results',[$assignment->user_id,$assignment->classroom_course_id]) }}">View
                                     Results</a></td>
-                            <td class="text-center"><a class="text-danger remove-assignment" href="#" data-id="{{ $assignment->id }}"><i class="fa fa-trash"></i></a></td>
+                            <td class="text-center"><a class="down" href="#" data-id="{{ $assignment->id }}">DELETE</a></td>
                         </tr>
                     @endforeach
                 @endif
@@ -64,8 +79,10 @@
     <div class="card">
         <div class="card-body">
             <div class="row">
-                <div class="col">
-                    {{ Form::select('user_id',$users,null,['class' => 'form-control','id' => 'user-list','placeholder' => '-- Select Employee --']) }}
+                <div class="col col-sm-4">
+                    <div class="text_outer">
+                        {{ Form::select('user_id',$users,null,['class' => 'select_status form-control','id' => 'user-list','placeholder' => '-- Select Employee --']) }}
+                    </div>
                 </div>
                 <div class="col">
                     <a href="#" id="add-user" class="btn btn-outline-secondary">Add <i class="fa fa-plus"></i></a>
@@ -82,7 +99,7 @@
             </td>
             <td></td>
             <td class="text-center">
-                <a href="#" class="text-danger" onclick="$(this).parent().parent().remove(); return false;"><i class="fa fa-trash"></i></a>
+                <a href="#" class="down" onclick="$(this).parent().parent().remove(); return false;">DELETE</a>
             </td>
         </tr>
     </table>
