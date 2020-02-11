@@ -174,6 +174,7 @@ class AdminClassroomController extends Controller
     {
         $sections = $chapter->classroomSections()->pluck('orderval', 'section_name')->toArray();
         $course = $chapter->classroomCourse;
+
         return view('admin.classrooms.chapters-edit', compact('chapter', 'course', 'sections'));
     }
 

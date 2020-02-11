@@ -1,4 +1,5 @@
-@extends('layouts.main',['activeMenu' => 'classroom'])
+@extends('layouts.main', ['activeMenu' => 'classroom'])
+
 @section('title', $chapter->name . ' Chapter')
 
 @section('breadcrumbs')
@@ -7,8 +8,7 @@
 @endsection
 
 @section('content1')
-
-    <h4>{{ $course->name }}</h4>
+    <h4 class="my-4"><span class="active-span clickable">{{ $course->name }}</span></h4>
 
     {!! Form::model($chapter,['url' => route('admin.classroom.chapter.store'),'files' => true]) !!}
     {!! Form::hidden('id') !!}
@@ -17,29 +17,26 @@
     <div class="card">
         <div class="card-body">
             <div class="row">
-                <div class="col col-sm-4">
-                    <div class="form-group">
-                        {!! Form::label('chapter_name') !!}
-                        {!! Form::text('chapter_name',null,['class' => 'form-control','required']) !!}
+                <div class="col col-sm-6">
+                    <div class="text_outer">
+                        {{ Form::label('chapter_name') }}
+                        {{ Form::text('chapter_name', null, array('class' => 'form-control', 'required')) }}
                     </div>
                 </div>
-                {{--                <div class="col col-sm-4">
-                                    <div class="form-group">
-                                        {!! Form::label('instructions') !!}
-                                        {!! Form::textarea('instructions',null,['class' => 'form-control']) !!}
-                                    </div>
-                                </div>--}}
-                <div class="col col-sm-4">
-                    {!! Form::label('upload','PDF Instruction Upload') !!}
-                    {!! Form::file('upload',['accept' => '.pdf']) !!}
-                    <br>
-                    @if ($chapter->s3_path)
-                        <small><a target="_blank" href="{{ $chapter->s3_url }}">{{ $chapter->s3_path }}</a></small>
-                    @endif
+                <div class="col col-sm-6 image-chooser">
+                    <div class="image-chooser-preview"></div>
+                    <div class="text_outer">
+                        {!! Html::decode(Form::label('upload', '<i class="fa fa-fw fa-photo"></i>PDF Instruction Upload'))!!}
+                        {{ Form::file('upload', array('class' => 'form-control _input_choose_file', 'accept' => '.pdf', 'onChange' => 'renderChoosedFile(this)')) }}
+                        <br>
+                        @if ($chapter->s3_path)
+                            <small><a target="_blank" href="{{ fileUrl($chapter->s3_url) }}">{{ $chapter->s3_path }}</a></small>
+                        @endif
+                    </div>
                 </div>
-                <div class="col col-sm-4">
+                <div class="col col-sm-12">
                     <div class="text-center">
-                        {!! Form::submit('Save',['class' => 'btn btn-secondary']) !!}
+                        <button type="submit" class="btn-dark contact_btn" style="margin: 0">Save</button>
                     </div>
                 </div>
             </div>
@@ -55,10 +52,12 @@
                 {!! Form::open(['url' => route('admin.classroom.chapter.add-question',$chapter->id)]) !!}
                 <div class="row">
                     <div class="col">
-                        {!! Form::select('question_type',\App\Models\ClassroomQuestion::$questionTypes,null,['class' => 'form-control']) !!}
+                        <div class="text_outer">
+                        {!! Form::select('question_type',\App\Models\ClassroomQuestion::$questionTypes,null,['class' => 'select_status form-control']) !!}
+                        </div>
                     </div>
                     <div class="col">
-                        {!! Form::submit('Add',['class' => 'btn btn-outline-secondary']) !!}
+                        <button type="submit" class="btn-dark contact_btn" style="margin: 0">Save</button>
                     </div>
                 </div>
                 {!! Form::close() !!}
@@ -75,20 +74,20 @@
                                 <td class="text-center">{!! Form::number('orderval[' . $question->id . ']',$question->orderval,['class' => 'form-control text-center','min' => 1, 'style' => 'min-width: 80px']) !!}</td>
                                 <td><a href="{{ route('admin.classroom.chapter.edit-question',$question->id) }}">{{ $question->question }}</a></td>
                                 <td class="text-center">{{ $question->question_type }}</td>
-                                <td class="text-center">
-                                    <a title="Delete User" class="deletejson text-danger btn" data-token="{{ csrf_token() }}" data-url="{{ route('admin.classroom.chapter.destroy-question',$question->id) }}" data-id="{{ $question->id }}" data-section="{{ $delSection }}"><i class="fa fa-trash"></i></a>
+                                <td class="text-center" width="15%">
+                                    <a href="{{ route('admin.classroom.chapter.edit-question',$question->id) }}">EDIT</a>
+                                    <a title="Delete User" href="javascript:void(0)" class="down deletejson" data-token="{{ csrf_token() }}" data-url="{{ route('admin.classroom.chapter.destroy-question',$question->id) }}" data-id="{{ $question->id }}" data-section="{{ $delSection }}">DELETE</a>
                                 </td>
                             </tr>
                         @endforeach
                     @endforeach
                 </table>
 
-                {!! Form::submit('Update Order',['class' => 'btn btn-secondary']) !!}
+                <button type="submit" class="btn-dark contact_btn" style="margin: 0">Update Order</button>
                 {!! Form::close() !!}
 
                 @endif
             </div>
         </div>
-
 @stop
 
