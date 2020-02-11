@@ -13,7 +13,6 @@ use Spatie\Permission\Models\{Role, Permission};
 
 class PermissionController extends Controller
 {
-
     /**
      * Display a listing of the resource.
      *
@@ -70,12 +69,11 @@ class PermissionController extends Controller
                     $r->givePermissionTo($permission);
                 }
             }
+
             return redirect()->route('permissions.index')->with('alert-info', 'Permission' . $permission->name . ' added!');
         } else {
             abort(401);
         }
-
-
     }
 
     /**
@@ -123,11 +121,11 @@ class PermissionController extends Controller
             ]);
             $input = $request->all();
             $permission->fill($input)->save();
+
             return redirect()->route('permissions.index')->with('alert-info', 'Permission' . $permission->name . ' updated!');
         } else {
             abort(401);
         }
-
     }
 
     /**
@@ -144,7 +142,7 @@ class PermissionController extends Controller
             return redirect()->route('permissions.index')->with('alert-info', 'Cannot delete this Permission!');
         }
         $permission->delete();
-        return redirect()->route('permissions.index')->with('alert-info', 'Permission deleted!');
 
+        return redirect()->route('permissions.index')->with('alert-info', 'Permission deleted!');
     }
 }

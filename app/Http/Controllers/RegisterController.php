@@ -10,7 +10,6 @@ use Spatie\Permission\Models\{Role, Permission};
 
 class RegisterController extends Controller
 {
-
     /**
      * Show the application dashboard.
      *
@@ -121,10 +120,9 @@ class RegisterController extends Controller
 
             return back()->with('message', 'Your information is submitted Successfully');
         } else {
-            $Employee_detail = EmployeeDetails::where('id', '=', auth()->user()->id)->update($employee_detailsarray);
+            EmployeeDetails::where('id', '=', auth()->user()->id)->update($employee_detailsarray);
 
             return back()->with('message', 'Your information is submitted Successfully');
         }
     }
-
 }

@@ -108,7 +108,6 @@ class PostController extends Controller
         $post->body = $request->input('body');
         $post->save();
         return redirect()->route('posts.show', $post->id)->with('alert-info', 'Article, ' . $post->title . ' updated');
-
     }
 
     /**
@@ -123,6 +122,5 @@ class PostController extends Controller
         $post = Post::findOrFail($id);
         $post->delete();
         return redirect()->route('posts.index')->with('alert-info', 'Article successfully deleted');
-
     }
 }
