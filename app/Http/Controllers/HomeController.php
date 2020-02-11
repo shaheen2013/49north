@@ -51,17 +51,6 @@ class HomeController extends Controller
     }
 
     /**
-     * Display classroom landing page
-     *
-     * @return Factory|View
-     */
-    public function classroomModule ()
-    {
-        $activeMenu = 'classroom';
-        return view('classroom-module', compact('activeMenu'));
-    }
-
-    /**
      * Show the form for editing the specified resource.
      *
      * @return Factory|View

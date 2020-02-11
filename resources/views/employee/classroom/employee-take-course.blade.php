@@ -1,4 +1,4 @@
-@extends('employee.layout')
+@extends('layouts.main')
 @section('title', $chapter->chapter_name . ' - ' . $section->section_name)
 
 @section('breadcrumbs')
@@ -6,7 +6,7 @@
     <li class="breadcrumb-item"><a href="{{ route('employee.classroom.chapters',$chapter->classroom_course_id) }}">{{ $chapter->classroomCourse->name }}</a></li>
 @endsection
 
-@section('content')
+@section('content1')
 
     {{-- show Intro PDF --}}
     @if (!request()->input('section') && !request()->input('qid') && $chapter->s3_path)

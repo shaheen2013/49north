@@ -1,7 +1,7 @@
-@extends('employee.layout')
+@extends('layouts.main')
 @section('title', $course->name)
 
-@section('content')
+@section('content1')
 
     @if ($course->s3_path)
         <iframe name="pdf_iframe" src="{{ $course->s3_url }}" class="invoice-pdf-frame"></iframe>

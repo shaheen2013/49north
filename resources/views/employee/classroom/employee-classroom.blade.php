@@ -1,7 +1,7 @@
-@extends('employee.layout')
+@extends('layouts.main')
 @section('title', 'Classroom')
 
-@section('content')
+@section('content1')
 
     <table class="table table-bordered" style="margin-top: 30px">
         <thead>

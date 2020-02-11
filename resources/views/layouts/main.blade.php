@@ -52,12 +52,6 @@
                             </li>
                             @endadmin
 
-                            @if(!auth()->user()->is_admin)
-                            <li class="nav-item">
-                                <a class="nav-link {{ $activeMenu == 'classroom' ? 'active' : '' }}" href="{{ route('classroom.module') }}" role="tab">Classroom</a>
-                            </li>
-                            @endif
-
                             @admin
                             <li class="nav-item">
                                 <a class="nav-link {{ $activeMenu == 'classroom' ? 'active' : '' }}" href="{{ route('missions.index') }}" role="tab">Classroom</a>

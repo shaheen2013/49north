@@ -2,9 +2,8 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
+use App\Models\{ClassroomAssignment,ClassroomCourse};
+use Illuminate\Database\Eloquent\Relations\{BelongsToMany,HasMany,HasManyThrough,HasOne};
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -74,5 +73,12 @@ class User extends Authenticatable {
      */
     public function tickets() {
         return $this->belongsToMany(MaintenanceTicket::class);
+    }
+
+    /**
+     * @return HasManyThrough
+     */
+    public function courses () {
+        return $this->hasManyThrough(ClassroomCourse::class, ClassroomAssignment::class, 'user_id', 'id', 'id', 'classroom_course_id');
     }
 }

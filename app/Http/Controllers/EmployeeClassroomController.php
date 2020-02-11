@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Http\Controllers\Employee;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Models\{ClassroomAnswer, ClassroomArchive, ClassroomAssignment, ClassroomChapter, ClassroomQuestion, ClassroomSection};
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\{RedirectResponse, Request};
