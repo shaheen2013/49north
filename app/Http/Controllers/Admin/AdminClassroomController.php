@@ -11,18 +11,18 @@ use Illuminate\Http\{JsonResponse, RedirectResponse, Request};
 use Illuminate\Support\Facades\{Storage, Validator};
 use Illuminate\View\View;
 
-class AdminClassroomController extends Controller {
+class AdminClassroomController extends Controller
+{
     /**
      * Display a listing of the resource.
      *
      * @return Factory|View
      */
-    public function index () {
+    public function index()
+    {
         $company = request()->input('c');
         $companyName = $company ? __('general.company-list.' . $company) : '';
-
         $courses = ClassroomCourse::where('company', $company)->orderBy('subject')->orderBy('name')->withCount('chapters')->get();
-
         return view('admin.classrooms.classroom-index', compact('company', 'companyName', 'courses'));
     }
 
@@ -31,11 +31,11 @@ class AdminClassroomController extends Controller {
      *
      * @return Factory|View
      */
-    public function create () {
+    public function create()
+    {
         $classroom = new ClassroomCourse();
         $classroom->company = request()->input('c');
         $users = User::where('is_admin', 0)->pluck('name', 'id')->toArray();
-
         return view('admin.classrooms.classroom-edit', compact('classroom', 'users'));
     }
 
@@ -46,7 +46,8 @@ class AdminClassroomController extends Controller {
      *
      * @return RedirectResponse
      */
-    public function store (Request $request) {
+    public function store(Request $request)
+    {
         $request->validate([
             's3_path' => 'nullable|file|mimes:pdf',
             'image_path' => 'nullable|image|mimes:jpeg,bmp,png',
@@ -54,8 +55,7 @@ class AdminClassroomController extends Controller {
         if ($id = request()->input('id')) {
             $classroomCourse = ClassroomCourse::find($id);
             session()->flash('alert-success', 'Course Updated');
-        }
-        else {
+        } else {
             $classroomCourse = new ClassroomCourse();
             $classroomCourse->company = $request->input('company');
             session()->flash('alert-success', 'New Course Created');
@@ -82,10 +82,9 @@ class AdminClassroomController extends Controller {
         foreach ($request->input('userList', []) AS $key => $val) {
             ClassroomAssignment::create([
                 'classroom_course_id' => $classroomCourse->id,
-                'user_id'             => $val
+                'user_id' => $val
             ]);
         }
-
         return redirect()->route('admin.classroom.index', ['c' => $classroomCourse->company]);
     }
 
@@ -96,10 +95,10 @@ class AdminClassroomController extends Controller {
      *
      * @return Factory|View
      */
-    public function edit (ClassroomCourse $classroom) {
+    public function edit(ClassroomCourse $classroom)
+    {
         $userIDs = $classroom->assignments()->pluck('user_id');
         $users = User::selectRaw('id, name')->whereNotIn('id', $userIDs)->orderBy('name')->orderBy('name')->pluck('name', 'id')->toArray();
-
         return view('admin.classrooms.classroom-edit', compact('classroom', 'users'));
     }
 
@@ -109,9 +108,9 @@ class AdminClassroomController extends Controller {
      *
      * @return Factory|View
      */
-    public function viewCourseUserResults (User $user, ClassroomCourse $course) {
+    public function viewCourseUserResults(User $user, ClassroomCourse $course)
+    {
         $chapters = $course->chapters()->with('questionsInOrder')->get();
-
         return view('admin.classrooms.user-course', compact('user', 'course', 'chapters'));
     }
 
@@ -121,7 +120,8 @@ class AdminClassroomController extends Controller {
      *
      * @return Factory|View
      */
-    public function viewChapterResults (User $user, ClassroomChapter $chapter) {
+    public function viewChapterResults(User $user, ClassroomChapter $chapter)
+    {
         return view('admin.classrooms.user-answers', compact('user', 'chapter'));
     }
 
@@ -133,13 +133,13 @@ class AdminClassroomController extends Controller {
      * @return JsonResponse
      * @throws Exception
      */
-    public function destroy (ClassroomCourse $classroom) {
+    public function destroy(ClassroomCourse $classroom)
+    {
         foreach ($classroom->chapters AS $chapter) {
             $chapter->questions()->delete();
         }
         $classroom->chapters()->delete();
         $classroom->delete();
-
         return response()->json(['success' => true]);
     }
 
@@ -148,7 +148,7 @@ class AdminClassroomController extends Controller {
      *
      * @return Factory|View
      */
-    public function chapters (ClassroomCourse $course)
+    public function chapters(ClassroomCourse $course)
     {
         return view('admin.classrooms.chapters-index', compact('course'));
     }
@@ -158,10 +158,10 @@ class AdminClassroomController extends Controller {
      *
      * @return Factory|View
      */
-    public function createChapter (ClassroomCourse $course) {
+    public function createChapter(ClassroomCourse $course)
+    {
         $chapter = new ClassroomChapter();
         $chapter->classroom_course_id = $course->id;
-
         return view('admin.classrooms.chapters-edit', compact('chapter', 'course'));
     }
 
@@ -170,7 +170,8 @@ class AdminClassroomController extends Controller {
      *
      * @return Factory|View
      */
-    public function editChapter (ClassroomChapter $chapter) {
+    public function editChapter(ClassroomChapter $chapter)
+    {
         $sections = $chapter->classroomSections()->pluck('orderval', 'section_name')->toArray();
         $course = $chapter->classroomCourse;
 
@@ -182,12 +183,12 @@ class AdminClassroomController extends Controller {
      *
      * @return RedirectResponse
      */
-    public function storeChapter (Request $request) {
+    public function storeChapter(Request $request)
+    {
         if ($id = $request->input('id')) {
             $chapter = ClassroomChapter::find($id);
             session()->flash('alert-success', 'Chapter Updated');
-        }
-        else {
+        } else {
             $chapter = new ClassroomChapter();
             $chapter->classroom_course_id = $request->input('classroom_course_id');
             session()->flash('alert-success', 'Chapter Created');
@@ -215,7 +216,8 @@ class AdminClassroomController extends Controller {
      *
      * @return RedirectResponse
      */
-    public function updateChapterOrder (Request $request) {
+    public function updateChapterOrder(Request $request)
+    {
 
         foreach ($request->input('orderval', []) AS $id => $val) {
             ClassroomChapter::find($id)->update(['orderval' => $val]);
@@ -227,12 +229,13 @@ class AdminClassroomController extends Controller {
     }
 
     /**
-     * @param Request          $request
+     * @param Request $request
      * @param ClassroomChapter $chapter
      *
      * @return Factory|View
      */
-    public function addQuestion (Request $request, ClassroomChapter $chapter) {
+    public function addQuestion(Request $request, ClassroomChapter $chapter)
+    {
         $question = new ClassroomQuestion();
         $question->question_type = $request->input('question_type');
         $question->questionsText = [];
@@ -247,7 +250,8 @@ class AdminClassroomController extends Controller {
      *
      * @return mixed
      */
-    private function _sections ($chapterID) {
+    private function _sections($chapterID)
+    {
         return ClassroomSection::selectRaw('CONCAT(orderval,") ",section_name) AS section, id')->where('classroom_chapter_id', $chapterID)->orderBy('orderval')
             ->pluck('section', 'id')->toArray();
     }
@@ -257,26 +261,27 @@ class AdminClassroomController extends Controller {
      *
      * @return int
      */
-    private function _nextSectionVal ($chapterID) {
+    private function _nextSectionVal($chapterID)
+    {
         return ClassroomSection::where('classroom_chapter_id', $chapterID)->max('orderval') ?? 1;
     }
 
     /**
      * @param Request $request
-     * @param int     $chapterID
+     * @param int $chapterID
      *
      * @return RedirectResponse
      */
-    public function saveQuestion (Request $request, $chapterID) {
+    public function saveQuestion(Request $request, $chapterID)
+    {
 
         $input = $request->only(['question', 'classroom_section_id', 'question_type']);
 
         if ($input['question_type'] == 'textbox') {
             $input['questions'] = json_encode(['answers' => $request->input('answer')]);
-        }
-        else {
+        } else {
             $input['questions'] = json_encode([
-                'answers'   => $request->input('buttons', null),
+                'answers' => $request->input('buttons', null),
                 'questions' => $request->input('questionsText', null),
             ]);
         }
@@ -298,12 +303,11 @@ class AdminClassroomController extends Controller {
             // create new section
             $section = ClassroomSection::create([
                 'classroom_chapter_id' => $chapterID,
-                'section_name'         => $request->input('new_section'),
-                'orderval'             => $orderval
+                'section_name' => $request->input('new_section'),
+                'orderval' => $orderval
             ]);
             $input['classroom_section_id'] = $section->id;
-        }
-        else {
+        } else {
             $section = ClassroomSection::find($input['classroom_section_id']);
         }
 
@@ -313,8 +317,7 @@ class AdminClassroomController extends Controller {
         if ($id = $request->input('id')) {
             $question = ClassroomQuestion::find($id);
             $question->update($input);
-        }
-        else {
+        } else {
             $input['orderval'] = (ClassroomQuestion::where('classroom_chapter_id', $chapterID)->max('orderval') ?? 0) + 1;
             $input['classroom_chapter_id'] = $chapterID;
             $question = ClassroomQuestion::create($input);
@@ -328,7 +331,8 @@ class AdminClassroomController extends Controller {
      *
      * @return Factory|View
      */
-    public function editQuestion (ClassroomQuestion $question) {
+    public function editQuestion(ClassroomQuestion $question)
+    {
         $chapter = $question->classroomChapter;
         $answers = json_decode($question->questions);
         $question->audio = $answers->audio ?? null;
@@ -346,7 +350,8 @@ class AdminClassroomController extends Controller {
      * @return JsonResponse
      * @throws Exception
      */
-    public function deleteQuestion (ClassroomQuestion $question) {
+    public function deleteQuestion(ClassroomQuestion $question)
+    {
 
         // count questions left in the section, and delete if this is the only one left
         if (ClassroomQuestion::where('classroom_section_id', $question->classroom_section_id)->count() == 1) {
@@ -363,7 +368,8 @@ class AdminClassroomController extends Controller {
      *
      * @return RedirectResponse
      */
-    public function updateQuestionOrder (Request $request) {
+    public function updateQuestionOrder(Request $request)
+    {
 
         foreach ($request->input('orderval', []) AS $id => $val) {
             ClassroomQuestion::find($id)->update(['orderval' => $val]);

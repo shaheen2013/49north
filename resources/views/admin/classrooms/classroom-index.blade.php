@@ -8,11 +8,8 @@
                 <div class="col-md-12">
                     <div class="col-sm-12" id="pending_div">
                         <div class="row">
-{{--                            <div class="col-sm-1">--}}
-{{--                                <div id="wait"></div>--}}
-{{--                            </div>--}}
                             <div class="col-sm-12">
-                                <a href="{{ route('admin.classroom.create',['c' => $company]) }}" class="_new_icon_button_1", style="padding : 7px 12px"> <i class="fa fa-plus"></i> </a>
+                                <a href="{{ route('admin.classroom.create',['c' => $company]) }}" class="_new_icon_button_1" , style="padding : 7px 12px"> <i class="fa fa-plus"></i> </a>
                             </div>
                             <div class="col-sm-12">
                                 <table class="table _table _table-bordered">
@@ -42,14 +39,15 @@
                                             </tr>
                                         @endif
                                         <tr class="del-{{ $delSection }}-{{ $course->id }}">
-                                            <td><a href="{{ route('admin.classroom.edit',$course->id) }}">{{ $course->name }}</a></td>
-                                            <td class="text-center"><a href="{{ route('admin.classroom.chapter.list',$course->id) }}">{{ $course->chapters_count }}</a></td>
+                                            <td> <a href="{{ route('admin.classroom.edit',$course->id) }}">{{ $course->name }}</a> </td>
+                                            <td class="text-center"><a href="{{ route('admin.classroom.chapter.list',$course->id) }}">{{ $course->chapters_count }}</a> </td>
                                             <td class="text-center">{{ $course->created_at->format('M d, Y') }}</td>
                                             <td class="text-right">
                                                 <a href="{{ route('admin.classroom.edit',$course->id) }}">EDIT</a>
-                                                <a title="Course User" class="down" data-token="{{ csrf_token() }}" data-url="{{ route('admin.classroom.destroy',$course->id) }}" data-id="{{ $course->id }}" data-section="{{ $delSection }}">DELETE</a>
+                                                <a title="Course User" class="down" data-token="{{ csrf_token() }}" data-url="{{ route('admin.classroom.destroy',$course->id) }}" data-id="{{ $course->id }}"
+                                                   data-section="{{ $delSection }}">DELETE</a>
                                             </td>
-                                        </tr><tr class="spacer"></tr>
+                                        </tr> <tr class="spacer"></tr>
                                     @endforeach
                                     <tbody>
                                 </table>
@@ -61,5 +59,5 @@
             </div>
         </div>
     </div>
-
 @stop
+
