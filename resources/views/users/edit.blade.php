@@ -1,10 +1,8 @@
-
 @extends('layouts.main')
 
 @section('title', $user->exists ? 'Edit ' . $user->name : 'Add User')
 
 @section('content1')
-
     <div class="tab-pane fade show active" id="nav-employee" role="tabpanel" aria-labelledby="nav-employee-tab">
 
         {{ Form::model($user, ['route' => 'users.store', 'enctype' => 'multipart/form-data']) }}
@@ -195,30 +193,30 @@
 
         <div class="emergency">
             <h2 class="form_title">Company</h2>
-                <div class="col-md-3">
-                    <div class="text_outer">
-                        {{ Form::label('company_id', 'Company') }}
+            <div class="col-md-3">
+                <div class="text_outer">
+                    {{ Form::label('company_id', 'Company') }}
+                    @php
+                        $data = [];
+                    @endphp
+                    @foreach($companies as $company)
                         @php
-                            $data = [];
+                            $data[$company->id] = $company->companyname;
                         @endphp
-                        @foreach($companies as $company)
-                            @php
-                                $data[$company->id] = $company->companyname;
-                            @endphp
-                        @endforeach
-                        {!! Form::select('company_id', $data, '', ['class' => 'select_status form-control', $user->company_id && $user->company_id == $company->id ? 'selected' : '']) !!}
+                    @endforeach
+                    {!! Form::select('company_id', $data, '', ['class' => 'select_status form-control', $user->company_id && $user->company_id == $company->id ? 'selected' : '']) !!}
+                </div>
+            </div>
+            @if($user->is_admin)
+                <h2 class="form_title">Ticket Admin</h2>
+                <div class='col-md-3'>
+                    <div class="text_outer">
+                        <label class="custom-checkbox form-check-label">
+                            {!! Form::checkbox('is_ticket_admin', 1, false, array('class' => 'form-check-input', 'checked' => $user->user->is_ticket_admin ? true : false)) !!}Is Ticket Admin
+                        </label>
                     </div>
                 </div>
-                @if($user->is_admin)
-                    <h2 class="form_title">Ticket Admin</h2>
-                     <div class='col-md-3'>
-                            <div class="text_outer">
-                                <label class="custom-checkbox form-check-label">
-                                    {!! Form::checkbox('is_ticket_admin', 1, false, array('class' => 'form-check-input', 'checked' => $user->user->is_ticket_admin ? true : false)) !!}Is Ticket Admin
-                                </label>
-                            </div>
-                        </div>
-                 @endif
+            @endif
         </div>
 
         @if(auth()->user()->is_admin == 1)
@@ -242,7 +240,11 @@
                                             {!! Form::label('role-' . $role->id,$role->name,['class' => 'font-weight-bold']) !!}
                                             @foreach ($role->permissions AS $permission)
                                                 <div class="form-check">
+                                                    @if($user->exists)
                                                     {!! Form::checkbox('permission[' . $permission->id .']',$permission->id, false,['class' => 'form-check-input','id' => 'permission-' . $permission->id, 'checked' => $user->user->hasPermissionTo($permission->name) ? true : false ]) !!}
+                                                    @else
+                                                        {!! Form::checkbox('permission[' . $permission->id .']',$permission->id, false,['class' => 'form-check-input','id' => 'permission-' . $permission->id]) !!}
+                                                    @endif
                                                     {!! Form::label('permission-' . $permission->id,$permission->name,['class' => 'form-check-label']) !!}
                                                 </div>
                                             @endforeach
@@ -262,7 +264,6 @@
     </div>
 
     <script type="text/javascript">
-
         var user_id = null
         let route = '{{$route}}';
         function resetStuffPassword() {
@@ -281,5 +282,4 @@
             });
         }
     </script>
-
 @endsection
