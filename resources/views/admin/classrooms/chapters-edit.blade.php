@@ -8,7 +8,7 @@
 @endsection
 
 @section('content1')
-    <h4 class="my-4">{{ $course->name }}</h4>
+    <h4 class="my-4"><span class="active-span clickable">{{ $course->name }}</span></h4>
 
     {!! Form::model($chapter,['url' => route('admin.classroom.chapter.store'),'files' => true]) !!}
     {!! Form::hidden('id') !!}

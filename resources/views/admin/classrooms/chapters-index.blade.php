@@ -12,7 +12,9 @@
             <div class="col-md-12">
                 <div class="row">
                     <div class="col-md-6">
-                        <h4>{{ $course->name }}</h4>
+                        <h2>
+                            <span class="active-span clickable">{{ $course->name }}</span>
+                        </h2>
                     </div>
                     <div class="col-md-6 mb-4">
                         <a href="{{ route('admin.classroom.chapter.create',$course->id) }}" class="_new_icon_button_1" style="padding: 7px 12px"><i class="fa fa-plus"></i> </a>
