@@ -109,10 +109,7 @@ class ExpenseController extends Controller
         $data['purchases'] = Purchases::all();
         $data['category'] = Categorys::all();
 
-        if ($data) {
-            return response()->json(['status' => 'success', 'data' => $data]);
-        }
-        return response()->json(['status' => 'fail']);
+        return response()->json(['status' => 'success', 'data' => $data]);
     }
 
     /**

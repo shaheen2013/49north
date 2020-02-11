@@ -20,6 +20,7 @@ class MissionController extends Controller
     {
         $activeMenu = 'classroom';
         $mission = Mission::Latest()->where('status', 1)->first();
+
         return view('mission.index', compact('activeMenu', 'mission'));
     }
 
@@ -49,6 +50,7 @@ class MissionController extends Controller
         $mission = new Mission();
         $mission->file = fileUpload('file');
         $mission->save();
+
         return redirect()->back()->with('success', 'File uploaded successfully.');
     }
 
@@ -92,6 +94,7 @@ class MissionController extends Controller
         $mission = new Mission();
         $mission->file = fileUpload('file');
         $mission->save();
+
         return redirect()->back()->with('success', 'File uploaded successfully.');
     }
 

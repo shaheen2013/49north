@@ -24,6 +24,7 @@ class PaystatementController extends Controller
             ->select('p.*', 'u.id as empid')
             ->get();
         $user = User::where('is_admin', 0)->get();
+
         return view('paystatement/index', compact('user_list', 'user', 'activeMenu'));
     }
 
@@ -102,6 +103,7 @@ class PaystatementController extends Controller
         foreach ($data as &$datum) {
             $datum->pdfname = fileUrl($datum->pdfname, true);
         }
+
         return response()->json(['status' => 'success', 'data' => $data]);
     }
 

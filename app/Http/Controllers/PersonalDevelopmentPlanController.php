@@ -21,6 +21,7 @@ class PersonalDevelopmentPlanController extends Controller
         $activeMenu = 'classroom';
         $data = PersonalDevelopmentPlan::get();
         $user = User::get();
+
         return view('personal-development-plan.index', compact('data', 'user', 'activeMenu'));
     }
 
@@ -208,10 +209,8 @@ class PersonalDevelopmentPlanController extends Controller
     {
         $data = PersonalDevelopmentPlan::findOrFail($personalDevelopmentPlan->id);
         $data['user'] = User::get();
-        if ($data) {
-            return response()->json(['status' => 'success', 'data' => $data]);
-        }
-        return response()->json(['status' => 'fail']);
+
+        return response()->json(['status' => 'success', 'data' => $data]);
     }
 
     /**
