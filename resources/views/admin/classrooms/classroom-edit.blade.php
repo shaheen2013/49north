@@ -2,7 +2,8 @@
 @section('title', 'Edit Course')
 
 @section('breadcrumbs')
-    <li class="breadcrumb-item"><a href="{{ route('admin.classroom.index',['c' => $classroom->company]) }}">Courses</a></li>
+    <li class="breadcrumb-item"><a href="{{ route('admin.classroom.index',['c' => $classroom->company]) }}">Courses</a>
+    </li>
 @endsection
 
 @section('content1')
@@ -46,7 +47,6 @@
                         @if ($classroom->image_path) <img src="{{ fileUrl($classroom->image_path) }}" width="50" height="50">@endif
                     </div>
                 </div>
-
             </div>
         </div>
         <div class="card-header">Assign To:</div>
@@ -59,23 +59,18 @@
                                 {{ Form::hidden('deleteList[]',null,['class' => 'delete-list']) }}
                                 {{ $assignment->user->name }}
                             </td>
-                            <td class="text-center">
-                                <a class="" href="{{ route('admin.classroom.view-results',[$assignment->user_id,$assignment->classroom_course_id]) }}">View
-                                    Results</a></td>
-                            <td class="text-center"><a class="down" href="#" data-id="{{ $assignment->id }}">DELETE</a></td>
+                            <td class="text-center"> <a class="" href="{{ route('admin.classroom.view-results',[$assignment->user_id,$assignment->classroom_course_id]) }}">View Results</a></td>
+                            <td class="text-center"> <a class="down" href="#" data-id="{{ $assignment->id }}">DELETE</a> </td>
                         </tr>
                     @endforeach
                 @endif
             </table>
-
-            <div class="text-center">
-                {{ Form::submit('Save',['class' => 'btn btn-secondary']) }}
+            <div class="col-md-12 col-sm-12">
+                <button type="submit" class="btn-dark contact_btn">Save </button>
             </div>
         </div>
     </div>
-
     {{ Form::close() }}
-
     <div class="card">
         <div class="card-body">
             <div class="row">
@@ -90,7 +85,6 @@
             </div>
         </div>
     </div>
-
     <table id="hidden-table" class="d-none">
         <tr>
             <td>
@@ -103,7 +97,6 @@
             </td>
         </tr>
     </table>
-
 @stop
 
 @push('scripts')
