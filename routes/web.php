@@ -148,6 +148,45 @@ Route::group(['middleware' => ['auth']], function () {
         Route::put('/status/{message}', 'MessageController@statusUpdate')->name('status.update');
     });
     Route::resource('messages', 'MessageController');
+
+    Route::group(['namespace' => 'Employee', 'prefix' => 'employee', 'as' => 'employee.'], function () {
+        Route::get('/', 'EmployeeController@index')->name('dashboard');
+        Route::get('contracts','EmployeeController@contracts')->name('contracts');
+        Route::get('performance','EmployeeController@performance')->name('performance');
+        Route::get('edit-profile','EmployeeController@editProfile')->name('edit-profile');
+        Route::post('save-profile','EmployeeController@saveProfile')->name('save-profile');
+
+        Route::group(['prefix' => 'expenses', 'as' => 'expenses.'], function () {
+            Route::get('expenses', 'EmployeeExpenseController@expenses')->name('expenses');
+            Route::post('save-expenses', 'EmployeeExpenseController@storeExpenses')->name('save-expenses');
+            Route::get('submit-expenses', 'EmployeeExpenseController@submitExpensesForApproval')->name('submit-expenses');
+            Route::delete('delete/{expenseReport}','EmployeeExpenseController@destroy')->name('destroy');
+            Route::post('edit','EmployeeExpenseController@ajaxEdit')->name('edit');
+        });
+
+        Route::group(['prefix' => 'mileage', 'as' => 'mileage.'], function () {
+            Route::get('mileage','EmployeeMileageController@mileage')->name('mileage');
+            Route::post('save-mileage','EmployeeMileageController@storeMileage')->name('save-mileage');
+            Route::get('submit-mileage','EmployeeMileageController@submitMileageForApproval')->name('submit-mileage');
+            Route::delete('delete/{mileageReport}','EmployeeMileageController@destroy')->name('destroy');
+        });
+
+        ## weekly Goals
+        Route::get('weekly-goal','EmployeeWeeklyGoalsController@index')->name('weekly-goal');
+        Route::post('store-weekly-goals','EmployeeWeeklyGoalsController@store')->name('store-weekly-goals');
+
+        Route::group(['prefix' => 'classroom', 'as' => 'classroom.'], function () {
+            Route::get('courses','EmployeeClassroomController@courses')->name('courses');
+            Route::get('chapters/{course}','EmployeeClassroomController@chapters')->name('chapters');
+            Route::get('take-course/{chapter}','EmployeeClassroomController@takeCourse')->name('take-course');
+            Route::post('save','EmployeeClassroomController@save')->name('save');
+            Route::get('repeat-chapter/{chapter}','EmployeeClassroomController@repeatChapter')->name('repeat-chapter');
+
+        });
+        Route::resource('classroom','EmployeeClassroomController');
+
+    });
+
 });
 
 Route::resource('posts', 'PostController');
@@ -156,5 +195,4 @@ Route::post('/reset/password/{id}', 'UserController@changeUserPassword')->name('
 Route::post('/reset/stuff/password/{id}', 'UserController@changeStuffPassword')->name('reset.stuff.password');
 Route::get('/employee/module', 'HomeController@employeeModule')->name('employee.module');
 Route::get('/benefits/module', 'HomeController@benefitsModule')->name('benefits.module');
-Route::get('/classroom/module', 'HomeController@classroomModule')->name('classroom.module');
 
