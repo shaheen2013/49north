@@ -63,7 +63,7 @@ class MaintenanceController extends Controller
     function edit (MaintenanceTicket $maintenanceTicket)
     {
         try {
-            $data = MaintenanceTicket::with('users')->find($maintenanceTicket->id);
+            $data = MaintenanceTicket::with('users')->findOrFail($maintenanceTicket->id);
 
             return response()->json(['status' => 200, 'data' => $data]);
         } catch (\Exception $e) {

@@ -69,6 +69,7 @@ class MileageController extends Controller
                 $datum->formatted_date = $datum->date ? $datum->date->format('M d, Y') : 'N/A';
             }
         }
+
         return response()->json(['status' => 'success', 'data' => $data]);
     }
 
@@ -122,13 +123,12 @@ class MileageController extends Controller
         }
 
         return response()->json(['status' => 'success', 'data' => $data]);
-
     }
 
     /**
      * Store a newly created resource in storage.
      * @param Request $request
-     * @return void
+     * @return JsonResponse
      */
     public function addMileage (Request $request)
     {
@@ -180,14 +180,10 @@ class MileageController extends Controller
             $q->where('emp_id', auth()->user()->id);
         }
 
-        $data['mileage'] = $q->first();
+        $data['mileage'] = $q->firstOrFail();
         $data['companies'] = Company::all();
 
-        if ($data) {
-            return response()->json(['status' => 'success', 'data' => $data]);
-        }
-
-        return response()->json(['status' => 'fail']);
+        return response()->json(['status' => 'success', 'data' => $data]);
     }
 
     /**
@@ -197,7 +193,6 @@ class MileageController extends Controller
      */
     public function update (Request $request, Mileage $mileage)
     {
-
         $input = $request->only(['company', 'date', 'vehicle', 'kilometers', 'reasonmileage']);
 
         if ($id = $mileage->id) {

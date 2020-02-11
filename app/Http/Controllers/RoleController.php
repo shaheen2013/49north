@@ -11,7 +11,6 @@ use Spatie\Permission\Models\{Role, Permission};
 
 class RoleController extends Controller
 {
-
     /**
      * Display a listing of the resource.
      *
@@ -170,6 +169,5 @@ class RoleController extends Controller
         $role->delete();
 
         return redirect()->route('roles.index')->with('alert-info', 'Role deleted!');
-
     }
 }

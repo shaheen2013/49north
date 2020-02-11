@@ -102,10 +102,8 @@ class CompanyController extends Controller
     {
         if (auth()->user()->is_admin == 1) {
             $data = Company::findOrFail($company->id);
-            if ($data) {
-                return response()->json(['status' => 'success', 'data' => $data]);
-            }
-            return response()->json(['status' => 'fail']);
+
+            return response()->json(['status' => 'success', 'data' => $data]);
         } else {
             abort(401);
         }
