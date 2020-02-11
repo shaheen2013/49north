@@ -47,6 +47,10 @@ class AdminClassroomController extends Controller {
      * @return RedirectResponse
      */
     public function store (Request $request) {
+        $request->validate([
+            's3_path' => 'nullable|file|mimes:pdf',
+            'image_path' => 'nullable|image|mimes:jpeg,bmp,png',
+        ]);
         if ($id = request()->input('id')) {
             $classroomCourse = ClassroomCourse::find($id);
             session()->flash('alert-success', 'Course Updated');
@@ -56,21 +60,17 @@ class AdminClassroomController extends Controller {
             $classroomCourse->company = $request->input('company');
             session()->flash('alert-success', 'New Course Created');
         }
-
         $classroomCourse->name = $request->input('name');
         $classroomCourse->subject = $request->input('new_subject') ? $request->input('new_subject') : $request->input('subject');
-        $classroomCourse->save();
 
-        // file upload
-        $file = request()->file('upload');
-        if ($file && $file->isValid()) {
-            $classroomCourse->s3_path = $file->getClientOriginalName();
-
-            $file->storeAs(ClassroomCourse::$courseLocation, $classroomCourse->s3_name, 's3');
-            Storage::disk('s3')->setVisibility(ClassroomCourse::$courseLocation . '/' . $classroomCourse->s3_name, 'public');
-            $classroomCourse->save();
+        if (isset($request->s3_path)) {
+            $classroomCourse->s3_path = fileUpload('s3_path');
         }
 
+        if (isset($request->image_path)) {
+            $classroomCourse->image_path = fileUpload('image_path');
+        }
+        $classroomCourse->save();
         // delete old users
         foreach ($request->input('deleteList', []) AS $key => $val) {
             if ($val) {
