@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Courses;
 use App\Models\{ClassroomAnswer, ClassroomArchive, ClassroomAssignment, ClassroomChapter, ClassroomQuestion, ClassroomSection};
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\{RedirectResponse, Request};
@@ -13,9 +14,11 @@ class EmployeeClassroomController extends Controller {
      * @return Factory|View
      */
     public function courses () {
-        $courses = Auth::User()->courses;
+//        $courses = Auth::User()->courses;
+        $courses = Courses::all();
+        $activeMenu = 'classroom';
 
-        return view('employee.classroom.employee-classroom', compact('courses'));
+        return view('employee.classroom.employee-classroom', compact('courses', 'activeMenu'));
     }
 
     /**

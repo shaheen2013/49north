@@ -34,7 +34,7 @@ class AdminClassroomController extends Controller {
     public function create () {
         $classroom = new ClassroomCourse();
         $classroom->company = request()->input('c');
-        $users = User::userArray('');
+        $users = User::where('is_admin', 0)->pluck('name', 'id')->toArray();
 
         return view('admin.classrooms.classroom-edit', compact('classroom', 'users'));
     }
