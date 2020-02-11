@@ -3,7 +3,7 @@
 
 @include('head')
 
-
+@php if (!isset($activeMenu)) $activeMenu = ''; @endphp
 <body id="page-top">
 <div id="app">
     <!-- Navigation -->
@@ -40,10 +40,10 @@
                             </li>
                             @endadmin
 
-                            @if(!auth()->user()->is_admin) 
+                            @if(!auth()->user()->is_admin)
                             <li class="nav-item">
                                 <a class="nav-link {{ $activeMenu == 'benefits' ? 'active' : '' }}" href="{{ route('benefits.module') }}" role="tab">Benefits</a>
-                            </li> 
+                            </li>
                             @endif
 
                             @admin
@@ -145,7 +145,7 @@
                     <a class="nav-item nav-link {{ (request()->is('personal-development-plan')) ? 'active' : '' }}" href="{{ route('personal-development-plan.index') }}">Personal
                         Development Plan</a>
                     {{-- <a class="nav-item nav-link" href="#">Personal Development Plan</a> --}}
-                    <a class="nav-item nav-link" href="#">Courses</a>
+                    <a class="nav-item nav-link {{ (request()->is('classroom')) ? 'active' : '' }}" href="{{ route('admin.classroom.index') }}">Courses</a>
                     <a class="nav-item nav-link {{ (request()->is('journal')) ? 'active' : '' }}" href="{{ route('journal.index') }}">Journal</a>
                 @endif
 
