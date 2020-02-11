@@ -32,7 +32,7 @@
 
                             @admin
                             <li class="nav-item">
-                                <a class="nav-link {{ $activeMenu == 'company' ? 'active' : '' }}" href="{{ route('company.index') }}" role="tab">Company</a>
+                                <a class="nav-link {{ $activeMenu == 'company' ? 'active' : '' }}" href="{{ route('companies.index') }}" role="tab">Company</a>
                             </li>
 
                             <li class="nav-item">
@@ -40,10 +40,10 @@
                             </li>
                             @endadmin
 
-                            @if(!auth()->user()->is_admin) 
+                            @if(!auth()->user()->is_admin)
                             <li class="nav-item">
                                 <a class="nav-link {{ $activeMenu == 'benefits' ? 'active' : '' }}" href="{{ route('benefits.module') }}" role="tab">Benefits</a>
-                            </li> 
+                            </li>
                             @endif
 
                             @admin
@@ -99,14 +99,14 @@
 
             <a class="nav-item nav-link {{ (request()->is('edit-profile')) ? 'active' : '' }}" href="{{ route('edit-profile') }}">Employee Information</a>
 
-            <a class="nav-item nav-link {{ (request()->is('agreementlist')) ? 'active' : '' }}" href="{{ route('agreement-list') }}">Agreements</a>
+            <a class="nav-item nav-link {{ (request()->is('agreements')) ? 'active' : '' }}" href="{{ route('agreements.index') }}">Agreements</a>
 
-            <a class="nav-item nav-link {{request()->is('paystatement/list') ? 'active' : '' }}" href="{{ route('paystatement.list') }}">Pay Statements</a>
+            <a class="nav-item nav-link {{request()->is('paystatements') ? 'active' : '' }}" href="{{ route('paystatements.index') }}">Pay Statements</a>
 
             @endif
 
             @if($activeMenu == 'company')
-                <a class="nav-item nav-link {{ (request()->is('company')) ? 'active' : '' }}" href="{{ route('company.index') }}">Company List</a>
+                <a class="nav-item nav-link {{ (request()->is('companies')) ? 'active' : '' }}" href="{{ route('companies.index') }}">Company List</a>
             @endif
 
                 @if($activeMenu == 'admin' || $activeMenu == 'submit')
@@ -115,15 +115,15 @@
                     @endif
 
                     @can('expenses-enabled')
-                        <a class="nav-item nav-link {{ (request()->is('expense/*')) ? 'active' : '' }}" href="{{ route('expense.expense-list') }}">Expense Report</a>
+                        <a class="nav-item nav-link {{ (request()->is('expenses')) ? 'active' : '' }}" href="{{ route('expenses.index') }}">Expense Report</a>
                     @endcan
 
 
                     @can('mileage-enabled')
-                        <a class="nav-item nav-link {{ (request()->is('mileage/*')) ? 'active' : '' }}" href="{{ route('mileage.mileage-list') }}">Mileage Book</a>
+                        <a class="nav-item nav-link {{ (request()->is('mileages')) ? 'active' : '' }}" href="{{ route('mileages.index') }}">Mileage Book</a>
                     @endcan
 
-                    <a class="nav-item nav-link {{ (request()->is('maintenance/*')) ? 'active' : '' }}" href="{{ url('maintenance/list') }}">Tech Maintenance</a>
+                    <a class="nav-item nav-link {{ (request()->is('maintenance_tickets')) ? 'active' : '' }}" href="{{ route('maintenance_tickets.index') }}">Tech Maintenance</a>
 
                     <a class="nav-item nav-link {{ (request()->is('timeoff/*')) ? 'active' : '' }}" href="{{ url('timeoff/list') }}">Time Off</a>
 
@@ -135,14 +135,14 @@
 
                 @if($activeMenu == 'benefits')
                     <a class="nav-item nav-link {{ (request()->is('plans')) ? 'active' : '' }}" href="{{ route('plans.index') }}">Plan Overview</a>
-                    <a class="nav-item nav-link {{ (request()->is('additional-benefits')) ? 'active' : '' }}" href="{{ route('additional-benefits.index') }}">Additional Benefits
+                    <a class="nav-item nav-link {{ (request()->is('additionl_benifits_spendings')) ? 'active' : '' }}" href="{{ route('additionl_benifits_spendings.index') }}">Additional Benefits
                         Spending</a>
                     <a class="nav-item nav-link" href="#">Meals</a>
                 @endif
 
                 @if($activeMenu == 'classroom')
                     <a class="nav-item nav-link {{ (request()->is('missions')) ? 'active' : '' }}" href="{{ route('missions.index') }}">49 North Mission</a>
-                    <a class="nav-item nav-link {{ (request()->is('personal-development-plan')) ? 'active' : '' }}" href="{{ route('personal-development-plan.index') }}">Personal
+                    <a class="nav-item nav-link {{ (request()->is('personal_development_plans')) ? 'active' : '' }}" href="{{ route('personal_development_plans.index') }}">Personal
                         Development Plan</a>
                     {{-- <a class="nav-item nav-link" href="#">Personal Development Plan</a> --}}
                     <a class="nav-item nav-link" href="#">Courses</a>
@@ -262,7 +262,6 @@
 
 <script type="text/javascript" src="{{ asset('js/bootstrap-datepicker.min.js') }}"></script>
 <script type="text/javascript" src="{{ asset('js/admin.js') }}"></script>
-<script src="{{asset('js/custom_function_admin.js')}}"></script>
 <script src="{{ URL::asset('toaster/jquery.toaster.js') }}"></script>
 <script src="{{ URL::asset('assets/jquery-spinner/js/jquery.spinner.js') }}"></script>
 <script src="{{asset('flatpicker/js/flatpicker.min.js')}}"></script>

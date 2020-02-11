@@ -32,7 +32,7 @@
     </tr>
 </table>
 
-@component('mail::button', ['url' => route('maintenance.list')])
+@component('mail::button', ['url' => route('maintenance_tickets.index')])
 Edit
 @endcomponent
 

@@ -3,7 +3,6 @@
 @include('modal')
 @section('content1')
 
-
     <div class="well-default-trans">
         <div class="tab-pane" id="nav-mileage" role="tabpanel" aria-labelledby="nav-mileage-tab">
             <div class="mileage inner-tab-box">
@@ -14,21 +13,23 @@
                         </h3>
                         <br>
                     </div>
-
                     <div class="col-sm-12" id="pending_div">
                         <div class="row">
                             <div class="col-sm-2">
                                 <div class="form-group">
-                                    {!! Form::text('date',null,['id' => 'date', 'placeholder' => 'Select Date','class' => 'form-control-new','onChange' => '']) !!}
+                                    {!! Form::text('date',null,['id' => 'date_from', 'placeholder' => 'Select Date','class' => 'form-control-new']) !!}
+                                </div>
+                            </div>
+                            <div class="col-sm-2">
+                                <div class="form-group">
+                                    {!! Form::text('date',null,['id' => 'date_to', 'placeholder' => 'Select Date','class' => 'form-control-new']) !!}
                                 </div>
                             </div>
                             <div class="col-sm-1">
                                 <div id="wait"></div>
                             </div>
-                            <div class="col-sm-9">
-                                <a href="javascript:void(0)" class="_new_icon_button_1" data-toggle="modal" data-target="#journal-edit-modal" onclick="openJournalForm();">
-                                    <i class="fa fa-plus"></i>
-                                </a>
+                            <div class="col-sm-7">
+                                <a href="javascript:void(0)" class="_new_icon_button_1" data-toggle="modal" data-target="#journal-edit-modal" onclick="openJournalForm();"> <i class="fa fa-plus"></i> </a>
                             </div>
                             <div class="col-sm-12">
                                 <table class="table _table _table-bordered">
@@ -81,7 +82,7 @@
                         <div class="row margin-top-30">
                             <div class="form-group" style="width:100%;">
                                 <div class="col-md-12 col-sm-12">
-                                    <button type="button" id="update" onclick="update_journal('')" class="btn-dark contact_btn" data-form="expences">Save
+                                    <button type="button" id="update" onclick="updateJournal('')" class="btn-dark contact_btn" data-form="expences">Save
                                     </button>
                                     <span class="close close-span" data-dismiss="modal" aria-label="Close"><i class="fa fa-arrow-left"></i>  Return to journal Reports</span>
                                 </div>
@@ -92,21 +93,18 @@
             </div>
         </div>
     </div>
+    <!--- Journal edit modal end -->
 @endsection
 
 @push('scripts')
-    <!--- Journal edit modal end -->
-
     <script type="text/javascript">
-
         let id = from = to = updateRoute = null;
 
         $(document).ready(function () {
             const date = new Date(), y = date.getFullYear(), m = date.getMonth();
-
             const today = new Date();
             to = formatDate(today);
-            from = formatDate(today.setDate(today.getDate() - 30));
+            from = formatDate(today.setDate(today.getDate()-30));
             searchJournalPage();
 
             $("#pending_span").click(function () {
@@ -114,38 +112,45 @@
                 $("#pending_div").show();
             });
 
-            $('#date').flatpickr({
-                mode: "range",
+            $('#date_from').flatpickr({
                 altInput: true,
                 altFormat: 'j M, Y',
-                defaultDate: [from, to],
+                defaultDate: from,
                 onChange: function (selectedDates, dateStr, instance) {
-                    from = formatDate(selectedDates[0]);
-                    to = formatDate(selectedDates[1]);
-
-                    if (selectedDates[0] === undefined || (selectedDates[0] !== undefined && selectedDates[1] !== undefined)) {
-                        if (selectedDates[0] === undefined) {
-                            from = to = null;
-                        }
-
-                        searchJournalPage();
+                    from = null;
+                    if(selectedDates.length > 0){
+                        from = formatDate(selectedDates);
                     }
+                    searchJournalPage();
                 },
             });
+
+            $('#date_to').flatpickr({
+                altInput: true,
+                altFormat: 'j M, Y',
+                defaultDate: to,
+                onChange: function (selectedDates, dateStr, instance) {
+                    to = null;
+                    if(selectedDates.length > 0){
+                        to = formatDate(selectedDates);
+                    }
+                    searchJournalPage();
+                },
+            });
+
         });
 
         function openJournalForm () {
             // $('#edit_date').val('');
             $('#title').val('');
             $('#details').val('');
-            $('#update').attr('onclick', 'create_journal(event)').attr('data-id', '');
+            $('#update').attr('onclick', 'createJournal(event)').attr('data-id', '');
         }
 
-        function create_journal(event) {
+        function createJournal(event) {
             event.preventDefault();
             const $create = $('#create');
             $create.attr('disabled', true);
-
             const date = $('#edit_date').val();
             const title = $('#title').val();
             const details = $('#details').val();
@@ -154,7 +159,6 @@
                 date: date,
                 title: title,
                 details: details,
-
             };
             // console.log(data)
             if (date === '' || title === '' || details === '') {
@@ -162,7 +166,6 @@
                 $create.removeAttr('disabled');
                 return false;
             }
-
             $.ajax({
                 method: "POST",
                 url: "{{ route('journal.store') }}",
@@ -176,10 +179,8 @@
             });
         }
 
-
-        function OpenEditJournalModel(id, route, update) {
+        function openEditJournalModel(id, route, update) {
             updateRoute = update;
-            console.log(id);
             $('#journal-edit-modal').modal();
             $.ajax({
                 type: 'GET',
@@ -189,7 +190,6 @@
 
                     if (results.status === 'success') {
                         const $editDate = $('#edit_date');
-
                         $editDate.val(results.data.date.split(' ')[0]);
                         $('#title').val(results.data.title);
                         $('#details').val(results.data.details);
@@ -217,9 +217,8 @@
             });
         }
 
-        function update_journal(id) {
+        function updateJournal(id) {
             $('#update').attr('disabled', 'disabled');
-
             const data = {
                 date: $('#edit_date').val(),
                 title: $('#title').val(),
@@ -238,19 +237,14 @@
                     $('#journal-edit-modal').modal('hide');
                     $('#update').removeAttr('disabled');
                 }
-
             });
         }
 
         function searchJournalPage() {
-
-            // console.log(date);
             let data = {
                 from: from,
                 to: to,
-
             };
-
             $('#wait').css('display', 'inline-block'); // wait for loader
             $('#wait-his').css('display', 'inline-block'); // wait for loader
             $.ajax({
@@ -275,14 +269,12 @@
                                         <td> ${data[index].formatted_date} </td>
                                         <td> ${data[index].title} </td>
                                         <td> ${data[index].details} </td>`;
-
                                     html += `
                                         <td class="text-right">
-                                            <a href="javascript:void(0);" onclick="OpenEditJournalModel('${data[index].id}', '${data[index].routes.edit}', '${data[index].routes.update}')">EDIT</a>
-                                            <a href="javascript:void(0);" class="down" onclick="deleteconfirm('${data[index].id}', '${data[index].routes.destroy}')">DELETE</a></td>
+                                            <a href="javascript:void(0);" onclick="openEditJournalModel('${data[index].id}', '${data[index].routes.edit}', '${data[index].routes.update}')">EDIT</a>
+                                            <a href="javascript:void(0);" class="down" onclick="deleteConfirm('${data[index].id}', '${data[index].routes.destroy}')">DELETE</a></td>
                                         </td>
-                                    </tr><tr class="spacer"></tr>`;
-
+                                        </tr><tr class="spacer"></tr>`;
                                 }
                                 $('#search_journal').html(html);
                             }
@@ -294,8 +286,7 @@
             });
         }
 
-
-        function deleteconfirm(id, route) {
+        function deleteConfirm(id, route) {
             swal({
                 title: "Delete?",
                 text: "Please ensure and then confirm!",

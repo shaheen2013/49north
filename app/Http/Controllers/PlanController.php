@@ -3,30 +3,33 @@
 namespace App\Http\Controllers;
 
 use App\Plan;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\View\View;
 
 class PlanController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Factory|View
      */
-    public function index()
+    public function index ()
     {
         // Get all resources
         $activeMenu = 'benefits';
         $plan = Plan::Latest()->where('status', 1)->first();
-
         return view('plan.index', compact('activeMenu', 'plan'));
     }
 
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return void
      */
-    public function create()
+    public function create ()
     {
         //
     }
@@ -34,31 +37,29 @@ class PlanController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\RedirectResponse
+     * @param Request $request
+     * @return RedirectResponse
      */
-    public function store(Request $request)
+    public function store (Request $request)
     {
         // Validate form data
         $request->validate([
             'file' => 'required|file|mimes:pdf'
         ]);
-
         // Create new model instance
         $plan = new Plan();
         $plan->file = fileUpload('file');
         $plan->save();
-
         return redirect()->back()->with('success', 'File uploaded successfully.');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Plan  $plan
-     * @return \Illuminate\Http\Response
+     * @param Plan $plan
+     * @return void
      */
-    public function show(Plan $plan)
+    public function show (Plan $plan)
     {
         //
     }
@@ -66,10 +67,10 @@ class PlanController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Plan  $plan
-     * @return \Illuminate\Http\Response
+     * @param Plan $plan
+     * @return void
      */
-    public function edit(Plan $plan)
+    public function edit (Plan $plan)
     {
         //
     }
@@ -77,11 +78,11 @@ class PlanController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Plan  $plan
-     * @return \Illuminate\Http\RedirectResponse
+     * @param Request $request
+     * @param Plan $plan
+     * @return RedirectResponse
      */
-    public function update(Request $request, Plan $plan)
+    public function update (Request $request, Plan $plan)
     {
         // Validate form data
         $request->validate([
@@ -95,15 +96,14 @@ class PlanController extends Controller
         $plan = new Plan();
         $plan->file = fileUpload('file');
         $plan->save();
-
         return redirect()->back()->with('success', 'File uploaded successfully.');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Plan  $plan
-     * @return \Illuminate\Http\RedirectResponse
+     * @param Plan $plan
+     * @return void
      */
     public function destroy(Plan $plan)
     {

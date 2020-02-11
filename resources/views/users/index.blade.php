@@ -47,7 +47,6 @@
 @section('js')
     <script !src="">
         let from = to = null;
-
         function searchAdmin() {
             $('#users').html('');
             $('#wait').css('display', 'inline-block'); // wait for loader
@@ -80,7 +79,6 @@
             /*from = formatDate(new Date(y, m, 1));
             to = formatDate(new Date(y, m + 1, 0));*/
             searchAdmin();
-
             $('#date').flatpickr({
                 mode: "range",
                 altInput: true,
@@ -134,13 +132,7 @@
                 callback: function(data, pagination) {
                     let html = '';
                     data.forEach(function myFunction(value, index, array) {
-                        if (value.created_at != null && value.created_at != '') {
-                            time = value.created_at.split(' ')[0];
-                            date = new Date(time);
-                            date = date.toDateString().split(' ')[2]+" "+date.toDateString().split(' ')[1]+", "+date.toDateString().split(' ')[3]
-                        } else {
-                            date = 'N/A';
-                        }
+                        date = value.formatted_date;
 
                         html += `<tr class="del-{{ $delSection }}-${value.id}">
                         <td> ${value.name} ${is_admin === 1 && auth_id != value.id ? '<a class="remove-default-style" href="force-login/' + value.id + '"><i class="fa fa-sign-in"></i></a>' : ''}</td>

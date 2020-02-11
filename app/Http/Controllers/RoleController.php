@@ -3,25 +3,26 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Contracts\View\Factory;
-use Illuminate\Http\{RedirectResponse,Request};
+use Illuminate\Http\{RedirectResponse, Request};
 use Illuminate\Routing\Redirector;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
-use Spatie\Permission\Models\{Role,Permission};
+use Spatie\Permission\Models\{Role, Permission};
 
-class RoleController extends Controller {
+class RoleController extends Controller
+{
 
     /**
      * Display a listing of the resource.
      *
      * @return Factory|View
      */
-    public function index () {
-        if(auth()->user()->is_admin == 1){
-            $roles = Role::all();//Get all roles 
+    public function index ()
+    {
+        if (auth()->user()->is_admin == 1) {
+            $roles = Role::all();//Get all roles
             return view('roles.index')->with('roles', $roles);
-        }
-        else{
+        } else {
             abort(401);
         }
     }
@@ -31,13 +32,13 @@ class RoleController extends Controller {
      *
      * @return Factory|View
      */
-    public function create () {
-        if(auth()->user()->is_admin == 1){
+    public function create ()
+    {
+        if (auth()->user()->is_admin == 1) {
             $permissions = Permission::all();//Get all permissions
 
             return view('roles.create', ['permissions' => $permissions]);
-        }
-        else{
+        } else {
             abort(401);
         }
     }
@@ -50,13 +51,14 @@ class RoleController extends Controller {
      * @return RedirectResponse
      * @throws ValidationException
      */
-    public function store (Request $request) {
-        if(auth()->user()->is_admin == 1){
+    public function store (Request $request)
+    {
+        if (auth()->user()->is_admin == 1) {
             //Validate name and permissions field
             $this->validate($request, [
-                    'name'        => 'required|unique:roles|max:10',
-                    'permissions' => 'required',
-                ]);
+                'name' => 'required|unique:roles|max:10',
+                'permissions' => 'required',
+            ]);
 
             $name = $request['name'];
             $role = new Role();
@@ -74,8 +76,7 @@ class RoleController extends Controller {
             }
 
             return redirect()->route('roles.index')->with('alert-info', 'Role' . $role->name . ' added!');
-        }
-        else{
+        } else {
             abort(401);
         }
     }
@@ -87,11 +88,11 @@ class RoleController extends Controller {
      *
      * @return RedirectResponse|Redirector
      */
-    public function show ($id) {
-        if(auth()->user()->is_admin == 1){
-             return redirect('roles');
-            }
-        else{
+    public function show ($id)
+    {
+        if (auth()->user()->is_admin == 1) {
+            return redirect('roles');
+        } else {
             abort(401);
         }
     }
@@ -103,14 +104,14 @@ class RoleController extends Controller {
      *
      * @return Factory|View
      */
-    public function edit ($id) {
-        if(auth()->user()->is_admin == 1){
+    public function edit ($id)
+    {
+        if (auth()->user()->is_admin == 1) {
             $role = Role::findOrFail($id);
             $permissions = Permission::all();
 
             return view('roles.edit', compact('role', 'permissions'));
-        }
-        else{
+        } else {
             abort(401);
         }
     }
@@ -119,18 +120,19 @@ class RoleController extends Controller {
      * Update the specified resource in storage.
      *
      * @param Request $request
-     * @param int     $id
+     * @param int $id
      *
      * @return RedirectResponse
      * @throws ValidationException
      */
-    public function update (Request $request, $id) {
-        if(auth()->user()->is_admin == 1){
+    public function update (Request $request, $id)
+    {
+        if (auth()->user()->is_admin == 1) {
 
             $role = Role::findOrFail($id);//Get role with the given id
             //Validate name and permission fields
             $this->validate($request, [
-                'name'        => 'required|max:10|unique:roles,name,' . $id,
+                'name' => 'required|max:10|unique:roles,name,' . $id,
                 'permissions' => 'required',
             ]);
 
@@ -150,8 +152,7 @@ class RoleController extends Controller {
             }
 
             return redirect()->route('roles.index')->with('alert-info', 'Role' . $role->name . ' updated!');
-        }
-        else{
+        } else {
             abort(401);
         }
     }
@@ -163,7 +164,8 @@ class RoleController extends Controller {
      *
      * @return RedirectResponse
      */
-    public function destroy ($id) {
+    public function destroy ($id)
+    {
         $role = Role::findOrFail($id);
         $role->delete();
 

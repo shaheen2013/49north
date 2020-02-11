@@ -3,29 +3,31 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Contracts\View\Factory;
-use Illuminate\Http\{JsonResponse, Request};
+use Illuminate\Http\{JsonResponse, Request, Response};
 use Illuminate\Support\Facades\{Auth, DB};
 use App\{Company, Mileage};
 use Illuminate\View\View;
 
-class MileageController extends Controller {
+class MileageController extends Controller
+{
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct () {
+    public function __construct()
+    {
         // $this->middleware('auth');
     }
 
     /**
-     * Show the application dashboard.
+     * Display a listing of the resource.
      *
      * @param Request $request
      *
      * @return Factory|View
      */
-    public function mileagelist(Request $request)
+    public function index (Request $request)
     {
         $type = auth()->user()->is_admin;
         if ($type) {
@@ -36,53 +38,48 @@ class MileageController extends Controller {
 
         if ($type == '1') {
             $data['mileage_list'] = Mileage::where('status', '<>', 'D')->orderByDesc('date')->with('employee:id,firstname,lastname')->get();
-        }
-        else {
+        } else {
             $data['mileage_list'] = Auth::user()->mileage()->where('status', 'A')->orderByDesc('date')->get();
 
         }
-
         $data['companies'] = Company::all();
         $date_key = $request->date;
-
-        return view('mileagelist', $data, compact('activeMenu'))->with('date_key', $date_key);
+        return view('mileage-list', $data, compact('activeMenu'))->with('date_key', $date_key);
     }
 
     /**
+     * Filter mileage
      * @param Request $request
-     *
      * @return JsonResponse
      */
-
-    /**
-     * @param Request $request
-     *
-     * @return JsonResponse
-     */
-    public function searchPendingMileage (Request $request) {
-
-        $data = $this->_searchMileage('search', true);
+    public function searchPendingMileage (Request $request)
+    {
+        $data = $this->searchMileage('search', true);
 
         if (count($data)) {
             foreach ($data as $datum) {
                 $routes = [];
-                $routes['pending'] = route('mileage.pending', $datum->id);
-                $routes['approve'] = route('mileage.approve', $datum->id);
-                $routes['reject'] = route('mileage.reject', $datum->id);
+                $routes['edit'] = route('mileages.edit', $datum->id);
+                $routes['update'] = route('mileages.update', $datum->id);
+                $routes['destroy'] = route('mileages.destroy', $datum->id);
+                $routes['pending'] = route('mileages.pending', $datum->id);
+                $routes['approve'] = route('mileages.approve', $datum->id);
+                $routes['reject'] = route('mileages.reject', $datum->id);
                 $datum->routes = $routes;
+                $datum->formatted_date = $datum->date ? $datum->date->format('M d, Y') : 'N/A';
             }
         }
-
         return response()->json(['status' => 'success', 'data' => $data]);
     }
 
     /**
+     * Filter mileage
      * @param string $searchField
-     * @param bool   $isPending
-     *
+     * @param bool $isPending
      * @return mixed
      */
-    private function _searchMileage ($searchField, $isPending = true) {
+    private function searchMileage ($searchField, $isPending = true)
+    {
         $query = Mileage::orderByDesc('date')->with('employee');
 
         if ($search = request()->input($searchField)) {
@@ -98,8 +95,7 @@ class MileageController extends Controller {
         // pending has not status
         if ($isPending) {
             $query->whereNull('status');
-        }
-        else {
+        } else {
             $query->whereNotNull('status');
         }
 
@@ -107,19 +103,21 @@ class MileageController extends Controller {
     }
 
     /**
+     * Filter history mileage
      * @param Request $request
-     *
      * @return JsonResponse
      */
-    public function searchHistoryMileage (Request $request) {
+    public function searchHistoryMileage (Request $request)
+    {
+        $data = $this->searchMileage('history_search', false);
 
-        $data = $this->_searchMileage('history_search', false);
         if (count($data)) {
             foreach ($data as $datum) {
                 $routes = [];
-                $routes['pending'] = route('mileage.pending', $datum->id);
-                $routes['destroy'] = route('mileage.destroy', $datum->id);
+                $routes['pending'] = route('mileages.pending', $datum->id);
+                $routes['destroy'] = route('mileages.destroy', $datum->id);
                 $datum->routes = $routes;
+                $datum->formatted_date = $datum->date ? $datum->date->format('M d, Y') : 'N/A';
             }
         }
 
@@ -128,30 +126,54 @@ class MileageController extends Controller {
     }
 
     /**
+     * Store a newly created resource in storage.
      * @param Request $request
+     * @return void
      */
-    public function addmileage (Request $request) {
-        $mileagearray = [
-            'emp_id'        => auth()->user()->id,
-            'company'       => $request->companyname,
-            'date'          => $request->date,
-            'vehicle'       => $request->vehicle,
-            'kilometers'    => $request->kilometers,
-            'reasonmileage' => $request->reasonformileage,
+    public function addMileage (Request $request)
+    {
+        // Validate form data
+        $rules = [
+            'companyname' => 'required|string|max:191',
+            'date' => 'required|date',
+            'vehicle' => 'required|string|max:191',
+            'kilometers' => 'required|string|max:191',
+            'reasonformileage' => 'required|string|max:191',
         ];
 
-        DB::table('mileages')->insert($mileagearray);
+        $validator = validator($request->all(), $rules, []);
 
+        if ($validator->fails()) {
+            return response()->json(['status' => 200, 'errors' => $validator->getMessageBag()->toarray()]);
+        }
+
+        try {
+            $mileagearray = [
+                'emp_id' => auth()->user()->id,
+                'company' => $request->companyname,
+                'date' => $request->date,
+                'vehicle' => $request->vehicle,
+                'kilometers' => $request->kilometers,
+                'reasonmileage' => $request->reasonformileage,
+            ];
+
+            DB::table('mileages')->insert($mileagearray);
+
+            return response()->json(['status' => 200, 'data' => 'Created successfully']);
+        } catch (\Exception $e) {
+            return response()->json(['status' => 500, 'message' => $e->getMessage()]);
+        }
     }
 
     /**
-     * @param Request $request
+     * Show the form for editing the specified resource.
      *
+     * @param Request $request
      * @return JsonResponse
      */
-    public function edit (Request $request) {
-
-        $q = Mileage::where('id', $request->input('id'));
+    public function edit (Request $request, Mileage $mileage)
+    {
+        $q = Mileage::where('id', $mileage->id);
 
         // if not admin, ensure they are only loading their own data
         if (!auth()->user()->is_admin) {
@@ -160,6 +182,7 @@ class MileageController extends Controller {
 
         $data['mileage'] = $q->first();
         $data['companies'] = Company::all();
+
         if ($data) {
             return response()->json(['status' => 'success', 'data' => $data]);
         }
@@ -168,22 +191,22 @@ class MileageController extends Controller {
     }
 
     /**
+     * Update the specified resource in storage.
      * @param Request $request
-     *
      * @return JsonResponse
      */
-    public function update (Request $request) {
+    public function update (Request $request, Mileage $mileage)
+    {
 
         $input = $request->only(['company', 'date', 'vehicle', 'kilometers', 'reasonmileage']);
-        if ($id = $request->input('id')) {
 
-            $data = Mileage::find($request->input('id'));
+        if ($id = $mileage->id) {
+            $data = Mileage::findOrFail($id);
 
             if ($data->update($input)) {
                 return response()->json(['status' => 'success']);
             }
-        }
-        else {
+        } else {
             $input['emp_id'] = Auth::user()->id;
             $data = Mileage::create($input);
             if ($data) {
@@ -195,17 +218,71 @@ class MileageController extends Controller {
     }
 
     /**
-     * @param Request $request
-     *
+     * Change the resource status pending.
+     * @param int $id
      * @return JsonResponse
      */
-    public function destroy (Request $request) {
-        $mileage = Mileage::findOrFail($request->input('id'));
+    public function mileagePending (Mileage $mileage)
+    {
+        $data = Mileage::findOrFail($mileage->id);
+        $data->status = null;
+        $data->save();
+
+        if ($data->update()) {
+            return response()->json(['status' => 'success']);
+        }
+
+        return response()->json(['status' => 'fail']);
+    }
+
+    /**
+     * Change the resource status approve.
+     * @param int $id
+     * @return JsonResponse
+     */
+    public function mileageApprove (Mileage $mileage)
+    {
+        $data = Mileage::findOrFail($mileage->id);
+        $data->status = 'A';
+        $data->save();
+
+        if ($data->update()) {
+            return response()->json(['status' => 'success']);
+        }
+
+        return response()->json(['status' => 'fail']);
+    }
+
+    /**
+     * Change the resource status reject.
+     * @param int $id
+     * @return JsonResponse
+     */
+    public function mileageReject (Mileage $mileage)
+    {
+        $data = Mileage::findOrFail($mileage->id);
+        $data->status = 'D';
+        $data->save();
+
+        if ($data->update()) {
+            return response()->json(['status' => 'success']);
+        }
+
+        return response()->json(['status' => 'fail']);
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function destroy (Mileage $mileage)
+    {
+        $mileage = Mileage::findOrFail($mileage->id);
         if ($mileage->delete() == 1) {
             $success = true;
             $message = "Mileage deleted successfully";
-        }
-        else {
+        } else {
             $success = false;
             $message = "Mileage not found";
         }
@@ -214,47 +291,6 @@ class MileageController extends Controller {
             'success' => $success,
             'message' => $message,
         ]);
-    }
-
-    /// Pending mileage
-    public function mileagePending($id)
-    {
-        $data = Mileage::find($id);
-        $data->status = null;
-        $data->save();
-        if ($data->update()) {
-            return response()->json(['status' => 'success']);
-        }
-
-        return response()->json(['status' => 'fail']);
-
-    }
-
-    /// approved mileage
-    public function mileageApprove($id)
-    {
-        $data = Mileage::find($id);
-        $data->status = 'A';
-        $data->save();
-        if ($data->update()) {
-            return response()->json(['status' => 'success']);
-        }
-
-        return response()->json(['status' => 'fail']);
-
-    }
-
-    /// reject mileage
-    public function mileageReject ($id) {
-        $data = Mileage::find($id);
-        $data->status = 'D';
-        $data->save();
-        if ($data->update()) {
-            return response()->json(['status' => 'success']);
-        }
-
-        return response()->json(['status' => 'fail']);
-
     }
 
 }

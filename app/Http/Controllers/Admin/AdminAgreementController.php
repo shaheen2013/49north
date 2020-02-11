@@ -21,11 +21,11 @@ class AdminAgreementController extends Controller {
             //->where(array('a.status'=>'A','coc.status'=>'A'))
             ->get();
 
-        return view('admin.agreement_list', ['employee' => $employee]);
+        return view('admin.agreement-list', ['employee' => $employee]);
         // print_r($employee);
 
         // echo 'wqedwd'; die();
-        //return view('agreement_list')->with('employee', $employee);
+        //return view('agreement-list')->with('employee', $employee);
     }
 
 }

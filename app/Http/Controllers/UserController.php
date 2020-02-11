@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\{Company, User, Employee_detail};
+use App\{Company, User, EmployeeDetails};
 use App\Mail\PasswordReset;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Support\Facades\{Auth, Hash, Mail, Storage};
@@ -13,7 +13,8 @@ use Illuminate\View\View;
 use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
 use Spatie\Permission\Models\{Permission, Role};
 
-class UserController extends Controller {
+class UserController extends Controller
+{
     use SendsPasswordResetEmails;
 
     /**
@@ -21,15 +22,14 @@ class UserController extends Controller {
      *
      * @return Factory|View
      */
-    public function index () {
+    public function index()
+    {
         if (auth()->user()->is_admin == 1) {
             //Get all users and pass it to the view
             $activeMenu = 'admin';
             $users = User::with('employee_details')->orderBy('name')->get();
-
             return view('users.index', compact('activeMenu', 'users'));
-        }
-        else {
+        } else {
             abort(401);
         }
     }
@@ -39,7 +39,8 @@ class UserController extends Controller {
      *
      * @return Factory|View
      */
-    public function create () {
+    public function create()
+    {
         if (auth()->user()->is_admin == 1) {
             //Get all roles and pass it to the view
             $companies = Company::Latest()->get();
@@ -52,12 +53,9 @@ class UserController extends Controller {
                 }
             ])->has('permissions')->orderBy('orderval')->get();
             $permissions = Permission::pluck('name', 'id');
-
-
             $route = '#';
             return view('users.edit', compact('user', 'activeMenu', 'companies', 'roles', 'permissions', 'route'));
-        }
-        else {
+        } else {
             abort(401);
         }
     }
@@ -67,7 +65,8 @@ class UserController extends Controller {
      *
      * @return array
      */
-    public function attributes () {
+    public function attributes()
+    {
         return [
             'password' => 'Password must contain a lower case, uppercase, number and special character',
         ];
@@ -81,18 +80,18 @@ class UserController extends Controller {
      * @return RedirectResponse
      * @throws ValidationException
      */
-    public function store (Request $request) {
+    public function store(Request $request)
+    {
 
         $isAdmin = auth()->user()->is_admin;
-
         $id = $request->input('id');
 
         //Validate name, email and password fields
         $rules = [
-            'firstname'  => 'required|max:120',
-            'lastname'   => 'required|max:120',
+            'firstname' => 'required|max:120',
+            'lastname' => 'required|max:120',
             'company_id' => 'nullable|integer',
-            'email'      => Rule::unique('users')->ignore($id) // require unique email address
+            'email' => Rule::unique('users')->ignore($id) // require unique email address
         ];
 
         // morph input fields to match user table
@@ -105,7 +104,6 @@ class UserController extends Controller {
             $rules['password'] = ['required', 'string', 'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/'];
             $input['password'] = Hash::make($request->input('password'));
         }
-
         $this->validate($request, $rules);
 
         // check for admin details
@@ -145,11 +143,10 @@ class UserController extends Controller {
             $user = User::find($id);
             $user->update($input);
             $emp_id = $id;
-            /*            $user_detailsupdate = Employee_detail::find($id);
+            /*            $user_detailsupdate = EmployeeDetails::find($id);
                         $user_detailsupdate->update($user_array);*/
             $msg = 'User successfully updated';
-        }
-        else {
+        } else {
             $user = User::create($input);
 
             $msg = 'User successfully Added';
@@ -157,10 +154,9 @@ class UserController extends Controller {
 
         // profile pic code
         if ($request->hasFile('profile_pic')) {
-            if (isset($emp_id) && $profile_pic = Employee_detail::find($id)->profile_pic) {
+            if (isset($emp_id) && $profile_pic = EmployeeDetails::find($id)->profile_pic) {
                 Storage::delete($profile_pic);
             }
-
             $profilepicname = fileUpload('profile_pic');
             $user_array['profile_pic'] = $profilepicname;
         }
@@ -168,9 +164,8 @@ class UserController extends Controller {
 
         if (isset($emp_id)) {
             //$user->employee_details()->update($user_array);
-            Employee_detail::where('id', '=', $emp_id)->update($user_array);
-        }
-        else {
+            EmployeeDetails::where('id', '=', $emp_id)->update($user_array);
+        } else {
             $user->employee_details()->create($user_array);
         }
 
@@ -185,7 +180,6 @@ class UserController extends Controller {
             $user->is_ticket_admin = 1;
             $user->save();
         }
-
         //Redirect to the users.index view and display message
         return redirect()->route('users.index')->with('alert-info', $msg);
     }
@@ -197,29 +191,31 @@ class UserController extends Controller {
      *
      * @return RedirectResponse|Redirector
      */
-    public function show ($id) {
+    public function show($id)
+    {
         return redirect('users');
     }
 
     /**
      * Show the form for editing the specified resource.
      *
+     * @param Request $request
      * @param int $id
      *
      * @return Factory|View
      */
-    public function edit (Request $request, $id) {
-
+    public function edit(Request $request, $id)
+    {
         $activeMenu = 'admin';
         $companies = Company::Latest()->get();
         $u = User::findOrFail($id); //Get user with specified id
         //DB::enableQueryLog();
-        $user = Employee_detail::find($u->id);
+        $user = EmployeeDetails::find($u->id);
         /* $query = DB::getQueryLog();
         print_r($query);
         die;*/
         if (!$user) {
-            $user = new Employee_detail();
+            $user = new EmployeeDetails();
             // separate first / last name from user table
             [$user->firstname, $user->lastname] = explode(' ', $u->name);
             $user->workemail = $u->email;
@@ -230,71 +226,68 @@ class UserController extends Controller {
         }
         $user->is_admin = $u->is_admin; // lazy load details from admin
         $user->id = $u->id; // override ID to match User table instead of Employee Details
-
         $roles = Role::with([
             'permissions' => function ($q) {
                 $q->orderBy('orderval')->orderBy('name');
             }
         ])->has('permissions')->orderBy('orderval')->get();
         // $permissions = Permission::pluck('name', 'id');
-       
-        if (isset($request->permission) && count($request->permission)){ 
+
+        if (isset($request->permission) && count($request->permission)) {
             $permissions = Permission::find($request->permission)->pluck('name', 'id');
             $u->givePermissionTo(['permissions']);
-        } else{
+        } else {
             $permissions = '-';
         }
         $route = route('reset.stuff.password', $u->id);
-
         return view('users.edit', compact('user', 'activeMenu', 'companies', 'roles', 'permissions', 'route'));
 
     }
 
     /**
      * Remove the specified resource from storage.
-     *
      * @param int $id
      *
      * @return JsonResponse|RedirectResponse
      */
-    public function destroy ($id) {
+    public function destroy($id)
+    {
         //Find a user with a given id and delete
         $user = User::find($id);
         $success = $user->exists ? true : false;
         $user->delete();
-
         return response()->json(['success' => $success]);
     }
 
     /**
+     * Force login
      * @param User $user
-     *
      * @return RedirectResponse
      */
-    public function forceLogin (User $user) {
+    public function forceLogin (User $user)
+    {
         // only allow forced login when user is an admin
         if (Auth::user()->is_admin === 1 && !request()->input('return')) {
             session(['was-admin-id' => Auth::user()->id, 'was-admin' => Auth::user()->remember_token]);
             Auth::loginUsingId($user->id);
-        }
-        elseif (session('was-admin-id') == $user->id && session('was-admin') == $user->remember_token) {
+        } elseif (session('was-admin-id') == $user->id && session('was-admin') == $user->remember_token) {
             session()->forget(['was-admin', 'was-admin-id']);
             Auth::loginUsingId($user->id);
-        }
-        else {
+        } else {
             return redirect()->back();
         }
-
         return redirect()->route('home');
     }
 
     /**
+     * change Admin Password
      * @param Request $request
-     * @param         $id
+     * @param $id
      *
      * @return JsonResponse
      */
-    public function changeUserPassword (Request $request, $id) {
+    public function changeUserPassword (Request $request, $id)
+    {
         try {
             $user = User::find($id);
             $pass = '';
@@ -308,12 +301,12 @@ class UserController extends Controller {
             $symbols["special_symbols"] = '!?~@#-_+<>[]{}';
             $characters = explode(",", $characters);
             foreach ($characters as $key => $value) {
-                $used_symbols .= $symbols[ $value ];
+                $used_symbols .= $symbols[$value];
             }
             $symbols_length = strlen($used_symbols) - 1;
             for ($i = 0; $i < $length; $i++) {
                 $n = rand(0, $symbols_length);
-                $pass .= $used_symbols[ $n ];
+                $pass .= $used_symbols[$n];
             }
             $user->password = bcrypt($pass);
             $user->save();
@@ -321,8 +314,7 @@ class UserController extends Controller {
             if ($user->update() == 1) {
                 $success = true;
                 $message = "Password send your email";
-            }
-            else {
+            } else {
                 $success = false;
                 $message = "There is a problem";
             }
@@ -341,8 +333,7 @@ class UserController extends Controller {
 
                 if (count($emails)) {
                     Mail::to($emails)->send(new PasswordReset($pass));
-                }
-                else {
+                } else {
                     $message = "You have no email!";
                 }
             }
@@ -357,12 +348,13 @@ class UserController extends Controller {
     }
 
     /**
+     * Change employee password
      * @param Request $request
-     * @param         $id
-     *
+     * @param $id
      * @return JsonResponse
      */
-    public function changeStuffPassword (Request $request, $id) {
+    public function changeStuffPassword (Request $request, $id)
+    {
         try {
             $user = User::findOrFail($id);
             $pass = '';
@@ -376,12 +368,12 @@ class UserController extends Controller {
             $symbols["special_symbols"] = '!?~@#-_+<>[]{}';
             $characters = explode(",", $characters);
             foreach ($characters as $key => $value) {
-                $used_symbols .= $symbols[ $value ];
+                $used_symbols .= $symbols[$value];
             }
             $symbols_length = strlen($used_symbols) - 1;
             for ($i = 0; $i < $length; $i++) {
                 $n = rand(0, $symbols_length);
-                $pass .= $used_symbols[ $n ];
+                $pass .= $used_symbols[$n];
             }
             $user->password = bcrypt($pass);
             $user->save();
@@ -389,8 +381,7 @@ class UserController extends Controller {
             if ($user->update() == 1) {
                 $success = true;
                 $message = "Password send your email";
-            }
-            else {
+            } else {
                 $success = false;
                 $message = "There is a problem";
             }
@@ -409,12 +400,10 @@ class UserController extends Controller {
 
                 if (count($emails)) {
                     Mail::to($emails)->send(new PasswordReset($pass));
-                }
-                else {
+                } else {
                     $message = "You have no email!";
                 }
             }
-
             return response()->json([
                 'success' => $success,
                 'message' => $message,
@@ -425,13 +414,13 @@ class UserController extends Controller {
     }
 
     /**
-     * Filter agreement
-     *
+     * Filter user
      * @param Request $request
      *
      * @return JsonResponse
      */
-    public function search (Request $request) {
+    public function search (Request $request)
+    {
         try {
             $data = User::with('employee_details')->orderBy('name')->where(function ($q) use ($request) {
 
@@ -441,6 +430,12 @@ class UserController extends Controller {
                     $q->where('name', 'like', '%' . $request->search . '%')->orWhere('email', 'like', '%' . $request->search . '%');
                 }
             })->get();
+
+            if (count($data)) {
+                foreach ($data as $datum) {
+                    $datum->formatted_date = $datum->created_at ? $datum->created_at->format('M d, Y') : 'N/A';
+                }
+            }
 
             return response()->json(['status' => 200, 'data' => $data]);
         } catch (\Exception $e) {

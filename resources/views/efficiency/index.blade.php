@@ -1,7 +1,5 @@
 @extends('layouts.main')
-
-
-
+@section('title', 'Efficiency')
 @section('content1')
     <div class="well-default-trans">
         <div class="row">

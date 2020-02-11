@@ -4,13 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Post;
 use Illuminate\Contracts\View\Factory;
-use Illuminate\Http\{RedirectResponse,Request};
+use Illuminate\Http\{RedirectResponse, Request};
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
-class PostController extends Controller {
+class PostController extends Controller
+{
 
-    public function __construct () {
+    public function __construct ()
+    {
         $this->middleware(['auth', 'clearance'])->except('index', 'show');
     }
 
@@ -19,9 +21,9 @@ class PostController extends Controller {
      *
      * @return Factory|View
      */
-    public function index () {
+    public function index ()
+    {
         $posts = Post::orderby('id', 'desc')->paginate(5); //show only 5 items at a time in descending order
-
         return view('posts.index', compact('posts'));
     }
 
@@ -30,7 +32,8 @@ class PostController extends Controller {
      *
      * @return Factory|View
      */
-    public function create () {
+    public function create ()
+    {
         return view('posts.create');
     }
 
@@ -42,19 +45,17 @@ class PostController extends Controller {
      * @return RedirectResponse
      * @throws ValidationException
      */
-    public function store (Request $request) {
+    public function store (Request $request)
+    {
 
         //Validating title and body field
         $this->validate($request, [
             'title' => 'required|max:100',
-            'body'  => 'required',
+            'body' => 'required',
         ]);
-
         $title = $request['title'];
         $body = $request['body'];
-
         $post = Post::create($request->only('title', 'body'));
-
         //Display a successful message upon save
         return redirect()->route('posts.index')->with('alert-info', 'Article,
              ' . $post->title . ' created');
@@ -67,9 +68,9 @@ class PostController extends Controller {
      *
      * @return Factory|View
      */
-    public function show ($id) {
+    public function show ($id)
+    {
         $post = Post::findOrFail($id); //Find post of id = $id
-
         return view('posts.show', compact('post'));
     }
 
@@ -80,9 +81,9 @@ class PostController extends Controller {
      *
      * @return Factory|View
      */
-    public function edit ($id) {
+    public function edit ($id)
+    {
         $post = Post::findOrFail($id);
-
         return view('posts.edit', compact('post'));
     }
 
@@ -90,22 +91,22 @@ class PostController extends Controller {
      * Update the specified resource in storage.
      *
      * @param Request $request
-     * @param int     $id
+     * @param int $id
      *
      * @return RedirectResponse
      * @throws ValidationException
      */
-    public function update (Request $request, $id) {
+    public function update (Request $request, $id)
+    {
         $this->validate($request, [
             'title' => 'required|max:100',
-            'body'  => 'required',
+            'body' => 'required',
         ]);
 
         $post = Post::findOrFail($id);
         $post->title = $request->input('title');
         $post->body = $request->input('body');
         $post->save();
-
         return redirect()->route('posts.show', $post->id)->with('alert-info', 'Article, ' . $post->title . ' updated');
 
     }
@@ -117,10 +118,10 @@ class PostController extends Controller {
      *
      * @return RedirectResponse
      */
-    public function destroy ($id) {
+    public function destroy ($id)
+    {
         $post = Post::findOrFail($id);
         $post->delete();
-
         return redirect()->route('posts.index')->with('alert-info', 'Article successfully deleted');
 
     }

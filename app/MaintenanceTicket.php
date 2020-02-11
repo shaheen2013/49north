@@ -3,12 +3,13 @@
 namespace App;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
 
-class Maintenance_ticket extends Authenticatable {
+class MaintenanceTicket extends Authenticatable {
     use SoftDeletes, Notifiable, HasRoles, HasEmployee, SearchTrait;
 
     /**
@@ -33,9 +34,9 @@ class Maintenance_ticket extends Authenticatable {
     /**
      * Users records associated with ticket
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * @return BelongsToMany
      */
-    public function users() {
+    public function users () {
         return $this->belongsToMany(User::class);
     }
 }

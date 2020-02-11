@@ -19,8 +19,6 @@ class JournalController extends Controller {
     public function index () {
         $data = Journal::get();
         $activeMenu = 'classroom';
-        // return $data;
-        // return response()->json(['status'=>'success', 'data'=>$data]);
         return view('journal.index', compact('activeMenu'))->with('data', $data);
     }
 
@@ -42,7 +40,6 @@ class JournalController extends Controller {
                 $datum->formatted_date = $datum->date->format('M d, Y');
             }
         }
-
         return response()->json(['status' => 'success', 'data' => $data]);
     }
 
@@ -54,8 +51,6 @@ class JournalController extends Controller {
     private function _searchJournal ($searchField) {
         $query = Journal::orderByDesc('date');
         $query->dateSearch('date');
-
-        // $query->isEmployee();
         return $query->get();
     }
 
@@ -72,9 +67,7 @@ class JournalController extends Controller {
             'date'    => 'required',
             'title'   => 'required|string|max:191',
             'details' => 'required|string|max:491',
-
         ];
-
         $validator = validator($request->all(), $rules, []);
 
         if ($validator->fails()) {
@@ -128,12 +121,10 @@ class JournalController extends Controller {
         if ($journal->delete() == 1) {
             $success = true;
             $message = "Journal deleted successfully";
-        }
-        else {
+        } else {
             $success = false;
             $message = "journal not found";
         }
-
         return response()->json([
             'success' => $success,
             'message' => $message,

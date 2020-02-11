@@ -28,77 +28,52 @@ Auth::routes();
 Route::group(['middleware' => ['auth']], function () {
     Route::get('home', 'HomeController@home')->name('home');
     Route::get('edit-profile', 'HomeController@editProfile')->name('edit-profile');
-    Route::post('edit_employee', 'HomeController@edit_employee')->name('edit_employee');
+    Route::post('edit_employee', 'HomeController@editEmployee')->name('edit_employee');
 
     // Agreements
-    Route::get('agreementlist', 'AgreementController@agreementlist')->name('agreement-list');
-    Route::post('addagreement', 'AgreementController@addagreement')->name('add-agreement');
-    Route::delete('delete_agreement/{id}/{type}', 'AgreementController@destroy')->name('delete_agreement')->middleware('isAdmin');
-    Route::get('agreement/search', 'AgreementController@search')->name('agreement.search');
+    Route::group(['prefix' => 'agreements', 'as' => 'agreements.'], function () {
+        Route::get('', 'AgreementController@index')->name('index');
+        Route::post('', 'AgreementController@store')->name('store');
+        Route::delete('/{agreement}', 'AgreementController@destroy')->name('destroy')->middleware('isAdmin');
+        Route::get('/search', 'AgreementController@search')->name('search');
+    });
 
     // Expenses
-    Route::group(['prefix' => 'expense', 'as' => 'expense.', 'middleware' => 'can:expenses-enabled'], function () {
-        Route::get('/list', 'ExpenseController@expenselist')->name('expense-list');
-        Route::post('/addexpense', 'ExpenseController@addexpense')->name('expense-add');
-
-        Route::get('/edit/{id}', 'ExpenseController@edit')->name('edit');
-        Route::POST('/update/{id}', 'ExpenseController@update')->name('update');
-
-        Route::post('/new/approve/{id}', 'ExpenseController@approve')->name('approve')->middleware('isAdmin');
-        Route::post('/new/reject/{id}', 'ExpenseController@reject')->name('reject')->middleware('isAdmin');
+    Route::resource('expenses', 'ExpenseController')->middleware('can:expenses-enabled');
+    Route::group(['prefix' => 'expenses', 'as' => 'expenses.', 'middleware' => 'can:expenses-enabled'], function () {
+        Route::post('/new/approve/{expense}', 'ExpenseController@approve')->name('approve')->middleware('isAdmin');
+        Route::post('/new/reject/{expense}', 'ExpenseController@reject')->name('reject')->middleware('isAdmin');
 
         Route::post('/new/history', 'ExpenseController@searchHistory')->name('history');
         Route::POST('/pending', 'ExpenseController@searchPending')->name('pending');
-        Route::POST('/destroy/{id}', 'ExpenseController@destroy')->name('destroy');
     });
 
     // Additional Benefits Spending
-    Route::group(['prefix' => 'additional-benefits', 'as' => 'additional-benefits.', 'middleware' => 'can:additional-spending-enabled'], function () {
+    Route::resource('additionl_benifits_spendings', 'AdditionlBenifitsSpendingController')->middleware('can:additional-spending-enabled');
+    Route::group(['prefix' => 'additionl_benifits_spendings', 'as' => 'additionl_benifits_spendings.', 'middleware' => 'can:additional-spending-enabled'], function () {
+        Route::post('/approve/{additionl_benifits_spending}', 'AdditionlBenifitsSpendingController@approve')->name('approve')->middleware('isAdmin');
+        Route::post('/reject/{additionl_benifits_spending}', 'AdditionlBenifitsSpendingController@reject')->name('reject')->middleware('isAdmin');
 
-        Route::get('/', 'AdditionlBenifitsSpendingController@index')->name('index');
-        Route::post('/store', 'AdditionlBenifitsSpendingController@store')->name('store');
-
-        Route::get('/edit/{id}', 'AdditionlBenifitsSpendingController@edit')->name('edit');
-        Route::POST('/update/{id}', 'AdditionlBenifitsSpendingController@update')->name('update');
-
-        Route::post('/approve/{id}', 'AdditionlBenifitsSpendingController@approve')->name('approve')->middleware('isAdmin');
-        Route::post('/reject/{id}', 'AdditionlBenifitsSpendingController@reject')->name('reject')->middleware('isAdmin');
-
-        Route::post('/paid/{id}', 'AdditionlBenifitsSpendingController@paid')->name('paid');
-        Route::post('/non-paid/{id}', 'AdditionlBenifitsSpendingController@nonPaid')->name('non-paid');
+        Route::post('/paid/{additionl_benifits_spending}', 'AdditionlBenifitsSpendingController@paid')->name('paid');
+        Route::post('/non-paid/{additionl_benifits_spending}', 'AdditionlBenifitsSpendingController@nonPaid')->name('non-paid');
 
         Route::post('/history', 'AdditionlBenifitsSpendingController@searchHistory')->name('history');
-        Route::POST('/pending', 'AdditionlBenifitsSpendingController@searchPending')->name('pending');
-        Route::POST('/destroy/{id}', 'AdditionlBenifitsSpendingController@destroy')->name('destroy');
+        Route::post('/pending', 'AdditionlBenifitsSpendingController@searchPending')->name('pending');
     });
 
     // Personal development plan
-    Route::group(['prefix' => 'personal-development-plan', 'as' => 'personal-development-plan.', 'middleware' => 'can:classroom-enabled'], function () {
-
-        Route::get('/', 'PersonalDevelopmentPlanController@index')->name('index');
+    Route::resource('personal_development_plans', 'PersonalDevelopmentPlanController')->middleware('can:classroom-enabled');
+    Route::group(['prefix' => 'personal_development_plans', 'as' => 'personal_development_plans.', 'middleware' => 'can:classroom-enabled'], function () {
         Route::post('/comment/store/{id}', 'PersonalDevelopmentPlanController@commentStore')->name('comment.store');
         Route::post('/comment/update/{id}', 'PersonalDevelopmentPlanController@commentUpdate')->name('comment.update');
 
-        Route::post('/store', 'PersonalDevelopmentPlanController@store')->name('store');
-
-        Route::get('/edit/{id}', 'PersonalDevelopmentPlanController@edit')->name('edit');
-        Route::POST('/update/{id}', 'PersonalDevelopmentPlanController@update')->name('update');
-
-        Route::get('/show/{id}', 'PersonalDevelopmentPlanController@show')->name('show');
-
         Route::post('/archive', 'PersonalDevelopmentPlanController@searchArchive')->name('archive');
-        Route::POST('/destroy/{id}', 'PersonalDevelopmentPlanController@destroy')->name('destroy');
     });
 
     // Company
-    Route::group(['prefix' => 'company', 'as' => 'company.', 'middleware' => 'isAdmin'], function () {
-        Route::get('', 'CompanyController@index')->name('index');
-        Route::POST('/search', 'CompanyController@searchCompanyPage')->name('search');
-        Route::get('/create', 'CompanyController@create')->name('create');
-        Route::post('/store', 'CompanyController@store')->name('store');
-        Route::get('/edit/{id}', 'CompanyController@edit')->name('edit');
-        Route::POST('/update/{id}', 'CompanyController@update')->name('update');
-        Route::POST('/destroy/{id}', 'CompanyController@destroy')->name('destroy');
+    Route::resource('companies', 'CompanyController')->middleware('isAdmin');
+    Route::group(['prefix' => 'companies', 'as' => 'companies.', 'middleware' => 'isAdmin'], function () {
+        Route::post('/search', 'CompanyController@searchCompanyPage')->name('search');
     });
 
     // Efficiency
@@ -106,35 +81,26 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('', 'EfficiencyController@index')->name('index');
     });
 
-    Route::post('/reset_apssword', 'RegisterController@reset_password')->name('reset_apssword');
+    Route::post('/reset_apssword', 'RegisterController@resetPassword')->name('reset_apssword');
     Route::post('/registration', 'RegisterController@store')->name('registration');
 
     // Maintenance
-    Route::group(['prefix' => 'maintenance', 'as' => 'maintenance.', 'middleware' => 'can:maintenance-enabled'], function () {
-        Route::get('/list', 'MaintenanceController@Maintenance_list')->name('list');
-        Route::post('/add', 'MaintenanceController@addmaintenance')->name('add');
-        Route::post('/editview', 'MaintenanceController@edit_maintenanceview')->name('editview');
-        Route::post('/edit', 'MaintenanceController@edit')->name('edit');
-        Route::post('/delete', 'MaintenanceController@delete')->name('delete');
-        Route::post('/ticket_inprogress', 'MaintenanceController@ticket_inprogress')->name('ticket_inprogress')->middleware('isAdmin');
-        Route::post('/ticket_cancel', 'MaintenanceController@ticket_cancel')->name('ticket_cancel')->middleware('isAdmin');
+    Route::group(['prefix' => 'maintenance_tickets', 'as' => 'maintenance_tickets.', 'middleware' => 'can:maintenance-enabled'], function () {
+        Route::post('/ticket_inprogress/{maintenance_ticket}', 'MaintenanceController@ticketInProgress')->name('ticket_inprogress')->middleware('isAdmin');
+        Route::post('/ticket_cancel/{maintenance_ticket}', 'MaintenanceController@ticketCancel')->name('ticket_cancel')->middleware('isAdmin');
         Route::get('search', 'MaintenanceController@search')->name('search');
 
-        Route::post('/comment/store/{id}', 'MaintenanceController@commentStore')->name('comment.store');
-        Route::post('/comment/update/{id}', 'MaintenanceController@commentUpdate')->name('comment.update');
-        Route::get('/show/{id}', 'MaintenanceController@show')->name('show');
-
+        Route::post('/comment/store/{maintenance_ticket}', 'MaintenanceController@commentStore')->name('comment.store');
+        Route::post('/comment/update/{maintenance_ticket}', 'MaintenanceController@commentUpdate')->name('comment.update');
     });
+    Route::resource('maintenance_tickets', 'MaintenanceController')->middleware('can:maintenance-enabled');
 
     // Mileage
-    Route::group(['prefix' => 'mileage', 'as' => 'mileage.', 'middleware' => 'can:mileage-enabled'], function () {
-        Route::get('mileagelist', 'MileageController@mileagelist')->name('mileage-list');
-        Route::post('edit', 'MileageController@edit')->name('edit');
-        Route::post('update', 'MileageController@update')->name('update');
-        Route::post('destroy', 'MileageController@destroy')->name('destroy');
-        Route::post('/pending/{id}', 'MileageController@mileagePending')->name('pending')->middleware('isAdmin');
-        Route::post('/approve/{id}', 'MileageController@mileageApprove')->name('approve')->middleware('isAdmin');
-        Route::post('/reject/{id}', 'MileageController@mileageReject')->name('reject')->middleware('isAdmin');
+    Route::resource('mileages', 'MileageController')->middleware('can:mileage-enabled');
+    Route::group(['prefix' => 'mileages', 'as' => 'mileages.', 'middleware' => 'can:mileage-enabled'], function () {
+        Route::post('/pending/{mileage}', 'MileageController@mileagePending')->name('pending')->middleware('isAdmin');
+        Route::post('/approve/{mileage}', 'MileageController@mileageApprove')->name('approve')->middleware('isAdmin');
+        Route::post('/reject/{mileage}', 'MileageController@mileageReject')->name('reject')->middleware('isAdmin');
         Route::post('/search/pending', 'MileageController@searchPendingMileage')->name('searchPending');
         Route::post('/search/history', 'MileageController@searchHistoryMileage')->name('searchHistory');
     });
@@ -148,15 +114,15 @@ Route::group(['middleware' => ['auth']], function () {
 
     // Timeoff route
     Route::group(['prefix' => 'timeoff', 'as' => 'timeoff.'], function () {
-        Route::get('/list', 'TimeoffController@timeofflist')->name('list');
+        Route::get('/list', 'TimeoffController@timeOffList')->name('list');
     });
 
     // Paystatement route
-    Route::group(['prefix' => 'paystatement', 'as' => 'paystatement.', 'middleware' => 'can:pay-statement-enabled'], function () {
-        Route::get('/list', 'PaystatementController@paylist')->name('list');
-        Route::POST('/search', 'PaystatementController@searchPaymentPage')->name('search');
-        Route::post('/store', 'PaystatementController@store')->name('store');
-        Route::POST('/destroy/{id}', 'PaystatementController@destroy')->name('destroy');
+    Route::group(['prefix' => 'paystatements', 'as' => 'paystatements.', 'middleware' => 'can:pay-statement-enabled'], function () {
+        Route::get('', 'PaystatementController@index')->name('index');
+        Route::post('', 'PaystatementController@store')->name('store');
+        Route::get('/search', 'PaystatementController@searchPaymentPage')->name('search');
+        Route::delete('/{id}', 'PaystatementController@destroy')->name('destroy');
     });
 
     Route::get('force-login/{user}', 'UserController@forceLogin')->name('force-login');
@@ -169,8 +135,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::put('/{plan}', 'PlanController@update')->name('update');
     });
 
-    Route::group(['prefix' => 'missions', 'as' => 'missions.', 'middleware' => 'can:classroom-enabled'], function () {
     // Missions routes go here
+    Route::group(['prefix' => 'missions', 'as' => 'missions.', 'middleware' => 'can:classroom-enabled'], function () {
     Route::get('/', 'MissionController@index')->name('index');
     Route::post('/store', 'MissionController@store')->name('store');
     Route::put('/{plan}', 'MissionController@update')->name('update');
@@ -178,15 +144,10 @@ Route::group(['middleware' => ['auth']], function () {
 
     // Messages routes go here
     Route::group(['prefix' => 'messages', 'as' => 'messages.'], function () {
-        Route::get('/', 'MessageController@index')->name('index');
-        Route::post('/store', 'MessageController@store')->name('store');
-        Route::get('show/{message}', 'MessageController@show')->name('show');
-        Route::get('/{message}/edit', 'MessageController@edit')->name('edit');
-        Route::put('/{message}', 'MessageController@update')->name('update');
-        Route::delete('/{message}', 'MessageController@destroy')->name('destroy');
         Route::get('/search', 'MessageController@search')->name('search');
         Route::put('/status/{message}', 'MessageController@statusUpdate')->name('status.update');
     });
+    Route::resource('messages', 'MessageController');
 });
 
 Route::resource('posts', 'PostController');
