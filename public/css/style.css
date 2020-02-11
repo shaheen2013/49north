@@ -1814,7 +1814,6 @@ span.fc-title {
     height: 40px;
     animation: spin 2s linear infinite;
 }
-
 .remove-button {
     position: absolute;
     right: 28px;
@@ -1823,28 +1822,85 @@ span.fc-title {
     cursor: pointer;
     color: #7e7e7e;
 }
-
 .image-preview {
     width: 200px;
     padding: 10px;
     border-radius: 15px;
 }
-
 .file-preview {
     padding: 10px 20px;
     color: #2368d0;
     font-weight: bold;
     text-decoration: none;
 }
-
 .custom-checkbox {
     margin-left: 10px!important;
 }
-
 .clickable {
     cursor: pointer;
 }
-
 .select2-container {
     width: 100%!important;
+}
+
+
+/*===================*/
+/* Classroom Courses */
+/*===================*/
+.CourseHeading{
+    width: 100%;
+    padding: 50px 0;
+    text-align: center;
+    font-size: 80px;
+    color: #000000;
+    font-weight: 700;
+}
+.course-box{
+    width: 100%;
+    height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-color: #757575;
+    margin-bottom: 20px;
+}
+.course-box .course_title{
+    color: #ffffff;
+    font-size: 30px;
+    text-align: center;
+    width: 100%;
+    font-weight: 700;
+    text-shadow: 1px 1px 9px #000000;
+}
+.course-box .course_action{
+    color: #ffffff;
+    text-align: center;
+    width: 100%;
+    padding-top: 20px;
+}
+.course-box .course_action .course_action_btn{
+    color: #ffffff;
+    text-decoration: none;
+    text-align: center;
+    padding: 5px 30px;
+    border: 2px solid #ffffff;
+    display: inline-block;
+    font-size: 25px;
+    text-shadow: 1px 1px 9px #000000;
+    -moz-transition: all 0.2s linear;
+    -webkit-transition: all 0.2s linear;
+    transition: all 0.2s linear;
+}
+.course-box .course_action .course_action_btn:hover,
+.course-box .course_action .course_action_btn:active{
+    color: #000000;
+    border: 2px solid #ffffff;
+    background: #ffffff;
+    text-shadow: 1px 1px 9px #ffffff;
+    -moz-transition: all 0.2s linear;
+    -webkit-transition: all 0.2s linear;
+    transition: all 0.2s linear;
 }

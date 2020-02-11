@@ -1,31 +1,28 @@
 @extends('layouts.main')
+
 @section('title', 'Classroom')
 
 @section('content1')
-
-    <table class="table table-bordered" style="margin-top: 30px">
-        <thead>
-        <tr>
-            <th>Course</th>
-            <th>Outline</th>
-        </tr>
-        </thead>
-        <tbody>
-        @foreach ($courses AS $course)
-            <tr>
-                <td>
-                    <a href="{{ route('employee.classroom.chapters',$course->id) }}">{{ $course->name }}</a><br>
-                </td>
-                <td class="text-center">
-                    @if ($course->s3_path)
-                        <a href="{{ $course->s3_url }}" target="_blank" class="btn btn-outline-secondary">Outline</a>
-                    @else
-                        N/A
-                    @endif
-                </td>
-            </tr>
-        @endforeach
-        </tbody>
-    </table>
-
+    <div class="well-default-trans">
+        <div class="col-md-12">
+            <h1 class="CourseHeading">My Courses</h1>
+        </div>
+        <div class="col-md-12">
+            <div class="row">
+                @foreach($courses as $course)
+                    <div class="col-md-4">
+                        <div class="course-box"
+                             style="background-image: url('{{ $course->s3_url}}')">
+                            <div class="col-md-12">
+                                <div class="course_title">{{$course->name}}</div>
+                                <div class="course_action">
+                                    <a href="{{ route('employee.classroom.chapters',$course->id) }}" class="course_action_btn">Enter</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+    </div>
 @stop

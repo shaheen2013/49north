@@ -52,11 +52,9 @@
                             </li>
                             @endadmin
 
-                            @admin
                             <li class="nav-item">
-                                <a class="nav-link {{ $activeMenu == 'classroom' ? 'active' : '' }}" href="{{ route('missions.index') }}" role="tab">Classroom</a>
+                                <a class="nav-link {{ $activeMenu == 'classroom' ? 'active' : '' }}" href="{{ auth()->user()->is_admin ? route('missions.index') : route('employee.classroom.courses') }}" role="tab">Classroom</a>
                             </li>
-                            @endadmin
                         </ul>
                     </div>
                     <div class="pull-right">
@@ -134,12 +132,10 @@
                     <a class="nav-item nav-link" href="#">Meals</a>
                 @endif
 
-                @if($activeMenu == 'classroom')
+                @if($activeMenu == 'classroom' && auth()->user()->is_admin)
                     <a class="nav-item nav-link {{ (request()->is('missions')) ? 'active' : '' }}" href="{{ route('missions.index') }}">49 North Mission</a>
-                    <a class="nav-item nav-link {{ (request()->is('personal_development_plans')) ? 'active' : '' }}" href="{{ route('personal_development_plans.index') }}">Personal
-                        Development Plan</a>
-                    {{-- <a class="nav-item nav-link" href="#">Personal Development Plan</a> --}}
-                    <a class="nav-item nav-link {{ (request()->is('classroom')) ? 'active' : '' }}" href="{{ route('admin.classroom.index') }}">Courses</a>
+                    <a class="nav-item nav-link {{ (request()->is('personal_development_plans')) ? 'active' : '' }}" href="{{ route('personal_development_plans.index') }}">Personal Development Plan</a>
+                    <a class="nav-item nav-link {{ (request()->is('admin/classroom')) ? 'active' : '' }}" href="{{ route('admin.classroom.index') }}">Courses</a>
                     <a class="nav-item nav-link {{ (request()->is('journal')) ? 'active' : '' }}" href="{{ route('journal.index') }}">Journal</a>
                 @endif
 
