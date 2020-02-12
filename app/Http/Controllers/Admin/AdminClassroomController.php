@@ -133,7 +133,7 @@ class AdminClassroomController extends Controller
      * @return JsonResponse
      * @throws Exception
      */
-    public function deleteChapter(ClassroomCourse $classroom)
+    public function destroy (ClassroomCourse $classroom)
     {
         foreach ($classroom->chapters AS $chapter) {
             $chapter->questions()->delete();
@@ -142,7 +142,6 @@ class AdminClassroomController extends Controller
         $classroom->delete();
         return response()->json(['success' => true]);
     }
-
     /**
      * @param ClassroomCourse $course
      *
