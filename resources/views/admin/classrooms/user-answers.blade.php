@@ -8,8 +8,9 @@
 @endsection
 
 @section('content1')
-
-    <h4>{{ $chapter->chapter_name }}</h4>
+    <h2 class="my-4">
+        <span class="active-span clickable">{{ $chapter->chapter_name }}</span>
+    </h2>
 
     <table class="table table-bordered">
         @foreach ($chapter->classroomSections()->with('classroomQuestionsOrder')->get() AS $section)
