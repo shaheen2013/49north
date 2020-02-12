@@ -16,7 +16,7 @@
                             {{ Form::open(array('id'=>'personal_development_form')) }}
                             {!! Form::hidden('id', $show->id,['id' => 'personal_development_id']) !!}
                                 <div class="text_outer">
-                                    <textarea style="height: 100px" class="form-control" placeholder="write here....." name="comment" id="edit_comment"></textarea>
+                                    {!! Form::textarea('comment', null, ['id' => 'edit_comment', 'class' => 'form-control', 'placeholder' => 'write here.....', 'style' => 'min-height: 100px']) !!}
                                 </div>
                                 <div class="row margin-top-30">
                                     <div class="form-group" style="width:100%;">

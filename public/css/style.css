@@ -1435,6 +1435,22 @@ td a.down {
     color: #760800 !important;
     border-color: #760800 !important;
 }
+td a.completed {
+    color: #ffffff !important;
+    border-color: #163488 !important;
+    background-color: #163488 !important;
+}
+td a.primary {
+    color: #163488 !important;
+    border-color: #163488 !important;
+}
+td a.danger {
+    color: #760800 !important;
+    border-color: #760800 !important;
+}
+td a.m-f-w {
+    width: 120px;
+}
 .action-box
 {
 	float:right !important;
@@ -1801,6 +1817,9 @@ span.fc-title {
 }
 .paginationjs{display: inline-block;float: right;}
 ._table th{border: none!important;border-bottom: none!important;}
+._table-v-middle td{
+    vertical-align: middle;
+}
 .spacer{ height:10px; }
 @keyframes spin {
     0% { transform: rotate(0deg); }
@@ -1903,4 +1922,37 @@ span.fc-title {
     -moz-transition: all 0.2s linear;
     -webkit-transition: all 0.2s linear;
     transition: all 0.2s linear;
+}
+
+.course-cover{
+    width: 100%;
+    height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+.course-cover .course_title{
+    color: #000000;
+    font-size: 50px;
+    text-align: center;
+    width: 100%;
+    font-weight: 700;
+    text-shadow: 1px 1px 3px #000000;
+}
+.chapter-node{
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #ffffff;
+    border: 2px solid #163488;
+    display: block;
+}
+.chapter-node.completed{
+    background: #163488;
+}
+.chapter-node.unavailable{
+    border: 2px solid #760800;
 }

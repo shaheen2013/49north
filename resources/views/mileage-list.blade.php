@@ -36,7 +36,7 @@
                             <div class="col-sm-1">
                                 <div id="wait"></div>
                             </div>
-                            <div class="@admin col-sm-5 @else col-sm-8 @endadmin">
+                            <div class="@admin col-sm-5 @else col-sm-7 @endadmin">
                                 <a href="javascript:void(0)" onclick="$('#mileage-modaledit input').val(''); $('#update').attr('onclick', 'createMileage();');" class="_new_icon_button_1" data-toggle="modal" data-target="#mileage-modaledit"><i class="fa fa-plus"></i> </a>
                             </div>
                             <div class="col-sm-12">

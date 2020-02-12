@@ -1,4 +1,4 @@
-@extends('layouts.main')
+@extends('layouts.main',['activeMenu' => 'classroom'])
 @section('title', $chapter->chapter_name . ' - ' . $section->section_name)
 
 @section('breadcrumbs')
@@ -12,7 +12,6 @@
     @if (!request()->input('section') && !request()->input('qid') && $chapter->s3_path)
         <iframe name="pdf_iframe" src="{{ $chapter->s3_url }}" class="invoice-pdf-frame"></iframe>
     @endif
-
     {{ Form::open(['url' => route('employee.classroom.save')]) }}
     {{ Form::hidden('section',$section->id) }}
     {{ Form::hidden('chapter',$chapter->id) }}
@@ -27,15 +26,11 @@
         $isAnswered = isset($question->classroomAnswers->answer);
         $userAnswer = $isAnswered ? $question->classroomAnswers->answer : null;
     @endphp
-
     <div class="row">
         <div class="col-12 col-sm-8 offset-sm-2 col-md-6 offset-md-3  text-center">
-
             <h3 style="margin-top: 30px;">{{ $chapter->chapter_name }}</h3>
             <h4>{{ $section->section_name }}</h4>
-
             <h5 style="margin-top: 30px;">{{ $question->question }}</h5>
-
             {{-- Audio --}}
             @if ($question->question_type == 'audio')
                 {!! $question->question_details->audio !!}
@@ -51,7 +46,6 @@
                         @endif
 
                         {{ Form::radio('text[' . $question->id . ']',$response,$userAnswer == $response,['class' => 'form-check-input','required','id' => 'radio-' . $question->id .'-'.$loop->iteration, 'disabled' => $isAnswered]) }}
-
                         {{ Form::label('radio-' . $question->id .'-'.$loop->iteration,$response,['class' => 'form-check-label']) }}
                         @if ($isAnswered && $answers == $loop->iteration)
                             @if ($userAnswer == $response)
@@ -66,15 +60,12 @@
             @elseif ($question->question_type == 'checkbox')
 
                 @foreach ($question->question_details->questions??[] AS $key => $response)
-
                     @if ($isAnswered && $question->checkCheckboxAnswer($response))
                         {{ Form::hidden('text[' . $question->id . '][]',$response) }}
                     @endif
-
                     <div class="form-check">
                         {{ Form::checkbox('text[' . $question->id . '][]',$response,$question->checkCheckboxAnswer($response),['class' => 'form-check-input','id' => 'check-' . $question->id .'-'.$loop->iteration,'disabled' => $isAnswered]) }}
                         {{ Form::label('check-' . $question->id.'-'.$loop->iteration,$response,['class' => 'form-check-label']) }}
-
                         @if ($isAnswered && isset($answers->{$loop->iteration}))
                             @if ($question->checkCheckboxAnswer($response))
                                 <span class="text-success">Correct</span>
@@ -84,10 +75,11 @@
                         @endif
                     </div>
                 @endforeach
-
                 {{-- textbox --}}
             @elseif ($question->question_type == 'textbox')
-                {{ Form::textarea('text[' . $question->id .']',$userAnswer,['class' => 'form-control','required','id' => 'notes-' . $question->id, 'readonly' => $isAnswered]) }}
+                <div class="text_outer">
+                {{ Form::textarea('text[' . $question->id .']',$userAnswer,['class' => 'form-control','required','style' => 'min-height: 100px','id' => 'notes-' . $question->id, 'readonly' => $isAnswered]) }}
+                </div>
                 @if ($isAnswered)
                     <div class="text-left">
                         <h6>Answer</h6>
@@ -103,21 +95,13 @@
                     {{ Form::submit('Save',['class' => 'btn btn-outline-secondary','name' => 'stay']) }}
                 @endif--}}
 
-                {{ Form::submit('Continue =>',['class' => 'btn btn-primary']) }}
-
+                <button type="submit" class="btn-dark contact_btn">Continue => </button>
             </div>
-
-            <div class="progress" style="margin-top: 30px">
+            <div class="progress" style="margin-top: 70px">
                 <div class="progress-bar" role="progressbar" style="width: {{ $progress }}%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
             </div>
         </div>
     </div>
-
-
-
-
-
     {{ Form::close() }}
-
 
 @stop

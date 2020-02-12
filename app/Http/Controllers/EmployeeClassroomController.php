@@ -14,10 +14,9 @@ class EmployeeClassroomController extends Controller {
      * @return Factory|View
      */
     public function courses () {
-//        $courses = Auth::User()->courses;
-        $courses = Courses::all();
+        $courses = Auth::User()->courses;
+//        $courses = Courses::all();
         $activeMenu = 'classroom';
-
         return view('employee.classroom.employee-classroom', compact('courses', 'activeMenu'));
     }
 
@@ -29,7 +28,6 @@ class EmployeeClassroomController extends Controller {
     public function chapters ($id) {
         $course = Auth::User()->courses()->where('classroom_courses.id', $id)->first();
         $alreadyCompletedChapters = $course->userArchives->pluck('classroom_chapter_id', 'classroom_chapter_id')->toArray();
-
         return view('employee.classroom.employee-course', compact('course', 'alreadyCompletedChapters'));
     }
 
@@ -44,7 +42,6 @@ class EmployeeClassroomController extends Controller {
         if (!$check) {
             abort(401);
         }
-
         // save a step if QuestionID has been passed
         if ($qid = request()->input('qid', 0)) {
             $question = ClassroomQuestion::find($qid);
@@ -59,17 +56,13 @@ class EmployeeClassroomController extends Controller {
                 $section = $chapter->classroomSections()->first();
                 $sectionID = $section->id;
             }
-
             $q = ClassroomQuestion::where('classroom_chapter_id', $chapter->id)->where('classroom_section_id', $sectionID);
-
             // if next ID is passed, use it
             if ($qid = request()->input('qid', 0)) {
                 $q->where('id', $qid);
             }
-
             $question = $q->orderBy('orderval')->first();
         }
-
         $numQuestions = $chapter->questionsInOrder()->count();
         $count = 0;
         $break = false;
@@ -88,9 +81,7 @@ class EmployeeClassroomController extends Controller {
         }
 
         $progress = number_format(($count / $numQuestions) * 100, 1);
-
         /*        echo $count . ' - ' . $numQuestions;*/
-
         return view('employee.classroom.employee-take-course', compact('chapter', 'question', 'section', 'progress'));
     }
 
@@ -107,13 +98,11 @@ class EmployeeClassroomController extends Controller {
 
         // go through each question
         $question = ClassroomQuestion::find($request->input('qid'));
-
         $input = [
             'user_id'               => Auth::User()->id,
             'classroom_question_id' => $question->id,
             'classroom_chapter_id'  => $question->classroom_chapter_id
         ];
-
         // build answers based on question type
         if ($question->question_type == 'audio') {
             $input['answer'] = $request->input('text.' . $question->id);
@@ -127,7 +116,6 @@ class EmployeeClassroomController extends Controller {
         elseif ($question->question_type == 'textbox') {
             $input['answer'] = $request->input('text.' . $question->id);
         }
-
         $answer = ClassroomAnswer::where('user_id', Auth::User()->id)->where('classroom_question_id', $question->id)->first();
         if ($answer) {
             $answer->update($input);
@@ -135,7 +123,6 @@ class EmployeeClassroomController extends Controller {
         else {
             $answer = ClassroomAnswer::create($input);
         }
-
         $assignment = ClassroomAssignment::where('user_id', Auth::User()->id)->where('classroom_course_id', $section->classroomChapter->classroom_course_id)->first();
 
         if ($request->input('stay', false)) {
