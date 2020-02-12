@@ -44,14 +44,14 @@
                                             <td class="text-center">{{ $course->created_at->format('M d, Y') }}</td>
                                             <td class="text-right">
                                                 <a href="{{ route('admin.classroom.edit',$course->id) }}">EDIT</a>
-                                                <a title="Course User" class="down" data-token="{{ csrf_token() }}" data-url="{{ route('admin.classroom.destroy',$course->id) }}" data-id="{{ $course->id }}"
+                                                <a title="Course User" class="down deletejson" data-token="{{ csrf_token() }}" data-url="{{ route('admin.classroom.destroy',$course->id) }}" data-id="{{ $course->id }}"
                                                    data-section="{{ $delSection }}">DELETE</a>
                                             </td>
-                                        </tr> <tr class="spacer"></tr>
+                                        </tr>
+                                        <tr class="spacer"></tr>
                                     @endforeach
                                     <tbody>
                                 </table>
-                                <div id="paginate"></div>
                             </div>
                         </div>
                     </div>

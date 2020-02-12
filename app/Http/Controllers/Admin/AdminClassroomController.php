@@ -133,7 +133,7 @@ class AdminClassroomController extends Controller
      * @return JsonResponse
      * @throws Exception
      */
-    public function destroy(ClassroomCourse $classroom)
+    public function deleteChapter(ClassroomCourse $classroom)
     {
         foreach ($classroom->chapters AS $chapter) {
             $chapter->questions()->delete();
@@ -196,18 +196,10 @@ class AdminClassroomController extends Controller
 
         $chapter->chapter_name = $request->input('chapter_name');
         $chapter->instructions = $request->input('instructions');
-        $chapter->save();
-
-        // PDF file upload
-        $file = $request->file('upload');
-        if ($file && $file->isValid()) {
-            $chapter->s3_path = $file->getClientOriginalName();
-
-            $file->storeAs(ClassroomCourse::$courseLocation, $chapter->s3_name, 's3');
-            Storage::disk('s3')->setVisibility(ClassroomCourse::$courseLocation . '/' . $chapter->s3_name, 'public');
-            $chapter->save();
+        if (isset($request->s3_path)) {
+            $chapter->s3_path = fileUpload('s3_path');
         }
-
+        $chapter->save();
         return redirect()->route('admin.classroom.chapter.list', $chapter->classroom_course_id);
     }
 
@@ -218,13 +210,10 @@ class AdminClassroomController extends Controller
      */
     public function updateChapterOrder(Request $request)
     {
-
         foreach ($request->input('orderval', []) AS $id => $val) {
             ClassroomChapter::find($id)->update(['orderval' => $val]);
         }
-
         session()->flash('alert-success', 'Order Updated');
-
         return redirect()->back();
     }
 
@@ -241,7 +230,6 @@ class AdminClassroomController extends Controller
         $question->questionsText = [];
         $sections = $this->_sections($chapter->id);
         $sectionNextVal = $this->_nextSectionVal($chapter->id);
-
         return view('admin.classrooms.question-add', compact('question', 'chapter', 'sections', 'sectionNextVal'));
     }
 
@@ -274,7 +262,6 @@ class AdminClassroomController extends Controller
      */
     public function saveQuestion(Request $request, $chapterID)
     {
-
         $input = $request->only(['question', 'classroom_section_id', 'question_type']);
 
         if ($input['question_type'] == 'textbox') {
@@ -296,7 +283,6 @@ class AdminClassroomController extends Controller
                 $validator = Validator::make([], []);
                 $validator->getMessageBag()->add('section_order', 'Order Value Must Be Unique');
                 $message = $validator->errors();
-
                 return redirect()->back()->withErrors($message)->withInput();
             }
 
@@ -322,7 +308,6 @@ class AdminClassroomController extends Controller
             $input['classroom_chapter_id'] = $chapterID;
             $question = ClassroomQuestion::create($input);
         }
-
         return redirect()->route('admin.classroom.chapter.edit', $chapterID);
     }
 
@@ -340,7 +325,6 @@ class AdminClassroomController extends Controller
         $question->answers = $answers->answers ?? null;
         $sections = $this->_sections($chapter->id);
         $sectionNextVal = $this->_nextSectionVal($chapter->id);
-
         return view('admin.classrooms.question-add', compact('question', 'chapter', 'sections', 'sectionNextVal'));
     }
 
@@ -352,14 +336,11 @@ class AdminClassroomController extends Controller
      */
     public function deleteQuestion(ClassroomQuestion $question)
     {
-
         // count questions left in the section, and delete if this is the only one left
         if (ClassroomQuestion::where('classroom_section_id', $question->classroom_section_id)->count() == 1) {
             ClassroomSection::where('id', $question->classroom_section_id)->delete();
         }
-
         $question->delete();
-
         return response()->json(['success' => true]);
     }
 
@@ -370,13 +351,10 @@ class AdminClassroomController extends Controller
      */
     public function updateQuestionOrder(Request $request)
     {
-
         foreach ($request->input('orderval', []) AS $id => $val) {
             ClassroomQuestion::find($id)->update(['orderval' => $val]);
         }
-
         session()->flash('alert-success', 'Order Updated');
-
         return redirect()->back();
     }
 }

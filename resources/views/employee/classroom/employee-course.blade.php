@@ -1,71 +1,55 @@
-@extends('layouts.main')
+@extends('layouts.main',['activeMenu' => 'classroom'])
 @section('title', $course->name)
 
 @section('content1')
 
-    @if ($course->s3_path)
+    {{--@if ($course->s3_path)
         <iframe name="pdf_iframe" src="{{ $course->s3_url }}" class="invoice-pdf-frame"></iframe>
-    @endif
+    @endif--}}
 
-    <table class="table table-bordered" style="margin-top: 30px;">
-        <thead>
-        <tr>
-            <th>Chapter</th>
-            <th>Status</th>
-            <th>Chapter Outline</th>
-        </tr>
-        </thead>
-        @php $curStatus = ''; $curChapterID = 0; @endphp
-        @foreach ($course->chapters()->withCount('questions')->get() AS $chapter)
-            {{-- check that there are questions --}}
-            @php
-                $lastStatus = $curStatus; $curStatus = $course->getStatus($chapter->id);
-                $lastChapterID = $curChapterID; $curChapterID = $chapter->id;
-            @endphp
-            @if ($chapter->questions_count)
-                <tr>
-                    @if ($curStatus == 'complete')
-                        <td>
-                            {{ $chapter->chapter_name }}
-                        </td>
-                        <td class="text-center">
-                            <a class="btn btn-danger confirm-repeat" href="{{ route('employee.classroom.repeat-chapter',$chapter->id) }}">Start Over</a>
-                            <a class="btn btn-outline-secondary" href="{{ route('employee.classroom.take-course',$chapter->id) }}">Check Answers</a>
-                        </td>
-                    @elseif (($curStatus == 'unavailable' || $curStatus == 'start-over') && (!$lastStatus || $lastStatus == 'complete' || isset($alreadyCompletedChapters[$lastChapterID])))
-                        <td><a href="{{ route('employee.classroom.take-course',$chapter->id) }}">{{ $chapter->chapter_name }}</a></td>
-                        <td class="text-center">
-                            <a class="btn btn-secondary" href="{{ route('employee.classroom.take-course',$chapter->id) }}">Start Chapter</a>
-                        </td>
-                    @elseif ($curStatus == 'in-progress')
-                        @php $nextQuestion = $chapter->nextQuestion(); @endphp
-                        <td>
-                            <a href="{{ route('employee.classroom.take-course',[$chapter->id,'qid' => $nextQuestion->id]) }}">{{ $chapter->chapter_name }}</a>
-                        </td>
-                        <td class="text-center">
-                            <a class="btn btn-secondary" href="{{ route('employee.classroom.take-course',[$chapter->id,'qid' => $nextQuestion->id]) }}">Continue</a>
-                        </td>
-                    @else
-                        <td>{{ $chapter->chapter_name }}</td>
-                        <td class="text-center">
-                            @lang('courses.chapter_status.' . $curStatus)
-                        </td>
-                    @endif
-                    <td class="text-center">
-                        @if ($chapter->s3_path)
-                            <a href="{{ $chapter->s3_url }}" target="_blank" class="btn btn-outline-secondary">Outline</a>
-                        @else
-                            N/A
-                        @endif
-                    </td>
-                </tr>
-            @endif
-        @endforeach
-    </table>
+    <div class="course-cover" style="background-image: url('{{ fileUrl($course->image_path) }}')">
+        <div class="course_title">{{$course->name}}</div>
+    </div>
 
+    <div class="well-default-trans">
+        <div class="tab-pane" id="nav-mileage" role="tabpanel" aria-labelledby="nav-mileage-tab">
+            <div class="mileage inner-tab-box">
+                <div class="col-md-12">
+                    <div class="col-sm-12" id="pending_div">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <table class="table _table _table-bordered _table-v-middle">
+                                    @php $sl = 0; @endphp
+                                    @php $curStatus = ''; $curChapterID = 0; @endphp
+                                    @foreach ($course->chapters()->withCount('questions')->get() AS $chapter)
+                                        @php
+                                            $sl++;
+                                            $lastStatus = $curStatus; $curStatus = $course->getStatus($chapter->id);
+                                            $lastChapterID = $curChapterID; $curChapterID = $chapter->id;
+                                        @endphp
+                                    <tr style="box-shadow: 1px 2px 5px #e6e6e6;">
+                                        <td class="text-center" width="35px"><span class="chapter-node @if($curStatus == 'complete') completed @endif @if($curStatus == 'unavailable') unavailable @endif"></span></td>
+                                        <td width="120px">Chapter {{$sl}}</td>
+                                        <td>{{$chapter->chapter_name}}</td>
+                                        <td class="text-right">@if($curStatus == 'complete')<a style="border: none" href="{{ route('employee.classroom.take-course',$chapter->id) }}"><img width="40px" src="{{asset('img/bicon.png')}}" alt="Report"></a>@endif</td>
+                                        <td class="text-right" width="130px">
+                                            @if($curStatus !== 'complete' && $curStatus !== 'unavailable')<a href="{{ route('employee.classroom.repeat-chapter',$chapter->id) }}?section=7&qid=20" class="completed m-f-w" >Start</a>@endif
+                                            @if($curStatus == 'complete')<a href="javascript:void(0)" class="completed m-f-w" >Completed</a>@endif
+                                            @if($curStatus == 'unavailable')<a href="javascript:void(0)" class="danger m-f-w" >Unavailable</a>@endif
 
+                                        </td>
+                                    </tr>
+                                    <tr class="spacer"></tr>
+                                    @endforeach
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 @stop
-
 
 @push('scripts')
     <!-- repeat chapter -->

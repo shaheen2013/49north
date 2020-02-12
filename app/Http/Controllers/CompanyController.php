@@ -65,16 +65,12 @@ class CompanyController extends Controller
         }
 
         try {
-            $data = $request->all();
-            $logo = null;
+            $company = new Company();
+            $company->companyname = $request->companyname;
+            $company->email = $request->email;
+            $company->logo = fileUpload('logo');
 
-            if ($request->hasFile('logo')) {
-                $logo = fileUpload('logo');
-                $data['logo'] = $logo;
-            }
-            $check = Company::create($data);
-
-            if ($check) {
+            if ($company->save()) {
                 return response()->json(['status' => 'success']);
             }
             return response()->json(['status' => 'fail']);
@@ -131,10 +127,7 @@ class CompanyController extends Controller
 
         try {// return $request->all();
             $data = Company::findOrFail($company->id);
-            $logo = null;
-
-            if ($request->hasFile('logo')) {
-                Storage::delete($data->logo);
+            if (isset($request->logo)) {
                 $data->logo = fileUpload('logo');
             }
             $data->companyname = $request->companyname;

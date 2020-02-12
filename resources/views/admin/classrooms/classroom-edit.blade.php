@@ -32,19 +32,25 @@
                     </div>
                 </div>
                 <div class="col col-sm-4">
-                    <div class="text_outer">
+                    <div class="col-md-12 col-sm-12 image-chooser">
+                        <div class="image-chooser-preview"></div>
+                        <div class="text_outer">
                         {!! Html::decode(Form::label('s3_path', '<i class="fa fa-fw fa-photo"></i>PDF Instruction Upload'))!!}
                         {{ Form::file('s3_path', array('class' => 'form-control _input_choose_file', 'onchange' => 'renderChoosedFile(this)')) }}
                         <br>
                         @if ($classroom->s3_path)<small><a target="_blank" href="{{ fileUrl($classroom->s3_path) }}">{{ $classroom->s3_path }}</a></small>@endif
                     </div>
+                    </div>
                 </div>
                 <div class="col col-sm-4">
-                    <div class="text_outer">
-                        {!! Html::decode(Form::label('image_path', '<i class="fa fa-fw fa-photo"></i>Image Upload'))!!}
-                        {{ Form::file('image_path', array('class' => 'form-control _input_choose_file', 'onchange' => 'renderChoosedFile(this)')) }}
-                        <br>
-                        @if ($classroom->image_path) <img src="{{ fileUrl($classroom->image_path) }}" width="50" height="50">@endif
+                    <div class="col-md-12 col-sm-12 image-chooser">
+                        <div class="image-chooser-preview"></div>
+                        <div class="text_outer">
+                            {!! Html::decode(Form::label('image_path', '<i class="fa fa-fw fa-photo"></i>Image Upload'))!!}
+                            {{ Form::file('image_path', array('class' => 'form-control _input_choose_file', 'onchange' => 'renderChoosedFile(this)')) }}
+                            <br>
+                            @if ($classroom->image_path) <img src="{{ fileUrl($classroom->image_path) }}" width="50" height="50">@endif
+                        </div>
                     </div>
                 </div>
             </div>
@@ -60,7 +66,7 @@
                                 {{ $assignment->user->name }}
                             </td>
                             <td class="text-center"> <a class="" href="{{ route('admin.classroom.view-results',[$assignment->user_id,$assignment->classroom_course_id]) }}">View Results</a></td>
-                            <td class="text-center"> <a class="down" href="#" data-id="{{ $assignment->id }}">DELETE</a> </td>
+                            <td class="text-center"> <a class="down deletejson remove-assignment" href="#" data-id="{{ $assignment->id }}">DELETE</a> </td>
                         </tr>
                     @endforeach
                 @endif
@@ -80,7 +86,7 @@
                     </div>
                 </div>
                 <div class="col">
-                    <a href="#" id="add-user" class="btn btn-outline-secondary">Add <i class="fa fa-plus"></i></a>
+                    <a href="#" id="add-user" class="_new_icon_button_1" , style="padding : 7px 12px; float: left"><i class="fa fa-plus"></i></a>
                 </div>
             </div>
         </div>
@@ -93,7 +99,7 @@
             </td>
             <td></td>
             <td class="text-center">
-                <a href="#" class="down" onclick="$(this).parent().parent().remove(); return false;">DELETE</a>
+                <a href="#" class="down deletejson" onclick="$(this).parent().parent().remove(); return false;">DELETE</a>
             </td>
         </tr>
     </table>

@@ -171,9 +171,11 @@
             @endif
         @endforeach
     </div>
-
-    @yield('content1')
 </div>
+
+
+
+@yield('content1')
 
 <div class="logout-footer fixed-bottom float-right">
     @if (Auth::check())
