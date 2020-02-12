@@ -7,8 +7,9 @@
 @endsection
 
 @section('content1')
-
-    <h4>{{ $course->name }}</h4>
+    <h2 class="my-4">
+        <span class="active-span clickable">{{ $course->name }}</span>
+    </h2>
 
     <table class="table table-bordered">
         @php $curStatus = ''; $curChapterID = 0; @endphp
